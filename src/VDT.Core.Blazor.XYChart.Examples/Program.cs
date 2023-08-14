@@ -1,18 +1,13 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace VDT.Core.Blazor.XYChart.Examples {
-    public class Program {
-        public static async Task Main(string[] args) {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("#app");
+namespace VDT.Core.Blazor.XYChart.Examples;
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+public class Program {
+    public static async Task Main(string[] args) {
+        var builder = WebAssemblyHostBuilder.CreateDefault(args);
+        builder.RootComponents.Add<App>("#app");
 
-            await builder.Build().RunAsync();
-        }
+        await builder.Build().RunAsync();
     }
 }
