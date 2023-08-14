@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorPlayground", "BlazorPlayground\BlazorPlayground.csproj", "{F271A8A8-9C29-4CDA-A4A5-6F6AFB25DED1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.XYChart.Examples", "VDT.Core.Blazor.XYChart.Examples\VDT.Core.Blazor.XYChart.Examples.csproj", "{F271A8A8-9C29-4CDA-A4A5-6F6AFB25DED1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorPlayground.Chart", "BlazorPlayground.Chart\BlazorPlayground.Chart.csproj", "{D6DBA2BF-458F-4296-9F26-9765CC93D1EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.XYChart", "VDT.Core.Blazor.XYChart\VDT.Core.Blazor.XYChart.csproj", "{D6DBA2BF-458F-4296-9F26-9765CC93D1EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorPlayground.Chart.Tests", "BlazorPlayground.Chart.Tests\BlazorPlayground.Chart.Tests.csproj", "{7F25E3A6-DBEF-4D20-8FC3-F2D6825606DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.XYChart.Tests", "VDT.Core.Blazor.XYChart.Tests\VDT.Core.Blazor.XYChart.Tests.csproj", "{7F25E3A6-DBEF-4D20-8FC3-F2D6825606DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

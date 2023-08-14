@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BlazorPlayground.Chart\BlazorPlayground.Chart.csproj" />
+		<ProjectReference Include="..\VDT.Core.Blazor.XYChart\VDT.Core.Blazor.XYChart.csproj" />
 	</ItemGroup>
 
 </Project>
