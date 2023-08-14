@@ -12,9 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BlazorPlayground.Calculator\BlazorPlayground.Calculator.csproj" />
 		<ProjectReference Include="..\BlazorPlayground.Chart\BlazorPlayground.Chart.csproj" />
-		<ProjectReference Include="..\BlazorPlayground.Graphics\BlazorPlayground.Graphics.csproj" />
 	</ItemGroup>
 
 </Project>
