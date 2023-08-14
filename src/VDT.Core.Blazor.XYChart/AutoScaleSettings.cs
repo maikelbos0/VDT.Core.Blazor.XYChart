@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace BlazorPlayground.Chart;
+namespace VDT.Core.Blazor.XYChart;
 
 public class AutoScaleSettings : ComponentBase, IDisposable {
     public static bool DefaultIsEnabled { get; set; } = true;

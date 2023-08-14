@@ -1,7 +1,7 @@
 ﻿using System;
 using Xunit;
 
-namespace BlazorPlayground.Chart.Tests;
+namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class PlotAreaTests {
     [Fact]
@@ -155,10 +155,10 @@ public class PlotAreaTests {
     public void AutoScale_Disabled() {
         var subject = new PlotArea() {
             AutoScaleSettings = {
-                IsEnabled = false, 
-                IncludeZero = false, 
-                ClearancePercentage = 0M, 
-                RequestedGridLineCount = 9 
+                IsEnabled = false,
+                IncludeZero = false,
+                ClearancePercentage = 0M,
+                RequestedGridLineCount = 9
             }
         };
 

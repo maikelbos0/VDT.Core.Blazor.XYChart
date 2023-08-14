@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace BlazorPlayground.Chart;
+namespace VDT.Core.Blazor.XYChart;
 
 public class Canvas : ComponentBase, IDisposable {
     public static int DefaultWidth { get; set; } = 1200;

@@ -1,4 +1,4 @@
-﻿namespace BlazorPlayground.Chart;
+﻿namespace VDT.Core.Blazor.XYChart;
 
 public enum DataPointSpacingMode {
     Auto,

@@ -1,9 +1,9 @@
-﻿using BlazorPlayground.Chart.Shapes;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
-namespace BlazorPlayground.Chart.Tests;
+namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class DataSeriesTests {
     private class TestLayer : LayerBase {

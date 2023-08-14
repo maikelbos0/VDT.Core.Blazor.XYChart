@@ -1,4 +1,4 @@
-﻿namespace BlazorPlayground.Chart.Shapes;
+﻿namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class YAxisMultiplierShape : ShapeBase {
     public override string CssClass => "y-axis-multiplier";

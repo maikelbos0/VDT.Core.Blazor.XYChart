@@ -1,7 +1,7 @@
-﻿using BlazorPlayground.Chart.Shapes;
+﻿using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
-namespace BlazorPlayground.Chart.Tests;
+namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class DefaultDataMarkerTypesTests {
     [Fact]

@@ -1,4 +1,4 @@
-﻿namespace BlazorPlayground.Chart.Shapes;
+﻿namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class GridLineShape : ShapeBase {
     public override string CssClass => "grid-line";

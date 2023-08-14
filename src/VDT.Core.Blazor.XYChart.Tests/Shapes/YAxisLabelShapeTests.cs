@@ -1,8 +1,8 @@
-﻿using BlazorPlayground.Chart.Shapes;
-using System.Linq;
+﻿using System.Linq;
+using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
-namespace BlazorPlayground.Chart.Tests.Shapes;
+namespace VDT.Core.Blazor.XYChart.Tests.Shapes;
 
 public class YAxisLabelShapeTests {
     [Fact]

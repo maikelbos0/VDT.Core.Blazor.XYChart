@@ -1,4 +1,4 @@
-﻿namespace BlazorPlayground.Chart.Shapes;
+﻿namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class DataLineShape : ShapeBase {
     public override string CssClass => "line-data";

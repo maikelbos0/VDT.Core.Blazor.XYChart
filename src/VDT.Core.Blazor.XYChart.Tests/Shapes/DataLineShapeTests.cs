@@ -1,8 +1,8 @@
-﻿using BlazorPlayground.Chart.Shapes;
-using System.Linq;
+﻿using System.Linq;
+using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
-namespace BlazorPlayground.Chart.Tests.Shapes;
+namespace VDT.Core.Blazor.XYChart.Tests.Shapes;
 
 public class DataLineShapeTests {
     [Fact]
@@ -15,7 +15,7 @@ public class DataLineShapeTests {
     [Fact]
     public void GetAttributes() {
         var subject = new DataLineShape(new[] { "M 20 50", "L 80 90" }, 5M, "red", 2);
-        
+
         var result = subject.GetAttributes();
 
         Assert.Equal(3, result.Count());

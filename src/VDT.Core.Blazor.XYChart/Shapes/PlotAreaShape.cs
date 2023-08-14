@@ -1,4 +1,4 @@
-﻿namespace BlazorPlayground.Chart.Shapes;
+﻿namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class PlotAreaShape : ShapeBase {
     private const int bleed = 100;

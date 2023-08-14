@@ -1,8 +1,8 @@
-﻿using BlazorPlayground.Chart.Shapes;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using VDT.Core.Blazor.XYChart.Shapes;
 
-namespace BlazorPlayground.Chart;
+namespace VDT.Core.Blazor.XYChart;
 
 public abstract class LayerBase : ComponentBase, IDisposable {
     public static bool DefaultIsStacked { get; set; } = false;

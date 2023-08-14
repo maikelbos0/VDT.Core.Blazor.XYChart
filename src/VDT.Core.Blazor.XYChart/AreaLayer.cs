@@ -1,7 +1,7 @@
-﻿using BlazorPlayground.Chart.Shapes;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using VDT.Core.Blazor.XYChart.Shapes;
 
-namespace BlazorPlayground.Chart;
+namespace VDT.Core.Blazor.XYChart;
 
 public class AreaLayer : LayerBase {
     public static LineGapMode DefaultLineGapMode { get; set; } = LineGapMode.Skip;

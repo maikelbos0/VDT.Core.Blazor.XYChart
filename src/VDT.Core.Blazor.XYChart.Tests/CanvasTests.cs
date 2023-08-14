@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace BlazorPlayground.Chart.Tests;
+namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Fact]

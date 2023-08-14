@@ -1,4 +1,4 @@
-﻿namespace BlazorPlayground.Chart.Shapes;
+﻿namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class SquareDataMarkerShape : ShapeBase {
     public override string CssClass => "data-marker data-marker-square";

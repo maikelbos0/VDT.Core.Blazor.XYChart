@@ -1,4 +1,4 @@
-﻿namespace BlazorPlayground.Chart.Shapes;
+﻿namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class RoundDataMarkerShape : ShapeBase {
     public override string CssClass => "data-marker data-marker-round";
@@ -19,6 +19,6 @@ public class RoundDataMarkerShape : ShapeBase {
         { "cx", X },
         { "cy", Y },
         { "r", Size / 2M },
-        { "fill", Color }   
+        { "fill", Color }
     };
 }

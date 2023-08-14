@@ -1,6 +1,6 @@
-﻿using BlazorPlayground.Chart.Shapes;
+﻿using VDT.Core.Blazor.XYChart.Shapes;
 
-namespace BlazorPlayground.Chart;
+namespace VDT.Core.Blazor.XYChart;
 
 public static class DefaultDataMarkerTypes {
     public static ShapeBase Round(decimal x, decimal y, decimal size, string color, int dataSeriesIndex, int dataPointIndex)

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Globalization;
 
-namespace BlazorPlayground.Chart.Shapes;
+namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class ShapeAttributeCollection : IEnumerable<KeyValuePair<string, object>> {
     private readonly Dictionary<string, object> attributes = new();

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace BlazorPlayground.Chart;
+namespace VDT.Core.Blazor.XYChart;
 
 public class DataSeries : ComponentBase, IDisposable {
     public const string FallbackColor = "#000000";

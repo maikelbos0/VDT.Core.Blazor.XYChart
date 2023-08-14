@@ -1,8 +1,8 @@
-﻿using BlazorPlayground.Chart.Shapes;
-using System;
+﻿using System;
+using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
-namespace BlazorPlayground.Chart.Tests;
+namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class LineLayerTests {
     [Theory]
@@ -290,9 +290,9 @@ public class LineLayerTests {
     [Fact]
     public void GetStackedDataSeriesShapes_HideDataLines() {
         var subject = new LineLayer() {
-           Chart = new() {
-               Labels = { "Foo", "Bar" }
-           },
+            Chart = new() {
+                Labels = { "Foo", "Bar" }
+            },
             DataSeries = {
                 new() {
                     Color = "red",

@@ -1,7 +1,7 @@
-﻿using BlazorPlayground.Chart.Shapes;
+﻿using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
-namespace BlazorPlayground.Chart.Tests.Shapes;
+namespace VDT.Core.Blazor.XYChart.Tests.Shapes;
 
 public class PathCommandFactoryTests {
     [Fact]

@@ -1,6 +1,7 @@
-﻿using Xunit;
+﻿using VDT.Core.Blazor.XYChart;
+using Xunit;
 
-namespace BlazorPlayground.Chart.Tests;
+namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class DecimalMathTests {
     [Theory]

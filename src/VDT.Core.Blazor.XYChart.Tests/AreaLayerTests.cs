@@ -1,8 +1,8 @@
-﻿using BlazorPlayground.Chart.Shapes;
-using System;
+﻿using System;
+using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
-namespace BlazorPlayground.Chart.Tests;
+namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class AreaLayerTests {
     [Theory]

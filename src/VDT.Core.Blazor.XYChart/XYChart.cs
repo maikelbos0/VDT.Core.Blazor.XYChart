@@ -1,8 +1,8 @@
-﻿using BlazorPlayground.Chart.Shapes;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using VDT.Core.Blazor.XYChart.Shapes;
 
-namespace BlazorPlayground.Chart;
+namespace VDT.Core.Blazor.XYChart;
 
 public class XYChart : ComponentBase {
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
@@ -15,6 +15,7 @@ public class XYChart : ComponentBase {
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
 
+    // TODO fix sequence, add svg xmlns
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenComponent<CascadingValue<XYChart>>(1);
         builder.AddAttribute(2, "Value", this);
@@ -125,8 +126,8 @@ public class XYChart : ComponentBase {
     };
 
     public decimal GetDataPointWidth() => GetDataPointSpacingMode() switch {
-        DataPointSpacingMode.EdgeToEdge => ((decimal)Canvas.PlotAreaWidth) / Math.Max(1, Labels.Count - 1),
-        DataPointSpacingMode.Center => ((decimal)Canvas.PlotAreaWidth) / Math.Max(1, Labels.Count),
+        DataPointSpacingMode.EdgeToEdge => (decimal)Canvas.PlotAreaWidth / Math.Max(1, Labels.Count - 1),
+        DataPointSpacingMode.Center => (decimal)Canvas.PlotAreaWidth / Math.Max(1, Labels.Count),
         _ => throw new NotImplementedException($"No implementation found for {nameof(DataPointSpacingMode)} '{DataPointSpacingMode}'.")
     };
 
