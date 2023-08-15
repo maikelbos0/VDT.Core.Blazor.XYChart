@@ -1,5 +1,10 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using System.Threading.Tasks;
+
+// TODO add chart style as package file and as template
+// TODO multiple target frameworks
+// TODO build action
+// TODO improve examples
+// TODO warnings & messages
 
 namespace VDT.Core.Blazor.XYChart.Examples;
 
