@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System;
 
 namespace VDT.Core.Blazor.XYChart;
 

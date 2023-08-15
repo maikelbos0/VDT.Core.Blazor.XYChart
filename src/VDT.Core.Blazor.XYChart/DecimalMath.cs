@@ -1,4 +1,6 @@
-﻿namespace VDT.Core.Blazor.XYChart;
+﻿using System;
+
+namespace VDT.Core.Blazor.XYChart;
 
 public static class DecimalMath {
     public static decimal Pow(decimal x, int y) {

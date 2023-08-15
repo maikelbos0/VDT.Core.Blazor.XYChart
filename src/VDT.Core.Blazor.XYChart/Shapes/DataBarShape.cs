@@ -1,4 +1,6 @@
-﻿namespace VDT.Core.Blazor.XYChart.Shapes;
+﻿using System;
+
+namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class DataBarShape : ShapeBase {
     public override string CssClass => "bar-data";
