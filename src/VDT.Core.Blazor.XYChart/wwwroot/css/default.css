@@ -1,0 +1,44 @@
+.chart-main {
+    border: 1px solid #dee2e6;
+    user-select: none;
+}
+
+.chart-main .plot-area {
+    stroke: #dee2e6;
+    stroke-width: 1px;
+    fill: #ffffff;
+}
+
+.chart-main .grid-line {
+    stroke: #dee2e6;
+    stroke-dasharray: 5;
+    stroke-width: 1px;
+}
+
+.chart-main .grid-line[value='0'] {
+    stroke: #adafb3;
+    stroke-dasharray: none;
+}
+
+.chart-main .y-axis-label {
+    text-anchor: end;
+    font-size: 10pt;
+    alignment-baseline: central;
+}
+
+.chart-main .y-axis-multiplier {
+    transform-box: fill-box;
+    transform-origin: 50% 50% 0;
+    transform: translate(6pt, 0) rotate(-90deg);
+    dominant-baseline: central;
+    text-anchor: middle;
+}
+
+.chart-main .x-axis-label {
+    dominant-baseline: hanging;
+    text-anchor: middle;
+}
+
+.chart-main .line-data {
+    fill: none;
+}
