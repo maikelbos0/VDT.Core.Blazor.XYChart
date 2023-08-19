@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-// TODO multiple target frameworks
-// TODO build action
 // TODO improve examples
 // TODO add chart style as example
 // TODO warnings & messages
 // TODO docs <GenerateDocumentationFile>true</GenerateDocumentationFile>
+// TODO figure out how to reload when rendering... render twice? on parameters set?
 
 namespace VDT.Core.Blazor.XYChart.Examples;
 
