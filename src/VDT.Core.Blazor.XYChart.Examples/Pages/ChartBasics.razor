@@ -1,0 +1,61 @@
+﻿@page "/ChartBasics"
+
+<h1>ChartBasics</h1>
+
+<p>
+    An XY chart is composed of layers, each of which groups a number of data series and defines how they should be rendered. Current supported chart layer
+    types are line, area and bar layers, each of which can be either stacked or unstacked.
+</p>
+
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label">Layers</label>
+        <Multiselect Items="AllLayerTypes" @bind-SelectedItems="LayerTypes" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="isStacked">Stack mode</label>
+        <select class="form-select" id="isStacked" @onchange="args => IsStacked = bool.Parse(args.Value?.ToString()!)">
+            <option value="false" selected="@(!IsStacked)">Unstacked</option>
+            <option value="true" selected="@IsStacked">Stacked</option>
+        </select>
+    </div>
+</div>
+
+
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
+    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
+
+    @if (LayerTypes.Contains(ChartLayerType.Area)) {
+        <AreaLayer IsStacked="IsStacked">
+            <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
+            <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" />
+        </AreaLayer>
+    }
+
+    @if (LayerTypes.Contains(ChartLayerType.Bar)) {
+        <BarLayer IsStacked="IsStacked">
+            <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
+            <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" />
+        </BarLayer>
+    }
+
+    @if (LayerTypes.Contains(ChartLayerType.Line)) {
+        <LineLayer IsStacked="IsStacked">
+            <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
+            <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
+        </LineLayer>
+    }
+</XYChart>
+
+@code {    
+    private bool IsStacked { get; set; } = false;
+    private List<ChartLayerType> LayerTypes { get; set; } = new(Enum.GetValues<ChartLayerType>());
+    private List<(ChartLayerType, string)> AllLayerTypes { get; } = Enum.GetValues<ChartLayerType>().Select(layerType => (layerType, layerType.ToString())).ToList();
+
+    private enum ChartLayerType {
+        Bar,
+        Line,
+        Area
+    }
+}
