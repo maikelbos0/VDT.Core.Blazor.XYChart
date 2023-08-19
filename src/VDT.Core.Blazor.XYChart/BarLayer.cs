@@ -16,6 +16,10 @@ public class BarLayer : LayerBase {
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
 
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
+        if (!DataSeries.Any()) {
+            return Enumerable.Empty<ShapeBase>();
+        }
+
         var width = Chart.GetDataPointWidth() / 100M * (100M - ClearancePercentage * 2);
         Func<int, decimal> offsetProvider = dataSeriesIndex => -width / 2M;
 

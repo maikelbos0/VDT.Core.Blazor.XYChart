@@ -347,4 +347,18 @@ public class LineLayerTests {
 
         Assert.Equal(expectedPath, shape.Path);
     }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void GetDataSeriesShapes_Empty(bool isStacked) {
+        var subject = new LineLayer() {
+            Chart = new(),
+            IsStacked = isStacked,
+            ShowDataLines = true,
+            ShowDataMarkers = true
+        };
+
+        Assert.Empty(subject.GetDataSeriesShapes());
+    }
 }
