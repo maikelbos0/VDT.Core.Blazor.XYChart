@@ -1,0 +1,59 @@
+﻿@page "/Style"
+
+<h1>Style</h1>
+
+<p>
+    Since the chart is rendered as SVG, each chart element is fully customizable with the powerful SVG customization options in CSS. Each element type can be
+    referenced using the below CSS classes. The chart itself can be referenced with <code>svg.chart-main</code>.
+</p>
+
+<ul>
+    <li>Plot area: <code>.plot-area</code>; please note that this shape is inverted and actually covers chart data elements that would otherwise extend into the rest of the canvas</li>
+    <li>Grid lines: <code>.grid-line</code></li>
+    <li>
+        Axes:
+        <ul>
+            <li>X axis labels: <code>.x-axis-label</code></li>
+            <li>Y axis labels: <code>.y-axis-label</code></li>
+            <li>Y axis multiplier: <code>.y-axis-multiplier</code></li>
+        </ul>
+    </li>
+    <li>
+        Data: <code>.data</code>
+        <ul>
+            <li>Area data: <code>.data.area-data</code></li>
+            <li>Bar data: <code>.data.bar-data</code></li>
+            <li>Line data: <code>.data.line-data</code></li>
+        </ul>
+    </li>
+    <li>
+        Data markers for line data: <code>.data-marker</code>
+        <ul>
+            <li>Round data markers: <code>.data-marker.data-marker-round</code></li>
+            <li>Square data markers: <code>.data-marker.data-marker-square</code></li>
+        </ul>
+    </li>
+</ul>
+
+TODO: override css and add marker positions for labels etc
+
+<p>
+    Styles that are not universal, such as the color for a data series, the line and marker settings for a line layer, or the gap width for a bar layer can be
+    set on the various chart objects themselves. For more information, see the menu items for the various layer types.
+</p>
+
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
+    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
+    <AreaLayer>
+        <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
+        <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" />
+    </AreaLayer>
+    <BarLayer>
+        <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
+        <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" />
+    </BarLayer>
+    <LineLayer DataLineWidth="3" DataMarkerSize="15" DataMarkerType="DefaultDataMarkerTypes.Square">
+        <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
+        <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
+    </LineLayer>
+</XYChart>
