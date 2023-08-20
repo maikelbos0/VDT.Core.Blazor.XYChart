@@ -20,11 +20,6 @@ public class XYChart : ComponentBase {
 
     // TODO fix sequence, add svg xmlns
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenComponent<CascadingValue<XYChart>>(1);
-        builder.AddAttribute(2, "Value", this);
-        builder.AddAttribute(3, "ChildContent", ChildContent);
-        builder.CloseComponent();
-
         builder.OpenElement(1, "svg");
         builder.AddAttribute(2, "class", "chart-main");
         builder.AddAttribute(3, "viewbox", $"0 0 {Canvas.Width} {Canvas.Height}");
@@ -39,6 +34,11 @@ public class XYChart : ComponentBase {
             builder.AddContent(9, shape.GetContent());
             builder.CloseElement();
         }
+
+        builder.OpenComponent<CascadingValue<XYChart>>(1);
+        builder.AddAttribute(2, "Value", this);
+        builder.AddAttribute(3, "ChildContent", ChildContent);
+        builder.CloseComponent();
 
         builder.CloseElement();
     }
