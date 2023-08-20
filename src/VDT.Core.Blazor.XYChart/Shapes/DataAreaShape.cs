@@ -3,7 +3,7 @@
 namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class DataAreaShape : ShapeBase {
-    public override string CssClass => "area-data";
+    public override string CssClass => "data area-data";
     public override string ElementName => "path";
     public string Path { get; }
     public string Color { get; }
