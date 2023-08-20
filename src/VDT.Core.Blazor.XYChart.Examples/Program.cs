@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 // TODO warnings & messages
 // TODO docs <GenerateDocumentationFile>true</GenerateDocumentationFile>
 // TODO figure out how to reload when rendering... render twice? on parameters set?
+// TODO perhaps add a class element to data series to allow custom styling per series, could even replace line width
+// TODO maybe rename data shapes _again_ to reverse data-x to x-data
 
 namespace VDT.Core.Blazor.XYChart.Examples;
 
