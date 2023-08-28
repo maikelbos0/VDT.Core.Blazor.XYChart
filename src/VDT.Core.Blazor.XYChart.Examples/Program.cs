@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 // TODO improve examples
-// TODO add chart style as example
 // TODO warnings & messages
 // TODO docs <GenerateDocumentationFile>true</GenerateDocumentationFile>
 // TODO figure out how to reload when rendering... render twice? on parameters set?

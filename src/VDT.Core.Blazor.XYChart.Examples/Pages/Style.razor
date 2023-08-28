@@ -9,7 +9,10 @@
 </p>
 
 <ul>
-    <li>Plot area: <code>.plot-area</code>; please note that this shape is inverted and actually covers chart data elements that would otherwise extend into the rest of the canvas</li>
+    <li>
+        Plot area: <code>.plot-area</code>; please note that this shape is inverted and actually covers chart data elements that would otherwise extend into
+        the rest of the canvas
+    </li>
     <li>Grid lines: <code>.grid-line</code></li>
     <li>
         Axes:
@@ -36,7 +39,12 @@
     </li>
 </ul>
 
-TODO: override css
+<p>
+    Below example contains custom styling for each available element. Please note that because this example uses Blazor CSS isolation on a child component, the
+    <code>::deep</code> pseudo-element is used and the chart component must be inside any normal HTML element that the isolation attribute will be applied to.
+    See the <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/css-isolation">Microsoft documentation on Blazor CSS isolation</a> for 
+    more information.
+</p>
 
 <p>
     The chart also allows you to add custom SVG elements; they are always rendered last, which means they will be top-most in the chart drawing.
@@ -52,38 +60,38 @@ TODO: override css
     set on the various chart objects themselves. For more information, see the menu items for the various layer types.
 </p>
 
-<XYChart @ref="Chart" Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
-    @if (Chart != null) {
-        foreach (var coordinates in GetCoordinates()) {
-            <line x1="@(coordinates.Item1 - 10)" y1="@coordinates.Item2" x2="@(coordinates.Item1 + 10)" y2="@coordinates.Item2" stroke="red"></line>
-            <line x1="@coordinates.Item1" y1="@(coordinates.Item2 - 10)" x2="@coordinates.Item1" y2="@(coordinates.Item2 + 10)" stroke="red"></line>
+<div>
+    <XYChart @ref="Chart" Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
+        @if (Chart != null) {
+            foreach (var coordinates in GetCoordinates()) {
+                <line x1="@(coordinates.Item1 - 10)" y1="@coordinates.Item2" x2="@(coordinates.Item1 + 10)" y2="@coordinates.Item2" stroke="red"></line>
+                <line x1="@coordinates.Item1" y1="@(coordinates.Item2 - 10)" x2="@coordinates.Item1" y2="@(coordinates.Item2 + 10)" stroke="red"></line>
+            }
         }
-    }
 
-    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-    <PlotArea Multiplier="1000" />
-    <AreaLayer>
-        <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
-        <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" />
-    </AreaLayer>
-    <BarLayer>
-        <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
-        <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" />
-    </BarLayer>
-    <LineLayer DataLineWidth="3" DataMarkerSize="15" DataMarkerType="DefaultDataMarkerTypes.Square">
-        <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
-        <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
-    </LineLayer>
-</XYChart>
+        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
+        <PlotArea Multiplier="1000" />
+        <AreaLayer>
+            <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
+            <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" />
+        </AreaLayer>
+        <BarLayer>
+            <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
+            <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" />
+        </BarLayer>
+        <LineLayer DataLineWidth="3" DataMarkerSize="15" DataMarkerType="DefaultDataMarkerTypes.Square">
+            <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
+            <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
+        </LineLayer>
+    </XYChart>
+</div>
 
 @code {
     private XYChart? Chart { get; set; }
 
     private IEnumerable<(int, int)> GetCoordinates() {
-        if (Chart != null)
-        {
-            foreach (var shape in Chart.GetYAxisLabelShapes())
-            {
+        if (Chart != null) {
+            foreach (var shape in Chart.GetYAxisLabelShapes()) {
                 yield return ((int)shape.X, (int)shape.Y);
             }
 
