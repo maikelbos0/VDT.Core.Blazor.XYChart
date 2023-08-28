@@ -4,13 +4,13 @@
 <h1>Style</h1>
 
 <p>
-    Since the chart is rendered as SVG, each chart element is fully customizable with the powerful SVG customization options in CSS. Each element type can be
-    referenced using the below CSS classes. The chart itself can be referenced with <code>svg.chart-main</code>.
+    Since the chart is rendered as SVG, each chart element is fully customizable using the powerful SVG options in CSS. Each element type can be referenced
+    using the below CSS classes. The chart itself can be referenced with the CSS class <code>svg.chart-main</code>.
 </p>
 
 <ul>
     <li>
-        Plot area: <code>.plot-area</code>; please note that this shape is inverted and actually covers chart data elements that would otherwise extend into
+        Plot area: <code>.plot-area</code>; please note that this shape is inverted so that it covers chart data elements that would otherwise extend into
         the rest of the canvas
     </li>
     <li>Grid lines: <code>.grid-line</code></li>
@@ -41,22 +41,23 @@
 
 <p>
     Below example contains custom styling for each available element. Please note that because this example uses Blazor CSS isolation on a child component, the
-    <code>::deep</code> pseudo-element is used and the chart component must be inside any normal HTML element that the isolation attribute will be applied to.
-    See the <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/css-isolation">Microsoft documentation on Blazor CSS isolation</a> for 
-    more information.
+    <code>::deep</code> pseudo-element is used and the chart component must be inside an HTML element that the isolation attribute will be applied to. See the
+    <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/css-isolation">Microsoft documentation on Blazor CSS isolation</a> for more
+    information.
 </p>
 
 <p>
-    The chart also allows you to add custom SVG elements; they are always rendered last, which means they will be top-most in the chart drawing.
+    The chart also allows you to add SVG elements or other custom content as part of the <code>ChildContent</code>. This content is always rendered last, which
+    means custom content will be rendered top-most in the chart SVG.
 </p>
 
 <p>
     The axis labels and y-axis multiplier only get positioned with a single x/y coordinate as an anchor, so horizontal and vertical aligning, rotation and any
-    other positional transforming should be done with CSS. In the below chart example the positions of the labels are made visible with red crosses.
+    other positional transforming should be done with CSS. In the below chart example the anchors of these elements are made visible with red crosses.
 </p>
 
 <p>
-    Styles that are not universal, such as the color for a data series, the line and marker settings for a line layer, or the gap width for a bar layer can be
+    Styles that are not universal, such as the color for a data series, the line and marker settings for a line layer, or the gap width for a bar layer, can be
     set on the various chart objects themselves. For more information, see the menu items for the various layer types.
 </p>
 

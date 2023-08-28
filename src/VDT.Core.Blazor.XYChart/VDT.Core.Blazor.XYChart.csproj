@@ -13,7 +13,7 @@
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component to create SVG bar, line and area charts</Description>
 		<PackageReleaseNotes>- Prevented empty layers from throwing an exception
-- Moved child content rendering to the bottom to allow custom SVG elements
+- Moved child content rendering to the bottom of the render tree to allow custom SVG elements
 - Fixed chart style to be in line with bootstrap defaults
 - Added basic and style examples</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>

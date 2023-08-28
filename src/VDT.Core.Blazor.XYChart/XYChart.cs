@@ -36,8 +36,8 @@ public class XYChart : ComponentBase {
         }
 
         builder.OpenComponent<CascadingValue<XYChart>>(1);
-        builder.AddAttribute(2, "Value", this);
-        builder.AddAttribute(3, "ChildContent", ChildContent);
+        builder.AddAttribute(10, "Value", this);
+        builder.AddAttribute(11, "ChildContent", ChildContent);
         builder.CloseComponent();
 
         builder.CloseElement();

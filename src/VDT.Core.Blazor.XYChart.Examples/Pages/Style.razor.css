@@ -1,5 +1,5 @@
 ﻿::deep .chart-main .plot-area {
-    stroke: #787C80;
+    stroke: #787c80;
 }
 
 ::deep .chart-main .grid-line {
@@ -24,13 +24,13 @@
 
 ::deep .chart-main .bar-data {
     fill-opacity: 0.8;
-    stroke: #787C80;
+    stroke: #787c80;
     stroke-opacity: 0.8;
 }
 
 ::deep .chart-main .area-data {
     fill-opacity: 0.6;
-    stroke: #787C80;
+    stroke: #787c80;
     stroke-opacity: 0.6;
 }
 
@@ -39,6 +39,6 @@
     transform-origin: 50% 50% 0;
     transform: rotate(45deg);
     fill-opacity: 0.6;
-    stroke: #787C80;
+    stroke: #787c80;
     stroke-opacity: 0.6;
 }
