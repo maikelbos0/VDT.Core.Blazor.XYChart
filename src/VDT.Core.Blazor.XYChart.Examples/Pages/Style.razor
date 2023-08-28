@@ -1,0 +1,108 @@
+﻿@page "/Style"
+@using VDT.Core.Blazor.XYChart.Shapes;
+
+<h1>Style</h1>
+
+<p>
+    Since the chart is rendered as SVG, each chart element is fully customizable using the powerful SVG options in CSS. Each element type can be referenced
+    using the below CSS classes. The chart itself can be referenced with the CSS class <code>svg.chart-main</code>.
+</p>
+
+<ul>
+    <li>
+        Plot area: <code>.plot-area</code>; please note that this shape is inverted so that it covers chart data elements that would otherwise extend into
+        the rest of the canvas
+    </li>
+    <li>Grid lines: <code>.grid-line</code></li>
+    <li>
+        Axes:
+        <ul>
+            <li>X-axis labels: <code>.x-axis-label</code></li>
+            <li>Y-axis labels: <code>.y-axis-label</code></li>
+            <li>Y-axis multiplier: <code>.y-axis-multiplier</code></li>
+        </ul>
+    </li>
+    <li>
+        Data: <code>.data</code>
+        <ul>
+            <li>Area data: <code>.data.area-data</code></li>
+            <li>Bar data: <code>.data.bar-data</code></li>
+            <li>Line data: <code>.data.line-data</code></li>
+        </ul>
+    </li>
+    <li>
+        Data markers for line data: <code>.data-marker</code>
+        <ul>
+            <li>Round data markers: <code>.data-marker.data-marker-round</code></li>
+            <li>Square data markers: <code>.data-marker.data-marker-square</code></li>
+        </ul>
+    </li>
+</ul>
+
+<p>
+    Below example contains custom styling for each available element. Please note that because this example uses Blazor CSS isolation on a child component, the
+    <code>::deep</code> pseudo-element is used and the chart component must be inside an HTML element that the isolation attribute will be applied to. See the
+    <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/css-isolation">Microsoft documentation on Blazor CSS isolation</a> for more
+    information.
+</p>
+
+<p>
+    The chart also allows you to add SVG elements or other custom content as part of the <code>ChildContent</code>. This content is always rendered last, which
+    means custom content will be rendered top-most in the chart SVG.
+</p>
+
+<p>
+    The axis labels and y-axis multiplier only get positioned with a single x/y coordinate as an anchor, so horizontal and vertical aligning, rotation and any
+    other positional transforming should be done with CSS. In the below chart example the anchors of these elements are made visible with red crosses.
+</p>
+
+<p>
+    Styles that are not universal, such as the color for a data series, the line and marker settings for a line layer, or the gap width for a bar layer, can be
+    set on the various chart objects themselves. For more information, see the menu items for the various layer types.
+</p>
+
+<div>
+    <XYChart @ref="Chart" Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
+        @if (Chart != null) {
+            foreach (var coordinates in GetCoordinates()) {
+                <line x1="@(coordinates.Item1 - 10)" y1="@coordinates.Item2" x2="@(coordinates.Item1 + 10)" y2="@coordinates.Item2" stroke="red"></line>
+                <line x1="@coordinates.Item1" y1="@(coordinates.Item2 - 10)" x2="@coordinates.Item1" y2="@(coordinates.Item2 + 10)" stroke="red"></line>
+            }
+        }
+
+        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
+        <PlotArea Multiplier="1000" />
+        <AreaLayer>
+            <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
+            <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" />
+        </AreaLayer>
+        <BarLayer>
+            <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
+            <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" />
+        </BarLayer>
+        <LineLayer DataLineWidth="3" DataMarkerSize="15" DataMarkerType="DefaultDataMarkerTypes.Square">
+            <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
+            <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
+        </LineLayer>
+    </XYChart>
+</div>
+
+@code {
+    private XYChart? Chart { get; set; }
+
+    private IEnumerable<(int, int)> GetCoordinates() {
+        if (Chart != null) {
+            foreach (var shape in Chart.GetYAxisLabelShapes()) {
+                yield return ((int)shape.X, (int)shape.Y);
+            }
+
+            if (Chart.GetYAxisMultiplierShape() is YAxisMultiplierShape multiplierShape) {
+                yield return ((int)multiplierShape.X, (int)multiplierShape.Y);
+            }
+
+            foreach (var shape in Chart.GetXAxisLabelShapes()) {
+                yield return ((int)shape.X, (int)shape.Y);
+            }
+        }
+    }
+}

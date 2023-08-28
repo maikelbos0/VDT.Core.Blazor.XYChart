@@ -3,7 +3,7 @@
 namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class DataBarShape : ShapeBase {
-    public override string CssClass => "bar-data";
+    public override string CssClass => "data bar-data";
     public override string ElementName => "rect";
     public decimal X { get; }
     public decimal Y { get; }

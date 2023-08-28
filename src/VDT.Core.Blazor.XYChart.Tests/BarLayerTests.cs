@@ -136,4 +136,16 @@ public class BarLayerTests {
             { 1, 2, 5M, plotAreaX + (2.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax - 15M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight }
         };
     }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void GetDataSeriesShapes_Empty(bool isStacked) {
+        var subject = new BarLayer() {
+            Chart = new(),
+            IsStacked = isStacked
+        };
+
+        Assert.Empty(subject.GetDataSeriesShapes());
+    }
 }

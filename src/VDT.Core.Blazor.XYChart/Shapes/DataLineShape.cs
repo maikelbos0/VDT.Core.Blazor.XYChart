@@ -3,7 +3,7 @@
 namespace VDT.Core.Blazor.XYChart.Shapes;
 
 public class DataLineShape : ShapeBase {
-    public override string CssClass => "line-data";
+    public override string CssClass => "data line-data";
     public override string ElementName => "path";
     public string Path { get; }
     public decimal Width { get; }

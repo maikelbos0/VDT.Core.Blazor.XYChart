@@ -170,4 +170,16 @@ public class AreaLayerTests {
 
         Assert.Equal(expectedPath, shape.Path);
     }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void GetDataSeriesShapes_Empty(bool isStacked) {
+        var subject = new AreaLayer() {
+            Chart = new(),
+            IsStacked = isStacked
+        };
+
+        Assert.Empty(subject.GetDataSeriesShapes());
+    }
 }

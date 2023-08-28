@@ -8,10 +8,14 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.XYChart</PackageId>
-		<Version>0.1.0</Version>
+		<Version>0.2.0</Version>
 		<Title>VDT.Core.Blazor.XYChart</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component to create SVG bar, line and area charts</Description>
+		<PackageReleaseNotes>- Prevented empty layers from throwing an exception
+- Moved child content rendering to the bottom of the render tree to allow custom SVG elements
+- Fixed chart style to be in line with bootstrap defaults
+- Added basic and style examples</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Maikel Bos</Copyright>
