@@ -8,6 +8,7 @@ public class ChildComponentBaseTests {
     private class TestComponent : ChildComponentBase {
         public int Struct { get; set; }
         public string? String { get; set; }
+        public List<int?> List { get; set; } = new();
 
         public override bool HaveParametersChanged(ParameterView parameters) {
             throw new System.NotImplementedException();
@@ -64,5 +65,37 @@ public class ChildComponentBaseTests {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
 
         Assert.False(ChildComponentBase.HasParameterChanged(parameters, nameof(subject.String), subject.String));
+    }
+
+    [Theory]
+    [MemberData(nameof(HasParameterChanged_List_Data))]
+    public void HasParameterChanged_List(List<int?> oldValue, List<int?>? newValue, bool expectedResult) {
+        var subject = new TestComponent() {
+            List = oldValue
+        };
+
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(TestComponent.String), newValue }
+        });
+
+        Assert.Equal(expectedResult, ChildComponentBase.HasParameterChanged(parameters, nameof(subject.List), subject.List));
+    }
+
+    public static TheoryData<List<int?>, List<int?>?, bool> HasParameterChanged_List_Data() => new() {
+        { new List<int?>(), new List<int?>(), false },
+        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2 }, false },
+        { new List<int?>(), null, false },
+        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 3 }, false },
+        { new List<int?>() { 1, 2, 3 }, new List<int?>() { 1, 2 }, false },
+        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2, 3 }, false }
+    };
+
+    [Fact]
+    public void HasParameterChanged_List_NotPresentInParameters() {
+        var subject = new TestComponent();
+
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
+
+        Assert.False(ChildComponentBase.HasParameterChanged(parameters, nameof(subject.List), subject.List));
     }
 }

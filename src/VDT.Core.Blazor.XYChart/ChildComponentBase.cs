@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
@@ -29,5 +29,7 @@ public abstract class ChildComponentBase : ComponentBase {
         return parameters.TryGetValue(parameterName, out T? value) && value != null && !value.Value.Equals(oldValue);
     }
 
+    public static bool HasParameterChanged<T>(ParameterView parameters, string parameterName, IEnumerable<T?> oldValue) where T : struct {
+        return parameters.TryGetValue(parameterName, out IEnumerable<T?>? value) && value != null && !value.SequenceEqual(oldValue);
     }
 }
