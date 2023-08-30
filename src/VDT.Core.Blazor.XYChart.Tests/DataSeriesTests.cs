@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
@@ -11,6 +12,27 @@ public class DataSeriesTests {
         public override DataPointSpacingMode DefaultDataPointSpacingMode => throw new NotImplementedException();
 
         public override IEnumerable<ShapeBase> GetDataSeriesShapes() => throw new NotImplementedException();
+    }
+
+    [Theory]
+    [InlineData("Foo", "red", 3, false)]
+    [InlineData("Bar", "red", 3, true)]
+    [InlineData("Foo", "blue", 3, true)]
+    [InlineData("Foo", "red", 4, true)]
+    public void HaveParametersChanged(string? name, string? color, int dataPoint, bool expectedResult) {
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(DataSeries.Name), name },
+            { nameof(DataSeries.Color), color },
+            { nameof(DataSeries.DataPoints), new List<decimal?> { 1, 2, dataPoint } }
+        });
+
+        var subject = new DataSeries() {
+            Name = "Foo",
+            Color = "red",
+            DataPoints = { 1, 2, 3}
+        };
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
     [Fact]
