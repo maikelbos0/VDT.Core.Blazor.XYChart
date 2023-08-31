@@ -1,10 +1,31 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
+using System.Collections.Generic;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class AreaLayerTests {
+
+    [Theory]
+    [InlineData(false, LineGapMode.Skip, false)]
+    [InlineData(true, LineGapMode.Skip, true)]
+    [InlineData(false, LineGapMode.Join, true)]
+    public void HaveParametersChanged(bool isStacked, LineGapMode lineGapMode, bool expectedResult) {
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(AreaLayer.IsStacked), isStacked },
+            { nameof(AreaLayer.LineGapMode), lineGapMode }
+        });
+
+        var subject = new AreaLayer {
+            IsStacked = false,
+            LineGapMode = LineGapMode.Skip
+        };
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
+    }
+
     [Theory]
     [MemberData(nameof(GetUnstackedDataSeriesShapes_Data))]
     public void GetUnstackedDataSeriesShapes(int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {

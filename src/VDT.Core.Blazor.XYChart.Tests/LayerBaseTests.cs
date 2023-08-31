@@ -15,22 +15,9 @@ public class LayerBaseTests {
             StackMode = stackMode;
         }
 
+        public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
+
         public override IEnumerable<ShapeBase> GetDataSeriesShapes() => throw new NotImplementedException();
-    }
-
-    [Theory]
-    [InlineData(false, false)]
-    [InlineData(true, true)]
-    public void HaveParametersChanged(bool isStacked, bool expectedResult) {
-        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
-            { nameof(TestLayer.IsStacked), isStacked }
-        });
-
-        var subject = new TestLayer(StackMode.Single) {
-            IsStacked = false
-        };
-
-        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
     [Fact]

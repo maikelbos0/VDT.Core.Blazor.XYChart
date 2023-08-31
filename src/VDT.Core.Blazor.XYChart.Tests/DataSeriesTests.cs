@@ -11,6 +11,8 @@ public class DataSeriesTests {
         public override StackMode StackMode => throw new NotImplementedException();
         public override DataPointSpacingMode DefaultDataPointSpacingMode => throw new NotImplementedException();
 
+        public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
+
         public override IEnumerable<ShapeBase> GetDataSeriesShapes() => throw new NotImplementedException();
     }
 

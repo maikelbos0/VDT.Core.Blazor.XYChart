@@ -18,8 +18,6 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
 
     protected override void OnInitialized() => Chart.AddLayer(this);
 
-    public override bool HaveParametersChanged(ParameterView parameters) => HasParameterChanged(parameters, nameof(IsStacked), IsStacked);
-
     public void Dispose() => Chart.RemoveLayer(this);
 
     internal void AddDataSeries(DataSeries dataSeries) {
