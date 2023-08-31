@@ -9,6 +9,7 @@ public class ChildComponentBaseTests {
         public int Struct { get; set; }
         public string? String { get; set; }
         public List<int?> List { get; set; } = new();
+        public DataMarkerDelegate Delegate { get; set; } = DefaultDataMarkerTypes.Square;
 
         public override bool HaveParametersChanged(ParameterView parameters) {
             throw new System.NotImplementedException();
@@ -38,6 +39,35 @@ public class ChildComponentBaseTests {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
 
         Assert.False(ChildComponentBase.HasParameterChanged(parameters, nameof(subject.Struct), subject.Struct));
+    }
+
+    [Theory]
+    [MemberData(nameof(HasParameterChanged_Delegate_Data))]
+    public void HasParameterChanged_Delegate(DataMarkerDelegate oldValue, DataMarkerDelegate? newValue, bool expectedResult) {
+        var subject = new TestComponent() {
+            Delegate = oldValue
+        };
+
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(TestComponent.Delegate), newValue }
+        });
+
+        Assert.Equal(expectedResult, ChildComponentBase.HasParameterChanged(parameters, nameof(subject.Delegate), subject.Delegate));
+    }
+
+    public static TheoryData<DataMarkerDelegate, DataMarkerDelegate?, bool> HasParameterChanged_Delegate_Data() => new() {
+        { DefaultDataMarkerTypes.Square, DefaultDataMarkerTypes.Square, false },
+        { DefaultDataMarkerTypes.Square, null, false },
+        { DefaultDataMarkerTypes.Square, DefaultDataMarkerTypes.Round, true }
+    };
+
+    [Fact]
+    public void HasParameterChanged_Delegate_NotPresentInParameters() {
+        var subject = new TestComponent();
+
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
+
+        Assert.False(ChildComponentBase.HasParameterChanged(parameters, nameof(subject.Delegate), subject.Delegate));
     }
 
     [Theory]

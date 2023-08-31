@@ -38,7 +38,7 @@ public class LineLayerTests {
         { true, true, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
         { false, false, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
         { false, true, 15M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
-        // TODO { false, true, 10M, DefaultDataMarkerTypes.Round, true, 2M, LineGapMode.Skip, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Round, true, 2M, LineGapMode.Skip, true },
         { false, true, 10M, DefaultDataMarkerTypes.Square, false, 2M, LineGapMode.Skip, true },
         { false, true, 10M, DefaultDataMarkerTypes.Square, true, 3M, LineGapMode.Skip, true },
         { false, true, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Join, true },

@@ -21,15 +21,15 @@ public abstract class ChildComponentBase : ComponentBase {
     
     public abstract bool HaveParametersChanged(ParameterView parameters);
 
-    public static bool HasParameterChanged(ParameterView parameters, string parameterName, string? oldValue) {
-        return parameters.TryGetValue(parameterName, out string? value) && !string.Equals(value, oldValue);
-    }
+    public static bool HasParameterChanged(ParameterView parameters, string parameterName, string? oldValue)
+        => parameters.TryGetValue(parameterName, out string? value) && !string.Equals(value, oldValue);
 
-    public static bool HasParameterChanged<T>(ParameterView parameters, string parameterName, T oldValue) where T : struct {
-        return parameters.TryGetValue(parameterName, out T? value) && value != null && !value.Value.Equals(oldValue);
-    }
+    public static bool HasParameterChanged<T>(ParameterView parameters, string parameterName, T oldValue) where T : struct
+        => parameters.TryGetValue(parameterName, out T? value) && value != null && !value.Value.Equals(oldValue);
 
-    public static bool HasParameterChanged<T>(ParameterView parameters, string parameterName, IEnumerable<T?> oldValue) where T : struct {
-        return parameters.TryGetValue(parameterName, out IEnumerable<T?>? value) && value != null && !value.SequenceEqual(oldValue);
-    }
+    public static bool HasParameterChanged(ParameterView parameters, string parameterName, Delegate oldValue)
+        => parameters.TryGetValue(parameterName, out Delegate? value) && value != null && !value.Equals(oldValue);
+
+    public static bool HasParameterChanged<T>(ParameterView parameters, string parameterName, IEnumerable<T?> oldValue) where T : struct
+        => parameters.TryGetValue(parameterName, out IEnumerable<T?>? value) && value != null && !value.SequenceEqual(oldValue);
 }

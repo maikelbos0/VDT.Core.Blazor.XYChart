@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
@@ -27,7 +26,7 @@ public class LineLayer : LayerBase {
         => HasParameterChanged(parameters, nameof(IsStacked), IsStacked)
         || HasParameterChanged(parameters, nameof(ShowDataMarkers), ShowDataMarkers)
         || HasParameterChanged(parameters, nameof(DataMarkerSize), DataMarkerSize)
-        // TODO but how || HasParameterChanged(parameters, nameof(DataMarkerType), DataMarkerType) 
+        || HasParameterChanged(parameters, nameof(DataMarkerType), DataMarkerType) 
         || HasParameterChanged(parameters, nameof(ShowDataLines), ShowDataLines)
         || HasParameterChanged(parameters, nameof(DataLineWidth), DataLineWidth)
         || HasParameterChanged(parameters, nameof(LineGapMode), LineGapMode);
