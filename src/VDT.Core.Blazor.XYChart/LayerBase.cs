@@ -7,10 +7,9 @@ using VDT.Core.Blazor.XYChart.Shapes;
 
 namespace VDT.Core.Blazor.XYChart;
 
-public abstract class LayerBase : ComponentBase, IDisposable {
+public abstract class LayerBase : ChildComponentBase, IDisposable {
     public static bool DefaultIsStacked { get; set; } = false;
 
-    [CascadingParameter] internal XYChart Chart { get; set; } = null!;
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool IsStacked { get; set; } = DefaultIsStacked;
     internal List<DataSeries> DataSeries { get; set; } = new();
@@ -18,6 +17,8 @@ public abstract class LayerBase : ComponentBase, IDisposable {
     public abstract DataPointSpacingMode DefaultDataPointSpacingMode { get; }
 
     protected override void OnInitialized() => Chart.AddLayer(this);
+
+    public override bool HaveParametersChanged(ParameterView parameters) => HasParameterChanged(parameters, nameof(IsStacked), IsStacked);
 
     public void Dispose() => Chart.RemoveLayer(this);
 
