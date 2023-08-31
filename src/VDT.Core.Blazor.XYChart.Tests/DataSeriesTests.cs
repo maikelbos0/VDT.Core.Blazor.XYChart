@@ -17,15 +17,12 @@ public class DataSeriesTests {
     }
 
     [Theory]
-    [InlineData("Foo", "red", 3, false)]
-    [InlineData("Bar", "red", 3, true)]
-    [InlineData("Foo", "blue", 3, true)]
-    [InlineData("Foo", "red", 4, true)]
-    public void HaveParametersChanged(string? name, string? color, int dataPoint, bool expectedResult) {
+    [MemberData(nameof(HaveParametersChanged_Data))]
+    public void HaveParametersChanged(string? name, string? color, List<decimal?> dataPoints, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(DataSeries.Name), name },
             { nameof(DataSeries.Color), color },
-            { nameof(DataSeries.DataPoints), new List<decimal?> { 1, 2, dataPoint } }
+            { nameof(DataSeries.DataPoints), dataPoints }
         });
 
         var subject = new DataSeries() {
@@ -36,6 +33,13 @@ public class DataSeriesTests {
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
+
+    public static TheoryData<string?, string?, List<decimal?>, bool> HaveParametersChanged_Data() => new() {
+        { "Foo", "red", new List<decimal?> { 1, 2, 3 }, false },
+        { "Bar", "red", new List<decimal?> { 1, 2, 3 }, true },
+        { "Foo", "blue", new List<decimal?> { 1, 2, 3 }, true },
+        { "Foo", "red", new List<decimal?> { 1, 2 }, true }
+    };
 
     [Fact]
     public void GetColor() {
