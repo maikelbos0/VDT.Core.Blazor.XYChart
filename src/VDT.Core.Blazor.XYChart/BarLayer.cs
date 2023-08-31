@@ -15,6 +15,11 @@ public class BarLayer : LayerBase {
     public override StackMode StackMode => StackMode.Split;
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
 
+    public override bool HaveParametersChanged(ParameterView parameters)
+        => HasParameterChanged(parameters, nameof(IsStacked), IsStacked)
+        || HasParameterChanged(parameters, nameof(ClearancePercentage), ClearancePercentage)
+        || HasParameterChanged(parameters, nameof(GapPercentage), GapPercentage);
+
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         if (!DataSeries.Any()) {
             return Enumerable.Empty<ShapeBase>();

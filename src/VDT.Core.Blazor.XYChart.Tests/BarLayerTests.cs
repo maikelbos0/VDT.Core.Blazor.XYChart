@@ -1,9 +1,36 @@
-﻿using VDT.Core.Blazor.XYChart.Shapes;
+﻿using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
+using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class BarLayerTests {
+    [Theory]
+    [MemberData(nameof(HaveParametersChanged_Data))]
+    public void HaveParametersChanged(bool isStacked, decimal clearancePercentage, decimal gapPercentage, bool expectedResult) {
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(BarLayer.IsStacked), isStacked },
+            { nameof(BarLayer.ClearancePercentage), clearancePercentage },
+            { nameof(BarLayer.GapPercentage), gapPercentage }
+        });
+
+        var subject = new BarLayer {
+            IsStacked = false,
+            ClearancePercentage = 20M,
+            GapPercentage = 20M
+        };
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
+    }
+
+    public static TheoryData<bool, decimal, decimal, bool> HaveParametersChanged_Data() => new() {
+        { false, 20M, 20M, false },
+        { true, 20M, 20M, true },
+        { false, 20M, 30M, true },
+        { false, 30M, 20M, true }
+    };
+
     [Theory]
     [MemberData(nameof(GetUnstackedDataSeriesShapes_Data))]
     public void GetUnstackedDataSeriesShapes(int dataSeriesIndex, int index, decimal dataPoint, decimal expectedX, decimal expectedY, decimal expectedWidth, decimal expectedHeight) {

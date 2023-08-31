@@ -7,7 +7,6 @@ using Xunit;
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class AreaLayerTests {
-
     [Theory]
     [InlineData(false, LineGapMode.Skip, false)]
     [InlineData(true, LineGapMode.Skip, true)]
