@@ -21,6 +21,7 @@ public abstract class ChildComponentBase : ComponentBase {
     
     public abstract bool HaveParametersChanged(ParameterView parameters);
 
+    // TODO maybe differentiate between nullable and not nullable string
     public static bool HasParameterChanged(ParameterView parameters, string parameterName, string? oldValue)
         => parameters.TryGetValue(parameterName, out string? value) && !string.Equals(value, oldValue);
 
