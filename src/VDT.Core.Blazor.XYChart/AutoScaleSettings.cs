@@ -18,7 +18,10 @@ public class AutoScaleSettings : ChildComponentBase, IDisposable {
 
     protected override void OnInitialized() => PlotArea.SetAutoScaleSettings(this);
 
-    public void Dispose() => PlotArea.ResetAutoScaleSettings();
+    public void Dispose() {
+        PlotArea.ResetAutoScaleSettings();
+        GC.SuppressFinalize(this);
+    }
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsEnabled)

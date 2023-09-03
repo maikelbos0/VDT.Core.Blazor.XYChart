@@ -31,7 +31,10 @@ public class DataSeries : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(Color)
         || parameters.HasParameterChanged(DataPoints);
 
-    public void Dispose() => Layer.RemoveDataSeries(this);
+    public void Dispose() {
+        Layer.RemoveDataSeries(this);
+        GC.SuppressFinalize(this);
+    }
 
     public string GetColor() {
         if (Color != null) {

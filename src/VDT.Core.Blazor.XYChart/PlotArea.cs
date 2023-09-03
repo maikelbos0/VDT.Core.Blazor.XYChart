@@ -21,7 +21,10 @@ public class PlotArea : ChildComponentBase, IDisposable {
 
     protected override void OnInitialized() => Chart.SetPlotArea(this);
 
-    public void Dispose() => Chart.ResetPlotArea();
+    public void Dispose() {
+        Chart.ResetPlotArea();
+        GC.SuppressFinalize(this);
+    }
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(Min)

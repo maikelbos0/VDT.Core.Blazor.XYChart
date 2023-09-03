@@ -30,7 +30,10 @@ public class Canvas : ChildComponentBase, IDisposable {
 
     protected override void OnInitialized() => Chart.SetCanvas(this);
 
-    public void Dispose() => Chart.ResetCanvas();
+    public void Dispose() {
+        Chart.ResetCanvas();
+        GC.SuppressFinalize(this);
+    }
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(Width)

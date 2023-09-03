@@ -18,7 +18,10 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
 
     protected override void OnInitialized() => Chart.AddLayer(this);
 
-    public void Dispose() => Chart.RemoveLayer(this);
+    public void Dispose() {
+        Chart.RemoveLayer(this);
+        GC.SuppressFinalize(this);
+    }
 
     internal void AddDataSeries(DataSeries dataSeries) {
         if (!DataSeries.Contains(dataSeries)) {
