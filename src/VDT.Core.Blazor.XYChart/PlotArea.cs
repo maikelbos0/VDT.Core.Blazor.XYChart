@@ -29,7 +29,6 @@ public class PlotArea : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(GridLineInterval)
         || parameters.HasParameterChanged(Multiplier); 
 
-    // TODO something is wrong with autoscale settings not getting rendered
     internal void SetAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
         AutoScaleSettings = autoScaleSettings;
         Chart.HandleStateChange();
