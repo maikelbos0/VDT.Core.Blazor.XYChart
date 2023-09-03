@@ -10,12 +10,14 @@ public class ParameterViewExtensionsTests {
         public string? String { get; set; }
         public List<int?> List { get; set; } = new();
         public DataMarkerDelegate Delegate { get; set; } = DefaultDataMarkerTypes.Square;
+        public List<string> StringList { get; set; } = new();
 
         public override bool HaveParametersChanged(ParameterView parameters)
             => parameters.HasParameterChanged(Struct)
             || parameters.HasParameterChanged(String)
             || parameters.HasParameterChanged(List)
-            || parameters.HasParameterChanged(Delegate);
+            || parameters.HasParameterChanged(Delegate)
+            || parameters.HasParameterChanged(StringList);
     }
 
     [Theory]
@@ -93,5 +95,28 @@ public class ParameterViewExtensionsTests {
         { new List<int?>() { 1, 2 }, new List<int?>() { 1, 3 }, true },
         { new List<int?>() { 1, 2, 3 }, new List<int?>() { 1, 2 }, true },
         { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2, 3 }, true }
+    };
+
+    [Theory]
+    [MemberData(nameof(HasParameterChanged_StringList_Data))]
+    public void HasParameterChanged_StringList(List<string> oldValue, List<string>? newValue, bool expectedResult) {
+        var subject = new TestComponent() {
+            StringList = oldValue
+        };
+
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(TestComponent.StringList), newValue }
+        });
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
+    }
+
+    public static TheoryData<List<string>, List<string>?, bool> HasParameterChanged_StringList_Data() => new() {
+        { new List<string>(), new List<string>(), false },
+        { new List<string>() { "Foo", "Bar" }, new List<string>() { "Foo", "Bar" }, false },
+        { new List<string>(), null, false },
+        { new List<string>() { "Foo", "Bar" }, new List<string>() { "Foo", "Baz" }, true },
+        { new List<string>() { "Foo", "Bar", "Baz" }, new List<string>() { "Foo", "Bar" }, true },
+        { new List<string>() { "Foo", "Bar" }, new List<string>() { "Foo", "Bar", "Baz" }, true }
     };
 }
