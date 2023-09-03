@@ -23,13 +23,13 @@ public class LineLayer : LayerBase {
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => HasParameterChanged(parameters, nameof(IsStacked), IsStacked)
-        || HasParameterChanged(parameters, nameof(ShowDataMarkers), ShowDataMarkers)
-        || HasParameterChanged(parameters, nameof(DataMarkerSize), DataMarkerSize)
-        || HasParameterChanged(parameters, nameof(DataMarkerType), DataMarkerType) 
-        || HasParameterChanged(parameters, nameof(ShowDataLines), ShowDataLines)
-        || HasParameterChanged(parameters, nameof(DataLineWidth), DataLineWidth)
-        || HasParameterChanged(parameters, nameof(LineGapMode), LineGapMode);
+        => parameters.HasParameterChanged(nameof(IsStacked), IsStacked)
+        || parameters.HasParameterChanged(nameof(ShowDataMarkers), ShowDataMarkers)
+        || parameters.HasParameterChanged(nameof(DataMarkerSize), DataMarkerSize)
+        || parameters.HasParameterChanged(nameof(DataMarkerType), DataMarkerType) 
+        || parameters.HasParameterChanged(nameof(ShowDataLines), ShowDataLines)
+        || parameters.HasParameterChanged(nameof(DataLineWidth), DataLineWidth)
+        || parameters.HasParameterChanged(nameof(LineGapMode), LineGapMode);
 
     // TODO fluent lines?
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {

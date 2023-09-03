@@ -27,9 +27,9 @@ public class DataSeries : ChildComponentBase, IDisposable {
     protected override void OnInitialized() => Layer.AddDataSeries(this);
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => HasParameterChanged(parameters, nameof(Name), Name)
-        || HasParameterChanged(parameters, nameof(Color), Color)
-        || HasParameterChanged(parameters, nameof(DataPoints), DataPoints);
+        => parameters.HasParameterChanged(nameof(Name), Name)
+        || parameters.HasParameterChanged(nameof(Color), Color)
+        || parameters.HasParameterChanged(nameof(DataPoints), DataPoints);
 
     public void Dispose() => Layer.RemoveDataSeries(this);
 

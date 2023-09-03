@@ -14,8 +14,8 @@ public class AreaLayer : LayerBase {
     [Parameter] public LineGapMode LineGapMode { get; set; } = DefaultLineGapMode;
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => HasParameterChanged(parameters, nameof(IsStacked), IsStacked)
-        || HasParameterChanged(parameters, nameof(LineGapMode), LineGapMode);
+        => parameters.HasParameterChanged(nameof(IsStacked), IsStacked)
+        || parameters.HasParameterChanged(nameof(LineGapMode), LineGapMode);
 
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var dataPointsByDataSeries = GetCanvasDataPoints().ToLookup(dataSeriesPoint => dataSeriesPoint.DataSeriesIndex);

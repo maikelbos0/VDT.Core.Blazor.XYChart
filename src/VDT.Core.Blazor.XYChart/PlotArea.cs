@@ -24,10 +24,10 @@ public class PlotArea : ChildComponentBase, IDisposable {
     public void Dispose() => Chart.ResetPlotArea();
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => HasParameterChanged(parameters, nameof(Min), Min)
-        || HasParameterChanged(parameters, nameof(Max), Max)
-        || HasParameterChanged(parameters, nameof(GridLineInterval), GridLineInterval)
-        || HasParameterChanged(parameters, nameof(Multiplier), Multiplier); 
+        => parameters.HasParameterChanged(nameof(Min), Min)
+        || parameters.HasParameterChanged(nameof(Max), Max)
+        || parameters.HasParameterChanged(nameof(GridLineInterval), GridLineInterval)
+        || parameters.HasParameterChanged(nameof(Multiplier), Multiplier); 
 
     // TODO something is wrong with autoscale settings not getting rendered
     internal void SetAutoScaleSettings(AutoScaleSettings autoScaleSettings) {

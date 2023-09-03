@@ -33,15 +33,15 @@ public class Canvas : ChildComponentBase, IDisposable {
     public void Dispose() => Chart.ResetCanvas();
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => HasParameterChanged(parameters, nameof(Width), Width)
-        || HasParameterChanged(parameters, nameof(Height), Height)
-        || HasParameterChanged(parameters, nameof(Padding), Padding)
-        || HasParameterChanged(parameters, nameof(XAxisLabelHeight), XAxisLabelHeight)
-        || HasParameterChanged(parameters, nameof(XAxisLabelClearance), XAxisLabelClearance)
-        || HasParameterChanged(parameters, nameof(YAxisLabelWidth), YAxisLabelWidth)
-        || HasParameterChanged(parameters, nameof(YAxisLabelClearance), YAxisLabelClearance)
-        || HasParameterChanged(parameters, nameof(YAxisLabelFormat), YAxisLabelFormat)
-        || HasParameterChanged(parameters, nameof(YAxisMultiplierFormat), YAxisMultiplierFormat);
+        => parameters.HasParameterChanged(nameof(Width), Width)
+        || parameters.HasParameterChanged(nameof(Height), Height)
+        || parameters.HasParameterChanged(nameof(Padding), Padding)
+        || parameters.HasParameterChanged(nameof(XAxisLabelHeight), XAxisLabelHeight)
+        || parameters.HasParameterChanged(nameof(XAxisLabelClearance), XAxisLabelClearance)
+        || parameters.HasParameterChanged(nameof(YAxisLabelWidth), YAxisLabelWidth)
+        || parameters.HasParameterChanged(nameof(YAxisLabelClearance), YAxisLabelClearance)
+        || parameters.HasParameterChanged(nameof(YAxisLabelFormat), YAxisLabelFormat)
+        || parameters.HasParameterChanged(nameof(YAxisMultiplierFormat), YAxisMultiplierFormat);
 
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 }

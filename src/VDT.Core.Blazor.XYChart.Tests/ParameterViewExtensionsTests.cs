@@ -4,7 +4,7 @@ using Xunit;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
-public class ChildComponentBaseTests {
+public class ParameterViewExtensionsTests {
     private class TestComponent : ChildComponentBase {
         public int Struct { get; set; }
         public string? String { get; set; }
@@ -29,7 +29,7 @@ public class ChildComponentBaseTests {
             { nameof(TestComponent.Struct), newValue }
         });
 
-        Assert.Equal(expectedResult, ChildComponentBase.HasParameterChanged(parameters, nameof(subject.Struct), subject.Struct));
+        Assert.Equal(expectedResult, parameters.HasParameterChanged(nameof(subject.Struct), subject.Struct));
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class ChildComponentBaseTests {
 
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
 
-        Assert.False(ChildComponentBase.HasParameterChanged(parameters, nameof(subject.Struct), subject.Struct));
+        Assert.False(parameters.HasParameterChanged(nameof(subject.Struct), subject.Struct));
     }
 
     [Theory]
@@ -52,7 +52,7 @@ public class ChildComponentBaseTests {
             { nameof(TestComponent.Delegate), newValue }
         });
 
-        Assert.Equal(expectedResult, ChildComponentBase.HasParameterChanged(parameters, nameof(subject.Delegate), subject.Delegate));
+        Assert.Equal(expectedResult, parameters.HasParameterChanged(nameof(subject.Delegate), subject.Delegate));
     }
 
     public static TheoryData<DataMarkerDelegate, DataMarkerDelegate?, bool> HasParameterChanged_Delegate_Data() => new() {
@@ -67,7 +67,7 @@ public class ChildComponentBaseTests {
 
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
 
-        Assert.False(ChildComponentBase.HasParameterChanged(parameters, nameof(subject.Delegate), subject.Delegate));
+        Assert.False(parameters.HasParameterChanged(nameof(subject.Delegate), subject.Delegate));
     }
 
     [Theory]
@@ -85,7 +85,7 @@ public class ChildComponentBaseTests {
             { nameof(TestComponent.String), newValue }
         });
 
-        Assert.Equal(expectedResult, ChildComponentBase.HasParameterChanged(parameters, nameof(subject.String), subject.String));
+        Assert.Equal(expectedResult, parameters.HasParameterChanged(nameof(subject.String), subject.String));
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public class ChildComponentBaseTests {
 
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
 
-        Assert.False(ChildComponentBase.HasParameterChanged(parameters, nameof(subject.String), subject.String));
+        Assert.False(parameters.HasParameterChanged(nameof(subject.String), subject.String));
     }
 
     [Theory]
@@ -108,7 +108,7 @@ public class ChildComponentBaseTests {
             { nameof(TestComponent.String), newValue }
         });
 
-        Assert.Equal(expectedResult, ChildComponentBase.HasParameterChanged(parameters, nameof(subject.List), subject.List));
+        Assert.Equal(expectedResult, parameters.HasParameterChanged(nameof(subject.List), subject.List));
     }
 
     public static TheoryData<List<int?>, List<int?>?, bool> HasParameterChanged_List_Data() => new() {
@@ -126,6 +126,6 @@ public class ChildComponentBaseTests {
 
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
 
-        Assert.False(ChildComponentBase.HasParameterChanged(parameters, nameof(subject.List), subject.List));
+        Assert.False(parameters.HasParameterChanged(nameof(subject.List), subject.List));
     }
 }
