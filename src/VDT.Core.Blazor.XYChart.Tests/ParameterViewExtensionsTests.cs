@@ -11,9 +11,11 @@ public class ParameterViewExtensionsTests {
         public List<int?> List { get; set; } = new();
         public DataMarkerDelegate Delegate { get; set; } = DefaultDataMarkerTypes.Square;
 
-        public override bool HaveParametersChanged(ParameterView parameters) {
-            throw new System.NotImplementedException();
-        }
+        public override bool HaveParametersChanged(ParameterView parameters)
+            => parameters.HasParameterChanged(Struct)
+            || parameters.HasParameterChanged(String)
+            || parameters.HasParameterChanged(List)
+            || parameters.HasParameterChanged(Delegate);
     }
 
     [Theory]
@@ -29,16 +31,7 @@ public class ParameterViewExtensionsTests {
             { nameof(TestComponent.Struct), newValue }
         });
 
-        Assert.Equal(expectedResult, parameters.HasParameterChanged(nameof(subject.Struct), subject.Struct));
-    }
-
-    [Fact]
-    public void HasParameterChanged_Struct_NotPresentInParameters() {
-        var subject = new TestComponent();
-
-        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
-
-        Assert.False(parameters.HasParameterChanged(nameof(subject.Struct), subject.Struct));
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
     [Theory]
@@ -52,7 +45,7 @@ public class ParameterViewExtensionsTests {
             { nameof(TestComponent.Delegate), newValue }
         });
 
-        Assert.Equal(expectedResult, parameters.HasParameterChanged(nameof(subject.Delegate), subject.Delegate));
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
     public static TheoryData<DataMarkerDelegate, DataMarkerDelegate?, bool> HasParameterChanged_Delegate_Data() => new() {
@@ -60,15 +53,6 @@ public class ParameterViewExtensionsTests {
         { DefaultDataMarkerTypes.Square, null, false },
         { DefaultDataMarkerTypes.Square, DefaultDataMarkerTypes.Round, true }
     };
-
-    [Fact]
-    public void HasParameterChanged_Delegate_NotPresentInParameters() {
-        var subject = new TestComponent();
-
-        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
-
-        Assert.False(parameters.HasParameterChanged(nameof(subject.Delegate), subject.Delegate));
-    }
 
     [Theory]
     [InlineData(null, null, false)]
@@ -85,16 +69,7 @@ public class ParameterViewExtensionsTests {
             { nameof(TestComponent.String), newValue }
         });
 
-        Assert.Equal(expectedResult, parameters.HasParameterChanged(nameof(subject.String), subject.String));
-    }
-
-    [Fact]
-    public void HasParameterChanged_String_NotPresentInParameters() {
-        var subject = new TestComponent();
-
-        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
-
-        Assert.False(parameters.HasParameterChanged(nameof(subject.String), subject.String));
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
     [Theory]
@@ -105,27 +80,18 @@ public class ParameterViewExtensionsTests {
         };
 
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
-            { nameof(TestComponent.String), newValue }
+            { nameof(TestComponent.List), newValue }
         });
 
-        Assert.Equal(expectedResult, parameters.HasParameterChanged(nameof(subject.List), subject.List));
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
     public static TheoryData<List<int?>, List<int?>?, bool> HasParameterChanged_List_Data() => new() {
         { new List<int?>(), new List<int?>(), false },
         { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2 }, false },
         { new List<int?>(), null, false },
-        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 3 }, false },
-        { new List<int?>() { 1, 2, 3 }, new List<int?>() { 1, 2 }, false },
-        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2, 3 }, false }
+        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 3 }, true },
+        { new List<int?>() { 1, 2, 3 }, new List<int?>() { 1, 2 }, true },
+        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2, 3 }, true }
     };
-
-    [Fact]
-    public void HasParameterChanged_List_NotPresentInParameters() {
-        var subject = new TestComponent();
-
-        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>());
-
-        Assert.False(parameters.HasParameterChanged(nameof(subject.List), subject.List));
-    }
 }

@@ -21,8 +21,8 @@ public class AutoScaleSettings : ChildComponentBase, IDisposable {
     public void Dispose() => PlotArea.ResetAutoScaleSettings();
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => parameters.HasParameterChanged(nameof(IsEnabled), IsEnabled)
-        || parameters.HasParameterChanged(nameof(RequestedGridLineCount), RequestedGridLineCount)
-        || parameters.HasParameterChanged(nameof(IncludeZero), IncludeZero)
-        || parameters.HasParameterChanged(nameof(ClearancePercentage), ClearancePercentage);
+        => parameters.HasParameterChanged(IsEnabled)
+        || parameters.HasParameterChanged(RequestedGridLineCount)
+        || parameters.HasParameterChanged(IncludeZero)
+        || parameters.HasParameterChanged(ClearancePercentage);
 }

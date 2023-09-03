@@ -33,15 +33,15 @@ public class Canvas : ChildComponentBase, IDisposable {
     public void Dispose() => Chart.ResetCanvas();
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => parameters.HasParameterChanged(nameof(Width), Width)
-        || parameters.HasParameterChanged(nameof(Height), Height)
-        || parameters.HasParameterChanged(nameof(Padding), Padding)
-        || parameters.HasParameterChanged(nameof(XAxisLabelHeight), XAxisLabelHeight)
-        || parameters.HasParameterChanged(nameof(XAxisLabelClearance), XAxisLabelClearance)
-        || parameters.HasParameterChanged(nameof(YAxisLabelWidth), YAxisLabelWidth)
-        || parameters.HasParameterChanged(nameof(YAxisLabelClearance), YAxisLabelClearance)
-        || parameters.HasParameterChanged(nameof(YAxisLabelFormat), YAxisLabelFormat)
-        || parameters.HasParameterChanged(nameof(YAxisMultiplierFormat), YAxisMultiplierFormat);
+        => parameters.HasParameterChanged(Width)
+        || parameters.HasParameterChanged(Height)
+        || parameters.HasParameterChanged(Padding)
+        || parameters.HasParameterChanged(XAxisLabelHeight)
+        || parameters.HasParameterChanged(XAxisLabelClearance)
+        || parameters.HasParameterChanged(YAxisLabelWidth)
+        || parameters.HasParameterChanged(YAxisLabelClearance)
+        || parameters.HasParameterChanged(YAxisLabelFormat)
+        || parameters.HasParameterChanged(YAxisMultiplierFormat);
 
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 }
