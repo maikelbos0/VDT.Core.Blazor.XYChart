@@ -2,6 +2,7 @@
 using System;
 using Xunit;
 using VDT.Core.Blazor.XYChart.Shapes;
+using Microsoft.AspNetCore.Components;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
@@ -13,6 +14,8 @@ public class LayerBaseTests {
         public TestLayer(StackMode stackMode) {
             StackMode = stackMode;
         }
+
+        public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
 
         public override IEnumerable<ShapeBase> GetDataSeriesShapes() => throw new NotImplementedException();
     }

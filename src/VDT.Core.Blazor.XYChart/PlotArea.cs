@@ -6,13 +6,12 @@ using System.Linq;
 
 namespace VDT.Core.Blazor.XYChart;
 
-public class PlotArea : ComponentBase, IDisposable {
+public class PlotArea : ChildComponentBase, IDisposable {
     public static decimal DefaultMin { get; set; } = 0M;
     public static decimal DefaultMax { get; set; } = 50M;
     public static decimal DefaultGridLineInterval { get; set; } = 5M;
     public static decimal DefaultMultiplier { get; set; } = 1M;
 
-    [CascadingParameter] internal XYChart Chart { get; set; } = null!;
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public decimal Min { get; set; } = DefaultMin;
     [Parameter] public decimal Max { get; set; } = DefaultMax;
@@ -22,7 +21,16 @@ public class PlotArea : ComponentBase, IDisposable {
 
     protected override void OnInitialized() => Chart.SetPlotArea(this);
 
-    public void Dispose() => Chart.ResetPlotArea();
+    public void Dispose() {
+        Chart.ResetPlotArea();
+        GC.SuppressFinalize(this);
+    }
+
+    public override bool HaveParametersChanged(ParameterView parameters)
+        => parameters.HasParameterChanged(Min)
+        || parameters.HasParameterChanged(Max)
+        || parameters.HasParameterChanged(GridLineInterval)
+        || parameters.HasParameterChanged(Multiplier); 
 
     internal void SetAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
         AutoScaleSettings = autoScaleSettings;

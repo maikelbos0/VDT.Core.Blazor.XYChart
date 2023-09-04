@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
@@ -6,6 +7,28 @@ using Xunit;
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class XYChartTests {
+    [Theory]
+    [MemberData(nameof(HaveParametersChanged_Data))]
+    public void HaveParametersChanged(List<string> labels, DataPointSpacingMode dataPointSpacingMode, bool expectedResult) {
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(XYChart.Labels), labels },
+            { nameof(XYChart.DataPointSpacingMode), dataPointSpacingMode }
+        });
+
+        var subject = new XYChart {
+            Labels = new() { "Foo", "Bar" },
+            DataPointSpacingMode = DataPointSpacingMode.Auto
+        };
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
+    }
+
+    public static TheoryData<List<string>, DataPointSpacingMode, bool> HaveParametersChanged_Data() => new() {
+        { new List<string>() { "Foo", "Bar" }, DataPointSpacingMode.Auto, false },
+        { new List<string>() { "Foo", "Baz" }, DataPointSpacingMode.Auto, true },
+        { new List<string>() { "Foo", "Bar" }, DataPointSpacingMode.Center, true},
+    };
+
     [Fact]
     public void SetCanvas() {
         var stateHasChangedInvoked = false;

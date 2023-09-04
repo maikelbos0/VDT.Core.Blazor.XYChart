@@ -22,6 +22,15 @@ public class LineLayer : LayerBase {
     public override StackMode StackMode => StackMode.Single;
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
 
+    public override bool HaveParametersChanged(ParameterView parameters)
+        => parameters.HasParameterChanged(IsStacked)
+        || parameters.HasParameterChanged(ShowDataMarkers)
+        || parameters.HasParameterChanged(DataMarkerSize)
+        || parameters.HasParameterChanged(DataMarkerType) 
+        || parameters.HasParameterChanged(ShowDataLines)
+        || parameters.HasParameterChanged(DataLineWidth)
+        || parameters.HasParameterChanged(LineGapMode);
+
     // TODO fluent lines?
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var dataPointsByDataSeries = GetCanvasDataPoints().ToLookup(dataSeriesPoint => dataSeriesPoint.DataSeriesIndex);

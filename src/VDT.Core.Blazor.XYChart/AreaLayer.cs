@@ -13,6 +13,10 @@ public class AreaLayer : LayerBase {
 
     [Parameter] public LineGapMode LineGapMode { get; set; } = DefaultLineGapMode;
 
+    public override bool HaveParametersChanged(ParameterView parameters)
+        => parameters.HasParameterChanged(IsStacked)
+        || parameters.HasParameterChanged(LineGapMode);
+
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var dataPointsByDataSeries = GetCanvasDataPoints().ToLookup(dataSeriesPoint => dataSeriesPoint.DataSeriesIndex);
         var zeroY = Chart.MapDataPointToCanvas(0M);

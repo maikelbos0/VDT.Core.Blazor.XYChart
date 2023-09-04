@@ -3,7 +3,7 @@ using System;
 
 namespace VDT.Core.Blazor.XYChart;
 
-public class AutoScaleSettings : ComponentBase, IDisposable {
+public class AutoScaleSettings : ChildComponentBase, IDisposable {
     public static bool DefaultIsEnabled { get; set; } = true;
     public static int DefaultRequestedGridLineCount { get; set; } = 11;
     public static bool DefaultIncludeZero { get; set; } = false;
@@ -18,5 +18,14 @@ public class AutoScaleSettings : ComponentBase, IDisposable {
 
     protected override void OnInitialized() => PlotArea.SetAutoScaleSettings(this);
 
-    public void Dispose() => PlotArea.ResetAutoScaleSettings();
+    public void Dispose() {
+        PlotArea.ResetAutoScaleSettings();
+        GC.SuppressFinalize(this);
+    }
+
+    public override bool HaveParametersChanged(ParameterView parameters)
+        => parameters.HasParameterChanged(IsEnabled)
+        || parameters.HasParameterChanged(RequestedGridLineCount)
+        || parameters.HasParameterChanged(IncludeZero)
+        || parameters.HasParameterChanged(ClearancePercentage);
 }

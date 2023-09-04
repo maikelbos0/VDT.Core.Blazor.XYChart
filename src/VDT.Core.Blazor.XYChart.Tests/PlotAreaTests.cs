@@ -1,9 +1,39 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class PlotAreaTests {
+    [Theory]
+    [MemberData(nameof(HaveParametersChanged_Data))]
+    public void HaveParametersChanged(decimal min, decimal max, decimal gridLineInterval, decimal multiplier, bool expectedResult) {
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(PlotArea.Min), min },
+            { nameof(PlotArea.Max), max },
+            { nameof(PlotArea.GridLineInterval), gridLineInterval },
+            { nameof(PlotArea.Multiplier), multiplier}
+        });
+
+        var subject = new PlotArea {
+            Min = 0M,
+            Max = 100M,
+            GridLineInterval = 10M,
+            Multiplier = 1M
+        };
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
+    }
+
+    public static TheoryData<decimal, decimal, decimal, decimal, bool> HaveParametersChanged_Data() => new() {
+        { 0M, 100M, 10M, 1M, false },
+        { -10M, 100M, 10M, 1M, true },
+        { 0M, 150M, 10M, 1M, true },
+        { 0M, 100M, 5M, 1M, true },
+        { 0M, 100M, 10M, 100M, true },
+    };
+
     [Fact]
     public void SetAutoScaleSettings() {
         var stateHasChangedInvoked = false;

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
 
 namespace VDT.Core.Blazor.XYChart;
@@ -17,6 +18,20 @@ public class XYChart : ComponentBase {
     internal PlotArea PlotArea { get; set; } = new();
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
+
+    public override async Task SetParametersAsync(ParameterView parameters) {
+        var parametersHaveChanged = HaveParametersChanged(parameters);
+
+        await base.SetParametersAsync(parameters);
+
+        if (parametersHaveChanged) {
+            HandleStateChange();
+        }
+    }
+
+    public bool HaveParametersChanged(ParameterView parameters)
+        => parameters.HasParameterChanged(Labels)
+        || parameters.HasParameterChanged(DataPointSpacingMode);
 
     // TODO fix sequence, add svg xmlns
     protected override void BuildRenderTree(RenderTreeBuilder builder) {

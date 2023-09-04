@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
@@ -10,8 +11,35 @@ public class DataSeriesTests {
         public override StackMode StackMode => throw new NotImplementedException();
         public override DataPointSpacingMode DefaultDataPointSpacingMode => throw new NotImplementedException();
 
+        public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
+
         public override IEnumerable<ShapeBase> GetDataSeriesShapes() => throw new NotImplementedException();
     }
+
+    [Theory]
+    [MemberData(nameof(HaveParametersChanged_Data))]
+    public void HaveParametersChanged(string? name, string? color, List<decimal?> dataPoints, bool expectedResult) {
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(DataSeries.Name), name },
+            { nameof(DataSeries.Color), color },
+            { nameof(DataSeries.DataPoints), dataPoints }
+        });
+
+        var subject = new DataSeries() {
+            Name = "Foo",
+            Color = "red",
+            DataPoints = { 1, 2, 3}
+        };
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
+    }
+
+    public static TheoryData<string?, string?, List<decimal?>, bool> HaveParametersChanged_Data() => new() {
+        { "Foo", "red", new List<decimal?> { 1, 2, 3 }, false },
+        { "Bar", "red", new List<decimal?> { 1, 2, 3 }, true },
+        { "Foo", "blue", new List<decimal?> { 1, 2, 3 }, true },
+        { "Foo", "red", new List<decimal?> { 1, 2 }, true }
+    };
 
     [Fact]
     public void GetColor() {

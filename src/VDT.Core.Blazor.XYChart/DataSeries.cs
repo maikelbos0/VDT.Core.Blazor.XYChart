@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace VDT.Core.Blazor.XYChart;
 
-public class DataSeries : ComponentBase, IDisposable {
+public class DataSeries : ChildComponentBase, IDisposable {
     public const string FallbackColor = "#000000";
 
     public static List<string> DefaultColors { get; set; } = new() {
@@ -26,7 +26,15 @@ public class DataSeries : ComponentBase, IDisposable {
 
     protected override void OnInitialized() => Layer.AddDataSeries(this);
 
-    public void Dispose() => Layer.RemoveDataSeries(this);
+    public override bool HaveParametersChanged(ParameterView parameters)
+        => parameters.HasParameterChanged(Name)
+        || parameters.HasParameterChanged(Color)
+        || parameters.HasParameterChanged(DataPoints);
+
+    public void Dispose() {
+        Layer.RemoveDataSeries(this);
+        GC.SuppressFinalize(this);
+    }
 
     public string GetColor() {
         if (Color != null) {

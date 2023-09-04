@@ -3,7 +3,7 @@ using System;
 
 namespace VDT.Core.Blazor.XYChart;
 
-public class Canvas : ComponentBase, IDisposable {
+public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultWidth { get; set; } = 1200;
     public static int DefaultHeight { get; set; } = 600;
     public static int DefaultPadding { get; set; } = 25;
@@ -14,7 +14,6 @@ public class Canvas : ComponentBase, IDisposable {
     public static string DefaultYAxisLabelFormat { get; set; } = "#,##0.######";
     public static string DefaultYAxisMultiplierFormat { get; set; } = "x #,##0.######";
 
-    [CascadingParameter] internal XYChart Chart { get; set; } = null!;
     [Parameter] public int Width { get; set; } = DefaultWidth;
     [Parameter] public int Height { get; set; } = DefaultHeight;
     [Parameter] public int Padding { get; set; } = DefaultPadding;
@@ -31,7 +30,21 @@ public class Canvas : ComponentBase, IDisposable {
 
     protected override void OnInitialized() => Chart.SetCanvas(this);
 
-    public void Dispose() => Chart.ResetCanvas();
+    public void Dispose() {
+        Chart.ResetCanvas();
+        GC.SuppressFinalize(this);
+    }
+
+    public override bool HaveParametersChanged(ParameterView parameters)
+        => parameters.HasParameterChanged(Width)
+        || parameters.HasParameterChanged(Height)
+        || parameters.HasParameterChanged(Padding)
+        || parameters.HasParameterChanged(XAxisLabelHeight)
+        || parameters.HasParameterChanged(XAxisLabelClearance)
+        || parameters.HasParameterChanged(YAxisLabelWidth)
+        || parameters.HasParameterChanged(YAxisLabelClearance)
+        || parameters.HasParameterChanged(YAxisLabelFormat)
+        || parameters.HasParameterChanged(YAxisMultiplierFormat);
 
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 }
