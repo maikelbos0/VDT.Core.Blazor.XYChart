@@ -40,7 +40,7 @@ public class ParameterViewExtensionsTests {
 
     [Theory]
     [InlineData(1, 1, false)]
-    [InlineData(1, null, false)]
+    [InlineData(1, null, true)]
     [InlineData(1, 2, true)]
     public void HasParameterChanged_Struct(int oldValue, int? newValue, bool expectedResult) {
         var subject = new TestComponent() {
@@ -70,7 +70,7 @@ public class ParameterViewExtensionsTests {
 
     public static TheoryData<DataMarkerDelegate, DataMarkerDelegate?, bool> HasParameterChanged_Delegate_Data() => new() {
         { DefaultDataMarkerTypes.Square, DefaultDataMarkerTypes.Square, false },
-        { DefaultDataMarkerTypes.Square, null, false },
+        { DefaultDataMarkerTypes.Square, null, true },
         { DefaultDataMarkerTypes.Square, DefaultDataMarkerTypes.Round, true }
     };
 
@@ -91,7 +91,7 @@ public class ParameterViewExtensionsTests {
     public static TheoryData<List<string>, List<string>?, bool> HasParameterChanged_StringList_Data() => new() {
         { new List<string>(), new List<string>(), false },
         { new List<string>() { "Foo", "Bar" }, new List<string>() { "Foo", "Bar" }, false },
-        { new List<string>(), null, false },
+        { new List<string>(), null, true },
         { new List<string>() { "Foo", "Bar" }, new List<string>() { "Foo", "Baz" }, true },
         { new List<string>() { "Foo", "Bar", "Baz" }, new List<string>() { "Foo", "Bar" }, true },
         { new List<string>() { "Foo", "Bar" }, new List<string>() { "Foo", "Bar", "Baz" }, true }
@@ -114,7 +114,7 @@ public class ParameterViewExtensionsTests {
     public static TheoryData<List<int?>, List<int?>?, bool> HasParameterChanged_StructList_Data() => new() {
         { new List<int?>(), new List<int?>(), false },
         { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2 }, false },
-        { new List<int?>(), null, false },
+        { new List<int?>(), null, true },
         { new List<int?>() { 1, 2 }, new List<int?>() { 1, 3 }, true },
         { new List<int?>() { 1, 2, 3 }, new List<int?>() { 1, 2 }, true },
         { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2, 3 }, true }
