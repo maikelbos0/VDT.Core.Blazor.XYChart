@@ -6,18 +6,36 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class ParameterViewExtensionsTests {
     private class TestComponent : ChildComponentBase {
-        public int Struct { get; set; }
         public string? String { get; set; }
-        public List<int?> List { get; set; } = new();
+        public int Struct { get; set; }
         public DataMarkerDelegate Delegate { get; set; } = DefaultDataMarkerTypes.Square;
         public List<string> StringList { get; set; } = new();
+        public List<int?> StructList { get; set; } = new();
 
         public override bool HaveParametersChanged(ParameterView parameters)
             => parameters.HasParameterChanged(Struct)
             || parameters.HasParameterChanged(String)
-            || parameters.HasParameterChanged(List)
+            || parameters.HasParameterChanged(StructList)
             || parameters.HasParameterChanged(Delegate)
             || parameters.HasParameterChanged(StringList);
+    }
+
+    [Theory]
+    [InlineData(null, null, false)]
+    [InlineData("foo", "foo", false)]
+    [InlineData("foo", "bar", true)]
+    [InlineData("foo", null, true)]
+    [InlineData(null, "foo", true)]
+    public void HasParameterChanged_String(string? oldValue, string? newValue, bool expectedResult) {
+        var subject = new TestComponent() {
+            String = oldValue
+        };
+
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(TestComponent.String), newValue }
+        });
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
     [Theory]
@@ -57,47 +75,6 @@ public class ParameterViewExtensionsTests {
     };
 
     [Theory]
-    [InlineData(null, null, false)]
-    [InlineData("foo", "foo", false)]
-    [InlineData("foo", "bar", true)]
-    [InlineData("foo", null, true)]
-    [InlineData(null, "foo", true)]
-    public void HasParameterChanged_String(string? oldValue, string? newValue, bool expectedResult) {
-        var subject = new TestComponent() {
-            String = oldValue
-        };
-
-        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
-            { nameof(TestComponent.String), newValue }
-        });
-
-        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
-    }
-
-    [Theory]
-    [MemberData(nameof(HasParameterChanged_List_Data))]
-    public void HasParameterChanged_List(List<int?> oldValue, List<int?>? newValue, bool expectedResult) {
-        var subject = new TestComponent() {
-            List = oldValue
-        };
-
-        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
-            { nameof(TestComponent.List), newValue }
-        });
-
-        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
-    }
-
-    public static TheoryData<List<int?>, List<int?>?, bool> HasParameterChanged_List_Data() => new() {
-        { new List<int?>(), new List<int?>(), false },
-        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2 }, false },
-        { new List<int?>(), null, false },
-        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 3 }, true },
-        { new List<int?>() { 1, 2, 3 }, new List<int?>() { 1, 2 }, true },
-        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2, 3 }, true }
-    };
-
-    [Theory]
     [MemberData(nameof(HasParameterChanged_StringList_Data))]
     public void HasParameterChanged_StringList(List<string> oldValue, List<string>? newValue, bool expectedResult) {
         var subject = new TestComponent() {
@@ -118,5 +95,28 @@ public class ParameterViewExtensionsTests {
         { new List<string>() { "Foo", "Bar" }, new List<string>() { "Foo", "Baz" }, true },
         { new List<string>() { "Foo", "Bar", "Baz" }, new List<string>() { "Foo", "Bar" }, true },
         { new List<string>() { "Foo", "Bar" }, new List<string>() { "Foo", "Bar", "Baz" }, true }
+    };
+
+    [Theory]
+    [MemberData(nameof(HasParameterChanged_StructList_Data))]
+    public void HasParameterChanged_StructList(List<int?> oldValue, List<int?>? newValue, bool expectedResult) {
+        var subject = new TestComponent() {
+            StructList = oldValue
+        };
+
+        var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(TestComponent.StructList), newValue }
+        });
+
+        Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
+    }
+
+    public static TheoryData<List<int?>, List<int?>?, bool> HasParameterChanged_StructList_Data() => new() {
+        { new List<int?>(), new List<int?>(), false },
+        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2 }, false },
+        { new List<int?>(), null, false },
+        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 3 }, true },
+        { new List<int?>() { 1, 2, 3 }, new List<int?>() { 1, 2 }, true },
+        { new List<int?>() { 1, 2 }, new List<int?>() { 1, 2, 3 }, true }
     };
 }

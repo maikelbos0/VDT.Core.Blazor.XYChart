@@ -5,16 +5,6 @@ using Xunit;
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
-    public static int DefaultWidth { get; set; } = 1200;
-    public static int DefaultHeight { get; set; } = 600;
-    public static int DefaultPadding { get; set; } = 25;
-    public static int DefaultXAxisLabelHeight { get; set; } = 100;
-    public static int DefaultXAxisLabelClearance { get; set; } = 10;
-    public static int DefaultYAxisLabelWidth { get; set; } = 100;
-    public static int DefaultYAxisLabelClearance { get; set; } = 10;
-    public static string DefaultYAxisLabelFormat { get; set; } = "#,##0.######";
-    public static string DefaultYAxisMultiplierFormat { get; set; } = "x #,##0.######";
-
     [Theory]
     [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", false)]
     [InlineData(900, 500, 10, 100, 10, 100, 10, "#", "x #", true)]
