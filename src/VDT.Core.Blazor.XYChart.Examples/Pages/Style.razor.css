@@ -18,7 +18,6 @@
 }
 
 ::deep .chart-main .line-data {
-    stroke-width: 2px;
     stroke-opacity: 0.8;
 }
 
@@ -41,4 +40,9 @@
     fill-opacity: 0.6;
     stroke: #787c80;
     stroke-opacity: 0.6;
+}
+
+::deep .chart-main .emphasized {
+    fill-opacity: 1;
+    stroke-opacity: 1;
 }

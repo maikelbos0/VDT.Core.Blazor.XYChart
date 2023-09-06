@@ -5,7 +5,8 @@
 
 <p>
     Since the chart is rendered as SVG, each chart element is fully customizable using the powerful SVG options in CSS. Each element type can be referenced
-    using the below CSS classes. The chart itself can be referenced with the CSS class <code>svg.chart-main</code>.
+    using the below CSS classes. The chart itself can be referenced with the CSS class <code>svg.chart-main</code>. Aside from the default CSS classes, it
+    is also possible to assign each data series its own custom CSS class using the <code>CssClass</code> parameter.
 </p>
 
 <ul>
@@ -40,10 +41,10 @@
 </ul>
 
 <p>
-    Below example contains custom styling for each available element. Please note that because this example uses Blazor CSS isolation on a child component, the
-    <code>::deep</code> pseudo-element is used and the chart component must be inside an HTML element that the isolation attribute will be applied to. See the
-    <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/css-isolation">Microsoft documentation on Blazor CSS isolation</a> for more
-    information.
+    Below example contains custom styling for each available element and a custom CSS class for several data series. Please note that because this example uses
+    Blazor CSS isolation on a child component, the <code>::deep</code> pseudo-element is used and the chart component must be inside an HTML element that the
+    isolation attribute will be applied to. See the <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/css-isolation">Microsoft
+    documentation on Blazor CSS isolation</a> for more information.
 </p>
 
 <p>
@@ -74,15 +75,15 @@
         <PlotArea Multiplier="1000" />
         <AreaLayer>
             <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
-            <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" />
+            <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" CssClass="emphasized " />
         </AreaLayer>
         <BarLayer>
             <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
-            <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" />
+            <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" CssClass="emphasized " />
         </BarLayer>
-        <LineLayer DataLineWidth="3" DataMarkerSize="15" DataMarkerType="DefaultDataMarkerTypes.Square">
+        <LineLayer DataMarkerSize="15" DataMarkerType="DefaultDataMarkerTypes.Square">
             <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
-            <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
+            <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" CssClass="emphasized " />
         </LineLayer>
     </XYChart>
 </div>
