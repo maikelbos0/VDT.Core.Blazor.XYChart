@@ -50,6 +50,7 @@ public class AreaLayer : LayerBase {
                 yield return new DataAreaShape(
                     commands,
                     DataSeries[dataSeriesIndex].GetColor(),
+                    DataSeries[dataSeriesIndex].CssClass,
                     dataSeriesIndex
                 );
             }

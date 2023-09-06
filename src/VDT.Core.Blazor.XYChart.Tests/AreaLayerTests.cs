@@ -51,10 +51,12 @@ public class AreaLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = false,
@@ -70,6 +72,7 @@ public class AreaLayerTests {
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal("red", shape.Color);
+        Assert.Equal("data area-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_Data() {
@@ -113,10 +116,12 @@ public class AreaLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = true,
@@ -132,6 +137,7 @@ public class AreaLayerTests {
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data area-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_Data() {
