@@ -224,10 +224,12 @@ public class LineLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = false,
@@ -244,6 +246,7 @@ public class LineLayerTests {
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal("red", shape.Color);
+        Assert.Equal("data line-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_Lines_Data() {
@@ -287,10 +290,12 @@ public class LineLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = true,
@@ -307,6 +312,7 @@ public class LineLayerTests {
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data line-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_Lines_Data() {

@@ -71,6 +71,7 @@ public class LineLayer : LayerBase {
                         commands,
                         DataLineWidth,
                         DataSeries[dataSeriesIndex].GetColor(),
+                        DataSeries[dataSeriesIndex].CssClass,
                         dataSeriesIndex
                     );
                 }

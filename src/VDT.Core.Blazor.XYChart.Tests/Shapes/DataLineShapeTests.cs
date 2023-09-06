@@ -7,14 +7,14 @@ namespace VDT.Core.Blazor.XYChart.Tests.Shapes;
 public class DataLineShapeTests {
     [Fact]
     public void Key() {
-        var subject = new DataLineShape(new[] { "M 20 50", "L 80 90" }, 5M, "red", 2);
+        var subject = new DataLineShape(new[] { "M 20 50", "L 80 90" }, 5M, "red", "example-data", 2);
 
         Assert.Equal("DataLineShape[2]", subject.Key);
     }
 
     [Fact]
     public void GetAttributes() {
-        var subject = new DataLineShape(new[] { "M 20 50", "L 80 90" }, 5M, "red", 2);
+        var subject = new DataLineShape(new[] { "M 20 50", "L 80 90" }, 5M, "red", "example-data", 2);
 
         var result = subject.GetAttributes();
 
