@@ -46,6 +46,7 @@ public class LineLayer : LayerBase {
                             dataPoint.Y,
                             DataMarkerSize,
                             DataSeries[dataSeriesIndex].GetColor(),
+                            DataSeries[dataSeriesIndex].CssClass,
                             dataSeriesIndex,
                             dataPoint.Index
                         );
