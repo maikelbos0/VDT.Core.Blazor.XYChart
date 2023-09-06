@@ -23,13 +23,15 @@ public class DataSeries : ChildComponentBase, IDisposable {
     [Parameter] public string? Name { get; set; }
     [Parameter] public string? Color { get; set; }
     [Parameter] public List<decimal?> DataPoints { get; set; } = new();
+    [Parameter] public string? CssClass { get; set; }
 
     protected override void OnInitialized() => Layer.AddDataSeries(this);
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(Name)
         || parameters.HasParameterChanged(Color)
-        || parameters.HasParameterChanged(DataPoints);
+        || parameters.HasParameterChanged(DataPoints)
+        || parameters.HasParameterChanged(CssClass);
 
     public void Dispose() {
         Layer.RemoveDataSeries(this);

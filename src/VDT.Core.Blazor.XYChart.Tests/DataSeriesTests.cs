@@ -18,27 +18,30 @@ public class DataSeriesTests {
 
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(string? name, string? color, List<decimal?> dataPoints, bool expectedResult) {
+    public void HaveParametersChanged(string? name, string? color, List<decimal?> dataPoints, string? cssClass, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(DataSeries.Name), name },
             { nameof(DataSeries.Color), color },
-            { nameof(DataSeries.DataPoints), dataPoints }
+            { nameof(DataSeries.DataPoints), dataPoints },
+            { nameof(DataSeries.CssClass), cssClass }
         });
 
         var subject = new DataSeries() {
             Name = "Foo",
             Color = "red",
-            DataPoints = { 1, 2, 3}
+            DataPoints = { 1, 2, 3},
+            CssClass = "foo-series"
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<string?, string?, List<decimal?>, bool> HaveParametersChanged_Data() => new() {
-        { "Foo", "red", new List<decimal?> { 1, 2, 3 }, false },
-        { "Bar", "red", new List<decimal?> { 1, 2, 3 }, true },
-        { "Foo", "blue", new List<decimal?> { 1, 2, 3 }, true },
-        { "Foo", "red", new List<decimal?> { 1, 2 }, true }
+    public static TheoryData<string?, string?, List<decimal?>, string, bool> HaveParametersChanged_Data() => new() {
+        { "Foo", "red", new List<decimal?> { 1, 2, 3 }, "foo-series", false },
+        { "Bar", "red", new List<decimal?> { 1, 2, 3 }, "foo-series", true },
+        { "Foo", "blue", new List<decimal?> { 1, 2, 3 }, "foo-series", true },
+        { "Foo", "red", new List<decimal?> { 1, 2 }, "foo-series", true },
+        { "Foo", "red", new List<decimal?> { 1, 2, 3 }, "foo-data", true }
     };
 
     [Fact]
