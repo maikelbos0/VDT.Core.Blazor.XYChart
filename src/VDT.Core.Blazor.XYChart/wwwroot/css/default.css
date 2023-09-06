@@ -42,4 +42,5 @@
 
 .chart-main .line-data {
     fill: none;
+    stroke-width: 2px;
 }

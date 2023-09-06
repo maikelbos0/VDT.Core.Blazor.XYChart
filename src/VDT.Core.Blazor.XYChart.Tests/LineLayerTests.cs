@@ -9,14 +9,13 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class LineLayerTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, decimal dataLineWidth, LineGapMode lineGapMode, bool expectedResult) {
+    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, LineGapMode lineGapMode, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(LineLayer.IsStacked), isStacked },
             { nameof(LineLayer.ShowDataMarkers), showDataMarkers },
             { nameof(LineLayer.DataMarkerSize), dataMarkerSize },
             { nameof(LineLayer.DataMarkerType), dataMarkerType },
             { nameof(LineLayer.ShowDataLines), showDataLines },
-            { nameof(LineLayer.DataLineWidth), dataLineWidth },
             { nameof(LineLayer.LineGapMode), lineGapMode }
         });
 
@@ -26,22 +25,20 @@ public class LineLayerTests {
             DataMarkerSize = 10M,
             DataMarkerType = DefaultDataMarkerTypes.Square,
             ShowDataLines = true,
-            DataLineWidth = 2M,
             LineGapMode = LineGapMode.Skip
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, decimal, LineGapMode, bool> HaveParametersChanged_Data() => new() {
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, false },
-        { true, true, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
-        { false, false, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
-        { false, true, 15M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Round, true, 2M, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, false, 2M, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, 3M, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Join, true },
+    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, LineGapMode, bool> HaveParametersChanged_Data() => new() {
+        { false, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, false },
+        { true, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
+        { false, false, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
+        { false, true, 15M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Round, true, LineGapMode.Skip, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Square, false, LineGapMode.Skip, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Join, true },
     };
 
     [Theory]
