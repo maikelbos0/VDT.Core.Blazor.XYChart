@@ -42,6 +42,7 @@ public class BarLayer : LayerBase {
             width,
             point.Height,
             DataSeries[point.DataSeriesIndex].GetColor(),
+            DataSeries[point.DataSeriesIndex].CssClass,
             point.DataSeriesIndex,
             point.Index
         ));

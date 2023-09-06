@@ -56,11 +56,13 @@ public class BarLayerTests {
             DataSeries = {
                 new() {
                     Color = "blue",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             ClearancePercentage = 25M,
@@ -79,6 +81,7 @@ public class BarLayerTests {
         Assert.Equal(expectedWidth, shape.Width);
         Assert.Equal(expectedHeight, shape.Height);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data bar-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, int, decimal, decimal, decimal, decimal, decimal> GetUnstackedDataSeriesShapes_Data() {
@@ -121,11 +124,13 @@ public class BarLayerTests {
             DataSeries = {
                 new() {
                     Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 10M, 15M }
+                    DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             ClearancePercentage = 25M,
@@ -144,6 +149,7 @@ public class BarLayerTests {
         Assert.Equal(expectedWidth, shape.Width);
         Assert.Equal(expectedHeight, shape.Height);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data bar-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, int, decimal, decimal, decimal, decimal, decimal> GetStackedDataSeriesShapes_Data() {

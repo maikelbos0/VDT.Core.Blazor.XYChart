@@ -7,14 +7,14 @@ namespace VDT.Core.Blazor.XYChart.Tests.Shapes;
 public class DataBarShapeTests {
     [Fact]
     public void Key() {
-        var subject = new DataBarShape(20, 50, 80, 90, "red", 2, 5);
+        var subject = new DataBarShape(20, 50, 80, 90, "red", "example-data", 2, 5);
 
         Assert.Equal("DataBarShape[2,5]", subject.Key);
     }
 
     [Fact]
     public void GetAttributes() {
-        var subject = new DataBarShape(20, 50, 80, 90, "red", 2, 5);
+        var subject = new DataBarShape(20, 50, 80, 90, "red", "example-data", 2, 5);
 
         var result = subject.GetAttributes();
 
@@ -28,7 +28,7 @@ public class DataBarShapeTests {
 
     [Fact]
     public void GetAttributes_Negative_Height() {
-        var subject = new DataBarShape(20, 140, 80, -90, "red", 2, 5);
+        var subject = new DataBarShape(20, 140, 80, -90, "red", "example-data", 2, 5);
 
         var result = subject.GetAttributes();
 
