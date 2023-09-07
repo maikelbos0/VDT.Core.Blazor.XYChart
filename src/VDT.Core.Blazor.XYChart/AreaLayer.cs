@@ -34,7 +34,6 @@ public class AreaLayer : LayerBase {
                     }
                     else if (dataPoints[i - 1].Index < dataPoints[i].Index - 1 && LineGapMode == LineGapMode.Skip) {
                         commands.Add(PathCommandFactory.LineTo(dataPoints[i - 1].X, zeroY));
-                        commands.Add(PathCommandFactory.ClosePath);
 
                         commands.Add(PathCommandFactory.MoveTo(dataPoints[i].X, zeroY));
                         commands.Add(PathCommandFactory.LineTo(dataPoints[i].X, dataPoints[i].Y));
@@ -45,7 +44,6 @@ public class AreaLayer : LayerBase {
                 }
 
                 commands.Add(PathCommandFactory.LineTo(dataPoints[^1].X, zeroY));
-                commands.Add(PathCommandFactory.ClosePath);
 
                 yield return new AreaDataShape(
                     commands,
