@@ -4,21 +4,21 @@ using Xunit;
 
 namespace VDT.Core.Blazor.XYChart.Tests.Shapes;
 
-public class DataLineShapeTests {
+public class LineDataShapeTests {
     [Fact]
     public void Key() {
-        var subject = new DataLineShape(new[] { "M 20 50", "L 80 90" }, "red", "example-data", 2);
+        var subject = new LineDataShape(new[] { "M 20 50", "L 80 90" }, "red", "example-data", 2);
 
-        Assert.Equal("DataLineShape[2]", subject.Key);
+        Assert.Equal($"{nameof(LineDataShape)}[2]", subject.Key);
     }
 
     [Fact]
     public void GetAttributes() {
-        var subject = new DataLineShape(new[] { "M 20 50", "L 80 90" }, "red", "example-data", 2);
+        var subject = new LineDataShape(new[] { "M 20 50", "L 80 90" }, "red", "example-data", 2);
 
         var result = subject.GetAttributes();
 
-        Assert.Equal(3, result.Count());
+        Assert.Equal(2, result.Count());
         Assert.Equal("M 20 50 L 80 90", Assert.Single(result, attribute => attribute.Key == "d").Value);
         Assert.Equal("red", Assert.Single(result, attribute => attribute.Key == "stroke").Value);
     }

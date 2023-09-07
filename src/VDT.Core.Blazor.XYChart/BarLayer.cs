@@ -36,7 +36,7 @@ public class BarLayer : LayerBase {
             offsetProvider = dataSeriesIndex => (dataSeriesIndex - DataSeries.Count / 2M) * dataSeriesWidth + (dataSeriesIndex - (DataSeries.Count - 1) / 2M) * gapWidth;
         }
 
-        return GetCanvasDataPoints().Select(point => new DataBarShape(
+        return GetCanvasDataPoints().Select(point => new BarDataShape(
             point.X + offsetProvider(point.DataSeriesIndex),
             point.Y,
             width,

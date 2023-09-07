@@ -265,7 +265,7 @@ public class XYChartTests {
             }
         });
 
-        Assert.Contains(subject.GetShapes(), shape => shape is DataBarShape);
+        Assert.Contains(subject.GetShapes(), shape => shape is BarDataShape);
     }
 
     [Fact]
@@ -475,7 +475,7 @@ public class XYChartTests {
 
         Assert.Equal(4, result.Count());
 
-        Assert.All(result, shape => Assert.IsType<DataBarShape>(shape));
+        Assert.All(result, shape => Assert.IsType<BarDataShape>(shape));
     }
 
     [Theory]

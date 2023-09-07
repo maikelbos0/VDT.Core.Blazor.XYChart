@@ -2,7 +2,7 @@
 
 namespace VDT.Core.Blazor.XYChart.Shapes;
 
-public class DataAreaShape : ShapeBase {
+public class AreaDataShape : ShapeBase {
     public const string DefaultCssClass = "data area-data";
 
     public override string ElementName => "path";
@@ -10,7 +10,7 @@ public class DataAreaShape : ShapeBase {
     public string Color { get; }
     public override string CssClass { get; }
 
-    public DataAreaShape(IEnumerable<string> commands, string color, string? cssClass, int dataSeriesIndex) : base(dataSeriesIndex) {
+    public AreaDataShape(IEnumerable<string> commands, string color, string? cssClass, int dataSeriesIndex) : base(dataSeriesIndex) {
         Path = string.Join(' ', commands);
         Color = color;
         CssClass = $"{DefaultCssClass} {cssClass}";

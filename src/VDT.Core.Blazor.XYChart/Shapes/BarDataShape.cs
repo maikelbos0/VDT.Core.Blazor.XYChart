@@ -2,7 +2,7 @@
 
 namespace VDT.Core.Blazor.XYChart.Shapes;
 
-public class DataBarShape : ShapeBase {
+public class BarDataShape : ShapeBase {
     public const string DefaultCssClass = "data bar-data";
 
     public override string ElementName => "rect";
@@ -13,7 +13,7 @@ public class DataBarShape : ShapeBase {
     public string Color { get; }
     public override string CssClass { get; }
 
-    public DataBarShape(decimal x, decimal y, decimal width, decimal height, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex) : base(dataSeriesIndex, dataPointIndex) {
+    public BarDataShape(decimal x, decimal y, decimal width, decimal height, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex) : base(dataSeriesIndex, dataPointIndex) {
         Y = y;
         X = x;
         Height = height;

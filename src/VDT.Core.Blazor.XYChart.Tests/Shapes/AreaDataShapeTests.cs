@@ -4,17 +4,17 @@ using Xunit;
 
 namespace VDT.Core.Blazor.XYChart.Tests.Shapes;
 
-public class DataAreaShapeTests {
+public class AreaDataShapeTests {
     [Fact]
     public void Key() {
-        var subject = new DataAreaShape(new[] { "M 20 50", "L 80 90", "L 20 90 Z" }, "red", "example-data", 2);
+        var subject = new AreaDataShape(new[] { "M 20 50", "L 80 90", "L 20 90 Z" }, "red", "example-data", 2);
 
-        Assert.Equal("DataAreaShape[2]", subject.Key);
+        Assert.Equal($"{nameof(AreaDataShape)}[2]", subject.Key);
     }
 
     [Fact]
     public void GetAttributes() {
-        var subject = new DataAreaShape(new[] { "M 20 50", "L 80 90", "L 20 90 Z" }, "red", "example-data", 2);
+        var subject = new AreaDataShape(new[] { "M 20 50", "L 80 90", "L 20 90 Z" }, "red", "example-data", 2);
 
         var result = subject.GetAttributes();
 

@@ -245,7 +245,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataLineShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataLineShape)}[1]"));
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[1]"));
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal("red", shape.Color);
@@ -311,7 +311,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataLineShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataLineShape)}[{dataSeriesIndex}]"));
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[{dataSeriesIndex}]"));
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
@@ -352,7 +352,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        Assert.DoesNotContain(result, shape => shape is DataLineShape);
+        Assert.DoesNotContain(result, shape => shape is LineDataShape);
     }
 
     [Theory]
@@ -391,7 +391,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataLineShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataLineShape)}[0]"));
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[0]"));
 
         Assert.Equal(expectedPath, shape.Path);
     }

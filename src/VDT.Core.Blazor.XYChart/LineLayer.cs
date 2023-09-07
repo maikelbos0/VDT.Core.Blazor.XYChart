@@ -65,7 +65,7 @@ public class LineLayer : LayerBase {
                         }
                     }
 
-                    yield return new DataLineShape(
+                    yield return new LineDataShape(
                         commands,
                         DataSeries[dataSeriesIndex].GetColor(),
                         DataSeries[dataSeriesIndex].CssClass,

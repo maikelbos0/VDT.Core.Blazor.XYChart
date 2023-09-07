@@ -68,7 +68,7 @@ public class AreaLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataAreaShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataAreaShape)}[1]"));
+        var shape = Assert.IsType<AreaDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(AreaDataShape)}[1]"));
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal("red", shape.Color);
@@ -133,7 +133,7 @@ public class AreaLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataAreaShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataAreaShape)}[{dataSeriesIndex}]"));
+        var shape = Assert.IsType<AreaDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(AreaDataShape)}[{dataSeriesIndex}]"));
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
@@ -192,7 +192,7 @@ public class AreaLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataAreaShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataAreaShape)}[0]"));
+        var shape = Assert.IsType<AreaDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(AreaDataShape)}[0]"));
 
         Assert.Equal(expectedPath, shape.Path);
     }
