@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 // TODO improve examples
 // TODO docs <GenerateDocumentationFile>true</GenerateDocumentationFile>
-// TODO perhaps add a class element to data series to allow custom styling per series, could even replace line width
-// TODO maybe rename data shapes _again_ to reverse data-x to x-data
+// TODO areas with gaps can simply go to next datapoint, don't need to be cut off like start/end
+// TODO stacked areas are wrong - shapes should be properly closed
+// TODO add layer index to data shapes to prevent double keys for multiple same type layers
 
 namespace VDT.Core.Blazor.XYChart.Examples;
 
