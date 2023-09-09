@@ -9,14 +9,13 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class LineLayerTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, decimal dataLineWidth, LineGapMode lineGapMode, bool expectedResult) {
+    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, LineGapMode lineGapMode, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(LineLayer.IsStacked), isStacked },
             { nameof(LineLayer.ShowDataMarkers), showDataMarkers },
             { nameof(LineLayer.DataMarkerSize), dataMarkerSize },
             { nameof(LineLayer.DataMarkerType), dataMarkerType },
             { nameof(LineLayer.ShowDataLines), showDataLines },
-            { nameof(LineLayer.DataLineWidth), dataLineWidth },
             { nameof(LineLayer.LineGapMode), lineGapMode }
         });
 
@@ -26,22 +25,20 @@ public class LineLayerTests {
             DataMarkerSize = 10M,
             DataMarkerType = DefaultDataMarkerTypes.Square,
             ShowDataLines = true,
-            DataLineWidth = 2M,
             LineGapMode = LineGapMode.Skip
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, decimal, LineGapMode, bool> HaveParametersChanged_Data() => new() {
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, false },
-        { true, true, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
-        { false, false, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
-        { false, true, 15M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Round, true, 2M, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, false, 2M, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, 3M, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, 2M, LineGapMode.Join, true },
+    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, LineGapMode, bool> HaveParametersChanged_Data() => new() {
+        { false, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, false },
+        { true, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
+        { false, false, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
+        { false, true, 15M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Round, true, LineGapMode.Skip, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Square, false, LineGapMode.Skip, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Join, true },
     };
 
     [Theory]
@@ -70,10 +67,12 @@ public class LineLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = false,
@@ -92,6 +91,7 @@ public class LineLayerTests {
         Assert.Equal(expectedY, shape.Y);
         Assert.Equal(expectedSize, shape.Size);
         Assert.Equal("red", shape.Color);
+        Assert.Equal("data-marker data-marker-round example-data", shape.CssClass);
     }
 
     public static TheoryData<int, decimal, decimal, decimal, decimal> GetUnstackedDataSeriesShapes_Markers_Data() {
@@ -134,11 +134,13 @@ public class LineLayerTests {
             DataSeries = {
                 new() {
                     Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 10M, 15M }
+                    DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = true,
@@ -157,6 +159,7 @@ public class LineLayerTests {
         Assert.Equal(expectedY, shape.Y);
         Assert.Equal(expectedSize, shape.Size);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data-marker data-marker-round example-data", shape.CssClass);
     }
 
     public static TheoryData<int, int, decimal, decimal, decimal, decimal> GetStackedDataSeriesShapes_Markers_Data() {
@@ -224,10 +227,12 @@ public class LineLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = false,
@@ -240,10 +245,11 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataLineShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataLineShape)}[1]"));
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[1]"));
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal("red", shape.Color);
+        Assert.Equal("data line-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_Lines_Data() {
@@ -287,10 +293,12 @@ public class LineLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = true,
@@ -303,10 +311,11 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataLineShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataLineShape)}[{dataSeriesIndex}]"));
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[{dataSeriesIndex}]"));
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data line-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_Lines_Data() {
@@ -343,7 +352,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        Assert.DoesNotContain(result, shape => shape is DataLineShape);
+        Assert.DoesNotContain(result, shape => shape is LineDataShape);
     }
 
     [Theory]
@@ -382,7 +391,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataLineShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataLineShape)}[0]"));
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[0]"));
 
         Assert.Equal(expectedPath, shape.Path);
     }

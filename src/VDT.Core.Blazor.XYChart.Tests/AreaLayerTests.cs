@@ -51,10 +51,12 @@ public class AreaLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = false,
@@ -66,10 +68,11 @@ public class AreaLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataAreaShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataAreaShape)}[1]"));
+        var shape = Assert.IsType<AreaDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(AreaDataShape)}[1]"));
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal("red", shape.Color);
+        Assert.Equal("data area-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_Data() {
@@ -113,10 +116,12 @@ public class AreaLayerTests {
                 new() {
                     Color = "blue",
                     DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M }
+                    DataPoints = { null, null, null, null, 15M },
+                    CssClass = "example-data"
                 }
             },
             IsStacked = true,
@@ -128,10 +133,11 @@ public class AreaLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataAreaShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataAreaShape)}[{dataSeriesIndex}]"));
+        var shape = Assert.IsType<AreaDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(AreaDataShape)}[{dataSeriesIndex}]"));
 
         Assert.Equal(expectedPath, shape.Path);
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data area-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_Data() {
@@ -186,7 +192,7 @@ public class AreaLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<DataAreaShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataAreaShape)}[0]"));
+        var shape = Assert.IsType<AreaDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(AreaDataShape)}[0]"));
 
         Assert.Equal(expectedPath, shape.Path);
     }

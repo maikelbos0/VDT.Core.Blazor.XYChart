@@ -47,9 +47,10 @@ public class AreaLayer : LayerBase {
                 commands.Add(PathCommandFactory.LineTo(dataPoints[^1].X, zeroY));
                 commands.Add(PathCommandFactory.ClosePath);
 
-                yield return new DataAreaShape(
+                yield return new AreaDataShape(
                     commands,
                     DataSeries[dataSeriesIndex].GetColor(),
+                    DataSeries[dataSeriesIndex].CssClass,
                     dataSeriesIndex
                 );
             }

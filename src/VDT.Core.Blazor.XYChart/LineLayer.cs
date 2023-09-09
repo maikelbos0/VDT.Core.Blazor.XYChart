@@ -10,14 +10,12 @@ public class LineLayer : LayerBase {
     public static decimal DefaultDataMarkerSize { get; set; } = 10M;
     public static DataMarkerDelegate DefaultDataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
     public static bool DefaultShowDataLines { get; set; } = true;
-    public static decimal DefaultDataLineWidth { get; set; } = 2M;
     public static LineGapMode DefaultLineGapMode { get; set; } = LineGapMode.Skip;
 
     [Parameter] public bool ShowDataMarkers { get; set; } = DefaultShowDataMarkers;
     [Parameter] public decimal DataMarkerSize { get; set; } = DefaultDataMarkerSize;
     [Parameter] public DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerType;
     [Parameter] public bool ShowDataLines { get; set; } = DefaultShowDataLines;
-    [Parameter] public decimal DataLineWidth { get; set; } = DefaultDataLineWidth;
     [Parameter] public LineGapMode LineGapMode { get; set; } = DefaultLineGapMode;
     public override StackMode StackMode => StackMode.Single;
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
@@ -28,7 +26,6 @@ public class LineLayer : LayerBase {
         || parameters.HasParameterChanged(DataMarkerSize)
         || parameters.HasParameterChanged(DataMarkerType) 
         || parameters.HasParameterChanged(ShowDataLines)
-        || parameters.HasParameterChanged(DataLineWidth)
         || parameters.HasParameterChanged(LineGapMode);
 
     // TODO fluent lines?
@@ -46,6 +43,7 @@ public class LineLayer : LayerBase {
                             dataPoint.Y,
                             DataMarkerSize,
                             DataSeries[dataSeriesIndex].GetColor(),
+                            DataSeries[dataSeriesIndex].CssClass,
                             dataSeriesIndex,
                             dataPoint.Index
                         );
@@ -67,10 +65,10 @@ public class LineLayer : LayerBase {
                         }
                     }
 
-                    yield return new DataLineShape(
+                    yield return new LineDataShape(
                         commands,
-                        DataLineWidth,
                         DataSeries[dataSeriesIndex].GetColor(),
+                        DataSeries[dataSeriesIndex].CssClass,
                         dataSeriesIndex
                     );
                 }
