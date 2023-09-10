@@ -1,4 +1,5 @@
 ﻿@page "/LineChart"
+@using VDT.Core.Blazor.XYChart.Shapes;
 
 <h1>Line chart</h1>
 
@@ -31,16 +32,56 @@
 </ul>
 
 <p>
+    If you want to have a different shape as a data marker, you can achieve this by implementing your own subclass of <code>Shapes.ShapeBase</code>. Make sure
+    you call the base constructor with the <code>dataSeriesIndex</code> and <code>dataPointIndex</code> that get used to create a unique key for this shape.
+    Return your desired CSS classes in your implementation of the <code>CssClass</code> property, the desired SVG element from <code>ElementName</code>, and
+    return a <code>ShapeAttributeCollection</code> with attribute names and values from your <code>GetAttributes</code> implementation.
+</p>
 
-    it is a delegate of type <code>DataMarkerDelegate</code> that returns a
-    <code>ShapeBase</code>
-    TODO
+<p>
+    After creating your shape, simply assign a lambda or other method that implements the <code>DataMarkerDelegate</code> delegate to the
+    <code>DataMarkerType</code> property of your line layer. This delegate will provide your shape implementation with the data point coordinates, size, color,
+    CSS class and aforementioned indexes.
 </p>
 
 <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-    <LineLayer>
+    <LineLayer DataMarkerType="CrossDataMarkerShape.Delegate">
         <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
         <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
     </LineLayer>
 </XYChart>
+
+@code {
+    private class CrossDataMarkerShape : ShapeBase {
+        public const string DefaultCssClass = "data-marker data-marker-cross";
+
+        public static ShapeBase Delegate(decimal x, decimal y, decimal size, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex)
+            => new CrossDataMarkerShape(x, y, size, color, cssClass, dataSeriesIndex, dataPointIndex);
+
+        public override string ElementName => "path";
+        public decimal X { get; }
+        public decimal Y { get; }
+        public decimal Size { get; }
+        public string Color { get; }
+        public override string CssClass { get; }
+
+        public CrossDataMarkerShape(decimal x, decimal y, decimal size, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex) : base(dataSeriesIndex, dataPointIndex) {
+            X = x;
+            Y = y;
+            Size = size;
+            Color = color;
+            CssClass = $"{DefaultCssClass} {cssClass}";
+        }
+
+        public override ShapeAttributeCollection GetAttributes() => new() {
+            { "d", string.Join(" ", new[] {
+                PathCommandFactory.MoveTo(X - Size / 2, Y - Size / 2),
+                PathCommandFactory.LineTo(X + Size / 2, Y + Size / 2),
+                PathCommandFactory.MoveTo(X - Size / 2, Y + Size / 2),
+                PathCommandFactory.LineTo(X + Size / 2, Y - Size / 2)
+            }) },
+            { "stroke", Color }
+        };
+    }
+}
