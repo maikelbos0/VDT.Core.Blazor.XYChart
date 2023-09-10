@@ -3,7 +3,7 @@
 <h1>Chart basics</h1>
 
 <p>
-    An XY chart is composed of layers, each of which groups a number of data series and defines how they should be rendered. Currently, bar, line and area 
+    An XY chart is composed of layers, each of which groups a number of data series and defines how they should be rendered. Currently, bar, line and area
     layers are supported, each of which can be either stacked or unstacked.
 </p>
 
@@ -22,7 +22,6 @@
     </div>
 </div>
 
-
 <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
 
@@ -36,7 +35,7 @@
     @if (LayerTypes.Contains(ChartLayerType.Bar)) {
         <BarLayer IsStacked="IsStacked">
             <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
-            <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" />
+            <DataSeries DataPoints="new List<decimal?> { 21000, -12000, 15500, 12000, 3500 }" Color="#00cc66" />
         </BarLayer>
     }
 
@@ -48,7 +47,7 @@
     }
 </XYChart>
 
-@code {    
+@code {
     private bool IsStacked { get; set; } = false;
     private List<ChartLayerType> LayerTypes { get; set; } = new(Enum.GetValues<ChartLayerType>());
     private List<(ChartLayerType, string)> AllLayerTypes { get; } = Enum.GetValues<ChartLayerType>().Select(layerType => (layerType, layerType.ToString())).ToList();

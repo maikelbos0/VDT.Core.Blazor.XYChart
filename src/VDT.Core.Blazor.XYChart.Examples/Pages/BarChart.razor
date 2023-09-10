@@ -1,0 +1,27 @@
+﻿@page "/BarChart"
+
+<h1>Bar chart</h1>
+
+<p>
+    A bar chart is an XY chart with a bar layer. As can be seen in <a href="/ChartBasics">chart basics</a>, a bar layer can be either stacked or unstacked.
+    For bar charts, you can also use the customization parameters listed below.
+</p>
+
+<ul>
+    <li>
+        <code>ClearancePercentage</code> is the amount of white space on both sides of the group of bars for an index, expressed as a percentage of the total
+        amount of space available for this index.
+    </li>
+    <li>
+        <code>GapPercentage</code> is the amount of white space between each bar for an index, expressed as a percentage of the total amount of space available
+        for this index; this value is ignored when the bar layer is stacked.
+    </li>
+</ul>
+
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
+    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
+    <BarLayer>
+        <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
+        <DataSeries DataPoints="new List<decimal?> { 21000, -12000, 15500, 12000, 3500 }" Color="#00cc66" />
+    </BarLayer>
+</XYChart>
