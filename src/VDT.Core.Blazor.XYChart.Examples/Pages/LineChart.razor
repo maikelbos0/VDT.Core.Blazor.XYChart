@@ -1,0 +1,46 @@
+﻿@page "/LineChart"
+
+<h1>Line chart</h1>
+
+<p>
+    A line chart is an XY chart with a line layer - meaning the data is displayed as a series of points at positions corresponding to the data values,
+    connected by lines. As can be seen in <a href="/ChartBasics">chart basics</a>, a line layer can be either stacked or unstacked. A stacked line layer stacks
+    positive and negative values together since there can not be any visibility issues. For line charts, you can also use the customization parameters listed
+    below.
+</p>
+
+<ul>
+    <li><code>ShowDataMarkers</code> toggles visibility of the markers at the positions of the data points</li>
+    <li><code>DataMarkerSize</code> is the size of the data markers</li>
+    <li>
+        <code>DataMarkerType</code> is the type of data marker to use; this library offers two types, but implementing your own is straight-forward as is
+        explained below
+        <ul>
+            <li><code>DefaultDataMarkerTypes.Round</code> shows the data point as a circle</li>
+            <li><code>DefaultDataMarkerTypes.Square</code> shows the data point as a square</li>
+        </ul>
+    </li>
+    <li><code>ShowDataLines</code> toggles visibility of the lines connecting the positions of the data points</li>
+    <li>
+        <code>LineGapMode</code> is the way gaps in a data series - meaning a data point is <code>null></code> - are resolved when constructing lines
+        <ul>
+            <li><code>LineGapMode.Skip</code> leaves a gap in the line</li>
+            <li><code>LineGapMode.Join</code> joins the previous and next data points</li>
+        </ul>
+    </li>
+</ul>
+
+<p>
+
+    it is a delegate of type <code>DataMarkerDelegate</code> that returns a
+    <code>ShapeBase</code>
+    TODO
+</p>
+
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
+    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
+    <LineLayer>
+        <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
+        <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
+    </LineLayer>
+</XYChart>
