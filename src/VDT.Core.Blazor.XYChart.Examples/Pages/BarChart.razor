@@ -3,8 +3,11 @@
 <h1>Bar chart</h1>
 
 <p>
-    A bar chart is an XY chart with a bar layer. As can be seen in <a href="/ChartBasics">chart basics</a>, a bar layer can be either stacked or unstacked.
-    For bar charts, you can also use the customization parameters listed below.
+    A bar chart is an XY chart with a bar layer - meaning the data is displayed as vertical bars which have a height corresponding to the data values. As can
+    be seen in <a href="/ChartBasics">chart basics</a>, a bar layer can be either stacked or unstacked. A stacked bar layer divides its bars into a positive
+    stack of bars displayed above the 0 line and a negative stack of bars below the 0 line, so that positive and negative values are always visible without
+    overlap. For bar charts, you can also use the customization
+    parameters listed below.
 </p>
 
 <ul>
@@ -20,6 +23,14 @@
 
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="isStacked">Stack mode</label>
+        <select class="form-select" id="isStacked" @onchange="args => IsStacked = bool.Parse(args.Value?.ToString()!)">
+            <option value="false" selected="@(!IsStacked)">Unstacked</option>
+            <option value="true" selected="@IsStacked">Stacked</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="clearancePercentage">Clearance percentage</label>
         <input type="number" class="form-control" id="clearancePercentage" @bind-value="@ClearancePercentage" />
     </div>
@@ -32,13 +43,14 @@
 
 <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-    <BarLayer ClearancePercentage="ClearancePercentage" GapPercentage="GapPercentage">
+    <BarLayer IsStacked="IsStacked" ClearancePercentage="ClearancePercentage" GapPercentage="GapPercentage">
         <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
-        <DataSeries DataPoints="new List<decimal?> { 21000, -12000, 15500, 12000, 3500 }" Color="#00cc66" />
+        <DataSeries DataPoints="new List<decimal?> { 21000, -12000, 15500, -4000, 3500 }" Color="#00cc66" />
     </BarLayer>
 </XYChart>
 
 @code {
+    private bool IsStacked { get; set; } = false;
     private decimal ClearancePercentage { get; set; } = 10M;
     private decimal GapPercentage { get; set; } = 5M;
 }
