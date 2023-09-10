@@ -23,7 +23,7 @@
     </li>
     <li><code>ShowDataLines</code> toggles visibility of the lines connecting the positions of the data points</li>
     <li>
-        <code>LineGapMode</code> is the way gaps in a data series - meaning a data point is <code>null></code> - are resolved when constructing lines
+        <code>LineGapMode</code> is the way gaps in a data series - meaning a data point is <code>null</code> - are resolved when constructing lines
         <ul>
             <li><code>LineGapMode.Skip</code> leaves a gap in the line</li>
             <li><code>LineGapMode.Join</code> joins the previous and next data points</li>
@@ -95,8 +95,8 @@
 <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
     <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines" LineGapMode="LineGapMode">
-        <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
-        <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" />
+        <DataSeries DataPoints="new List<decimal?> { 12500, 9500, 20500, 14500, 11000 }" />
+        <DataSeries DataPoints="new List<decimal?> { 6500, -2500, null, 4000, 2000 }" />
     </LineLayer>
 </XYChart>
 
@@ -129,7 +129,25 @@
                 PathCommandFactory.MoveTo(X - Size / 2, Y + Size / 2),
                 PathCommandFactory.LineTo(X + Size / 2, Y - Size / 2)
             }) },
-            { "stroke", Color }
+            { "stroke", Color },
+            { "stroke-width", "2" }
+        };
+    }
+
+    private bool IsStacked { get; set; } = false;
+    private bool ShowDataMarkers { get; set; } = true;
+    private decimal DataMarkerSize { get; set; } = 10M;
+    private DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
+    private bool ShowDataLines { get; set; } = true;
+    private LineGapMode LineGapMode { get; set; } = LineGapMode.Skip;
+
+    private void SetDataMarkerType(ChangeEventArgs args) {
+        DataMarkerType = args.Value?.ToString() switch
+        {
+            "round" => DefaultDataMarkerTypes.Round,
+            "square" => DefaultDataMarkerTypes.Square,
+            "cross" => CrossDataMarkerShape.Delegate,
+            _ => throw new NotImplementedException()
         };
     }
 }
