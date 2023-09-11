@@ -4,7 +4,7 @@
 <h1>Line chart</h1>
 
 <p>
-    A line chart is an XY chart with a line layer - meaning the data is displayed as a series of points at positions corresponding to the data values,
+    A line chart is an XY chart with a line layer, in which the data is displayed as a series of points at positions corresponding to the data values,
     connected by lines. As can be seen in <a href="/ChartBasics">chart basics</a>, a line layer can be either stacked or unstacked. A stacked line layer stacks
     positive and negative values together since there can not be any visibility issues. For line charts, you can also use the customization parameters listed
     below.
@@ -84,8 +84,8 @@
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 mb-3">
-        <label class="form-label" for="showDataLines">Line gap mode</label>
-        <select class="form-select" id="showDataLines" @onchange="args => LineGapMode = Enum.Parse<LineGapMode>(args.Value?.ToString()!)">
+        <label class="form-label" for="lineGapMode">Line gap mode</label>
+        <select class="form-select" id="lineGapMode" @onchange="args => LineGapMode = Enum.Parse<LineGapMode>(args.Value?.ToString()!)">
             <option value="@LineGapMode.Skip" selected="@(LineGapMode == LineGapMode.Skip)">Skip</option>
             <option value="@LineGapMode.Join" selected="@(LineGapMode == LineGapMode.Join)">Join</option>
         </select>
