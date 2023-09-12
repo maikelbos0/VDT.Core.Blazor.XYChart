@@ -18,40 +18,37 @@ public class AreaLayer : LayerBase {
         || parameters.HasParameterChanged(LineGapMode);
 
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
-        var dataPointsByDataSeries = GetCanvasDataPoints().ToLookup(dataSeriesPoint => dataSeriesPoint.DataSeriesIndex);
         var zeroY = Chart.MapDataPointToCanvas(0M);
 
-        for (var dataSeriesIndex = 0; dataSeriesIndex < DataSeries.Count; dataSeriesIndex++) {
-            var dataPoints = dataPointsByDataSeries[dataSeriesIndex].OrderBy(dataPoint => dataPoint.Index).ToList();
-
-            if (dataPoints.Any()) {
+        foreach (var canvasDataSeries in GetCanvasDataSeries(false)) {
+            if (canvasDataSeries.DataPoints.Any()) {
                 var commands = new List<string>();
 
-                for (var i = 0; i < dataPoints.Count; i++) {
+                for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
                     if (i == 0) {
-                        commands.Add(PathCommandFactory.MoveTo(dataPoints[i].X, zeroY));
-                        commands.Add(PathCommandFactory.LineTo(dataPoints[i].X, dataPoints[i].Y));
+                        commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, zeroY));
+                        commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                     }
-                    else if (dataPoints[i - 1].Index < dataPoints[i].Index - 1 && LineGapMode == LineGapMode.Skip) {
-                        commands.Add(PathCommandFactory.LineTo(dataPoints[i - 1].X, zeroY));
+                    else if (canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1 && LineGapMode == LineGapMode.Skip) {
+                        commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i - 1].X, zeroY));
                         commands.Add(PathCommandFactory.ClosePath);
 
-                        commands.Add(PathCommandFactory.MoveTo(dataPoints[i].X, zeroY));
-                        commands.Add(PathCommandFactory.LineTo(dataPoints[i].X, dataPoints[i].Y));
+                        commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, zeroY));
+                        commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                     }
                     else {
-                        commands.Add(PathCommandFactory.LineTo(dataPoints[i].X, dataPoints[i].Y));
+                        commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                     }
                 }
 
-                commands.Add(PathCommandFactory.LineTo(dataPoints[^1].X, zeroY));
+                commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[^1].X, zeroY));
                 commands.Add(PathCommandFactory.ClosePath);
 
                 yield return new AreaDataShape(
                     commands,
-                    DataSeries[dataSeriesIndex].GetColor(),
-                    DataSeries[dataSeriesIndex].CssClass,
-                    dataSeriesIndex
+                    canvasDataSeries.Color,
+                    canvasDataSeries.CssClass,
+                    canvasDataSeries.Index
                 );
             }
         }
