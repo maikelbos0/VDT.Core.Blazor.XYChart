@@ -61,6 +61,26 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             .ToList();
     }
 
+    public IEnumerable<CanvasDataSeries> GetCanvasDataSeries(bool nullAsZero) {
+        var dataPointTransformer = GetDataPointTransformer();
+
+        return DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
+            dataSeries.GetColor(), 
+            dataSeries.CssClass, 
+            index, 
+            dataSeries.DataPoints
+                .Select((dataPoint, index) => (DataPoint: dataPoint, Index: index))
+                .Where(value => value.Index < Chart.Labels.Count && (nullAsZero || value.DataPoint != null))
+                .Select(value => new CanvasDataPoint(
+                    Chart.MapDataIndexToCanvas(value.Index),
+                    Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint ?? 0, value.Index)),
+                    Chart.MapDataValueToPlotArea(value.DataPoint ?? 0),
+                    -1, // TODO remove
+                    value.Index
+                )).ToList())
+        ).ToList();
+    }
+
     public IEnumerable<decimal> GetScaleDataPoints() {
         var dataPointTransformer = GetDataPointTransformer();
 

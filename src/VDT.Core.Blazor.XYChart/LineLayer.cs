@@ -24,27 +24,23 @@ public class LineLayer : LayerBase {
         => parameters.HasParameterChanged(IsStacked)
         || parameters.HasParameterChanged(ShowDataMarkers)
         || parameters.HasParameterChanged(DataMarkerSize)
-        || parameters.HasParameterChanged(DataMarkerType) 
+        || parameters.HasParameterChanged(DataMarkerType)
         || parameters.HasParameterChanged(ShowDataLines)
         || parameters.HasParameterChanged(LineGapMode);
 
     // TODO fluent lines?
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
-        var dataPointsByDataSeries = GetCanvasDataPoints().ToLookup(dataSeriesPoint => dataSeriesPoint.DataSeriesIndex);
-
-        for (var dataSeriesIndex = 0; dataSeriesIndex < DataSeries.Count; dataSeriesIndex++) {
-            var dataPoints = dataPointsByDataSeries[dataSeriesIndex].OrderBy(dataPoint => dataPoint.Index).ToList();
-
-            if (dataPoints.Any()) {
+        foreach (var canvasDataSeries in GetCanvasDataSeries(false)) {
+            if (canvasDataSeries.DataPoints.Any()) {
                 if (ShowDataMarkers) {
-                    foreach (var dataPoint in dataPoints) {
+                    foreach (var dataPoint in canvasDataSeries.DataPoints) {
                         yield return DataMarkerType(
                             dataPoint.X,
                             dataPoint.Y,
                             DataMarkerSize,
-                            DataSeries[dataSeriesIndex].GetColor(),
-                            DataSeries[dataSeriesIndex].CssClass,
-                            dataSeriesIndex,
+                            canvasDataSeries.Color,
+                            canvasDataSeries.CssClass,
+                            canvasDataSeries.Index,
                             dataPoint.Index
                         );
                     }
@@ -53,23 +49,23 @@ public class LineLayer : LayerBase {
                 if (ShowDataLines) {
                     var commands = new List<string>();
 
-                    for (var i = 0; i < dataPoints.Count; i++) {
+                    for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
                         if (i == 0) {
-                            commands.Add(PathCommandFactory.MoveTo(dataPoints[i].X, dataPoints[i].Y));
+                            commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                         }
-                        else if (dataPoints[i - 1].Index < dataPoints[i].Index - 1 && LineGapMode == LineGapMode.Skip) {
-                            commands.Add(PathCommandFactory.MoveTo(dataPoints[i].X, dataPoints[i].Y));
+                        else if (canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1 && LineGapMode == LineGapMode.Skip) {
+                            commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                         }
                         else {
-                            commands.Add(PathCommandFactory.LineTo(dataPoints[i].X, dataPoints[i].Y));
+                            commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                         }
                     }
 
                     yield return new LineDataShape(
                         commands,
-                        DataSeries[dataSeriesIndex].GetColor(),
-                        DataSeries[dataSeriesIndex].CssClass,
-                        dataSeriesIndex
+                        canvasDataSeries.Color,
+                        canvasDataSeries.CssClass,
+                        canvasDataSeries.Index
                     );
                 }
             }
