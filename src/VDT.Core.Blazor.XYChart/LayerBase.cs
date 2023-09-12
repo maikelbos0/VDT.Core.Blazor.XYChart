@@ -77,7 +77,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
                     Chart.MapDataValueToPlotArea(value.DataPoint ?? 0),
                     -1, // TODO remove
                     value.Index
-                )).ToList())
+                )).ToList().AsReadOnly())
         ).ToList();
     }
 
