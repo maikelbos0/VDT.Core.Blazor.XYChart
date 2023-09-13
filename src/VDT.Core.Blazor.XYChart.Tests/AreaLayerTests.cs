@@ -8,18 +8,15 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class AreaLayerTests {
     [Theory]
-    [InlineData(false, LineGapMode.Skip, false)]
-    [InlineData(true, LineGapMode.Skip, true)]
-    [InlineData(false, LineGapMode.Join, true)]
-    public void HaveParametersChanged(bool isStacked, LineGapMode lineGapMode, bool expectedResult) {
+    [InlineData(false, false)]
+    [InlineData(true, true)]
+    public void HaveParametersChanged(bool isStacked, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
-            { nameof(AreaLayer.IsStacked), isStacked },
-            { nameof(AreaLayer.LineGapMode), lineGapMode }
+            { nameof(AreaLayer.IsStacked), isStacked }
         });
 
         var subject = new AreaLayer {
-            IsStacked = false,
-            LineGapMode = LineGapMode.Skip
+            IsStacked = false
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
@@ -59,8 +56,7 @@ public class AreaLayerTests {
                     CssClass = "example-data"
                 }
             },
-            IsStacked = false,
-            LineGapMode = LineGapMode.Join
+            IsStacked = false
         };
 
         subject.DataSeries[1].DataPoints[startIndex] = startDataPoint;
@@ -124,8 +120,7 @@ public class AreaLayerTests {
                     CssClass = "example-data"
                 }
             },
-            IsStacked = true,
-            LineGapMode = LineGapMode.Join
+            IsStacked = true
         };
 
         subject.DataSeries[dataSeriesIndex].DataPoints[startIndex] = startDataPoint;
@@ -155,46 +150,6 @@ public class AreaLayerTests {
             { 1, 2, 5M, 3, -5M, FormattableString.Invariant($"M {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaMax / plotAreaRange * plotAreaHeight} L {plotAreaX + 2M * dataPointWidth} {plotAreaY + (plotAreaMax - 15M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 3M * dataPointWidth} {plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 3M * dataPointWidth} {plotAreaY + plotAreaMax / plotAreaRange * plotAreaHeight} Z") },
             { 1, 2, -5M, 3, 5M, FormattableString.Invariant($"M {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaMax / plotAreaRange * plotAreaHeight} L {plotAreaX + 2M * dataPointWidth} {plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 3M * dataPointWidth} {plotAreaY + (plotAreaMax - 15M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 3M * dataPointWidth} {plotAreaY + plotAreaMax / plotAreaRange * plotAreaHeight} Z") },
         };
-    }
-
-    [Theory]
-    [InlineData(LineGapMode.Skip, "M 125.0 425 L 125.0 325.00 L 337.5 325.00 L 337.5 425 Z M 762.5 425 L 762.5 325.00 L 975.0 325.00 L 975.0 425 Z")]
-    [InlineData(LineGapMode.Join, "M 125.0 425 L 125.0 325.00 L 337.5 325.00 L 762.5 325.00 L 975.0 325.00 L 975.0 425 Z")]
-    public void GetDataSeriesShapes_LineGapMode(LineGapMode lineGapMode, string expectedPath) {
-        var subject = new AreaLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 1000,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = 00M,
-                     Max = 40M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz", "Quux", "Quuux" },
-                DataPointSpacingMode = DataPointSpacingMode.EdgeToEdge
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { 10M, 10M, null, 10M, 10M }
-                }
-            },
-            IsStacked = true,
-            LineGapMode = lineGapMode
-        };
-
-        var result = subject.GetDataSeriesShapes();
-
-        var shape = Assert.IsType<AreaDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(AreaDataShape)}[0]"));
-
-        Assert.Equal(expectedPath, shape.Path);
     }
 
     [Theory]
