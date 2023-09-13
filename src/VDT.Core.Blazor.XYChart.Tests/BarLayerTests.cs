@@ -37,7 +37,7 @@ public class BarLayerTests {
         var subject = new BarLayer() {
             Chart = new() {
                 Canvas = {
-                    Width = 1000,
+                    Width = 900,
                     Height = 500,
                     Padding = 25,
                     XAxisLabelHeight = 50,
@@ -50,18 +50,18 @@ public class BarLayerTests {
                      Max = 40M,
                      GridLineInterval = 10M
                 },
-                Labels = { "Foo", "Bar", "Baz", "Quux" },
+                Labels = { "Foo", "Bar", "Baz" },
                 DataPointSpacingMode = DataPointSpacingMode.Center
             },
             DataSeries = {
                 new() {
                     Color = "blue",
-                    DataPoints = { null, null, null, null, 15M },
+                    DataPoints = { -10M, -10M, 10M, 15M },
                     CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M },
+                    DataPoints = { null, null, null, 15M },
                     CssClass = "example-data"
                 }
             },
@@ -87,15 +87,15 @@ public class BarLayerTests {
     public static TheoryData<int, int, decimal, decimal, decimal, decimal, decimal> GetUnstackedDataSeriesShapes_Data() {
         var plotAreaX = 25 + 100;
         var plotAreaY = 25;
-        var dataPointWidth = (1000 - 25 - 25 - 100) / 4M;
+        var dataPointWidth = (900 - 25 - 25 - 100) / 3M;
         var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaMax = 40M;
-        var plotAreaRange = plotAreaMax - -10M;
+        var plotAreaZero = 40M;
+        var plotAreaRange = plotAreaZero - -10M;
 
         return new() {
-            { 0, 0, -5M, plotAreaX + (0.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight, 0.2M * dataPointWidth, -5M / plotAreaRange * plotAreaHeight },
-            { 1, 1, 5M, plotAreaX + (1.5M + 0.1M / 2) * dataPointWidth, plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight, 0.2M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight },
-            { 0, 3, 35M, plotAreaX + (3.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax - 35M) / plotAreaRange * plotAreaHeight, 0.2M * dataPointWidth, 35M / plotAreaRange * plotAreaHeight },
+            { 0, 0, -5M, plotAreaX + (0.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaZero + 5M) / plotAreaRange * plotAreaHeight, 0.2M * dataPointWidth, -5M / plotAreaRange * plotAreaHeight },
+            { 1, 1, 5M, plotAreaX + (1.5M + 0.1M / 2) * dataPointWidth, plotAreaY + (plotAreaZero - 5M) / plotAreaRange * plotAreaHeight, 0.2M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight },
+            { 0, 2, 35M, plotAreaX + (2.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaZero - 35M) / plotAreaRange * plotAreaHeight, 0.2M * dataPointWidth, 35M / plotAreaRange * plotAreaHeight },
         };
     }
 
@@ -105,7 +105,7 @@ public class BarLayerTests {
         var subject = new BarLayer() {
             Chart = new() {
                 Canvas = {
-                    Width = 1000,
+                    Width = 900,
                     Height = 500,
                     Padding = 25,
                     XAxisLabelHeight = 50,
@@ -118,18 +118,18 @@ public class BarLayerTests {
                      Max = 30M,
                      GridLineInterval = 10M
                 },
-                Labels = { "Foo", "Bar", "Baz", "Quux" },
+                Labels = { "Foo", "Bar", "Baz" },
                 DataPointSpacingMode = DataPointSpacingMode.Center
             },
             DataSeries = {
                 new() {
                     Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 10M, 15M },
+                    DataPoints = { -10M, -10M, 10M, 15M },
                     CssClass = "example-data"
                 },
                 new() {
                     Color = "red",
-                    DataPoints = { null, null, null, null, 15M },
+                    DataPoints = { null, null, null, 15M },
                     CssClass = "example-data"
                 }
             },
@@ -155,18 +155,18 @@ public class BarLayerTests {
     public static TheoryData<int, int, decimal, decimal, decimal, decimal, decimal> GetStackedDataSeriesShapes_Data() {
         var plotAreaX = 25 + 100;
         var plotAreaY = 25;
-        var dataPointWidth = (1000 - 25 - 25 - 100) / 4M;
+        var dataPointWidth = (900 - 25 - 25 - 100) / 3M;
         var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaMax = 30M;
-        var plotAreaRange = plotAreaMax - -20M;
+        var plotAreaZero = 30M;
+        var plotAreaRange = plotAreaZero - -20M;
 
         return new() {
-            { 0, 0, -5M, plotAreaX + (0.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, -5M / plotAreaRange * plotAreaHeight },
-            { 0, 2, 5M, plotAreaX + (2.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight },
-            { 1, 0, -5M, plotAreaX + (0.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax + 15M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, -5M / plotAreaRange * plotAreaHeight },
-            { 1, 0, 5M, plotAreaX + (0.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight },
-            { 1, 2, -5M, plotAreaX + (2.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, -5M / plotAreaRange * plotAreaHeight },
-            { 1, 2, 5M, plotAreaX + (2.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaMax - 15M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight }
+            { 0, 0, -5M, plotAreaX + (0.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaZero + 5M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, -5M / plotAreaRange * plotAreaHeight },
+            { 0, 2, 5M, plotAreaX + (2.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaZero - 5M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight },
+            { 1, 0, -5M, plotAreaX + (0.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaZero + 15M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, -5M / plotAreaRange * plotAreaHeight },
+            { 1, 0, 5M, plotAreaX + (0.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaZero - 5M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight },
+            { 1, 2, -5M, plotAreaX + (2.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaZero + 5M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, -5M / plotAreaRange * plotAreaHeight },
+            { 1, 2, 5M, plotAreaX + (2.5M - 0.25M) * dataPointWidth, plotAreaY + (plotAreaZero - 15M) / plotAreaRange * plotAreaHeight, 0.5M * dataPointWidth, 5M / plotAreaRange * plotAreaHeight }
         };
     }
 
