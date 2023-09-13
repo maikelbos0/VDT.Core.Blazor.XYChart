@@ -10,6 +10,7 @@ public class LayerBaseTests {
     private class TestLayer : LayerBase {
         public override StackMode StackMode { get; }
         public override DataPointSpacingMode DefaultDataPointSpacingMode => throw new NotImplementedException();
+        public override bool NullAsZero => throw new NotImplementedException();
 
         public TestLayer(StackMode stackMode) {
             StackMode = stackMode;

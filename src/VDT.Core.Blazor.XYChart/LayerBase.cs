@@ -15,6 +15,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     internal List<DataSeries> DataSeries { get; set; } = new();
     public abstract StackMode StackMode { get; }
     public abstract DataPointSpacingMode DefaultDataPointSpacingMode { get; }
+    public abstract bool NullAsZero { get; }
 
     protected override void OnInitialized() => Chart.AddLayer(this);
 
@@ -61,7 +62,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             .ToList();
     }
 
-    public IEnumerable<CanvasDataSeries> GetCanvasDataSeries(bool nullAsZero) {
+    public IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();
 
         return DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
@@ -70,7 +71,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             index, 
             dataSeries.DataPoints
                 .Select((dataPoint, index) => (DataPoint: dataPoint, Index: index))
-                .Where(value => value.Index < Chart.Labels.Count && (nullAsZero || value.DataPoint != null))
+                .Where(value => value.Index < Chart.Labels.Count && (NullAsZero || value.DataPoint != null))
                 .Select(value => new CanvasDataPoint(
                     Chart.MapDataIndexToCanvas(value.Index),
                     Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint ?? 0, value.Index)),

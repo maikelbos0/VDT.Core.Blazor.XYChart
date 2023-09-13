@@ -10,6 +10,7 @@ public class AreaLayer : LayerBase {
 
     public override StackMode StackMode => StackMode.Single;
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.EdgeToEdge;
+    public override bool NullAsZero => true;
 
     [Parameter] public LineGapMode LineGapMode { get; set; } = DefaultLineGapMode;
 
@@ -20,7 +21,7 @@ public class AreaLayer : LayerBase {
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var zeroY = Chart.MapDataPointToCanvas(0M);
 
-        foreach (var canvasDataSeries in GetCanvasDataSeries(false)) {
+        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
             if (canvasDataSeries.DataPoints.Any()) {
                 var commands = new List<string>();
 

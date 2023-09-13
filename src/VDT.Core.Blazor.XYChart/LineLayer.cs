@@ -12,13 +12,15 @@ public class LineLayer : LayerBase {
     public static bool DefaultShowDataLines { get; set; } = true;
     public static LineGapMode DefaultLineGapMode { get; set; } = LineGapMode.Skip;
 
+    public override StackMode StackMode => StackMode.Single;
+    public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
+    public override bool NullAsZero => IsStacked;
+
     [Parameter] public bool ShowDataMarkers { get; set; } = DefaultShowDataMarkers;
     [Parameter] public decimal DataMarkerSize { get; set; } = DefaultDataMarkerSize;
     [Parameter] public DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerType;
     [Parameter] public bool ShowDataLines { get; set; } = DefaultShowDataLines;
     [Parameter] public LineGapMode LineGapMode { get; set; } = DefaultLineGapMode;
-    public override StackMode StackMode => StackMode.Single;
-    public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsStacked)
@@ -30,7 +32,7 @@ public class LineLayer : LayerBase {
 
     // TODO fluent lines?
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
-        foreach (var canvasDataSeries in GetCanvasDataSeries(false)) {
+        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
             if (canvasDataSeries.DataPoints.Any()) {
                 if (ShowDataMarkers) {
                     foreach (var dataPoint in canvasDataSeries.DataPoints) {

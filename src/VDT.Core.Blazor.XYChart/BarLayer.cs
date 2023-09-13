@@ -10,10 +10,12 @@ public class BarLayer : LayerBase {
     public static decimal DefaultClearancePercentage { get; set; } = 10M;
     public static decimal DefaultGapPercentage { get; set; } = 5M;
 
-    [Parameter] public decimal ClearancePercentage { get; set; } = DefaultClearancePercentage;
-    [Parameter] public decimal GapPercentage { get; set; } = DefaultGapPercentage;
     public override StackMode StackMode => StackMode.Split;
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
+    public override bool NullAsZero => false;
+
+    [Parameter] public decimal ClearancePercentage { get; set; } = DefaultClearancePercentage;
+    [Parameter] public decimal GapPercentage { get; set; } = DefaultGapPercentage;
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsStacked)
@@ -36,7 +38,7 @@ public class BarLayer : LayerBase {
             offsetProvider = dataSeriesIndex => (dataSeriesIndex - DataSeries.Count / 2M) * dataSeriesWidth + (dataSeriesIndex - (DataSeries.Count - 1) / 2M) * gapWidth;
         }
 
-        foreach (var canvasDataSeries in GetCanvasDataSeries(false)) {
+        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
             foreach (var canvasDataPoint in canvasDataSeries.DataPoints) {
                 yield return new BarDataShape(
                     canvasDataPoint.X + offsetProvider(canvasDataSeries.Index),
