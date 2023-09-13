@@ -10,7 +10,6 @@ public class LineLayer : LayerBase {
     public static decimal DefaultDataMarkerSize { get; set; } = 10M;
     public static DataMarkerDelegate DefaultDataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
     public static bool DefaultShowDataLines { get; set; } = true;
-    public static LineGapMode DefaultLineGapMode { get; set; } = LineGapMode.Skip;
 
     public override StackMode StackMode => StackMode.Single;
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
@@ -20,15 +19,13 @@ public class LineLayer : LayerBase {
     [Parameter] public decimal DataMarkerSize { get; set; } = DefaultDataMarkerSize;
     [Parameter] public DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerType;
     [Parameter] public bool ShowDataLines { get; set; } = DefaultShowDataLines;
-    [Parameter] public LineGapMode LineGapMode { get; set; } = DefaultLineGapMode;
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsStacked)
         || parameters.HasParameterChanged(ShowDataMarkers)
         || parameters.HasParameterChanged(DataMarkerSize)
         || parameters.HasParameterChanged(DataMarkerType)
-        || parameters.HasParameterChanged(ShowDataLines)
-        || parameters.HasParameterChanged(LineGapMode);
+        || parameters.HasParameterChanged(ShowDataLines);
 
     // TODO fluent lines?
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
@@ -55,7 +52,7 @@ public class LineLayer : LayerBase {
                         if (i == 0) {
                             commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                         }
-                        else if (canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1 && LineGapMode == LineGapMode.Skip) {
+                        else if (canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
                             commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                         }
                         else {

@@ -22,13 +22,6 @@
         </ul>
     </li>
     <li><code>ShowDataLines</code> toggles visibility of the lines connecting the positions of the data points</li>
-    <li>
-        <code>LineGapMode</code> is the way gaps in a data series - meaning a data point is <code>null</code> - are resolved when constructing lines
-        <ul>
-            <li><code>LineGapMode.Skip</code> leaves a gap in the line</li>
-            <li><code>LineGapMode.Join</code> joins the previous and next data points</li>
-        </ul>
-    </li>
 </ul>
 
 <p>
@@ -82,19 +75,11 @@
             <option value="false" selected="@(!ShowDataLines)">Hide</option>
         </select>
     </div>
-
-    <div class="col-12 col-md-6 col-xl-4 mb-3">
-        <label class="form-label" for="lineGapMode">Line gap mode</label>
-        <select class="form-select" id="lineGapMode" @onchange="args => LineGapMode = Enum.Parse<LineGapMode>(args.Value?.ToString()!)">
-            <option value="@LineGapMode.Skip" selected="@(LineGapMode == LineGapMode.Skip)">Skip</option>
-            <option value="@LineGapMode.Join" selected="@(LineGapMode == LineGapMode.Join)">Join</option>
-        </select>
-    </div>
 </div>
 
 <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-    <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines" LineGapMode="LineGapMode">
+    <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
         <DataSeries DataPoints="new List<decimal?> { 12500, 9500, 20500, 14500, 11000 }" />
         <DataSeries DataPoints="new List<decimal?> { 6500, -2500, null, 4000, 2000 }" />
     </LineLayer>
@@ -139,7 +124,6 @@
     private decimal DataMarkerSize { get; set; } = 10M;
     private DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
     private bool ShowDataLines { get; set; } = true;
-    private LineGapMode LineGapMode { get; set; } = LineGapMode.Skip;
 
     private void SetDataMarkerType(ChangeEventArgs args) {
         DataMarkerType = args.Value?.ToString() switch

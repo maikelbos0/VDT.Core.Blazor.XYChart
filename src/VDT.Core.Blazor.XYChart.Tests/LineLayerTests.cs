@@ -9,14 +9,13 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class LineLayerTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, LineGapMode lineGapMode, bool expectedResult) {
+    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(LineLayer.IsStacked), isStacked },
             { nameof(LineLayer.ShowDataMarkers), showDataMarkers },
             { nameof(LineLayer.DataMarkerSize), dataMarkerSize },
             { nameof(LineLayer.DataMarkerType), dataMarkerType },
-            { nameof(LineLayer.ShowDataLines), showDataLines },
-            { nameof(LineLayer.LineGapMode), lineGapMode }
+            { nameof(LineLayer.ShowDataLines), showDataLines }
         });
 
         var subject = new LineLayer {
@@ -24,21 +23,19 @@ public class LineLayerTests {
             ShowDataMarkers = true,
             DataMarkerSize = 10M,
             DataMarkerType = DefaultDataMarkerTypes.Square,
-            ShowDataLines = true,
-            LineGapMode = LineGapMode.Skip
+            ShowDataLines = true
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, LineGapMode, bool> HaveParametersChanged_Data() => new() {
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, false },
-        { true, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
-        { false, false, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
-        { false, true, 15M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Round, true, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, false, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Join, true },
+    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, bool> HaveParametersChanged_Data() => new() {
+        { false, true, 10M, DefaultDataMarkerTypes.Square, true, false },
+        { true, true, 10M, DefaultDataMarkerTypes.Square, true, true },
+        { false, false, 10M, DefaultDataMarkerTypes.Square, true, true },
+        { false, true, 15M, DefaultDataMarkerTypes.Square, true, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Round, true, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Square, false, true }
     };
 
     [Theory]
@@ -236,8 +233,7 @@ public class LineLayerTests {
                 }
             },
             IsStacked = false,
-            ShowDataLines = true,
-            LineGapMode = LineGapMode.Join
+            ShowDataLines = true
         };
 
         subject.DataSeries[1].DataPoints[startIndex] = startDataPoint;
@@ -302,8 +298,7 @@ public class LineLayerTests {
                 }
             },
             IsStacked = true,
-            ShowDataLines = true,
-            LineGapMode = LineGapMode.Join
+            ShowDataLines = true
         };
 
         subject.DataSeries[dataSeriesIndex].DataPoints[startIndex] = startDataPoint;
@@ -353,47 +348,6 @@ public class LineLayerTests {
         var result = subject.GetDataSeriesShapes();
 
         Assert.DoesNotContain(result, shape => shape is LineDataShape);
-    }
-
-    [Theory]
-    [InlineData(LineGapMode.Skip, "M 210.0 325.00 L 380.0 325.00 M 720.0 325.00 L 890.0 325.00")]
-    [InlineData(LineGapMode.Join, "M 210.0 325.00 L 380.0 325.00 L 720.0 325.00 L 890.0 325.00")]
-    public void GetDataSeriesShapes_LineGapMode(LineGapMode lineGapMode, string expectedPath) {
-        var subject = new LineLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 1000,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = 00M,
-                     Max = 40M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz", "Quux", "Quuux" },
-                DataPointSpacingMode = DataPointSpacingMode.Center
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { 10M, 10M, null, 10M, 10M }
-                }
-            },
-            IsStacked = true,
-            ShowDataLines = true,
-            LineGapMode = lineGapMode
-        };
-
-        var result = subject.GetDataSeriesShapes();
-
-        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[0]"));
-
-        Assert.Equal(expectedPath, shape.Path);
     }
 
     [Theory]
