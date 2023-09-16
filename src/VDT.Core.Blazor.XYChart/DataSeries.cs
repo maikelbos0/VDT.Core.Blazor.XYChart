@@ -38,6 +38,20 @@ public class DataSeries : ChildComponentBase, IDisposable {
         GC.SuppressFinalize(this);
     }
 
+    public IEnumerable<decimal?> GetDataPoints() {
+        var dataPoints = DataPoints.Take(Chart.Labels.Count);
+
+        if (DataPoints.Count < Chart.Labels.Count) {
+            dataPoints = dataPoints.Concat(Enumerable.Repeat<decimal?>(null, Chart.Labels.Count - DataPoints.Count));
+        }
+
+        if (Layer.NullAsZero) {
+            dataPoints = dataPoints.Select<decimal?, decimal?>(dataPoint => dataPoint ?? 0M);
+        }
+
+        return dataPoints;
+    }
+
     public string GetColor() {
         if (Color != null) {
             return Color;

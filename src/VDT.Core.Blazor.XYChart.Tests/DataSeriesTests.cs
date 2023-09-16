@@ -10,7 +10,11 @@ public class DataSeriesTests {
     private class TestLayer : LayerBase {
         public override StackMode StackMode => throw new NotImplementedException();
         public override DataPointSpacingMode DefaultDataPointSpacingMode => throw new NotImplementedException();
-        public override bool NullAsZero => throw new NotImplementedException();
+        public override bool NullAsZero { get; }
+
+        public TestLayer(bool nullAsZero) {
+            NullAsZero = nullAsZero;
+        }
 
         public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
 
@@ -30,7 +34,7 @@ public class DataSeriesTests {
         var subject = new DataSeries() {
             Name = "Foo",
             Color = "red",
-            DataPoints = { 1, 2, 3},
+            DataPoints = { 1, 2, 3 },
             CssClass = "foo-series"
         };
 
@@ -43,6 +47,27 @@ public class DataSeriesTests {
         { "Foo", "blue", new List<decimal?> { 1, 2, 3 }, "foo-series", true },
         { "Foo", "red", new List<decimal?> { 1, 2 }, "foo-series", true },
         { "Foo", "red", new List<decimal?> { 1, 2, 3 }, "foo-data", true }
+    };
+
+    [Theory]
+    [MemberData(nameof(GetDataPoints_Data))]
+    public void GetDataPoints(List<decimal?> dataPoints, bool nullAsZero, List<decimal?> expectedResult) {
+        var subject = new DataSeries() {
+            Chart = new() {
+                Labels = { "Foo", "Bar", "Baz" }
+            },
+            Layer = new TestLayer(nullAsZero),
+            DataPoints = dataPoints
+        };
+
+        Assert.Equal(expectedResult, subject.GetDataPoints());
+    }
+
+    public static TheoryData<List<decimal?>, bool, List<decimal?>> GetDataPoints_Data() => new() {
+        { new List<decimal?>{ 5M, 10M, 15M }, false, new List<decimal?>{ 5M, 10M, 15M } },
+        { new List<decimal?>{ 5M, 10M, 15M, 20M }, false, new List<decimal?>{ 5M, 10M, 15M } },
+        { new List<decimal?>{ null, 10M }, false, new List<decimal?>{ null, 10M, null } },
+        { new List<decimal?>{ null, 10M }, true, new List<decimal?>{ 0M, 10M, 0M } }
     };
 
     [Fact]
@@ -62,7 +87,7 @@ public class DataSeriesTests {
     public void GetColor_Default(int index, string expectedColor) {
         DataSeries.DefaultColors = new List<string>() { "red", "blue", "green" };
 
-        var layer = new TestLayer();
+        var layer = new TestLayer(false);
         layer.DataSeries.Add(new DataSeries() { Layer = layer });
         layer.DataSeries.Add(new DataSeries() { Layer = layer });
         layer.DataSeries.Add(new DataSeries() { Layer = layer });
@@ -77,7 +102,7 @@ public class DataSeriesTests {
     public void GetColor_Fallback() {
         DataSeries.DefaultColors = new();
 
-        var layer = new TestLayer();
+        var layer = new TestLayer(false);
         var subject = new DataSeries() { Layer = layer };
 
         layer.DataSeries.Add(subject);
