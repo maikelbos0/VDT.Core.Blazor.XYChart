@@ -69,9 +69,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         var dataPointTransformer = GetDataPointTransformer();
 
         return DataSeries.SelectMany(dataSeries => dataSeries.GetDataPoints()
-            .Select((dataPoint, index) => (DataPoint: dataPoint, Index: index))
-            .Where(value => value.DataPoint != null)
-            .Select(value => dataPointTransformer(value.DataPoint!.Value, value.Index)));
+            .Select(value => dataPointTransformer(value.DataPoint, value.Index)));
     }
 
     private Func<decimal, int, decimal> GetDataPointTransformer() {

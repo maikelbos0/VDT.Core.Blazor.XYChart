@@ -38,7 +38,7 @@ public class DataSeries : ChildComponentBase, IDisposable {
         GC.SuppressFinalize(this);
     }
 
-    public IEnumerable<decimal?> GetDataPoints() {
+    public IEnumerable<(int Index, decimal DataPoint)> GetDataPoints() {
         var dataPoints = DataPoints.Take(Chart.Labels.Count);
 
         if (DataPoints.Count < Chart.Labels.Count) {
@@ -46,10 +46,14 @@ public class DataSeries : ChildComponentBase, IDisposable {
         }
 
         if (Layer.NullAsZero) {
-            dataPoints = dataPoints.Select<decimal?, decimal?>(dataPoint => dataPoint ?? 0M);
+            return dataPoints.Select((dataPoint, index) => (index, dataPoint ?? 0M));
         }
-
-        return dataPoints;
+        else {
+            return dataPoints
+                .Select((dataPoint, index) => (index, dataPoint))
+                .Where(value => value.dataPoint != null)
+                .Select(value => (value.index, value.dataPoint!.Value));
+        }
     }
 
     public string GetColor() {

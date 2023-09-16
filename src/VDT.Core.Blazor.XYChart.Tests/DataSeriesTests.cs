@@ -51,7 +51,7 @@ public class DataSeriesTests {
 
     [Theory]
     [MemberData(nameof(GetDataPoints_Data))]
-    public void GetDataPoints(List<decimal?> dataPoints, bool nullAsZero, List<decimal?> expectedResult) {
+    public void GetDataPoints(List<decimal?> dataPoints, bool nullAsZero, List<(int, decimal)> expectedResult) {
         var subject = new DataSeries() {
             Chart = new() {
                 Labels = { "Foo", "Bar", "Baz" }
@@ -63,11 +63,11 @@ public class DataSeriesTests {
         Assert.Equal(expectedResult, subject.GetDataPoints());
     }
 
-    public static TheoryData<List<decimal?>, bool, List<decimal?>> GetDataPoints_Data() => new() {
-        { new List<decimal?>{ 5M, 10M, 15M }, false, new List<decimal?>{ 5M, 10M, 15M } },
-        { new List<decimal?>{ 5M, 10M, 15M, 20M }, false, new List<decimal?>{ 5M, 10M, 15M } },
-        { new List<decimal?>{ null, 10M }, false, new List<decimal?>{ null, 10M, null } },
-        { new List<decimal?>{ null, 10M }, true, new List<decimal?>{ 0M, 10M, 0M } }
+    public static TheoryData<List<decimal?>, bool, List<(int, decimal)>> GetDataPoints_Data() => new() {
+        { new List<decimal?>{ 5M, 10M, 15M }, false, new List<(int, decimal)>{ (0, 5M), (1, 10M), (2, 15M) } },
+        { new List<decimal?>{ 5M, 10M, 15M, 20M }, false, new List<(int, decimal)>{ (0, 5M), (1, 10M), (2, 15M) } },
+        { new List<decimal?>{ null, 10M }, false, new List<(int, decimal)>{ (1, 10M) } },
+        { new List<decimal?>{ null, 10M }, true, new List<(int, decimal)>{ (0, 0M), (1, 10M), (2, 0M) } }
     };
 
     [Fact]
