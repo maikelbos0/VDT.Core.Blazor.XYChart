@@ -138,20 +138,24 @@ public class XYChartTests {
             Labels = { "Foo", "Bar", "Baz" },
         };
 
-        subject.Layers.Add(new BarLayer() {
+        var layer = new BarLayer() {
             Chart = subject,
-            IsStacked = false,
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { -9M, 0M }
-                },
-                new() {
-                    Color = "red",
-                    DataPoints = { -5M, 19M }
-                }
-            }
+            IsStacked = false
+        };
+
+        layer.DataSeries.Add(new() {
+            Chart = subject,
+            Layer = layer,
+            Color = "blue",
+            DataPoints = { -9M, 0M }
         });
+        layer.DataSeries.Add(new() {
+            Chart = subject,
+            Layer = layer,
+            Color = "red",
+            DataPoints = { -5M, 19M }
+        });
+        subject.Layers.Add(layer);
 
         _ = subject.GetShapes().ToList();
 
@@ -179,20 +183,24 @@ public class XYChartTests {
             Labels = { "Foo", "Bar", "Baz" }
         };
 
-        subject.Layers.Add(new BarLayer() {
+        var layer = new BarLayer() {
             Chart = subject,
-            IsStacked = false,
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { -9M, 0M }
-                },
-                new() {
-                    Color = "red",
-                    DataPoints = { -5M, 19M }
-                }
-            }
+            IsStacked = false
+        };
+
+        layer.DataSeries.Add(new() {
+            Chart = subject,
+            Layer = layer,
+            Color = "blue",
+            DataPoints = { -9M, 0M }
         });
+        layer.DataSeries.Add(new() {
+            Chart = subject,
+            Layer = layer,
+            Color = "red",
+            DataPoints = { -5M, 19M }
+        });
+        subject.Layers.Add(layer);
 
         _ = subject.GetShapes().ToList();
 
@@ -255,15 +263,18 @@ public class XYChartTests {
             Labels = { "Foo", "Bar" }
         };
 
-        subject.Layers.Add(new BarLayer() {
+        var layer = new BarLayer() {
             Chart = subject,
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { 5M, 10M }
-                }
-            }
+            IsStacked = false
+        };
+
+        layer.DataSeries.Add(new() {
+            Chart = subject,
+            Layer = layer,
+            Color = "blue",
+            DataPoints = { 5M, 10M }
         });
+        subject.Layers.Add(layer);
 
         Assert.Contains(subject.GetShapes(), shape => shape is BarDataShape);
     }

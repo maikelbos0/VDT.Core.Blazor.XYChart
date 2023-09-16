@@ -68,9 +68,9 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     public IEnumerable<decimal> GetScaleDataPoints() {
         var dataPointTransformer = GetDataPointTransformer();
 
-        return DataSeries.SelectMany(dataSeries => dataSeries.DataPoints
+        return DataSeries.SelectMany(dataSeries => dataSeries.GetDataPoints()
             .Select((dataPoint, index) => (DataPoint: dataPoint, Index: index))
-            .Where(value => value.DataPoint != null && value.Index < Chart.Labels.Count)
+            .Where(value => value.DataPoint != null)
             .Select(value => dataPointTransformer(value.DataPoint!.Value, value.Index)));
     }
 
