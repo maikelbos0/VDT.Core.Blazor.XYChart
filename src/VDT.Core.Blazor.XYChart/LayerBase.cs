@@ -53,13 +53,11 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             dataSeries.GetColor(), 
             dataSeries.CssClass, 
             index, 
-            dataSeries.DataPoints
-                .Select((dataPoint, index) => (DataPoint: dataPoint, Index: index))
-                .Where(value => value.Index < Chart.Labels.Count && (NullAsZero || value.DataPoint != null))
+            dataSeries.GetDataPoints()
                 .Select(value => new CanvasDataPoint(
                     Chart.MapDataIndexToCanvas(value.Index),
-                    Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint ?? 0, value.Index)),
-                    Chart.MapDataValueToPlotArea(value.DataPoint ?? 0),
+                    Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
+                    Chart.MapDataValueToPlotArea(value.DataPoint),
                     value.Index
                 )).ToList().AsReadOnly())
         ).ToList();
