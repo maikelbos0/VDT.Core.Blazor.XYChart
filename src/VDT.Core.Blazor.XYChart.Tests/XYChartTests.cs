@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
+using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
@@ -406,81 +407,32 @@ public class XYChartTests {
 
     [Fact]
     public void GetXAxisLabelShapes() {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 80,
-                YAxisLabelClearance = 10
-            },
-            PlotArea = {
-                 Min = -100M,
-                 Max = 500M,
-                 GridLineInterval = 200M,
-                 Multiplier = 1000
-            },
-            Labels = { "Foo", "Bar", "Baz" },
-            DataPointSpacingMode = DataPointSpacingMode.Center
-        };
+        var subject = new XYChartBuilder()
+            .WithLabelCount(3)
+            .WithDataPointSpacingMode(DataPointSpacingMode.Center)
+            .GetChart();
 
         var result = subject.GetXAxisLabelShapes();
 
         Assert.Equal(3, result.Count());
 
         Assert.All(result, shape => {
-            Assert.Equal(500 - 25 - 50 + 5, shape.Y);
+            Assert.Equal(PlotAreaY + PlotAreaHeight + CanvasXAxisLabelClearance, shape.Y);
         });
 
-        var dataPointWidth = 870M / 3;
-
-        Assert.Single(result, shape => shape.Key.EndsWith("[0]") && shape.X == subject.Canvas.PlotAreaX + 0.5M * dataPointWidth && shape.Label == "Foo");
-        Assert.Single(result, shape => shape.Key.EndsWith("[1]") && shape.X == subject.Canvas.PlotAreaX + 1.5M * dataPointWidth && shape.Label == "Bar");
-        Assert.Single(result, shape => shape.Key.EndsWith("[2]") && shape.X == subject.Canvas.PlotAreaX + 2.5M * dataPointWidth && shape.Label == "Baz");
+        Assert.Single(result, shape => shape.Key.EndsWith("[0]") && shape.X == PlotAreaX + 0.5M * PlotAreaWidth / 3M && shape.Label == "Foo");
+        Assert.Single(result, shape => shape.Key.EndsWith("[1]") && shape.X == PlotAreaX + 1.5M * PlotAreaWidth / 3M && shape.Label == "Bar");
+        Assert.Single(result, shape => shape.Key.EndsWith("[2]") && shape.X == PlotAreaX + 2.5M * PlotAreaWidth / 3M && shape.Label == "Baz");
     }
 
     [Fact]
     public void GetDataSeriesShapes() {
-
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 100,
-                YAxisLabelClearance = 10
-            },
-            PlotArea = {
-                    Min = -10M,
-                    Max = 40M,
-                    GridLineInterval = 10M
-            },
-            Labels = { "Foo", "Bar", "Baz" }
-        };
-
-        subject.Layers.Add(new BarLayer() {
-            Chart = subject,
-            DataSeries = {
-                new() {
-                    Color = "red",
-                    DataPoints = { 5M, null, 15M }
-                }
-            }
-        });
-
-        subject.Layers.Add(new BarLayer() {
-            Chart = subject,
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { 11M, 8M, null }
-                }
-            }
-        });
+        var subject = new XYChartBuilder()
+            .WithLabelCount(3)
+            .WithLayer<BarLayer>()
+            .WithDataSeries(5M, null, 15M)
+            .WithDataSeries(11M, 8M, null)
+            .GetChart();
 
         var result = subject.GetDataSeriesShapes();
 
@@ -492,79 +444,39 @@ public class XYChartTests {
     [Theory]
     [MemberData(nameof(MapDataPointToCanvas_Data))]
     public void MapDataPointToCanvas(decimal dataPoint, decimal expectedValue) {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 75,
-                YAxisLabelClearance = 10
-            },
-            PlotArea = {
-                 Min = -100M,
-                 Max = 500M
-            }
-        };
+        var subject = new XYChartBuilder()
+            .GetChart();
 
         Assert.Equal(expectedValue, subject.MapDataPointToCanvas(dataPoint));
     }
 
-    public static TheoryData<decimal, decimal> MapDataPointToCanvas_Data() {
-        var plotAreaY = 25;
-        var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaMax = 500M;
-        var plotAreaRange = plotAreaMax - -100M;
-
-        return new() {
-            { 50M, plotAreaY + (plotAreaMax - 50M) / plotAreaRange * plotAreaHeight },
-            { 200M, plotAreaY + (plotAreaMax - 200M) / plotAreaRange * plotAreaHeight },
-            { 350M, plotAreaY + (plotAreaMax - 350M) / plotAreaRange * plotAreaHeight }
-        };
-    }
+    public static TheoryData<decimal, decimal> MapDataPointToCanvas_Data() => new() {
+        { 50M, PlotAreaY + (PlotAreaMax - 50M) / PlotAreaRange * PlotAreaHeight },
+        { 200M, PlotAreaY + (PlotAreaMax - 200M) / PlotAreaRange * PlotAreaHeight },
+        { 350M, PlotAreaY + (PlotAreaMax - 350M) / PlotAreaRange * PlotAreaHeight }
+    };
 
     [Theory]
     [MemberData(nameof(MapDataValueToPlotArea_Data))]
     public void MapDataValueToPlotArea(decimal dataPoint, decimal expectedValue) {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 75,
-                YAxisLabelClearance = 10
-            },
-            PlotArea = {
-                 Min = -100M,
-                 Max = 500M
-            }
-        };
+        var subject = new XYChartBuilder()
+            .GetChart();
 
         Assert.Equal(expectedValue, subject.MapDataValueToPlotArea(dataPoint));
     }
 
-    public static TheoryData<decimal, decimal> MapDataValueToPlotArea_Data() {
-        var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaMax = 500M;
-        var plotAreaRange = plotAreaMax - -100M;
-
-        return new() {
-            { 50M, 50M / plotAreaRange * plotAreaHeight },
-            { 200M, 200M / plotAreaRange * plotAreaHeight },
-            { 350M, 350M / plotAreaRange * plotAreaHeight }
-        };
-    }
+    public static TheoryData<decimal, decimal> MapDataValueToPlotArea_Data() => new() {
+        { 50M, 50M / PlotAreaRange * PlotAreaHeight },
+        { 200M, 200M / PlotAreaRange * PlotAreaHeight },
+        { 350M, 350M / PlotAreaRange * PlotAreaHeight }
+    };
 
     [Theory]
     [MemberData(nameof(GetDataPointSpacingMode_Data))]
     public void GetDataPointSpacingMode(DataPointSpacingMode dataPointSpacingMode, List<LayerBase> layers, DataPointSpacingMode expectedDataPointSpacingMode) {
-        var subject = new XYChart() {
-            Layers = layers,
-            DataPointSpacingMode = dataPointSpacingMode
-        };
+        var subject = layers.Aggregate(new XYChartBuilder(), (builder, layer) => builder.WithLayer(layer))
+            .WithDataPointSpacingMode(dataPointSpacingMode)
+            .GetChart();
 
         Assert.Equal(expectedDataPointSpacingMode, subject.GetDataPointSpacingMode());
     }
@@ -580,63 +492,41 @@ public class XYChartTests {
 
     [Theory]
     [MemberData(nameof(GetDataPointWidth_Data))]
-    public void GetDataPointWidth(DataPointSpacingMode dataPointSpacingMode, List<string> labels, decimal expectedWidth) {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 80,
-                YAxisLabelClearance = 10
-            },
-            Labels = labels,
-            DataPointSpacingMode = dataPointSpacingMode
-        };
+    public void GetDataPointWidth(DataPointSpacingMode dataPointSpacingMode, int labelCount, decimal expectedWidth) {
+        var subject = new XYChartBuilder()
+            .WithLabelCount(labelCount)
+            .WithDataPointSpacingMode(dataPointSpacingMode)
+            .GetChart();
 
         Assert.Equal(expectedWidth, subject.GetDataPointWidth());
     }
 
-    public static TheoryData<DataPointSpacingMode, List<string>, decimal> GetDataPointWidth_Data() => new() {
-        { DataPointSpacingMode.EdgeToEdge, new List<string>() { "Foo", "Bar", "Baz" }, 870M / 2 },
-        { DataPointSpacingMode.Center, new List<string>() { "Foo", "Bar", "Baz" }, 870M / 3 },
-        { DataPointSpacingMode.EdgeToEdge, new List<string>() { "Foo", }, 870M },
-        { DataPointSpacingMode.Center, new List<string>() { "Foo" }, 870M },
-        { DataPointSpacingMode.EdgeToEdge, new List<string>(), 870M },
-        { DataPointSpacingMode.Center, new List<string>(), 870M },
+    public static TheoryData<DataPointSpacingMode, int, decimal> GetDataPointWidth_Data() => new() {
+        { DataPointSpacingMode.EdgeToEdge, 3, PlotAreaWidth / 2M },
+        { DataPointSpacingMode.Center, 3, PlotAreaWidth / 3M },
+        { DataPointSpacingMode.EdgeToEdge, 1, PlotAreaWidth },
+        { DataPointSpacingMode.Center, 1, PlotAreaWidth },
+        { DataPointSpacingMode.EdgeToEdge, 0, PlotAreaWidth },
+        { DataPointSpacingMode.Center, 0, PlotAreaWidth },
     };
 
     [Theory]
     [MemberData(nameof(MapDataIndexToCanvas_Data))]
     public void MapDataIndexToCanvas(DataPointSpacingMode dataPointSpacingMode, int index, decimal expectedValue) {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 80,
-                YAxisLabelClearance = 10
-            },
-            Labels = { "Foo", "Bar", "Baz" },
-            DataPointSpacingMode = dataPointSpacingMode
-        };
+        var subject = new XYChartBuilder()
+            .WithLabelCount(3)
+            .WithDataPointSpacingMode(dataPointSpacingMode)
+            .GetChart();
 
         Assert.Equal(expectedValue, subject.MapDataIndexToCanvas(index));
     }
 
-    public static TheoryData<DataPointSpacingMode, int, decimal> MapDataIndexToCanvas_Data() {
-        var plotAreaX = 25 + 80;
-
-        return new() {
-            { DataPointSpacingMode.EdgeToEdge, 0, plotAreaX },
-            { DataPointSpacingMode.EdgeToEdge, 1, plotAreaX + 1 * 870M / 2 },
-            { DataPointSpacingMode.EdgeToEdge, 2, plotAreaX + 2 * 870M / 2 },
-            { DataPointSpacingMode.Center, 0, plotAreaX + 0.5M * 870M / 3 },
-            { DataPointSpacingMode.Center, 1, plotAreaX + 1.5M * 870M / 3 },
-            { DataPointSpacingMode.Center, 2, plotAreaX + 2.5M * 870M / 3 },
-        };
-    }
+    public static TheoryData<DataPointSpacingMode, int, decimal> MapDataIndexToCanvas_Data() => new() {
+        { DataPointSpacingMode.EdgeToEdge, 0, PlotAreaX },
+        { DataPointSpacingMode.EdgeToEdge, 1, PlotAreaX + 1 * PlotAreaWidth / 2M },
+        { DataPointSpacingMode.EdgeToEdge, 2, PlotAreaX + 2 * PlotAreaWidth / 2M },
+        { DataPointSpacingMode.Center, 0, PlotAreaX + 0.5M * PlotAreaWidth / 3M },
+        { DataPointSpacingMode.Center, 1, PlotAreaX + 1.5M * PlotAreaWidth / 3M },
+        { DataPointSpacingMode.Center, 2, PlotAreaX + 2.5M * PlotAreaWidth / 3M },
+    };
 }
