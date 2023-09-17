@@ -121,42 +121,12 @@ public class XYChartTests {
 
     [Fact]
     public void GetShapes_AutoScale() {
-        var subject = new XYChart() {
-            PlotArea = {
-                Min = -4M,
-                Max = 10M,
-                GridLineInterval = 1M,
-                AutoScaleSettings = {
-                    IsEnabled = true,
-                    ClearancePercentage = 0M
-                }
-            },
-            Canvas = {
-                Height = 800,
-                Padding = 25,
-                XAxisLabelHeight = 50
-            },
-            Labels = { "Foo", "Bar", "Baz" },
-        };
-
-        var layer = new BarLayer() {
-            Chart = subject,
-            IsStacked = false
-        };
-
-        layer.DataSeries.Add(new() {
-            Chart = subject,
-            Layer = layer,
-            Color = "blue",
-            DataPoints = { -9M, 0M }
-        });
-        layer.DataSeries.Add(new() {
-            Chart = subject,
-            Layer = layer,
-            Color = "red",
-            DataPoints = { -5M, 19M }
-        });
-        subject.Layers.Add(layer);
+        var subject = new XYChartBuilder(labelCount: 2)
+            .WithAutoScaleSettings(true, requestedGridLineCount: 15, clearancePercentage: 0M)
+            .WithLayer<BarLayer>()
+            .WithDataSeries(-9M, 0M)
+            .WithDataSeries(-5M, 19M)
+            .Chart;
 
         _ = subject.GetShapes().ToList();
 
@@ -167,84 +137,58 @@ public class XYChartTests {
 
     [Fact]
     public void GetShapes_No_AutoScale() {
-        var subject = new XYChart() {
-            PlotArea = {
-                Min = -4M,
-                Max = 10M,
-                GridLineInterval = 1M,
-                AutoScaleSettings = {
-                    IsEnabled = false
-                }
-            },
-            Canvas = {
-                Height = 800,
-                Padding = 25,
-                XAxisLabelHeight = 50
-            },
-            Labels = { "Foo", "Bar", "Baz" }
-        };
-
-        var layer = new BarLayer() {
-            Chart = subject,
-            IsStacked = false
-        };
-
-        layer.DataSeries.Add(new() {
-            Chart = subject,
-            Layer = layer,
-            Color = "blue",
-            DataPoints = { -9M, 0M }
-        });
-        layer.DataSeries.Add(new() {
-            Chart = subject,
-            Layer = layer,
-            Color = "red",
-            DataPoints = { -5M, 19M }
-        });
-        subject.Layers.Add(layer);
+        var subject = new XYChartBuilder(labelCount: 2)
+            .WithAutoScaleSettings(false)
+            .WithLayer<BarLayer>()
+            .WithDataSeries(-9M, 0M)
+            .WithDataSeries(-5M, 19M)
+            .Chart;
 
         _ = subject.GetShapes().ToList();
 
-        Assert.Equal(-4M, subject.PlotArea.Min);
-        Assert.Equal(10M, subject.PlotArea.Max);
-        Assert.Equal(1M, subject.PlotArea.GridLineInterval);
+        Assert.Equal(PlotAreaMin, subject.PlotArea.Min);
+        Assert.Equal(PlotAreaMax, subject.PlotArea.Max);
+        Assert.Equal(PlotAreaGridLineInterval, subject.PlotArea.GridLineInterval);
     }
 
     [Fact]
     public void GetShapes_PlotAreaShape() {
-        var subject = new XYChart();
+        var subject = new XYChartBuilder()
+            .Chart;
 
         Assert.Single(subject.GetShapes(), shape => shape is PlotAreaShape);
     }
 
     [Fact]
     public void GetShapes_GridLineShapes() {
-        var subject = new XYChart();
+        var subject = new XYChartBuilder()
+            .Chart;
 
         Assert.Contains(subject.GetShapes(), shape => shape is GridLineShape);
     }
 
     [Fact]
     public void GetShapes_YAxisLabelShapes() {
-        var subject = new XYChart();
+        var subject = new XYChartBuilder()
+            .Chart;
 
         Assert.Contains(subject.GetShapes(), shape => shape is YAxisLabelShape);
     }
 
     [Fact]
     public void GetShapes_YAxisMultiplierShape() {
-        var subject = new XYChart() {
-            PlotArea = {
-                Multiplier = 1000
-            }
-        };
+        var subject = new XYChartBuilder()
+            .WithPlotArea(multiplier: 1000)
+            .Chart;
 
         Assert.Single(subject.GetShapes(), shape => shape is YAxisMultiplierShape);
     }
 
     [Fact]
     public void GetShapes_YAxisMultiplierShape_Without_Multiplier() {
-        var subject = new XYChart();
+        var subject = new XYChartBuilder()
+            .WithPlotArea(multiplier: 1)
+            .Chart;
 
         Assert.DoesNotContain(subject.GetShapes(), shape => shape == null);
     }
@@ -407,9 +351,7 @@ public class XYChartTests {
 
     [Fact]
     public void GetXAxisLabelShapes() {
-        var subject = new XYChartBuilder()
-            .WithLabelCount(3)
-            .WithDataPointSpacingMode(DataPointSpacingMode.Center)
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
             .Chart;
 
         var result = subject.GetXAxisLabelShapes();
@@ -427,8 +369,7 @@ public class XYChartTests {
 
     [Fact]
     public void GetDataSeriesShapes() {
-        var subject = new XYChartBuilder()
-            .WithLabelCount(3)
+        var subject = new XYChartBuilder(labelCount: 3)
             .WithLayer<BarLayer>()
             .WithDataSeries(5M, null, 15M)
             .WithDataSeries(11M, 8M, null)
@@ -474,8 +415,7 @@ public class XYChartTests {
     [Theory]
     [MemberData(nameof(GetDataPointSpacingMode_Data))]
     public void GetDataPointSpacingMode(DataPointSpacingMode dataPointSpacingMode, List<LayerBase> layers, DataPointSpacingMode expectedDataPointSpacingMode) {
-        var subject = layers.Aggregate(new XYChartBuilder(), (builder, layer) => builder.WithLayer(layer))
-            .WithDataPointSpacingMode(dataPointSpacingMode)
+        var subject = layers.Aggregate(new XYChartBuilder(dataPointSpacingMode: dataPointSpacingMode), (builder, layer) => builder.WithLayer(layer))
             .Chart;
 
         Assert.Equal(expectedDataPointSpacingMode, subject.GetDataPointSpacingMode());
@@ -493,9 +433,7 @@ public class XYChartTests {
     [Theory]
     [MemberData(nameof(GetDataPointWidth_Data))]
     public void GetDataPointWidth(DataPointSpacingMode dataPointSpacingMode, int labelCount, decimal expectedWidth) {
-        var subject = new XYChartBuilder()
-            .WithLabelCount(labelCount)
-            .WithDataPointSpacingMode(dataPointSpacingMode)
+        var subject = new XYChartBuilder(labelCount, dataPointSpacingMode)
             .Chart;
 
         Assert.Equal(expectedWidth, subject.GetDataPointWidth());
@@ -513,9 +451,7 @@ public class XYChartTests {
     [Theory]
     [MemberData(nameof(MapDataIndexToCanvas_Data))]
     public void MapDataIndexToCanvas(DataPointSpacingMode dataPointSpacingMode, int index, decimal expectedValue) {
-        var subject = new XYChartBuilder()
-            .WithLabelCount(3)
-            .WithDataPointSpacingMode(dataPointSpacingMode)
+        var subject = new XYChartBuilder(labelCount: 3, dataPointSpacingMode)
             .Chart;
 
         Assert.Equal(expectedValue, subject.MapDataIndexToCanvas(index));

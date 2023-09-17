@@ -1,6 +1,9 @@
 ﻿namespace VDT.Core.Blazor.XYChart.Tests;
 
 public static class Constants {
+    public const int LabelCount = 5;
+    public const DataPointSpacingMode SpacingMode = DataPointSpacingMode.Auto;
+
     public const int CanvasWidth = 900;
     public const int CanvasHeight = 500;
     public const int CanvasPadding = 25;
@@ -18,4 +21,9 @@ public static class Constants {
     public const decimal PlotAreaMax = 500M;
     public const decimal PlotAreaRange = PlotAreaMax - PlotAreaMin;
     public const decimal PlotAreaGridLineInterval = 200M;
+
+    public const bool AutoScaleSettingsIsEnabled = true;
+    public const int AutoScaleSettingsRequestedGridLineCount = 11;
+    public const bool AutoScaleSettingsIncludeZero = false;
+    public const decimal AutoScaleSettingsClearancePercentage = 5M;
 }

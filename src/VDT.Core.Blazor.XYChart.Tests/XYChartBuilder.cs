@@ -9,8 +9,11 @@ public class XYChartBuilder {
 
     public XYChart Chart { get; }
 
-    public XYChartBuilder() {
-        Chart = new();
+    public XYChartBuilder(int labelCount = LabelCount, DataPointSpacingMode dataPointSpacingMode = SpacingMode) {
+        Chart = new() {
+            Labels = defaultLabels.Take(labelCount).ToList(),
+            DataPointSpacingMode = dataPointSpacingMode
+        };
         Chart.Canvas = new() {
             Chart = Chart,
             Width = CanvasWidth,
@@ -27,16 +30,14 @@ public class XYChartBuilder {
             Max = PlotAreaMax,
             GridLineInterval = PlotAreaGridLineInterval
         };
-    }
-
-    public XYChartBuilder WithLabelCount(int labelCount) {
-        Chart.Labels = defaultLabels.Take(labelCount).ToList();
-        return this;
-    }
-
-    public XYChartBuilder WithDataPointSpacingMode(DataPointSpacingMode dataPointSpacingMode) {
-        Chart.DataPointSpacingMode = dataPointSpacingMode;
-        return this;
+        Chart.PlotArea.AutoScaleSettings = new() {
+            Chart = Chart,
+            PlotArea = Chart.PlotArea,
+            IsEnabled = AutoScaleSettingsIsEnabled,
+            RequestedGridLineCount = AutoScaleSettingsRequestedGridLineCount,
+            IncludeZero = AutoScaleSettingsIncludeZero,
+            ClearancePercentage = AutoScaleSettingsClearancePercentage
+        };
     }
 
     public XYChartBuilder WithLayer<TLayer>() where TLayer : LayerBase, new()
@@ -55,6 +56,23 @@ public class XYChartBuilder {
             Layer = Chart.Layers.Last()
         };
         Chart.Layers.Last().DataSeries.Add(dataSeries);
+        return this;
+    }
+
+    public XYChartBuilder WithPlotArea(decimal? min = null, decimal? max = null, decimal? gridLineInterval = null, decimal? multiplier = null) {
+        Chart.PlotArea.Min = min ?? Chart.PlotArea.Min;
+        Chart.PlotArea.Max = max ?? Chart.PlotArea.Max;
+        Chart.PlotArea.GridLineInterval = gridLineInterval ?? Chart.PlotArea.GridLineInterval;
+        Chart.PlotArea.Multiplier = multiplier ?? Chart.PlotArea.Multiplier;
+        return this;
+    }
+
+    public XYChartBuilder WithAutoScaleSettings(bool isEnabled, int? requestedGridLineCount = null, bool? includeZero = null, decimal? clearancePercentage = null) {
+        Chart.PlotArea.AutoScaleSettings.IsEnabled = isEnabled;
+        Chart.PlotArea.AutoScaleSettings.RequestedGridLineCount = requestedGridLineCount ?? Chart.PlotArea.AutoScaleSettings.RequestedGridLineCount;
+        Chart.PlotArea.AutoScaleSettings.IncludeZero = includeZero ?? Chart.PlotArea.AutoScaleSettings.IncludeZero;
+        Chart.PlotArea.AutoScaleSettings.ClearancePercentage = clearancePercentage ?? Chart.PlotArea.AutoScaleSettings.ClearancePercentage;
+
         return this;
     }
 }
