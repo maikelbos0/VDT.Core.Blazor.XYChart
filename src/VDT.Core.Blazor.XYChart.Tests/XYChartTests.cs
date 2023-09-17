@@ -410,7 +410,7 @@ public class XYChartTests {
         var subject = new XYChartBuilder()
             .WithLabelCount(3)
             .WithDataPointSpacingMode(DataPointSpacingMode.Center)
-            .GetChart();
+            .Chart;
 
         var result = subject.GetXAxisLabelShapes();
 
@@ -432,7 +432,7 @@ public class XYChartTests {
             .WithLayer<BarLayer>()
             .WithDataSeries(5M, null, 15M)
             .WithDataSeries(11M, 8M, null)
-            .GetChart();
+            .Chart;
 
         var result = subject.GetDataSeriesShapes();
 
@@ -445,7 +445,7 @@ public class XYChartTests {
     [MemberData(nameof(MapDataPointToCanvas_Data))]
     public void MapDataPointToCanvas(decimal dataPoint, decimal expectedValue) {
         var subject = new XYChartBuilder()
-            .GetChart();
+            .Chart;
 
         Assert.Equal(expectedValue, subject.MapDataPointToCanvas(dataPoint));
     }
@@ -460,7 +460,7 @@ public class XYChartTests {
     [MemberData(nameof(MapDataValueToPlotArea_Data))]
     public void MapDataValueToPlotArea(decimal dataPoint, decimal expectedValue) {
         var subject = new XYChartBuilder()
-            .GetChart();
+            .Chart;
 
         Assert.Equal(expectedValue, subject.MapDataValueToPlotArea(dataPoint));
     }
@@ -476,7 +476,7 @@ public class XYChartTests {
     public void GetDataPointSpacingMode(DataPointSpacingMode dataPointSpacingMode, List<LayerBase> layers, DataPointSpacingMode expectedDataPointSpacingMode) {
         var subject = layers.Aggregate(new XYChartBuilder(), (builder, layer) => builder.WithLayer(layer))
             .WithDataPointSpacingMode(dataPointSpacingMode)
-            .GetChart();
+            .Chart;
 
         Assert.Equal(expectedDataPointSpacingMode, subject.GetDataPointSpacingMode());
     }
@@ -496,7 +496,7 @@ public class XYChartTests {
         var subject = new XYChartBuilder()
             .WithLabelCount(labelCount)
             .WithDataPointSpacingMode(dataPointSpacingMode)
-            .GetChart();
+            .Chart;
 
         Assert.Equal(expectedWidth, subject.GetDataPointWidth());
     }
@@ -516,7 +516,7 @@ public class XYChartTests {
         var subject = new XYChartBuilder()
             .WithLabelCount(3)
             .WithDataPointSpacingMode(dataPointSpacingMode)
-            .GetChart();
+            .Chart;
 
         Assert.Equal(expectedValue, subject.MapDataIndexToCanvas(index));
     }

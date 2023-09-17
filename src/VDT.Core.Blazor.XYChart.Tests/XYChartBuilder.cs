@@ -6,12 +6,13 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class XYChartBuilder {
     private static readonly List<string> defaultLabels = new() { "Foo", "Bar", "Baz", "Qux", "Quux" };
-    private readonly XYChart chart;
+
+    public XYChart Chart { get; }
 
     public XYChartBuilder() {
-        chart = new();
-        chart.Canvas = new() {
-            Chart = chart,
+        Chart = new();
+        Chart.Canvas = new() {
+            Chart = Chart,
             Width = CanvasWidth,
             Height = CanvasHeight,
             Padding = CanvasPadding,
@@ -20,23 +21,21 @@ public class XYChartBuilder {
             YAxisLabelWidth = CanvasYAxisLabelWidth,
             YAxisLabelClearance = CanvasYAxisLabelClearance
         };
-        chart.PlotArea = new() {
-            Chart = chart,
+        Chart.PlotArea = new() {
+            Chart = Chart,
             Min = PlotAreaMin,
             Max = PlotAreaMax,
             GridLineInterval = PlotAreaGridLineInterval
         };
     }
 
-    public XYChart GetChart() => chart;
-
     public XYChartBuilder WithLabelCount(int labelCount) {
-        chart.Labels = defaultLabels.Take(labelCount).ToList();
+        Chart.Labels = defaultLabels.Take(labelCount).ToList();
         return this;
     }
 
     public XYChartBuilder WithDataPointSpacingMode(DataPointSpacingMode dataPointSpacingMode) {
-        chart.DataPointSpacingMode = dataPointSpacingMode;
+        Chart.DataPointSpacingMode = dataPointSpacingMode;
         return this;
     }
 
@@ -44,18 +43,18 @@ public class XYChartBuilder {
         => WithLayer(new TLayer());
 
     public XYChartBuilder WithLayer(LayerBase layer) {
-        chart.Layers.Add(layer);
-        layer.Chart = chart;
+        Chart.Layers.Add(layer);
+        layer.Chart = Chart;
         return this;
     }
 
     public XYChartBuilder WithDataSeries(params decimal?[] dataPoints) {
         var dataSeries = new DataSeries() {
             DataPoints = dataPoints.ToList(),
-            Chart = chart,
-            Layer = chart.Layers.Last()
+            Chart = Chart,
+            Layer = Chart.Layers.Last()
         };
-        chart.Layers.Last().DataSeries.Add(dataSeries);
+        Chart.Layers.Last().DataSeries.Add(dataSeries);
         return this;
     }
 }
