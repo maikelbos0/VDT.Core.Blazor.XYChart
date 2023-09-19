@@ -8,11 +8,13 @@ public class XYChartBuilder {
     private static readonly List<string> defaultLabels = new() { "Foo", "Bar", "Baz", "Qux", "Quux" };
 
     public XYChart Chart { get; }
+    public bool StateHasChangedInvoked { get; private set; }
 
     public XYChartBuilder(int labelCount = LabelCount, DataPointSpacingMode dataPointSpacingMode = SpacingMode) {
         Chart = new() {
             Labels = defaultLabels.Take(labelCount).ToList(),
-            DataPointSpacingMode = dataPointSpacingMode
+            DataPointSpacingMode = dataPointSpacingMode,
+            StateHasChangedHandler = () => StateHasChangedInvoked = true
         };
         Chart.Canvas = new() {
             Chart = Chart,

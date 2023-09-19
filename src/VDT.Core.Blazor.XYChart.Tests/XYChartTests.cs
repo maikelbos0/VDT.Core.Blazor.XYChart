@@ -16,10 +16,8 @@ public class XYChartTests {
             { nameof(XYChart.DataPointSpacingMode), dataPointSpacingMode }
         });
 
-        var subject = new XYChart {
-            Labels = new() { "Foo", "Bar" },
-            DataPointSpacingMode = DataPointSpacingMode.Auto
-        };
+        var subject = new XYChartBuilder(labelCount: 2, DataPointSpacingMode.Auto)
+            .Chart;
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
@@ -32,91 +30,75 @@ public class XYChartTests {
 
     [Fact]
     public void SetCanvas() {
-        var stateHasChangedInvoked = false;
         var canvas = new Canvas();
-        var subject = new XYChart() {
-            StateHasChangedHandler = () => stateHasChangedInvoked = true
-        };
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
 
         subject.SetCanvas(canvas);
 
         Assert.Same(canvas, subject.Canvas);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
     public void ResetCanvas() {
-        var stateHasChangedInvoked = false;
-        var canvas = new Canvas();
-        var subject = new XYChart() {
-            StateHasChangedHandler = () => stateHasChangedInvoked = true,
-            Canvas = canvas
-        };
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+        var canvas = subject.Canvas;
 
         subject.ResetCanvas();
 
         Assert.NotSame(canvas, subject.Canvas);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
     public void SetPlotArea() {
-        var stateHasChangedInvoked = false;
         var plotArea = new PlotArea();
-        var subject = new XYChart() {
-            StateHasChangedHandler = () => stateHasChangedInvoked = true
-        };
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
 
         subject.SetPlotArea(plotArea);
 
         Assert.Same(plotArea, subject.PlotArea);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
     public void ResetPlotArea() {
-        var stateHasChangedInvoked = false;
-        var plotArea = new PlotArea();
-        var subject = new XYChart() {
-            StateHasChangedHandler = () => stateHasChangedInvoked = true,
-            PlotArea = plotArea
-        };
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+        var plotArea = subject.PlotArea;
 
         subject.ResetPlotArea();
 
         Assert.NotSame(plotArea, subject.PlotArea);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
     public void AddLayer() {
-        var stateHasChangedInvoked = false;
         var layer = new BarLayer();
-        var subject = new XYChart() {
-            StateHasChangedHandler = () => stateHasChangedInvoked = true
-        };
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
 
         subject.AddLayer(layer);
 
         Assert.Same(layer, Assert.Single(subject.Layers));
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
     public void RemoveLayer() {
-        var stateHasChangedInvoked = false;
         var layer = new BarLayer();
-        var subject = new XYChart() {
-            StateHasChangedHandler = () => stateHasChangedInvoked = true,
-            Layers = {
-                layer
-            }
-        };
+        var builder = new XYChartBuilder()
+            .WithLayer(layer);
+        var subject = builder.Chart;
 
         subject.RemoveLayer(layer);
 
         Assert.Empty(subject.Layers);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
