@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using Xunit;
+using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
@@ -46,21 +47,15 @@ public class CanvasTests {
 
     [Fact]
     public void GetPlotAreaShape() {
-        var subject = new Canvas() {
-            Width = 1000,
-            Height = 500,
-            Padding = 25,
-            XAxisLabelHeight = 50,
-            XAxisLabelClearance = 5,
-            YAxisLabelWidth = 75,
-            YAxisLabelClearance = 10
-        };
+        var subject = new XYChartBuilder()
+            .Chart
+            .Canvas;
 
         var result = subject.GetPlotAreaShape();
 
-        Assert.Equal(25 + 75, result.X);
-        Assert.Equal(25, result.Y);
-        Assert.Equal(1000 - 25 - 25 - 75, result.Width);
-        Assert.Equal(500 - 25 - 25 - 50, result.Height);
+        Assert.Equal(PlotAreaX, result.X);
+        Assert.Equal(PlotAreaY, result.Y);
+        Assert.Equal(PlotAreaWidth, result.Width);
+        Assert.Equal(PlotAreaHeight, result.Height);
     }
 }
