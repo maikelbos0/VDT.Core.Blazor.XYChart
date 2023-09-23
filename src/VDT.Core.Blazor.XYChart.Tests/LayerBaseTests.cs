@@ -3,6 +3,7 @@ using System;
 using Xunit;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Microsoft.AspNetCore.Components;
+using System.Linq;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
@@ -52,16 +53,15 @@ public class LayerBaseTests {
     [Theory]
     [MemberData(nameof(GetScaleDataPoints_Data))]
     public void GetScaleDataPoints(bool isStacked, StackMode stackMode, bool nullAsZero, decimal[] expectedDataPoints) {
-        var subject = new TestLayer(stackMode, nullAsZero) {
-            IsStacked = isStacked
-        };
-        
-        _ = new XYChartBuilder(labelCount: 4)
-            .WithLayer(subject)
+        var subject = new XYChartBuilder(labelCount: 4)
+            .WithLayer(new TestLayer(stackMode, nullAsZero) {
+                IsStacked = isStacked
+            })
             .WithDataSeries(-5M, -3M, null, null, 15M)
             .WithDataSeries(-7M, -3M, null, null, 15M)
             .WithDataSeries(7M, null, 3M)
-            .WithDataSeries(5M, null, 3M);
+            .WithDataSeries(5M, null, 3M)
+            .Chart.Layers.Single();
 
         Assert.Equal(expectedDataPoints, subject.GetScaleDataPoints());
     }

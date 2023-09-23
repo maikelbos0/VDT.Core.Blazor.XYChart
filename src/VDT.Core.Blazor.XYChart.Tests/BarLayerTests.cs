@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
@@ -35,13 +36,12 @@ public class BarLayerTests {
     [Theory]
     [MemberData(nameof(GetUnstackedDataSeriesShapes_Data))]
     public void GetUnstackedDataSeriesShapes(int dataSeriesIndex, int index, decimal dataPoint, decimal expectedX, decimal expectedY, decimal expectedWidth, decimal expectedHeight) {
-        var subject = new BarLayer() {
-            ClearancePercentage = 25M,
-            GapPercentage = 10M,
-            IsStacked = false
-        };
-        _ = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
-            .WithLayer(subject)
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
+            .WithLayer(new BarLayer() {
+                ClearancePercentage = 25M,
+                GapPercentage = 10M,
+                IsStacked = false
+            })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
                 DataPoints = { -10M, -10M, 10M, 15M },
@@ -51,7 +51,8 @@ public class BarLayerTests {
                 Color = "red",
                 DataPoints = { null, null, null, 15M },
                 CssClass = "example-data"
-            });
+            })
+            .Chart.Layers.Single();
 
         subject.DataSeries[dataSeriesIndex].DataPoints[index] = dataPoint;
 
@@ -80,13 +81,12 @@ public class BarLayerTests {
     [Theory]
     [MemberData(nameof(GetStackedDataSeriesShapes_Data))]
     public void GetStackedDataSeriesShapes(int dataSeriesIndex, int index, decimal dataPoint, decimal expectedX, decimal expectedY, decimal expectedWidth, decimal expectedHeight) {
-        var subject = new BarLayer() {
-            ClearancePercentage = 25M,
-            GapPercentage = 10M,
-            IsStacked = true
-        };
-        _ = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
-            .WithLayer(subject)
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
+            .WithLayer(new BarLayer() {
+                ClearancePercentage = 25M,
+                GapPercentage = 10M,
+                IsStacked = true
+            })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
                 DataPoints = { -10M, -10M, 10M, 15M },
@@ -96,7 +96,8 @@ public class BarLayerTests {
                 Color = "red",
                 DataPoints = { null, null, null, 15M },
                 CssClass = "example-data"
-            });
+            })
+            .Chart.Layers.Single();
 
         subject.DataSeries[dataSeriesIndex].DataPoints[index] = dataPoint;
 
