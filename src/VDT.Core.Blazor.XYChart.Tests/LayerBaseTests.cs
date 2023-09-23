@@ -24,70 +24,44 @@ public class LayerBaseTests {
 
     [Fact]
     public void AddDataSeries() {
-        var stateHasChangedInvoked = false;
         var dataSeries = new DataSeries();
-        var subject = new TestLayer(StackMode.Single, false) {
-            Chart = new() {
-                StateHasChangedHandler = () => stateHasChangedInvoked = true
-            }
-        };
+        var subject = new TestLayer(StackMode.Single, false);
+        var builder = new XYChartBuilder()
+            .WithLayer(subject);
 
         subject.AddDataSeries(dataSeries);
 
         Assert.Same(dataSeries, Assert.Single(subject.DataSeries));
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
     public void RemoveDataSeries() {
-        var stateHasChangedInvoked = false;
         var dataSeries = new DataSeries();
-        var subject = new TestLayer(StackMode.Single, false) {
-            Chart = new() {
-                StateHasChangedHandler = () => stateHasChangedInvoked = true
-            },
-            DataSeries = {
-                dataSeries
-            }
-        };
+        var subject = new TestLayer(StackMode.Single, false);
+        var builder = new XYChartBuilder()
+            .WithLayer(subject)
+            .WithDataSeries(dataSeries);
 
         subject.RemoveDataSeries(dataSeries);
 
         Assert.Empty(subject.DataSeries);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Theory]
     [MemberData(nameof(GetScaleDataPoints_Data))]
     public void GetScaleDataPoints(bool isStacked, StackMode stackMode, bool nullAsZero, decimal[] expectedDataPoints) {
-        var chart = new XYChart() {
-            Labels = { "Foo", "Bar", "Baz", "Quux" }
-        };
         var subject = new TestLayer(stackMode, nullAsZero) {
-            Chart = chart,
             IsStacked = isStacked
         };
-
-        subject.DataSeries.Add(new() {
-            Layer = subject,
-            Chart = chart,
-            DataPoints = { -5M, -3M, null, null, 15M }
-        });
-        subject.DataSeries.Add(new() {
-            Layer = subject,
-            Chart = chart,
-            DataPoints = { -7M, -3M, null, null, 15M }
-        });
-        subject.DataSeries.Add(new() {
-            Layer = subject,
-            Chart = chart,
-            DataPoints = { 7M, null, 3M }
-        });
-        subject.DataSeries.Add(new() {
-            Layer = subject,
-            Chart = chart,
-            DataPoints = { 5M, null, 3M }
-        });
+        
+        _ = new XYChartBuilder(labelCount: 4)
+            .WithLayer(subject)
+            .WithDataSeries(-5M, -3M, null, null, 15M)
+            .WithDataSeries(-7M, -3M, null, null, 15M)
+            .WithDataSeries(7M, null, 3M)
+            .WithDataSeries(5M, null, 3M);
 
         Assert.Equal(expectedDataPoints, subject.GetScaleDataPoints());
     }

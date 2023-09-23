@@ -51,12 +51,16 @@ public class XYChartBuilder {
         return this;
     }
 
-    public XYChartBuilder WithDataSeries(params decimal?[] dataPoints) {
-        var dataSeries = new DataSeries() {
+    public XYChartBuilder WithDataSeries(params decimal?[] dataPoints)
+        => WithDataSeries(new DataSeries() {
             DataPoints = dataPoints.ToList(),
             Chart = Chart,
             Layer = Chart.Layers.Last()
-        };
+        });
+
+    public XYChartBuilder WithDataSeries(DataSeries dataSeries) {
+        dataSeries.Chart = Chart;
+        dataSeries.Layer = Chart.Layers.Last();
         Chart.Layers.Last().DataSeries.Add(dataSeries);
         return this;
     }
