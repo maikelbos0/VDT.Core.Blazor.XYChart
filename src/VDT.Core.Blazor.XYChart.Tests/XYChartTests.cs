@@ -16,8 +16,10 @@ public class XYChartTests {
             { nameof(XYChart.DataPointSpacingMode), dataPointSpacingMode }
         });
 
-        var subject = new XYChartBuilder(labelCount: 2, DataPointSpacingMode.Auto)
-            .Chart;
+        var subject = new XYChart() {
+            Labels = new List<string> { "Foo", "Bar" },
+            DataPointSpacingMode = DataPointSpacingMode.Auto
+        };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
