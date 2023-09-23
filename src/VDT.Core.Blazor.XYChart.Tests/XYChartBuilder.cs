@@ -30,7 +30,8 @@ public class XYChartBuilder {
             Chart = Chart,
             Min = PlotAreaMin,
             Max = PlotAreaMax,
-            GridLineInterval = PlotAreaGridLineInterval
+            GridLineInterval = PlotAreaGridLineInterval,
+            Multiplier = PlotAreaMultiplier
         };
         Chart.PlotArea.AutoScaleSettings = new() {
             Chart = Chart,
@@ -65,20 +66,32 @@ public class XYChartBuilder {
         return this;
     }
 
-    public XYChartBuilder WithPlotArea(decimal? min = null, decimal? max = null, decimal? gridLineInterval = null, decimal? multiplier = null) {
-        Chart.PlotArea.Min = min ?? Chart.PlotArea.Min;
-        Chart.PlotArea.Max = max ?? Chart.PlotArea.Max;
-        Chart.PlotArea.GridLineInterval = gridLineInterval ?? Chart.PlotArea.GridLineInterval;
-        Chart.PlotArea.Multiplier = multiplier ?? Chart.PlotArea.Multiplier;
+    public XYChartBuilder WithPlotArea(decimal? min = null, decimal? max = null, decimal? gridLineInterval = null, decimal? multiplier = null)
+        => WithPlotArea(new PlotArea() {
+            Min = min ?? PlotAreaMin,
+            Max = max ?? PlotAreaMax,
+            GridLineInterval = gridLineInterval ?? PlotAreaGridLineInterval,
+            Multiplier = multiplier ?? PlotAreaMultiplier
+        });
+
+    public XYChartBuilder WithPlotArea(PlotArea plotArea) {
+        Chart.PlotArea = plotArea;
+        plotArea.Chart = Chart;
         return this;
     }
 
-    public XYChartBuilder WithAutoScaleSettings(bool isEnabled, int? requestedGridLineCount = null, bool? includeZero = null, decimal? clearancePercentage = null) {
-        Chart.PlotArea.AutoScaleSettings.IsEnabled = isEnabled;
-        Chart.PlotArea.AutoScaleSettings.RequestedGridLineCount = requestedGridLineCount ?? Chart.PlotArea.AutoScaleSettings.RequestedGridLineCount;
-        Chart.PlotArea.AutoScaleSettings.IncludeZero = includeZero ?? Chart.PlotArea.AutoScaleSettings.IncludeZero;
-        Chart.PlotArea.AutoScaleSettings.ClearancePercentage = clearancePercentage ?? Chart.PlotArea.AutoScaleSettings.ClearancePercentage;
+    public XYChartBuilder WithAutoScaleSettings(bool isEnabled, int? requestedGridLineCount = null, bool? includeZero = null, decimal? clearancePercentage = null)
+        => WithAutoScaleSettings(new AutoScaleSettings() {
+            IsEnabled = isEnabled,
+            RequestedGridLineCount = requestedGridLineCount ?? AutoScaleSettingsRequestedGridLineCount,
+            IncludeZero = includeZero ?? AutoScaleSettingsIncludeZero,
+            ClearancePercentage = clearancePercentage ?? AutoScaleSettingsClearancePercentage
+        });
 
+    public XYChartBuilder WithAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
+        Chart.PlotArea.AutoScaleSettings = autoScaleSettings;
+        autoScaleSettings.Chart = Chart;
+        autoScaleSettings.PlotArea = Chart.PlotArea;
         return this;
     }
 }

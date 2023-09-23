@@ -21,6 +21,7 @@ public static class Constants {
     public const decimal PlotAreaMax = 500M;
     public const decimal PlotAreaRange = PlotAreaMax - PlotAreaMin;
     public const decimal PlotAreaGridLineInterval = 200M;
+    public const decimal PlotAreaMultiplier = 1M;
 
     public const bool AutoScaleSettingsIsEnabled = true;
     public const int AutoScaleSettingsRequestedGridLineCount = 11;
