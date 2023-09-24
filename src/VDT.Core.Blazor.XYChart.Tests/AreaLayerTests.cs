@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
+using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
@@ -24,39 +26,21 @@ public class AreaLayerTests {
     [Theory]
     [MemberData(nameof(GetUnstackedDataSeriesShapes_Data))]
     public void GetUnstackedDataSeriesShapes(int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {
-        var subject = new AreaLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 900,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = -10M,
-                     Max = 40M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz" },
-                DataPointSpacingMode = DataPointSpacingMode.EdgeToEdge
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 15M },
-                    CssClass = "example-data"
-                },
-                new() {
-                    Color = "red",
-                    DataPoints = { null, null, null, 15M },
-                    CssClass = "example-data"
-                }
-            },
-            IsStacked = false
-        };
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.EdgeToEdge)
+            .WithLayer(new AreaLayer() {
+                IsStacked = false
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -10M, -10M, 10M, 15M },
+                CssClass = "example-data"
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "red",
+                DataPoints = { null, null, null, 15M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
 
         subject.DataSeries[1].DataPoints[startIndex] = startDataPoint;
         subject.DataSeries[1].DataPoints[endIndex] = endDataPoint;
@@ -71,28 +55,23 @@ public class AreaLayerTests {
     }
 
     public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_Data() {
-        var plotAreaX = 25 + 100;
-        var plotAreaY = 25;
-        var dataPointWidth = (900 - 25 - 25 - 100) / 2M;
-        var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaZero = 40M;
-        var plotAreaRange = plotAreaZero - -10M;
+        var dataPointWidth = PlotAreaWidth / 2M;
 
         return new() {
             { 0, 5M, 1, -5M, Helpers.Path(
-                $"M {plotAreaX} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX} {plotAreaY + (plotAreaZero - 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + dataPointWidth} {plotAreaY + (plotAreaZero + 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
+                $"M {PlotAreaX} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
                 $"Z"
             ) },
             { 1, -5M, 2, 5M, Helpers.Path(
-                $"M {plotAreaX} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + dataPointWidth} {plotAreaY + (plotAreaZero + 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + (plotAreaZero - 5M)  / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
+                $"M {PlotAreaX} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 5M)  / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
                 $"Z"
             ) }
         };
@@ -101,39 +80,21 @@ public class AreaLayerTests {
     [Theory]
     [MemberData(nameof(GetStackedDataSeriesShapes_Data))]
     public void GetStackedDataSeriesShapes(int dataSeriesIndex, int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {
-        var subject = new AreaLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 900,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = -20M,
-                     Max = 30M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz" },
-                DataPointSpacingMode = DataPointSpacingMode.EdgeToEdge
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 15M },
-                    CssClass = "example-data"
-                },
-                new() {
-                    Color = "red",
-                    DataPoints = { null, null, null, 15M },
-                    CssClass = "example-data"
-                }
-            },
-            IsStacked = true
-        };
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.EdgeToEdge)
+            .WithLayer(new AreaLayer() {
+                IsStacked = true
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -10M, -10M, 10M, 15M },
+                CssClass = "example-data"
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "red",
+                DataPoints = { null, null, null, 15M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
 
         subject.DataSeries[dataSeriesIndex].DataPoints[startIndex] = startDataPoint;
         subject.DataSeries[dataSeriesIndex].DataPoints[endIndex] = endDataPoint;
@@ -148,52 +109,47 @@ public class AreaLayerTests {
     }
 
     public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_Data() {
-        var plotAreaX = 25 + 100;
-        var plotAreaY = 25;
-        var dataPointWidth = (900 - 25 - 25 - 100) / 2M;
-        var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaZero = 30M;
-        var plotAreaRange = plotAreaZero - -20M;
+        var dataPointWidth = PlotAreaWidth / 2M;
 
         return new() {
             { 0, 0, 5M, 1, 5M, Helpers.Path(
-                $"M {plotAreaX} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX} {plotAreaY + (plotAreaZero - 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + dataPointWidth} {plotAreaY + (plotAreaZero - 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + (plotAreaZero - 10M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
+                $"M {PlotAreaX} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + dataPointWidth} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 10M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
                 $"Z"
             ) },
             { 1, 0, 5M, 1, -5M, Helpers.Path(
-                $"M {plotAreaX} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX} {plotAreaY + (plotAreaZero + 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + dataPointWidth} {plotAreaY + (plotAreaZero + 15M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M  * dataPointWidth} {plotAreaY + (plotAreaZero - 10M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
+                $"M {PlotAreaX} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + dataPointWidth} {PlotAreaY + (PlotAreaMax + 15M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M  * dataPointWidth} {PlotAreaY + (PlotAreaMax - 10M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
                 $"Z"
             ) },
             { 1, 0, -5M, 1, 5M, Helpers.Path(
-                $"M {plotAreaX} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX} {plotAreaY + (plotAreaZero + 15M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + dataPointWidth} {plotAreaY + (plotAreaZero + 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + (plotAreaZero - 10M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
+                $"M {PlotAreaX} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX} {PlotAreaY + (PlotAreaMax + 15M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 10M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
                 $"Z"
             ) },
             { 1, 1, 5M, 2, -5M, Helpers.Path(
-                $"M {plotAreaX} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX} {plotAreaY + (plotAreaZero + 10M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + dataPointWidth} {plotAreaY + (plotAreaZero + 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + (plotAreaZero - 5M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
+                $"M {PlotAreaX} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX} {PlotAreaY + (PlotAreaMax + 10M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
                 $"Z"
             ) },
             { 1, 1, -5M, 2, 5M, Helpers.Path(
-                $"M {plotAreaX} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX} {plotAreaY + (plotAreaZero + 10M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + dataPointWidth} {plotAreaY + (plotAreaZero + 15M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + (plotAreaZero - 15M) / plotAreaRange * plotAreaHeight}",
-                $"L {plotAreaX + 2M * dataPointWidth} {plotAreaY + plotAreaZero / plotAreaRange * plotAreaHeight}",
+                $"M {PlotAreaX} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX} {PlotAreaY + (PlotAreaMax + 10M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + dataPointWidth} {PlotAreaY + (PlotAreaMax + 15M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 15M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2M * dataPointWidth} {PlotAreaY + PlotAreaMax / PlotAreaRange * PlotAreaHeight}",
                 $"Z"
             ) },
         };
@@ -203,10 +159,11 @@ public class AreaLayerTests {
     [InlineData(false)]
     [InlineData(true)]
     public void GetDataSeriesShapes_Empty(bool isStacked) {
-        var subject = new AreaLayer() {
-            Chart = new(),
-            IsStacked = isStacked
-        };
+        var subject = new XYChartBuilder()
+            .WithLayer(new AreaLayer() {
+                IsStacked = isStacked
+            })
+            .Chart.Layers.Single();
 
         Assert.Empty(subject.GetDataSeriesShapes());
     }
