@@ -106,7 +106,7 @@ public class XYChartTests {
     [Fact]
     public void GetShapes_AutoScale() {
         var subject = new XYChartBuilder(labelCount: 2)
-            .WithAutoScaleSettings(true, requestedGridLineCount: 15, clearancePercentage: 0M)
+            .WithAutoScaleSettings(isEnabled: true, requestedGridLineCount: 15, clearancePercentage: 0M)
             .WithLayer<BarLayer>()
             .WithDataSeries(-9M, 0M)
             .WithDataSeries(-5M, 19M)
@@ -122,7 +122,7 @@ public class XYChartTests {
     [Fact]
     public void GetShapes_No_AutoScale() {
         var subject = new XYChartBuilder(labelCount: 2)
-            .WithAutoScaleSettings(false)
+            .WithAutoScaleSettings(isEnabled: false)
             .WithLayer<BarLayer>()
             .WithDataSeries(-9M, 0M)
             .WithDataSeries(-5M, 19M)
@@ -231,52 +231,23 @@ public class XYChartTests {
 
     [Fact]
     public void GetYAxisMultiplierShape() {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 75,
-                YAxisLabelClearance = 10,
-                YAxisMultiplierFormat = "x 0000"
-            },
-            PlotArea = {
-                 Min = -100M,
-                 Max = 500M,
-                 GridLineInterval = 200M,
-                 Multiplier = 1000
-            }
-        };
+        var subject = new XYChartBuilder()
+            .WithPlotArea(multiplier: 1000)
+            .Chart;
 
         var result = subject.GetYAxisMultiplierShape();
 
         Assert.NotNull(result);
-        Assert.Equal(25, result.X);
-        Assert.Equal(25 + (500 - 25 - 25 - 50) / 2, result.Y);
-        Assert.Equal("x 1000", result.Multiplier);
+        Assert.Equal(CanvasPadding, result.X);
+        Assert.Equal(CanvasPadding + PlotAreaHeight / 2M, result.Y);
+        Assert.Equal(1000.ToString(CanvasYAxisMultiplierFormat), result.Multiplier);
     }
 
     [Fact]
     public void GetYAxisMultiplierShape_Without_Multiplier() {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 75,
-                YAxisLabelClearance = 10,
-                YAxisMultiplierFormat = "x 0000"
-            },
-            PlotArea = {
-                 Min = -100M,
-                 Max = 500M,
-                 GridLineInterval = 200M
-            }
-        };
+        var subject = new XYChartBuilder()
+            .WithPlotArea(multiplier: 1)
+            .Chart;
 
         var result = subject.GetYAxisMultiplierShape();
 

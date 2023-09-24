@@ -82,9 +82,9 @@ public class XYChartBuilder {
         return this;
     }
 
-    public XYChartBuilder WithAutoScaleSettings(bool isEnabled, int? requestedGridLineCount = null, bool? includeZero = null, decimal? clearancePercentage = null)
+    public XYChartBuilder WithAutoScaleSettings(bool? isEnabled = null, int? requestedGridLineCount = null, bool? includeZero = null, decimal? clearancePercentage = null)
         => WithAutoScaleSettings(new AutoScaleSettings() {
-            IsEnabled = isEnabled,
+            IsEnabled = isEnabled ?? AutoScaleSettingsIsEnabled,
             RequestedGridLineCount = requestedGridLineCount ?? AutoScaleSettingsRequestedGridLineCount,
             IncludeZero = includeZero ?? AutoScaleSettingsIncludeZero,
             ClearancePercentage = clearancePercentage ?? AutoScaleSettingsClearancePercentage
