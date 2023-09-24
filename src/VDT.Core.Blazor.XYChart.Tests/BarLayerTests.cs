@@ -130,10 +130,11 @@ public class BarLayerTests {
     [InlineData(false)]
     [InlineData(true)]
     public void GetDataSeriesShapes_Empty(bool isStacked) {
-        var subject = new BarLayer() {
-            Chart = new(),
-            IsStacked = isStacked
-        };
+        var subject = new XYChartBuilder()
+            .WithLayer(new BarLayer() {
+                IsStacked = isStacked
+            })
+            .Chart.Layers.Single();
 
         Assert.Empty(subject.GetDataSeriesShapes());
     }

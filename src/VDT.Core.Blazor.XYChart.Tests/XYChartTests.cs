@@ -179,104 +179,54 @@ public class XYChartTests {
 
     [Fact]
     public void GetShapes_XAxisLabelShapes() {
-        var subject = new XYChart() {
-            Labels = { "Foo", "Bar" }
-        };
+        var subject = new XYChartBuilder()
+            .Chart;
 
         Assert.Contains(subject.GetShapes(), shape => shape is XAxisLabelShape);
     }
 
     [Fact]
     public void GetShapes_DataSeriesShapes() {
-        var subject = new XYChart() {
-            Labels = { "Foo", "Bar" }
-        };
-
-        var layer = new BarLayer() {
-            Chart = subject,
-            IsStacked = false
-        };
-
-        layer.DataSeries.Add(new() {
-            Chart = subject,
-            Layer = layer,
-            Color = "blue",
-            DataPoints = { 5M, 10M }
-        });
-        subject.Layers.Add(layer);
+        var subject = new XYChartBuilder(labelCount: 2)
+            .WithLayer<BarLayer>()
+            .WithDataSeries(5M, 10M)
+            .Chart;
 
         Assert.Contains(subject.GetShapes(), shape => shape is BarDataShape);
     }
 
     [Fact]
     public void GetGridLineShapes() {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 75,
-                YAxisLabelClearance = 10
-            },
-            PlotArea = {
-                 Min = -100M,
-                 Max = 500M,
-                 GridLineInterval = 200M
-            }
-        };
+        var subject = new XYChartBuilder()
+            .Chart;
 
         var result = subject.GetGridLineShapes();
 
-        Assert.Equal(3, result.Count());
+        Assert.Equal(PlotAreaRange / PlotAreaGridLineInterval, result.Count());
 
-        Assert.All(result, shape => {
-            Assert.Equal(25 + 75, shape.X);
-            Assert.Equal(1000 - 25 - 25 - 75, shape.Width);
+        Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
+            Assert.Equal(PlotAreaY + (PlotAreaMax - PlotAreaGridLineInterval * value.Index) / PlotAreaRange * PlotAreaHeight, value.Shape.Y);
+            Assert.Equal(PlotAreaX, value.Shape.X);
+            Assert.Equal(PlotAreaWidth, value.Shape.Width);
+            Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
         });
-
-        var plotAreaRange = subject.PlotArea.Max - subject.PlotArea.Min;
-
-        Assert.Single(result, shape => shape.Key.EndsWith("[0]") && shape.Y == subject.Canvas.PlotAreaY + (400M - subject.PlotArea.Min) / plotAreaRange * subject.Canvas.PlotAreaHeight);
-        Assert.Single(result, shape => shape.Key.EndsWith("[1]") && shape.Y == subject.Canvas.PlotAreaY + (200M - subject.PlotArea.Min) / plotAreaRange * subject.Canvas.PlotAreaHeight);
-        Assert.Single(result, shape => shape.Key.EndsWith("[2]") && shape.Y == subject.Canvas.PlotAreaY + (0M - subject.PlotArea.Min) / plotAreaRange * subject.Canvas.PlotAreaHeight);
     }
 
     [Fact]
     public void GetYAxisLabelShapes() {
-        var subject = new XYChart() {
-            Canvas = {
-                Width = 1000,
-                Height = 500,
-                Padding = 25,
-                XAxisLabelHeight = 50,
-                XAxisLabelClearance = 5,
-                YAxisLabelWidth = 75,
-                YAxisLabelClearance = 10,
-                YAxisLabelFormat = "#000"
-            },
-            PlotArea = {
-                 Min = -100M,
-                 Max = 500M,
-                 GridLineInterval = 200M,
-                 Multiplier = 10M
-            }
-        };
-
+        var subject = new XYChartBuilder()
+            .Chart;
+        
         var result = subject.GetYAxisLabelShapes();
 
-        Assert.Equal(3, result.Count());
+        Assert.Equal(PlotAreaRange / PlotAreaGridLineInterval, result.Count());
 
-        Assert.All(result, shape => {
-            Assert.Equal(25 + 75 - 10, shape.X);
+        Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
+            Assert.Equal(PlotAreaY + (PlotAreaMax - PlotAreaGridLineInterval * value.Index) / PlotAreaRange * PlotAreaHeight, value.Shape.Y);
+            Assert.Equal(PlotAreaX - CanvasYAxisLabelClearance, value.Shape.X);
+            Assert.Equal((PlotAreaGridLineInterval * value.Index).ToString(CanvasYAxisLabelFormat), value.Shape.Value);
+            Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
         });
-
-        var plotAreaRange = subject.PlotArea.Max - subject.PlotArea.Min;
-
-        Assert.Single(result, shape => shape.Key.EndsWith("[0]") && shape.Y == subject.Canvas.PlotAreaY + (400M - subject.PlotArea.Min) / plotAreaRange * subject.Canvas.PlotAreaHeight && shape.Value == "000");
-        Assert.Single(result, shape => shape.Key.EndsWith("[1]") && shape.Y == subject.Canvas.PlotAreaY + (200M - subject.PlotArea.Min) / plotAreaRange * subject.Canvas.PlotAreaHeight && shape.Value == "020");
-        Assert.Single(result, shape => shape.Key.EndsWith("[2]") && shape.Y == subject.Canvas.PlotAreaY + (0M - subject.PlotArea.Min) / plotAreaRange * subject.Canvas.PlotAreaHeight && shape.Value == "040");
     }
 
     [Fact]

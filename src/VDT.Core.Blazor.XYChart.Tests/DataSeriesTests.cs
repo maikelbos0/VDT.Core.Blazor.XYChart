@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
@@ -51,23 +52,20 @@ public class DataSeriesTests {
 
     [Theory]
     [MemberData(nameof(GetDataPoints_Data))]
-    public void GetDataPoints(List<decimal?> dataPoints, bool nullAsZero, List<(int, decimal)> expectedResult) {
-        var subject = new DataSeries() {
-            Chart = new() {
-                Labels = { "Foo", "Bar", "Baz" }
-            },
-            Layer = new TestLayer(nullAsZero),
-            DataPoints = dataPoints
-        };
+    public void GetDataPoints(decimal?[] dataPoints, bool nullAsZero, List<(int, decimal)> expectedResult) {
+        var subject = new XYChartBuilder(labelCount: 3)
+            .WithLayer(new TestLayer(nullAsZero))
+            .WithDataSeries(dataPoints)
+            .Chart.Layers.Single().DataSeries.Single();
 
         Assert.Equal(expectedResult, subject.GetDataPoints());
     }
 
-    public static TheoryData<List<decimal?>, bool, List<(int, decimal)>> GetDataPoints_Data() => new() {
-        { new List<decimal?>{ 5M, 10M, 15M }, false, new List<(int, decimal)>{ (0, 5M), (1, 10M), (2, 15M) } },
-        { new List<decimal?>{ 5M, 10M, 15M, 20M }, false, new List<(int, decimal)>{ (0, 5M), (1, 10M), (2, 15M) } },
-        { new List<decimal?>{ null, 10M }, false, new List<(int, decimal)>{ (1, 10M) } },
-        { new List<decimal?>{ null, 10M }, true, new List<(int, decimal)>{ (0, 0M), (1, 10M), (2, 0M) } }
+    public static TheoryData<decimal?[], bool, List<(int, decimal)>> GetDataPoints_Data() => new() {
+        { new decimal?[]{ 5M, 10M, 15M }, false, new List<(int, decimal)>{ (0, 5M), (1, 10M), (2, 15M) } },
+        { new decimal?[]{ 5M, 10M, 15M, 20M }, false, new List<(int, decimal)>{ (0, 5M), (1, 10M), (2, 15M) } },
+        { new decimal?[]{ null, 10M }, false, new List<(int, decimal)>{ (1, 10M) } },
+        { new decimal?[]{ null, 10M }, true, new List<(int, decimal)>{ (0, 0M), (1, 10M), (2, 0M) } }
     };
 
     [Fact]

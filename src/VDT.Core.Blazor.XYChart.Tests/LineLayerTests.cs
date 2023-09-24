@@ -283,12 +283,13 @@ public class LineLayerTests {
     [InlineData(false)]
     [InlineData(true)]
     public void GetDataSeriesShapes_Empty(bool isStacked) {
-        var subject = new LineLayer() {
-            Chart = new(),
-            IsStacked = isStacked,
-            ShowDataLines = true,
-            ShowDataMarkers = true
-        };
+        var subject = new XYChartBuilder()
+            .WithLayer(new LineLayer() {
+                IsStacked = isStacked,
+                ShowDataLines = true,
+                ShowDataMarkers = true
+            })
+            .Chart.Layers.Single();
 
         Assert.Empty(subject.GetDataSeriesShapes());
     }
