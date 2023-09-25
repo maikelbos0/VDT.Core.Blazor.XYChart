@@ -14,19 +14,20 @@ public class AreaLayer : LayerBase {
         => parameters.HasParameterChanged(IsStacked);
 
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
-        var zeroY = Chart.MapDataPointToCanvas(0M);
-
         foreach (var canvasDataSeries in GetCanvasDataSeries()) {
             if (canvasDataSeries.DataPoints.Any()) {
-                var commands = new List<string> {
-                    PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[0].X, zeroY)
+                var commands = new List<string>() {
+                    PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[0].X, canvasDataSeries.DataPoints[0].Y)
                 };
 
-                foreach (var canvasDataPoint in canvasDataSeries.DataPoints) {
+                foreach (var canvasDataPoint in canvasDataSeries.DataPoints.Skip(1)) {
                     commands.Add(PathCommandFactory.LineTo(canvasDataPoint.X, canvasDataPoint.Y));
                 }
 
-                commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[^1].X, zeroY));
+                foreach (var canvasDataPoint in canvasDataSeries.DataPoints.Reverse()) {
+                    commands.Add(PathCommandFactory.LineTo(canvasDataPoint.X, canvasDataPoint.Y + canvasDataPoint.Height));
+                }
+
                 commands.Add(PathCommandFactory.ClosePath);
 
                 yield return new AreaDataShape(
