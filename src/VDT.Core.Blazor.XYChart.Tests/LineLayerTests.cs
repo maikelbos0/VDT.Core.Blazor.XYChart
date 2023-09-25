@@ -51,12 +51,12 @@ public class LineLayerTests {
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
-                DataPoints = { -10M, -10M, 10M, 15M },
+                DataPoints = { -60M, -60M, 60M, 150M },
                 CssClass = "example-data"
             })
             .WithDataSeries(new DataSeries() {
                 Color = "red",
-                DataPoints = { null, null, null, 15M },
+                DataPoints = { null, null, null, 150M },
                 CssClass = "example-data"
             })
             .Chart.Layers.Single();
@@ -78,9 +78,9 @@ public class LineLayerTests {
         var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, -5M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 5M, PlotAreaX + 1.5M * dataPointWidth, PlotAreaY  + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 2, 35M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY  + (PlotAreaMax - 35M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 30M, PlotAreaX + 1.5M * dataPointWidth, PlotAreaY  + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 2, 210M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY  + (PlotAreaMax - 210M) / PlotAreaRange * PlotAreaHeight, 20M },
         };
     }
 
@@ -96,12 +96,12 @@ public class LineLayerTests {
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
-                DataPoints = { -10M, -10M, 10M, 15M },
+                DataPoints = { -60M, -60M, 60M, 150M },
                 CssClass = "example-data"
             })
             .WithDataSeries(new DataSeries() {
                 Color = "red",
-                DataPoints = { null, null, null, 15M },
+                DataPoints = { null, null, null, 150M },
                 CssClass = "example-data"
             })
             .Chart.Layers.Single();
@@ -123,12 +123,12 @@ public class LineLayerTests {
         var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, 0, -5M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 0, 2, 5M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 0, -5M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 15M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 0, 5M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 2, -5M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 2, 5M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 15M) / PlotAreaRange * PlotAreaHeight, 20M }
+            { 0, 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 0, 2, 30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 0, 30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 2, -30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 2, 30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 90M) / PlotAreaRange * PlotAreaHeight, 20M }
         };
     }
 
@@ -140,7 +140,7 @@ public class LineLayerTests {
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
-                DataPoints = { -10M, -10M, 10M, 15M },
+                DataPoints = { -60M, -60M, 60M, 150M },
                 CssClass = "example-data"
             })
             .Chart.Layers.Single();
@@ -160,12 +160,12 @@ public class LineLayerTests {
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
-                DataPoints = { -10M, -10M, 10M, 15M },
+                DataPoints = { -60M, -60M, 60M, 150M },
                 CssClass = "example-data"
             })
             .WithDataSeries(new DataSeries() {
                 Color = "red",
-                DataPoints = { null, null, null, 15M },
+                DataPoints = { null, null, null, 150M },
                 CssClass = "example-data"
             })
             .Chart.Layers.Single();
@@ -186,13 +186,13 @@ public class LineLayerTests {
         var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, 5M, 1, -5M, Helpers.Path(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}"
+            { 0, 30M, 1, -30M, Helpers.Path(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, -5M, 2, 5M, Helpers.Path(
-                $"M {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}"
+            { 1, -30M, 2, 30M, Helpers.Path(
+                $"M {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}"
             ) }
         };
     }
@@ -207,12 +207,12 @@ public class LineLayerTests {
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
-                DataPoints = { -10M, -10M, 10M, 15M },
+                DataPoints = { -60M, -60M, 60M, 150M },
                 CssClass = "example-data"
             })
             .WithDataSeries(new DataSeries() {
                 Color = "red",
-                DataPoints = { null, null, null, 15M },
+                DataPoints = { null, null, null, 150M },
                 CssClass = "example-data"
             })
             .Chart.Layers.Single();
@@ -233,30 +233,30 @@ public class LineLayerTests {
         var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, 0, 5M, 1, 5M, Helpers.Path(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 10M) / PlotAreaRange * PlotAreaHeight}"
+            { 0, 0, 30M, 1, 30M, Helpers.Path(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, 0, 5M, 1, -5M, Helpers.Path(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 15M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 10M) / PlotAreaRange * PlotAreaHeight}"
+            { 1, 0, 30M, 1, -30M, Helpers.Path(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, 0, -5M, 1, 5M, Helpers.Path(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 15M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 10M) / PlotAreaRange * PlotAreaHeight}"
+            { 1, 0, -30M, 1, 30M, Helpers.Path(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, 1, 5M, 2, -5M, Helpers.Path(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 10M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 5M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 5M) / PlotAreaRange * PlotAreaHeight}"
+            { 1, 1, 30M, 2, -30M, Helpers.Path(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 60M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, 1, -5M, 2, 5M, Helpers.Path(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 10M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 15M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 15M) / PlotAreaRange * PlotAreaHeight}"
+            { 1, 1, -30M, 2, 30M, Helpers.Path(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 60M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 90M) / PlotAreaRange * PlotAreaHeight}"
             ) },
         };
     }
@@ -269,7 +269,7 @@ public class LineLayerTests {
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
-                DataPoints = { -10M, -10M, 10M, 15M },
+                DataPoints = { -60M, -60M, 60M, 150M },
                 CssClass = "example-data"
             })
             .Chart.Layers.Single();

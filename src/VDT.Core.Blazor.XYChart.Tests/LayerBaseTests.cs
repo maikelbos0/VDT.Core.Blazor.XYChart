@@ -57,19 +57,19 @@ public class LayerBaseTests {
             .WithLayer(new TestLayer(stackMode, nullAsZero) {
                 IsStacked = isStacked
             })
-            .WithDataSeries(-5M, -3M, null, null, 15M)
-            .WithDataSeries(-7M, -3M, null, null, 15M)
-            .WithDataSeries(7M, null, 3M)
-            .WithDataSeries(5M, null, 3M)
+            .WithDataSeries(-6M, -3M, null, null, 150M)
+            .WithDataSeries(-6M, -3M, null, null, 150M)
+            .WithDataSeries(9M, null, 3M)
+            .WithDataSeries(15M, null, 3M)
             .Chart.Layers.Single();
 
         Assert.Equal(expectedDataPoints, subject.GetScaleDataPoints());
     }
 
     public static TheoryData<bool, StackMode, bool, decimal[]> GetScaleDataPoints_Data() => new() {
-        { false, StackMode.Single, true, new[] { -5M, -3M, 0M, 0M, -7M, -3M, 0M, 0M, 7M, 0M, 3M, 0M, 5M, 0M, 3M, 0M } },
-        { false, StackMode.Split, false, new[] { -5M, -3M, -7M, -3M, 7M, 3M, 5M, 3M } },
-        { true, StackMode.Single, false, new[] { -5M, -3M, -12M, -6M, -5M, 3M, 0M, 6M } },
-        { true, StackMode.Split, false, new[] { -5M, -3M, -12M, -6M, 7M, 3M, 12M, 6M } }
+        { false, StackMode.Single, true, new[] { -6M, -3M, 0M, 0M, -6M, -3M, 0M, 0M, 9M, 0M, 3M, 0M, 15M, 0M, 3M, 0M } },
+        { false, StackMode.Split, false, new[] { -6M, -3M, -6M, -3M, 9M, 3M, 15M, 3M } },
+        { true, StackMode.Single, false, new[] { -6M, -3M, -12M, -6M, -3M, 3M, 12M, 6M } },
+        { true, StackMode.Split, false, new[] { -6M, -3M, -12M, -6M, 9M, 3M, 24M, 6M } }
     };
 }
