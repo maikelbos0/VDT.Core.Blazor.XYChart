@@ -177,7 +177,7 @@ public class LineLayerTests {
 
         var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[1]"));
 
-        Assert.Equal(expectedPath, shape.Path);
+        Assert.Equal(expectedPath, Path.TrimDecimals(shape.Path));
         Assert.Equal("red", shape.Color);
         Assert.Equal("data line-data example-data", shape.CssClass);
     }
@@ -186,11 +186,11 @@ public class LineLayerTests {
         var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, 30M, 1, -30M, Helpers.Path(
+            { 0, 30M, 1, -30M, Path.Create(
                 $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, -30M, 2, 30M, Helpers.Path(
+            { 1, -30M, 2, 30M, Path.Create(
                 $"M {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}"
             ) }
@@ -224,7 +224,7 @@ public class LineLayerTests {
 
         var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[{dataSeriesIndex}]"));
 
-        Assert.Equal(expectedPath, shape.Path);
+        Assert.Equal(expectedPath, Path.TrimDecimals(shape.Path));
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
         Assert.Equal("data line-data example-data", shape.CssClass);
     }
@@ -233,27 +233,27 @@ public class LineLayerTests {
         var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, 0, 30M, 1, 30M, Helpers.Path(
+            { 0, 0, 30M, 1, 30M, Path.Create(
                 $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, 0, 30M, 1, -30M, Helpers.Path(
+            { 1, 0, 30M, 1, -30M, Path.Create(
                 $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, 0, -30M, 1, 30M, Helpers.Path(
+            { 1, 0, -30M, 1, 30M, Path.Create(
                 $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, 1, 30M, 2, -30M, Helpers.Path(
+            { 1, 1, 30M, 2, -30M, Path.Create(
                 $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 60M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}"
             ) },
-            { 1, 1, -30M, 2, 30M, Helpers.Path(
+            { 1, 1, -30M, 2, 30M, Path.Create(
                 $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 60M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
                 $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 90M) / PlotAreaRange * PlotAreaHeight}"

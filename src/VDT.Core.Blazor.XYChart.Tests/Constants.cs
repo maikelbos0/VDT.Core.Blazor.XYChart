@@ -19,8 +19,8 @@ public static class Constants {
     public const int PlotAreaWidth = CanvasWidth - CanvasPadding * 2 - CanvasYAxisLabelWidth;
     public const int PlotAreaHeight = CanvasHeight - CanvasPadding * 2 - CanvasXAxisLabelHeight;
 
-    public const decimal PlotAreaMin = -100M;
-    public const decimal PlotAreaMax = 500M;
+    public const decimal PlotAreaMin = -120M;
+    public const decimal PlotAreaMax = 480M;
     public const decimal PlotAreaRange = PlotAreaMax - PlotAreaMin;
     public const decimal PlotAreaGridLineInterval = 200M;
     public const decimal PlotAreaMultiplier = 1M;
