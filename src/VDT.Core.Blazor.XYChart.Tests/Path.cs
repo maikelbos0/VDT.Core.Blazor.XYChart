@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public static class Path {
-    private static Regex pathDecimalTrimmer = new("(\\.0+|(?<=\\.[1-9]+)(0+))(?= )", RegexOptions.Compiled);
+    private readonly static Regex pathDecimalTrimmer = new("(\\.0+|(?<=\\.[1-9]+)(0+))(?= )", RegexOptions.Compiled);
 
     public static string TrimDecimals(string path) => pathDecimalTrimmer.Replace(path, "");
 

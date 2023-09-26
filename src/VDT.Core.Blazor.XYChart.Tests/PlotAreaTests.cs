@@ -50,7 +50,7 @@ public class PlotAreaTests {
     [Fact]
     public void ResetAutoScaleSettings() {
         var builder = new XYChartBuilder();
-                var subject = builder.Chart.PlotArea;
+        var subject = builder.Chart.PlotArea;
         var autoScaleSettings = subject.AutoScaleSettings;
 
         subject.ResetAutoScaleSettings();

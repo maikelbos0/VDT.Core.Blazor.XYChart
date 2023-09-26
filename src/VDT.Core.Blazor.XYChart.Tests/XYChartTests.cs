@@ -17,7 +17,7 @@ public class XYChartTests {
         });
 
         var subject = new XYChart() {
-            Labels = new List<string> { "Foo", "Bar" },
+            Labels = new() { "Foo", "Bar" },
             DataPointSpacingMode = DataPointSpacingMode.Auto
         };
 
@@ -261,15 +261,14 @@ public class XYChartTests {
 
         var result = subject.GetXAxisLabelShapes();
 
-        Assert.Equal(3, result.Count());
+        Assert.Equal(subject.Labels.Count, result.Count());
 
-        Assert.All(result, shape => {
-            Assert.Equal(PlotAreaY + PlotAreaHeight + CanvasXAxisLabelClearance, shape.Y);
+        Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
+            Assert.Equal(PlotAreaY + PlotAreaHeight + CanvasXAxisLabelClearance, value.Shape.Y);
+            Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
+            Assert.Equal(PlotAreaX + (0.5M + value.Index) * PlotAreaWidth / subject.Labels.Count, value.Shape.X);
+            Assert.Equal(subject.Labels[value.Index], value.Shape.Label);
         });
-
-        Assert.Single(result, shape => shape.Key.EndsWith("[0]") && shape.X == PlotAreaX + 0.5M * PlotAreaWidth / 3M && shape.Label == "Foo");
-        Assert.Single(result, shape => shape.Key.EndsWith("[1]") && shape.X == PlotAreaX + 1.5M * PlotAreaWidth / 3M && shape.Label == "Bar");
-        Assert.Single(result, shape => shape.Key.EndsWith("[2]") && shape.X == PlotAreaX + 2.5M * PlotAreaWidth / 3M && shape.Label == "Baz");
     }
 
     [Fact]
