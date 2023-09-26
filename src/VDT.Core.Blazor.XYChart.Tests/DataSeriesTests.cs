@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 
@@ -10,6 +11,11 @@ public class DataSeriesTests {
     private class TestLayer : LayerBase {
         public override StackMode StackMode => throw new NotImplementedException();
         public override DataPointSpacingMode DefaultDataPointSpacingMode => throw new NotImplementedException();
+        public override bool NullAsZero { get; }
+
+        public TestLayer(bool nullAsZero) {
+            NullAsZero = nullAsZero;
+        }
 
         public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
 
@@ -29,7 +35,7 @@ public class DataSeriesTests {
         var subject = new DataSeries() {
             Name = "Foo",
             Color = "red",
-            DataPoints = { 1, 2, 3},
+            DataPoints = { 1, 2, 3 },
             CssClass = "foo-series"
         };
 
@@ -42,6 +48,24 @@ public class DataSeriesTests {
         { "Foo", "blue", new List<decimal?> { 1, 2, 3 }, "foo-series", true },
         { "Foo", "red", new List<decimal?> { 1, 2 }, "foo-series", true },
         { "Foo", "red", new List<decimal?> { 1, 2, 3 }, "foo-data", true }
+    };
+
+    [Theory]
+    [MemberData(nameof(GetDataPoints_Data))]
+    public void GetDataPoints(decimal?[] dataPoints, bool nullAsZero, List<(int, decimal)> expectedResult) {
+        var subject = new XYChartBuilder(labelCount: 3)
+            .WithLayer(new TestLayer(nullAsZero))
+            .WithDataSeries(dataPoints)
+            .Chart.Layers.Single().DataSeries.Single();
+
+        Assert.Equal(expectedResult, subject.GetDataPoints());
+    }
+
+    public static TheoryData<decimal?[], bool, List<(int, decimal)>> GetDataPoints_Data() => new() {
+        { new decimal?[]{ 5M, 10M, 15M }, false, new List<(int, decimal)>{ (0, 5M), (1, 10M), (2, 15M) } },
+        { new decimal?[]{ 5M, 10M, 15M, 20M }, false, new List<(int, decimal)>{ (0, 5M), (1, 10M), (2, 15M) } },
+        { new decimal?[]{ null, 10M }, false, new List<(int, decimal)>{ (1, 10M) } },
+        { new decimal?[]{ null, 10M }, true, new List<(int, decimal)>{ (0, 0M), (1, 10M), (2, 0M) } }
     };
 
     [Fact]
@@ -61,7 +85,7 @@ public class DataSeriesTests {
     public void GetColor_Default(int index, string expectedColor) {
         DataSeries.DefaultColors = new List<string>() { "red", "blue", "green" };
 
-        var layer = new TestLayer();
+        var layer = new TestLayer(false);
         layer.DataSeries.Add(new DataSeries() { Layer = layer });
         layer.DataSeries.Add(new DataSeries() { Layer = layer });
         layer.DataSeries.Add(new DataSeries() { Layer = layer });
@@ -76,7 +100,7 @@ public class DataSeriesTests {
     public void GetColor_Fallback() {
         DataSeries.DefaultColors = new();
 
-        var layer = new TestLayer();
+        var layer = new TestLayer(false);
         var subject = new DataSeries() { Layer = layer };
 
         layer.DataSeries.Add(subject);

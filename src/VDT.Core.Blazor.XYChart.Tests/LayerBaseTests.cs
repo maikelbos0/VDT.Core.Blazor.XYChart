@@ -3,6 +3,7 @@ using System;
 using Xunit;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Microsoft.AspNetCore.Components;
+using System.Linq;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
@@ -10,9 +11,11 @@ public class LayerBaseTests {
     private class TestLayer : LayerBase {
         public override StackMode StackMode { get; }
         public override DataPointSpacingMode DefaultDataPointSpacingMode => throw new NotImplementedException();
+        public override bool NullAsZero { get; }
 
-        public TestLayer(StackMode stackMode) {
+        public TestLayer(StackMode stackMode, bool nullAsZero) {
             StackMode = stackMode;
+            NullAsZero = nullAsZero;
         }
 
         public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
@@ -22,70 +25,51 @@ public class LayerBaseTests {
 
     [Fact]
     public void AddDataSeries() {
-        var stateHasChangedInvoked = false;
         var dataSeries = new DataSeries();
-        var subject = new TestLayer(StackMode.Single) {
-            Chart = new() {
-                StateHasChangedHandler = () => stateHasChangedInvoked = true
-            }
-        };
+        var subject = new TestLayer(StackMode.Single, false);
+        var builder = new XYChartBuilder()
+            .WithLayer(subject);
 
         subject.AddDataSeries(dataSeries);
 
         Assert.Same(dataSeries, Assert.Single(subject.DataSeries));
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
     public void RemoveDataSeries() {
-        var stateHasChangedInvoked = false;
         var dataSeries = new DataSeries();
-        var subject = new TestLayer(StackMode.Single) {
-            Chart = new() {
-                StateHasChangedHandler = () => stateHasChangedInvoked = true
-            },
-            DataSeries = {
-                dataSeries
-            }
-        };
+        var subject = new TestLayer(StackMode.Single, false);
+        var builder = new XYChartBuilder()
+            .WithLayer(subject)
+            .WithDataSeries(dataSeries);
 
         subject.RemoveDataSeries(dataSeries);
 
         Assert.Empty(subject.DataSeries);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Theory]
     [MemberData(nameof(GetScaleDataPoints_Data))]
-    public void GetScaleDataPoints(bool isStacked, StackMode stackMode, decimal[] expectedDataPoints) {
-        var subject = new TestLayer(stackMode) {
-            Chart = new() {
-                Labels = { "Foo", "Bar", "Baz", "Quux" }
-            },
-            IsStacked = isStacked,
-            DataSeries = {
-                new() {
-                    DataPoints = { -5M, -3M, null, null, 15M }
-                },
-                new() {
-                    DataPoints = { -7M, -3M, null, null, 15M }
-                },
-                new() {
-                    DataPoints = { 7M, null, 3M }
-                },
-                new() {
-                    DataPoints = { 5M, null, 3M }
-                }
-            }
-        };
+    public void GetScaleDataPoints(bool isStacked, StackMode stackMode, bool nullAsZero, decimal[] expectedDataPoints) {
+        var subject = new XYChartBuilder(labelCount: 4)
+            .WithLayer(new TestLayer(stackMode, nullAsZero) {
+                IsStacked = isStacked
+            })
+            .WithDataSeries(-6M, -3M, null, null, 150M)
+            .WithDataSeries(-6M, -3M, null, null, 150M)
+            .WithDataSeries(9M, null, 3M)
+            .WithDataSeries(15M, null, 3M)
+            .Chart.Layers.Single();
 
         Assert.Equal(expectedDataPoints, subject.GetScaleDataPoints());
     }
 
-    public static TheoryData<bool, StackMode, decimal[]> GetScaleDataPoints_Data() => new() {
-        { false, StackMode.Single, new[] { -5M, -3M, -7M, -3M, 7M, 3M, 5M, 3M } },
-        { false, StackMode.Split, new[] { -5M, -3M, -7M, -3M, 7M, 3M, 5M, 3M } },
-        { true, StackMode.Single, new[] { -5M, -3M, -12M, -6M, -5M, 3M, 0M, 6M } },
-        { true, StackMode.Split, new[] { -5M, -3M, -12M, -6M, 7M, 3M, 12M, 6M } }
+    public static TheoryData<bool, StackMode, bool, decimal[]> GetScaleDataPoints_Data() => new() {
+        { false, StackMode.Single, true, new[] { -6M, -3M, 0M, 0M, -6M, -3M, 0M, 0M, 9M, 0M, 3M, 0M, 15M, 0M, 3M, 0M } },
+        { false, StackMode.Split, false, new[] { -6M, -3M, -6M, -3M, 9M, 3M, 15M, 3M } },
+        { true, StackMode.Single, false, new[] { -6M, -3M, -12M, -6M, -3M, 3M, 12M, 6M } },
+        { true, StackMode.Split, false, new[] { -6M, -3M, -12M, -6M, 9M, 3M, 24M, 6M } }
     };
 }

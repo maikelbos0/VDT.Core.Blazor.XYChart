@@ -10,10 +10,12 @@ public class BarLayer : LayerBase {
     public static decimal DefaultClearancePercentage { get; set; } = 10M;
     public static decimal DefaultGapPercentage { get; set; } = 5M;
 
-    [Parameter] public decimal ClearancePercentage { get; set; } = DefaultClearancePercentage;
-    [Parameter] public decimal GapPercentage { get; set; } = DefaultGapPercentage;
     public override StackMode StackMode => StackMode.Split;
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
+    public override bool NullAsZero => false;
+
+    [Parameter] public decimal ClearancePercentage { get; set; } = DefaultClearancePercentage;
+    [Parameter] public decimal GapPercentage { get; set; } = DefaultGapPercentage;
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsStacked)
@@ -22,12 +24,12 @@ public class BarLayer : LayerBase {
 
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         if (!DataSeries.Any()) {
-            return Enumerable.Empty<ShapeBase>();
+            yield break;
         }
 
         var width = Chart.GetDataPointWidth() / 100M * (100M - ClearancePercentage * 2);
         Func<int, decimal> offsetProvider = dataSeriesIndex => -width / 2M;
-
+        
         if (!IsStacked) {
             var gapWidth = Chart.GetDataPointWidth() / 100M * GapPercentage;
             var dataSeriesWidth = (width - gapWidth * (DataSeries.Count - 1)) / DataSeries.Count;
@@ -36,15 +38,19 @@ public class BarLayer : LayerBase {
             offsetProvider = dataSeriesIndex => (dataSeriesIndex - DataSeries.Count / 2M) * dataSeriesWidth + (dataSeriesIndex - (DataSeries.Count - 1) / 2M) * gapWidth;
         }
 
-        return GetCanvasDataPoints().Select(point => new BarDataShape(
-            point.X + offsetProvider(point.DataSeriesIndex),
-            point.Y,
-            width,
-            point.Height,
-            DataSeries[point.DataSeriesIndex].GetColor(),
-            DataSeries[point.DataSeriesIndex].CssClass,
-            point.DataSeriesIndex,
-            point.Index
-        ));
+        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
+            foreach (var canvasDataPoint in canvasDataSeries.DataPoints) {
+                yield return new BarDataShape(
+                    canvasDataPoint.X + offsetProvider(canvasDataSeries.Index),
+                    canvasDataPoint.Y,
+                    width,
+                    canvasDataPoint.Height,
+                    canvasDataSeries.Color,
+                    canvasDataSeries.CssClass,
+                    canvasDataSeries.Index,
+                    canvasDataPoint.Index
+                );
+            }
+        }
     }
 }

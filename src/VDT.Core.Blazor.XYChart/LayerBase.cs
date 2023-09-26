@@ -15,6 +15,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     internal List<DataSeries> DataSeries { get; set; } = new();
     public abstract StackMode StackMode { get; }
     public abstract DataPointSpacingMode DefaultDataPointSpacingMode { get; }
+    public abstract bool NullAsZero { get; }
 
     protected override void OnInitialized() => Chart.AddLayer(this);
 
@@ -45,29 +46,28 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
 
     public abstract IEnumerable<ShapeBase> GetDataSeriesShapes();
 
-    public IEnumerable<CanvasDataPoint> GetCanvasDataPoints() {
+    public IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();
 
-        return DataSeries.SelectMany((dataSeries, dataSeriesIndex) => dataSeries.DataPoints
-            .Select((dataPoint, index) => (DataPoint: dataPoint, Index: index))
-            .Where(value => value.DataPoint != null && value.Index < Chart.Labels.Count)
-            .Select(value => new CanvasDataPoint(
-                Chart.MapDataIndexToCanvas(value.Index),
-                Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint!.Value, value.Index)),
-                Chart.MapDataValueToPlotArea(value.DataPoint!.Value),
-                dataSeriesIndex,
-                value.Index
-            )))
-            .ToList();
+        return DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
+            dataSeries.GetColor(), 
+            dataSeries.CssClass, 
+            index, 
+            dataSeries.GetDataPoints()
+                .Select(value => new CanvasDataPoint(
+                    Chart.MapDataIndexToCanvas(value.Index),
+                    Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
+                    Chart.MapDataValueToPlotArea(value.DataPoint),
+                    value.Index
+                )).ToList().AsReadOnly())
+        ).ToList();
     }
 
     public IEnumerable<decimal> GetScaleDataPoints() {
         var dataPointTransformer = GetDataPointTransformer();
 
-        return DataSeries.SelectMany(dataSeries => dataSeries.DataPoints
-            .Select((dataPoint, index) => (DataPoint: dataPoint, Index: index))
-            .Where(value => value.DataPoint != null && value.Index < Chart.Labels.Count)
-            .Select(value => dataPointTransformer(value.DataPoint!.Value, value.Index)));
+        return DataSeries.SelectMany(dataSeries => dataSeries.GetDataPoints()
+            .Select(value => dataPointTransformer(value.DataPoint, value.Index)));
     }
 
     private Func<decimal, int, decimal> GetDataPointTransformer() {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
+using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
@@ -36,48 +37,34 @@ public class PlotAreaTests {
 
     [Fact]
     public void SetAutoScaleSettings() {
-        var stateHasChangedInvoked = false;
         var autoScaleSettings = new AutoScaleSettings();
-        var subject = new PlotArea() {
-            Chart = new() {
-                StateHasChangedHandler = () => stateHasChangedInvoked = true
-            }
-        };
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart.PlotArea;
 
         subject.SetAutoScaleSettings(autoScaleSettings);
 
         Assert.Same(autoScaleSettings, subject.AutoScaleSettings);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
     public void ResetAutoScaleSettings() {
-        var stateHasChangedInvoked = false;
-        var autoScaleSettings = new AutoScaleSettings();
-        var subject = new PlotArea() {
-            Chart = new() {
-                StateHasChangedHandler = () => stateHasChangedInvoked = true
-            },
-            AutoScaleSettings = autoScaleSettings
-        };
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart.PlotArea;
+        var autoScaleSettings = subject.AutoScaleSettings;
 
         subject.ResetAutoScaleSettings();
 
         Assert.NotSame(autoScaleSettings, subject.AutoScaleSettings);
-        Assert.True(stateHasChangedInvoked);
+        Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Theory]
     [MemberData(nameof(AutoScale_Data))]
     public void AutoScale(decimal[] dataPoints, int requestedGridLineCount, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
-        var subject = new PlotArea() {
-            AutoScaleSettings = {
-                IsEnabled = true,
-                IncludeZero = false,
-                ClearancePercentage = 0M,
-                RequestedGridLineCount = requestedGridLineCount
-            }
-        };
+        var subject = new XYChartBuilder()
+            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 0M, requestedGridLineCount: requestedGridLineCount)
+            .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
 
@@ -87,30 +74,25 @@ public class PlotAreaTests {
     }
 
     public static TheoryData<decimal[], int, decimal, decimal, decimal> AutoScale_Data() => new() {
-        { new[] { 1M, 49M }, 6, 10M, 0M, 50M }, // 6
-        { new[] { 1M, 49M }, 11, 5M, 0M, 50M }, // 11
-        { new[] { 50M, 100M }, 11, 5M, 50M, 100M }, // 11
+        { new[] { 1M, 49M }, 6, 10M, 0M, 50M },
+        { new[] { 1M, 49M }, 11, 5M, 0M, 50M },
+        { new[] { 50M, 100M }, 11, 5M, 50M, 100M },
 
-        { new[] { 0.1M, 4.9M }, 6, 1M, 0M, 5M }, // 6
-        { new[] { 0.1M, 4.9M }, 11, 0.5M, 0M, 5M }, // 11
-        { new[] { 5M, 10M }, 11, 0.5M, 5M, 10M }, // 11
+        { new[] { 0.1M, 4.9M }, 6, 1M, 0M, 5M },
+        { new[] { 0.1M, 4.9M }, 11, 0.5M, 0M, 5M },
+        { new[] { 5M, 10M }, 11, 0.5M, 5M, 10M },
 
-        { new[] { 0.001M, 0.049M }, 6, 0.01M, 0M, 0.05M }, // 6
-        { new[] { 0.001M, 0.049M }, 11, 0.005M, 0M, 0.05M }, // 11
-        { new[] { 0.05M, 0.1M }, 11, 0.005M, 0.05M, 0.1M }, // 11
+        { new[] { 0.001M, 0.049M }, 6, 0.01M, 0M, 0.05M },
+        { new[] { 0.001M, 0.049M }, 11, 0.005M, 0M, 0.05M },
+        { new[] { 0.05M, 0.1M }, 11, 0.005M, 0.05M, 0.1M },
     };
 
     [Theory]
     [MemberData(nameof(AutoScale_No_DataPoints_Data))]
     public void AutoScale_No_DataPoints(int requestedGridLineCount, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
-        var subject = new PlotArea() {
-            AutoScaleSettings = {
-                IsEnabled = true,
-                IncludeZero = false,
-                ClearancePercentage = 0M,
-                RequestedGridLineCount = requestedGridLineCount
-            }
-        };
+        var subject = new XYChartBuilder()
+            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 0M, requestedGridLineCount: requestedGridLineCount)
+            .Chart.PlotArea;
 
         subject.AutoScale(Array.Empty<decimal>());
 
@@ -134,14 +116,9 @@ public class PlotAreaTests {
     [Theory]
     [MemberData(nameof(AutoScale_IncludeZero_Data))]
     public void AutoScale_IncludeZero(decimal[] dataPoints, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
-        var subject = new PlotArea() {
-            AutoScaleSettings = {
-                IsEnabled = true,
-                IncludeZero = true,
-                ClearancePercentage = 0M,
-                RequestedGridLineCount = 5
-            }
-        };
+        var subject = new XYChartBuilder()
+            .WithAutoScaleSettings(isEnabled: true, includeZero: true, clearancePercentage: 0M, requestedGridLineCount: 5)
+            .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
 
@@ -159,14 +136,9 @@ public class PlotAreaTests {
     [Theory]
     [MemberData(nameof(AutoScale_ClearancePercentage_Data))]
     public void AutoScale_ClearancePercentage(decimal[] dataPoints, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
-        var subject = new PlotArea() {
-            AutoScaleSettings = {
-                IsEnabled = true,
-                IncludeZero = false,
-                ClearancePercentage = 5M,
-                RequestedGridLineCount = 5
-            }
-        };
+        var subject = new XYChartBuilder()
+            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 5M, requestedGridLineCount: 5)
+            .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
 
@@ -183,30 +155,23 @@ public class PlotAreaTests {
 
     [Fact]
     public void AutoScale_Disabled() {
-        var subject = new PlotArea() {
-            AutoScaleSettings = {
-                IsEnabled = false,
-                IncludeZero = false,
-                ClearancePercentage = 0M,
-                RequestedGridLineCount = 9
-            }
-        };
+        var subject = new XYChartBuilder()
+            .WithAutoScaleSettings(isEnabled: false)
+            .Chart.PlotArea;
 
         subject.AutoScale(new[] { 0.006M, 0.044M });
 
-        Assert.Equal(PlotArea.DefaultMin, subject.Min);
-        Assert.Equal(PlotArea.DefaultMax, subject.Max);
-        Assert.Equal(PlotArea.DefaultGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(PlotAreaMin, subject.Min);
+        Assert.Equal(PlotAreaMax, subject.Max);
+        Assert.Equal(PlotAreaGridLineInterval, subject.GridLineInterval);
     }
 
     [Theory]
     [MemberData(nameof(GetGridLineDataPoints_Data))]
     public void GetGridLineDataPoints(decimal min, decimal max, decimal gridLineInterval, params decimal[] expectedDataPoints) {
-        var subject = new PlotArea() {
-            Min = min,
-            Max = max,
-            GridLineInterval = gridLineInterval
-        };
+        var subject = new XYChartBuilder()
+            .WithPlotArea(min, max, gridLineInterval)
+            .Chart.PlotArea;
 
         Assert.Equal(expectedDataPoints, subject.GetGridLineDataPoints());
     }

@@ -6,52 +6,35 @@ using VDT.Core.Blazor.XYChart.Shapes;
 namespace VDT.Core.Blazor.XYChart;
 
 public class AreaLayer : LayerBase {
-    public static LineGapMode DefaultLineGapMode { get; set; } = LineGapMode.Skip;
-
     public override StackMode StackMode => StackMode.Single;
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.EdgeToEdge;
-
-    [Parameter] public LineGapMode LineGapMode { get; set; } = DefaultLineGapMode;
+    public override bool NullAsZero => true;
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => parameters.HasParameterChanged(IsStacked)
-        || parameters.HasParameterChanged(LineGapMode);
+        => parameters.HasParameterChanged(IsStacked);
 
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
-        var dataPointsByDataSeries = GetCanvasDataPoints().ToLookup(dataSeriesPoint => dataSeriesPoint.DataSeriesIndex);
-        var zeroY = Chart.MapDataPointToCanvas(0M);
+        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
+            if (canvasDataSeries.DataPoints.Any()) {
+                var commands = new List<string>() {
+                    PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[0].X, canvasDataSeries.DataPoints[0].Y)
+                };
 
-        for (var dataSeriesIndex = 0; dataSeriesIndex < DataSeries.Count; dataSeriesIndex++) {
-            var dataPoints = dataPointsByDataSeries[dataSeriesIndex].OrderBy(dataPoint => dataPoint.Index).ToList();
-
-            if (dataPoints.Any()) {
-                var commands = new List<string>();
-
-                for (var i = 0; i < dataPoints.Count; i++) {
-                    if (i == 0) {
-                        commands.Add(PathCommandFactory.MoveTo(dataPoints[i].X, zeroY));
-                        commands.Add(PathCommandFactory.LineTo(dataPoints[i].X, dataPoints[i].Y));
-                    }
-                    else if (dataPoints[i - 1].Index < dataPoints[i].Index - 1 && LineGapMode == LineGapMode.Skip) {
-                        commands.Add(PathCommandFactory.LineTo(dataPoints[i - 1].X, zeroY));
-                        commands.Add(PathCommandFactory.ClosePath);
-
-                        commands.Add(PathCommandFactory.MoveTo(dataPoints[i].X, zeroY));
-                        commands.Add(PathCommandFactory.LineTo(dataPoints[i].X, dataPoints[i].Y));
-                    }
-                    else {
-                        commands.Add(PathCommandFactory.LineTo(dataPoints[i].X, dataPoints[i].Y));
-                    }
+                foreach (var canvasDataPoint in canvasDataSeries.DataPoints.Skip(1)) {
+                    commands.Add(PathCommandFactory.LineTo(canvasDataPoint.X, canvasDataPoint.Y));
                 }
 
-                commands.Add(PathCommandFactory.LineTo(dataPoints[^1].X, zeroY));
+                foreach (var canvasDataPoint in canvasDataSeries.DataPoints.Reverse()) {
+                    commands.Add(PathCommandFactory.LineTo(canvasDataPoint.X, canvasDataPoint.Y + canvasDataPoint.Height));
+                }
+
                 commands.Add(PathCommandFactory.ClosePath);
 
                 yield return new AreaDataShape(
                     commands,
-                    DataSeries[dataSeriesIndex].GetColor(),
-                    DataSeries[dataSeriesIndex].CssClass,
-                    dataSeriesIndex
+                    canvasDataSeries.Color,
+                    canvasDataSeries.CssClass,
+                    canvasDataSeries.Index
                 );
             }
         }

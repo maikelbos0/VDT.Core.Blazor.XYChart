@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
+using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class LineLayerTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, LineGapMode lineGapMode, bool expectedResult) {
+    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(LineLayer.IsStacked), isStacked },
             { nameof(LineLayer.ShowDataMarkers), showDataMarkers },
             { nameof(LineLayer.DataMarkerSize), dataMarkerSize },
             { nameof(LineLayer.DataMarkerType), dataMarkerType },
-            { nameof(LineLayer.ShowDataLines), showDataLines },
-            { nameof(LineLayer.LineGapMode), lineGapMode }
+            { nameof(LineLayer.ShowDataLines), showDataLines }
         });
 
         var subject = new LineLayer {
@@ -24,62 +24,42 @@ public class LineLayerTests {
             ShowDataMarkers = true,
             DataMarkerSize = 10M,
             DataMarkerType = DefaultDataMarkerTypes.Square,
-            ShowDataLines = true,
-            LineGapMode = LineGapMode.Skip
+            ShowDataLines = true
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, LineGapMode, bool> HaveParametersChanged_Data() => new() {
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, false },
-        { true, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
-        { false, false, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
-        { false, true, 15M, DefaultDataMarkerTypes.Square, true, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Round, true, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, false, LineGapMode.Skip, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, LineGapMode.Join, true },
+    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, bool> HaveParametersChanged_Data() => new() {
+        { false, true, 10M, DefaultDataMarkerTypes.Square, true, false },
+        { true, true, 10M, DefaultDataMarkerTypes.Square, true, true },
+        { false, false, 10M, DefaultDataMarkerTypes.Square, true, true },
+        { false, true, 15M, DefaultDataMarkerTypes.Square, true, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Round, true, true },
+        { false, true, 10M, DefaultDataMarkerTypes.Square, false, true }
     };
 
     [Theory]
     [MemberData(nameof(GetUnstackedDataSeriesShapes_Markers_Data))]
     public void GetUnstackedDataSeriesShapes_Markers(int index, decimal dataPoint, decimal expectedX, decimal expectedY, decimal expectedSize) {
-        var subject = new LineLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 1000,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = -10M,
-                     Max = 40M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz", "Quux" },
-                DataPointSpacingMode = DataPointSpacingMode.Center
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 10M, 15M },
-                    CssClass = "example-data"
-                },
-                new() {
-                    Color = "red",
-                    DataPoints = { null, null, null, null, 15M },
-                    CssClass = "example-data"
-                }
-            },
-            IsStacked = false,
-            ShowDataMarkers = true,
-            DataMarkerSize = 20M,
-            DataMarkerType = DefaultDataMarkerTypes.Round
-        };
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
+            .WithLayer(new LineLayer() {
+                IsStacked = false,
+                ShowDataMarkers = true,
+                DataMarkerSize = 20M,
+                DataMarkerType = DefaultDataMarkerTypes.Round
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -60M, -60M, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "red",
+                DataPoints = { null, null, null, 150M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
 
         subject.DataSeries[1].DataPoints[index] = dataPoint;
 
@@ -95,59 +75,36 @@ public class LineLayerTests {
     }
 
     public static TheoryData<int, decimal, decimal, decimal, decimal> GetUnstackedDataSeriesShapes_Markers_Data() {
-        var plotAreaX = 25 + 100;
-        var plotAreaY = 25;
-        var dataPointWidth = (1000 - 25 - 25 - 100) / 4M;
-        var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaMax = 40M;
-        var plotAreaRange = plotAreaMax - -10M;
+        var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, -5M, plotAreaX + 0.5M * dataPointWidth, plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight, 20M },
-            { 1, 5M, plotAreaX + 1.5M * dataPointWidth, plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight, 20M },
-            { 3, 35M, plotAreaX + 3.5M * dataPointWidth, plotAreaY + (plotAreaMax - 35M) / plotAreaRange * plotAreaHeight, 20M },
+            { 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 30M, PlotAreaX + 1.5M * dataPointWidth, PlotAreaY  + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 2, 210M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY  + (PlotAreaMax - 210M) / PlotAreaRange * PlotAreaHeight, 20M },
         };
     }
 
     [Theory]
     [MemberData(nameof(GetStackedDataSeriesShapes_Markers_Data))]
     public void GetStackedDataSeriesShapes_Markers(int dataSeriesIndex, int index, decimal dataPoint, decimal expectedX, decimal expectedY, decimal expectedSize) {
-        var subject = new LineLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 1000,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = -20M,
-                     Max = 30M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz", "Quux" },
-                DataPointSpacingMode = DataPointSpacingMode.Center
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 10M, 15M },
-                    CssClass = "example-data"
-                },
-                new() {
-                    Color = "red",
-                    DataPoints = { null, null, null, null, 15M },
-                    CssClass = "example-data"
-                }
-            },
-            IsStacked = true,
-            ShowDataMarkers = true,
-            DataMarkerSize = 20M,
-            DataMarkerType = DefaultDataMarkerTypes.Round
-        };
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
+            .WithLayer(new LineLayer() {
+                IsStacked = true,
+                ShowDataMarkers = true,
+                DataMarkerSize = 20M,
+                DataMarkerType = DefaultDataMarkerTypes.Round
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -60M, -60M, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "red",
+                DataPoints = { null, null, null, 150M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
 
         subject.DataSeries[dataSeriesIndex].DataPoints[index] = dataPoint;
 
@@ -163,38 +120,30 @@ public class LineLayerTests {
     }
 
     public static TheoryData<int, int, decimal, decimal, decimal, decimal> GetStackedDataSeriesShapes_Markers_Data() {
-        var plotAreaX = 25 + 100;
-        var plotAreaY = 25;
-        var dataPointWidth = (1000 - 25 - 25 - 100) / 4M;
-        var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaMax = 30M;
-        var plotAreaRange = plotAreaMax - -20M;
+        var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, 0, -5M, plotAreaX + 0.5M * dataPointWidth, plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight, 20M },
-            { 0, 2, 5M, plotAreaX + 2.5M * dataPointWidth, plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight, 20M },
-            { 1, 0, -5M, plotAreaX + 0.5M * dataPointWidth, plotAreaY + (plotAreaMax + 15M) / plotAreaRange * plotAreaHeight, 20M },
-            { 1, 0, 5M, plotAreaX + 0.5M * dataPointWidth, plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight, 20M },
-            { 1, 2, -5M, plotAreaX + 2.5M * dataPointWidth, plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight, 20M },
-            { 1, 2, 5M, plotAreaX + 2.5M * dataPointWidth, plotAreaY + (plotAreaMax - 15M) / plotAreaRange * plotAreaHeight, 20M }
+            { 0, 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 0, 2, 30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 0, 30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 2, -30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 1, 2, 30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 90M) / PlotAreaRange * PlotAreaHeight, 20M }
         };
     }
 
     [Fact]
     public void GetStackedDataSeriesShapes_HideDataMarkers() {
-        var subject = new LineLayer() {
-            Chart = new() {
-                Labels = { "Foo", "Bar" }
-            },
-            DataSeries = {
-                new() {
-                    Color = "red",
-                    DataPoints = { 15M }
-                }
-            },
-            ShowDataMarkers = false,
-            DataMarkerType = DefaultDataMarkerTypes.Round
-        };
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
+            .WithLayer(new LineLayer() {
+                ShowDataMarkers = false
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -60M, -60M, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
 
         var result = subject.GetDataSeriesShapes();
 
@@ -204,41 +153,22 @@ public class LineLayerTests {
     [Theory]
     [MemberData(nameof(GetUnstackedDataSeriesShapes_Lines_Data))]
     public void GetUnstackedDataSeriesShapes_Lines(int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {
-        var subject = new LineLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 1000,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = -10M,
-                     Max = 40M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz", "Quux" },
-                DataPointSpacingMode = DataPointSpacingMode.Center
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 10M, 15M },
-                    CssClass = "example-data"
-                },
-                new() {
-                    Color = "red",
-                    DataPoints = { null, null, null, null, 15M },
-                    CssClass = "example-data"
-                }
-            },
-            IsStacked = false,
-            ShowDataLines = true,
-            LineGapMode = LineGapMode.Join
-        };
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
+            .WithLayer(new LineLayer() {
+                IsStacked = false,
+                ShowDataLines = true
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -60M, -60M, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "red",
+                DataPoints = { null, null, null, 150M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
 
         subject.DataSeries[1].DataPoints[startIndex] = startDataPoint;
         subject.DataSeries[1].DataPoints[endIndex] = endDataPoint;
@@ -247,64 +177,45 @@ public class LineLayerTests {
 
         var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[1]"));
 
-        Assert.Equal(expectedPath, shape.Path);
+        Assert.Equal(expectedPath, Path.TrimDecimals(shape.Path));
         Assert.Equal("red", shape.Color);
         Assert.Equal("data line-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_Lines_Data() {
-        var plotAreaX = 25 + 100;
-        var plotAreaY = 25;
-        var dataPointWidth = (1000 - 25 - 25 - 100) / 4M;
-        var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaMax = 40M;
-        var plotAreaRange = plotAreaMax - -10M;
+        var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, 5M, 1, -5M, FormattableString.Invariant($"M {plotAreaX + 0.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 1.5M * dataPointWidth} {plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight}") },
-            { 1, -5M, 2, 5M, FormattableString.Invariant($"M {plotAreaX + 1.5M * dataPointWidth} {plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 2.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight}") },
-            { 1, 10M, 3, 35M, FormattableString.Invariant($"M {plotAreaX + 1.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 10M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 3.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 35M) / plotAreaRange * plotAreaHeight}") },
+            { 0, 30M, 1, -30M, Path.Create(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}"
+            ) },
+            { 1, -30M, 2, 30M, Path.Create(
+                $"M {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}"
+            ) }
         };
     }
 
     [Theory]
     [MemberData(nameof(GetStackedDataSeriesShapes_Lines_Data))]
     public void GetStackedDataSeriesShapes_Lines(int dataSeriesIndex, int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {
-        var subject = new LineLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 1000,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = -20M,
-                     Max = 30M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz", "Quux" },
-                DataPointSpacingMode = DataPointSpacingMode.Center
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { -10M, -10M, 10M, 10M, 15M },
-                    CssClass = "example-data"
-                },
-                new() {
-                    Color = "red",
-                    DataPoints = { null, null, null, null, 15M },
-                    CssClass = "example-data"
-                }
-            },
-            IsStacked = true,
-            ShowDataLines = true,
-            LineGapMode = LineGapMode.Join
-        };
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
+            .WithLayer(new LineLayer() {
+                IsStacked = true,
+                ShowDataLines = true
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -60M, -60M, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "red",
+                DataPoints = { null, null, null, 150M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
 
         subject.DataSeries[dataSeriesIndex].DataPoints[startIndex] = startDataPoint;
         subject.DataSeries[dataSeriesIndex].DataPoints[endIndex] = endDataPoint;
@@ -313,42 +224,55 @@ public class LineLayerTests {
 
         var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[{dataSeriesIndex}]"));
 
-        Assert.Equal(expectedPath, shape.Path);
+        Assert.Equal(expectedPath, Path.TrimDecimals(shape.Path));
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
         Assert.Equal("data line-data example-data", shape.CssClass);
     }
 
     public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_Lines_Data() {
-        var plotAreaX = 25 + 100;
-        var plotAreaY = 25;
-        var dataPointWidth = (1000 - 25 - 25 - 100) / 4M;
-        var plotAreaHeight = 500 - 25 - 25 - 50;
-        var plotAreaMax = 30M;
-        var plotAreaRange = plotAreaMax - -20M;
+        var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { 0, 0, 5M, 1, 5M, FormattableString.Invariant($"M {plotAreaX + 0.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 1.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight} L 656.25 185.0 L 868.75 185.0") },
-            { 1, 0, 5M, 1, -5M, FormattableString.Invariant($"M {plotAreaX + 0.5M * dataPointWidth} {plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 1.5M * dataPointWidth} {plotAreaY + (plotAreaMax + 15M) / plotAreaRange * plotAreaHeight}") },
-            { 1, 0, -5M, 1, 5M, FormattableString.Invariant($"M {plotAreaX + 0.5M * dataPointWidth} {plotAreaY + (plotAreaMax + 15M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 1.5M * dataPointWidth} {plotAreaY + (plotAreaMax + 5M) / plotAreaRange * plotAreaHeight}") },
-            { 1, 2, 5M, 3, -5M, FormattableString.Invariant($"M {plotAreaX + 2.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 15M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 3.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight}") },
-            { 1, 2, -5M, 3, 5M, FormattableString.Invariant($"M {plotAreaX + 2.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 5M) / plotAreaRange * plotAreaHeight} L {plotAreaX + 3.5M * dataPointWidth} {plotAreaY + (plotAreaMax - 15M) / plotAreaRange * plotAreaHeight}") },
+            { 0, 0, 30M, 1, 30M, Path.Create(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
+            ) },
+            { 1, 0, 30M, 1, -30M, Path.Create(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
+            ) },
+            { 1, 0, -30M, 1, 30M, Path.Create(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
+            ) },
+            { 1, 1, 30M, 2, -30M, Path.Create(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 60M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}"
+            ) },
+            { 1, 1, -30M, 2, 30M, Path.Create(
+                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 60M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
+                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 90M) / PlotAreaRange * PlotAreaHeight}"
+            ) },
         };
     }
 
     [Fact]
     public void GetStackedDataSeriesShapes_HideDataLines() {
-        var subject = new LineLayer() {
-            Chart = new() {
-                Labels = { "Foo", "Bar" }
-            },
-            DataSeries = {
-                new() {
-                    Color = "red",
-                    DataPoints = { 15M, 15M }
-                }
-            },
-            ShowDataLines = false
-        };
+        var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
+            .WithLayer(new LineLayer() {
+                ShowDataLines = false
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -60M, -60M, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
 
         var result = subject.GetDataSeriesShapes();
 
@@ -356,56 +280,16 @@ public class LineLayerTests {
     }
 
     [Theory]
-    [InlineData(LineGapMode.Skip, "M 210.0 325.00 L 380.0 325.00 M 720.0 325.00 L 890.0 325.00")]
-    [InlineData(LineGapMode.Join, "M 210.0 325.00 L 380.0 325.00 L 720.0 325.00 L 890.0 325.00")]
-    public void GetDataSeriesShapes_LineGapMode(LineGapMode lineGapMode, string expectedPath) {
-        var subject = new LineLayer() {
-            Chart = new() {
-                Canvas = {
-                    Width = 1000,
-                    Height = 500,
-                    Padding = 25,
-                    XAxisLabelHeight = 50,
-                    XAxisLabelClearance = 5,
-                    YAxisLabelWidth = 100,
-                    YAxisLabelClearance = 10
-                },
-                PlotArea = {
-                     Min = 00M,
-                     Max = 40M,
-                     GridLineInterval = 10M
-                },
-                Labels = { "Foo", "Bar", "Baz", "Quux", "Quuux" },
-                DataPointSpacingMode = DataPointSpacingMode.Center
-            },
-            DataSeries = {
-                new() {
-                    Color = "blue",
-                    DataPoints = { 10M, 10M, null, 10M, 10M }
-                }
-            },
-            IsStacked = true,
-            ShowDataLines = true,
-            LineGapMode = lineGapMode
-        };
-
-        var result = subject.GetDataSeriesShapes();
-
-        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[0]"));
-
-        Assert.Equal(expectedPath, shape.Path);
-    }
-
-    [Theory]
     [InlineData(false)]
     [InlineData(true)]
     public void GetDataSeriesShapes_Empty(bool isStacked) {
-        var subject = new LineLayer() {
-            Chart = new(),
-            IsStacked = isStacked,
-            ShowDataLines = true,
-            ShowDataMarkers = true
-        };
+        var subject = new XYChartBuilder()
+            .WithLayer(new LineLayer() {
+                IsStacked = isStacked,
+                ShowDataLines = true,
+                ShowDataMarkers = true
+            })
+            .Chart.Layers.Single();
 
         Assert.Empty(subject.GetDataSeriesShapes());
     }
