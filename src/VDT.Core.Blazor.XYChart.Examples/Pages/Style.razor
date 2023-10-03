@@ -62,9 +62,7 @@
     set on the various chart objects themselves. For more information, see the menu items for the various layer types.
 </p>
 
-<h2 class="mt-3">Chart</h2>
-
-<div>
+<div class="d-inline-block">
     <XYChart @ref="Chart" Labels="ExampleData.Labels">
         @if (Chart != null) {
             foreach (var coordinates in GetCoordinates()) {
@@ -103,61 +101,11 @@
             }
         </LineLayer>
     </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
 </div>
-
-<h2 class="mt-3">Bar source data</h2>
-
-<table class="table">
-    <tr>
-        @foreach (var label in ExampleData.Labels) {
-            <th>@label</th>
-        }
-    </tr>
-
-    @foreach (var dataSeries in ExampleData.BarData) {
-        <tr>
-            @foreach (var dataPoint in dataSeries.DataPoints) {
-                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
-            }
-        </tr>
-    }
-</table>
-
-<h2 class="mt-3">Line source data</h2>
-
-<table class="table">
-    <tr>
-        @foreach (var label in ExampleData.Labels) {
-            <th>@label</th>
-        }
-    </tr>
-
-    @foreach (var dataSeries in ExampleData.LineData) {
-        <tr>
-            @foreach (var dataPoint in dataSeries.DataPoints) {
-                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
-            }
-        </tr>
-    }
-</table>
-
-<h2 class="mt-3">Area source data</h2>
-
-<table class="table">
-    <tr>
-        @foreach (var label in ExampleData.Labels) {
-            <th>@label</th>
-        }
-    </tr>
-
-    @foreach (var dataSeries in ExampleData.AreaData) {
-        <tr>
-            @foreach (var dataPoint in dataSeries.DataPoints) {
-                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
-            }
-        </tr>
-    }
-</table>
 
 @code {
     private XYChart? Chart { get; set; }

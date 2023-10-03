@@ -8,8 +8,6 @@
     chart itself, and while each layer type has a default spacing mode, you can override this on the chart level.
 </p>
 
-<h2 class="mt-3">Parameters</h2>
-
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label">Layers</label>
@@ -39,89 +37,40 @@
     </div>
 </div>
 
-<h2 class="mt-3">Chart</h2>
+<div class="d-inline-block">
+    <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" }.Take(LabelCount).ToList())" DataPointSpacingMode="DataPointSpacingMode">
+        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
 
-<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" }.Take(LabelCount).ToList())" DataPointSpacingMode="DataPointSpacingMode">
-    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-
-    @if (LayerTypes.Contains(ChartLayerType.Area)) {
-        <AreaLayer IsStacked="IsStacked">
-            @foreach (var data in ExampleData.AreaData) {
-                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
-            }
-        </AreaLayer>
-    }
-
-    @if (LayerTypes.Contains(ChartLayerType.Bar)) {
-        <BarLayer IsStacked="IsStacked">
-            @foreach (var data in ExampleData.BarData) {
-                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
-            }
-        </BarLayer>
-    }
-
-    @if (LayerTypes.Contains(ChartLayerType.Line)) {
-        <LineLayer IsStacked="IsStacked">
-            @foreach (var data in ExampleData.LineData) {
-                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
-            }
-        </LineLayer>
-    }
-</XYChart>
-
-<h2 class="mt-3">Bar source data</h2>
-
-<table class="table">
-    <tr>
-        @foreach (var label in ExampleData.Labels) {
-            <th>@label</th>
+        @if (LayerTypes.Contains(ChartLayerType.Area)) {
+            <AreaLayer IsStacked="IsStacked">
+                @foreach (var data in ExampleData.AreaData) {
+                    <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+                }
+            </AreaLayer>
         }
-    </tr>
 
-    @foreach (var dataSeries in ExampleData.BarData) {
-        <tr>
-            @foreach (var dataPoint in dataSeries.DataPoints) {
-                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
-            }
-        </tr>
-    }
-</table>
-
-<h2 class="mt-3">Line source data</h2>
-
-<table class="table">
-    <tr>
-        @foreach (var label in ExampleData.Labels) {
-            <th>@label</th>
+        @if (LayerTypes.Contains(ChartLayerType.Bar)) {
+            <BarLayer IsStacked="IsStacked">
+                @foreach (var data in ExampleData.BarData) {
+                    <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+                }
+            </BarLayer>
         }
-    </tr>
 
-    @foreach (var dataSeries in ExampleData.LineData) {
-        <tr>
-            @foreach (var dataPoint in dataSeries.DataPoints) {
-                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
-            }
-        </tr>
-    }
-</table>
-
-<h2 class="mt-3">Area source data</h2>
-
-<table class="table">
-    <tr>
-        @foreach (var label in ExampleData.Labels) {
-            <th>@label</th>
+        @if (LayerTypes.Contains(ChartLayerType.Line)) {
+            <LineLayer IsStacked="IsStacked">
+                @foreach (var data in ExampleData.LineData) {
+                    <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+                }
+            </LineLayer>
         }
-    </tr>
+    </XYChart>
 
-    @foreach (var dataSeries in ExampleData.AreaData) {
-        <tr>
-            @foreach (var dataPoint in dataSeries.DataPoints) {
-                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
-            }
-        </tr>
-    }
-</table>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
 
 @code {
     private List<ChartLayerType> LayerTypes { get; set; } = new(Enum.GetValues<ChartLayerType>());

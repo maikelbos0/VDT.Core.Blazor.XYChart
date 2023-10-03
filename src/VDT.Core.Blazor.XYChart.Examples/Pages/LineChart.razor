@@ -37,8 +37,6 @@
     CSS class and aforementioned indexes.
 </p>
 
-<h2 class="mt-3">Parameters</h2>
-
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="isStacked">Stack mode</label>
@@ -79,34 +77,20 @@
     </div>
 </div>
 
-<h2 class="mt-3">Chart</h2>
-
-<XYChart Labels="ExampleData.Labels">
-    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-    <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
-        @foreach (var data in ExampleData.LineData) {
-            <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
-        }
-    </LineLayer>
-</XYChart>
-
-<h2 class="mt-3">Source data</h2>
-
-<table class="table">
-    <tr>
-        @foreach (var label in ExampleData.Labels) {
-            <th>@label</th>
-        }
-    </tr>
-
-    @foreach (var dataSeries in ExampleData.LineData) {
-        <tr>
-            @foreach (var dataPoint in dataSeries.DataPoints) {
-                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
+<div class="d-inline-block">
+    <XYChart Labels="ExampleData.Labels">
+        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
+        <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
             }
-        </tr>
-    }
-</table>
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
 
 @code {
     private class CrossDataMarkerShape : ShapeBase {
@@ -149,8 +133,7 @@
     private bool ShowDataLines { get; set; } = true;
 
     private void SetDataMarkerType(ChangeEventArgs args) {
-        DataMarkerType = args.Value?.ToString() switch
-        {
+        DataMarkerType = args.Value?.ToString() switch {
             "round" => DefaultDataMarkerTypes.Round,
             "square" => DefaultDataMarkerTypes.Square,
             "cross" => CrossDataMarkerShape.Delegate,
