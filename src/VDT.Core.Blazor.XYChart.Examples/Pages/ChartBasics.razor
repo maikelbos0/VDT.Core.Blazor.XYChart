@@ -8,6 +8,8 @@
     chart itself, and while each layer type has a default spacing mode, you can override this on the chart level.
 </p>
 
+<h2 class="mt-3">Parameters</h2>
+
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label">Layers</label>
@@ -37,30 +39,89 @@
     </div>
 </div>
 
+<h2 class="mt-3">Chart</h2>
+
 <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" }.Take(LabelCount).ToList())" DataPointSpacingMode="DataPointSpacingMode">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
 
     @if (LayerTypes.Contains(ChartLayerType.Area)) {
         <AreaLayer IsStacked="IsStacked">
-            <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
-            <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" />
+            @foreach (var dataSeries in ExampleData.AreaDataSeries) {
+                <DataSeries DataPoints="dataSeries" />
+            }
         </AreaLayer>
     }
 
     @if (LayerTypes.Contains(ChartLayerType.Bar)) {
         <BarLayer IsStacked="IsStacked">
-            <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
-            <DataSeries DataPoints="new List<decimal?> { 21000, -12000, 15500, -4000, 3500 }" Color="#00cc66" />
+            @foreach (var dataSeries in ExampleData.BarDataSeries) {
+                <DataSeries DataPoints="dataSeries" />
+            }
         </BarLayer>
     }
 
     @if (LayerTypes.Contains(ChartLayerType.Line)) {
         <LineLayer IsStacked="IsStacked">
-            <DataSeries DataPoints="new List<decimal?> { 12500, 9500, 20500, 14500, 11000 }" Color="#2274a5" />
-            <DataSeries DataPoints="new List<decimal?> { 6500, -2500, 4000, 2000 }" Color="#d90368" />
+            @foreach (var dataSeries in ExampleData.LineDataSeries) {
+                <DataSeries DataPoints="dataSeries" />
+            }
         </LineLayer>
     }
 </XYChart>
+
+<h2 class="mt-3">Bar source data</h2>
+
+<table class="table">
+    <tr>
+        @foreach (var label in ExampleData.Labels) {
+            <th>@label</th>
+        }
+    </tr>
+
+    @foreach (var dataSeries in ExampleData.BarDataSeries) {
+        <tr>
+            @foreach (var dataPoint in dataSeries) {
+                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
+            }
+        </tr>
+    }
+</table>
+
+<h2 class="mt-3">Line source data</h2>
+
+<table class="table">
+    <tr>
+        @foreach (var label in ExampleData.Labels) {
+            <th>@label</th>
+        }
+    </tr>
+
+    @foreach (var dataSeries in ExampleData.LineDataSeries) {
+        <tr>
+            @foreach (var dataPoint in dataSeries) {
+                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
+            }
+        </tr>
+    }
+</table>
+
+<h2 class="mt-3">Area source data</h2>
+
+<table class="table">
+    <tr>
+        @foreach (var label in ExampleData.Labels) {
+            <th>@label</th>
+        }
+    </tr>
+
+    @foreach (var dataSeries in ExampleData.AreaDataSeries) {
+        <tr>
+            @foreach (var dataPoint in dataSeries) {
+                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
+            }
+        </tr>
+    }
+</table>
 
 @code {
     private List<ChartLayerType> LayerTypes { get; set; } = new(Enum.GetValues<ChartLayerType>());
