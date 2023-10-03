@@ -44,10 +44,10 @@
 
 <h2 class="mt-3">Chart</h2>
 
-<XYChart Labels="Labels">
+<XYChart Labels="ExampleData.Labels">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
     <BarLayer IsStacked="IsStacked" ClearancePercentage="ClearancePercentage" GapPercentage="GapPercentage">
-        @foreach (var dataSeries in DataSeries) {
+        @foreach (var dataSeries in ExampleData.BarDataSeries) {
             <DataSeries DataPoints="dataSeries" />
         }
     </BarLayer>
@@ -57,12 +57,12 @@
 
 <table class="table">
     <tr>
-        @foreach (var label in Labels) {
+        @foreach (var label in ExampleData.Labels) {
             <th>@label</th>
         }
     </tr>
 
-    @foreach (var dataSeries in DataSeries) {
+    @foreach (var dataSeries in ExampleData.BarDataSeries) {
         <tr>
             @foreach (var dataPoint in dataSeries) {
                 <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
@@ -75,9 +75,4 @@
     private bool IsStacked { get; set; } = false;
     private decimal ClearancePercentage { get; set; } = 10M;
     private decimal GapPercentage { get; set; } = 5M;
-    private List<string> Labels { get; set; } = new() { "Foo", "Bar", "Baz", "Quux", "Quuux" };
-    private List<List<decimal?>> DataSeries { get; set; } = new() {
-        new() { 11000, 19000, 31500, -2500, 9500 },
-        new() { 21000, -12000, 15500, -4000, 3500 }
-    };
 }

@@ -81,10 +81,10 @@
 
 <h2 class="mt-3">Chart</h2>
 
-<XYChart Labels="Labels">
+<XYChart Labels="ExampleData.Labels">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
     <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
-        @foreach (var dataSeries in DataSeries) {
+        @foreach (var dataSeries in ExampleData.LineDataSeries) {
             <DataSeries DataPoints="dataSeries" />
         }
     </LineLayer>
@@ -94,12 +94,12 @@
 
 <table class="table">
     <tr>
-        @foreach (var label in Labels) {
+        @foreach (var label in ExampleData.Labels) {
             <th>@label</th>
         }
     </tr>
 
-    @foreach (var dataSeries in DataSeries) {
+    @foreach (var dataSeries in ExampleData.LineDataSeries) {
         <tr>
             @foreach (var dataPoint in dataSeries) {
                 <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
@@ -147,11 +147,6 @@
     private decimal DataMarkerSize { get; set; } = 10M;
     private DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
     private bool ShowDataLines { get; set; } = true;
-    private List<string> Labels { get; set; } = new() { "Foo", "Bar", "Baz", "Quux", "Quuux" };
-    private List<List<decimal?>> DataSeries { get; set; } = new() {
-        new() { 12500, 9500, 20500, 14500, 11000 },
-        new() { 6500, -2500, null, 4000, 2000 }
-    };
 
     private void SetDataMarkerType(ChangeEventArgs args) {
         DataMarkerType = args.Value?.ToString() switch
