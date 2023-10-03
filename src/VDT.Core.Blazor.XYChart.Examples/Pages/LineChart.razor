@@ -84,8 +84,8 @@
 <XYChart Labels="ExampleData.Labels">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
     <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
-        @foreach (var dataSeries in ExampleData.LineDataSeries) {
-            <DataSeries DataPoints="dataSeries" />
+        @foreach (var data in ExampleData.LineData) {
+            <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
         }
     </LineLayer>
 </XYChart>
@@ -99,9 +99,9 @@
         }
     </tr>
 
-    @foreach (var dataSeries in ExampleData.LineDataSeries) {
+    @foreach (var dataSeries in ExampleData.LineData) {
         <tr>
-            @foreach (var dataPoint in dataSeries) {
+            @foreach (var dataPoint in dataSeries.DataPoints) {
                 <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
             }
         </tr>

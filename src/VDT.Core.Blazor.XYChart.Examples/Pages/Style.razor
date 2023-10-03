@@ -76,16 +76,16 @@
         <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
         <PlotArea Multiplier="1000" />
         <AreaLayer>
-            @foreach (var dataSeries in ExampleData.AreaDataSeries) {
-                <DataSeries DataPoints="dataSeries" />
+            @foreach (var data in ExampleData.AreaData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
             }
         </AreaLayer>
         <BarLayer>
             @{
                 var emphasized = false;
 
-                foreach (var dataSeries in ExampleData.BarDataSeries) {
-                    <DataSeries DataPoints="dataSeries" CssClass="@(emphasized ? "emphasized" : "")" />
+                foreach (var data in ExampleData.BarData) {
+                    <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" CssClass="@(emphasized ? "emphasized" : "")" />
 
                     emphasized = !emphasized;
                 }
@@ -95,8 +95,8 @@
             @{
                 var emphasized = false;
 
-                foreach (var dataSeries in ExampleData.LineDataSeries) {
-                    <DataSeries DataPoints="dataSeries" CssClass="@(emphasized ? "emphasized" : "")" />
+                foreach (var data in ExampleData.LineData) {
+                    <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" CssClass="@(emphasized ? "emphasized" : "")" />
 
                     emphasized = !emphasized;
                 }
@@ -114,9 +114,9 @@
         }
     </tr>
 
-    @foreach (var dataSeries in ExampleData.BarDataSeries) {
+    @foreach (var dataSeries in ExampleData.BarData) {
         <tr>
-            @foreach (var dataPoint in dataSeries) {
+            @foreach (var dataPoint in dataSeries.DataPoints) {
                 <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
             }
         </tr>
@@ -132,9 +132,9 @@
         }
     </tr>
 
-    @foreach (var dataSeries in ExampleData.LineDataSeries) {
+    @foreach (var dataSeries in ExampleData.LineData) {
         <tr>
-            @foreach (var dataPoint in dataSeries) {
+            @foreach (var dataPoint in dataSeries.DataPoints) {
                 <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
             }
         </tr>
@@ -150,9 +150,9 @@
         }
     </tr>
 
-    @foreach (var dataSeries in ExampleData.AreaDataSeries) {
+    @foreach (var dataSeries in ExampleData.AreaData) {
         <tr>
-            @foreach (var dataPoint in dataSeries) {
+            @foreach (var dataPoint in dataSeries.DataPoints) {
                 <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
             }
         </tr>

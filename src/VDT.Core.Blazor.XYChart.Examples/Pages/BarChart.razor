@@ -47,8 +47,9 @@
 <XYChart Labels="ExampleData.Labels">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
     <BarLayer IsStacked="IsStacked" ClearancePercentage="ClearancePercentage" GapPercentage="GapPercentage">
-        @foreach (var dataSeries in ExampleData.BarDataSeries) {
-            <DataSeries DataPoints="dataSeries" />
+
+        @foreach (var data in ExampleData.BarData) {
+            <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
         }
     </BarLayer>
 </XYChart>
@@ -62,9 +63,9 @@
         }
     </tr>
 
-    @foreach (var dataSeries in ExampleData.BarDataSeries) {
+    @foreach (var dataSeries in ExampleData.BarData) {
         <tr>
-            @foreach (var dataPoint in dataSeries) {
+            @foreach (var dataPoint in dataSeries.DataPoints) {
                 <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
             }
         </tr>

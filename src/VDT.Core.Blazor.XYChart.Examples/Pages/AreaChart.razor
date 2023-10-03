@@ -3,7 +3,7 @@
 <h1>Area chart</h1>
 
 <p>
-    An area chart is an XY chart with an area layer, in which the data is displayed as filled shapes connecting the points at positions corresponding to the 
+    An area chart is an XY chart with an area layer, in which the data is displayed as filled shapes connecting the points at positions corresponding to the
     data values. As can be seen in <a href="/ChartBasics">chart basics</a>, an area layer can be either stacked or unstacked. A stacked area layer stacks
     positive and negative values together to more clearly express the relationship between data layers. For area charts, there are currently not additional
     customization options.
@@ -26,8 +26,8 @@
 <XYChart Labels="ExampleData.Labels">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
     <AreaLayer IsStacked="IsStacked">
-        @foreach (var dataSeries in ExampleData.AreaDataSeries) {
-            <DataSeries DataPoints="dataSeries" />
+        @foreach (var data in ExampleData.AreaData) {
+            <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
         }
     </AreaLayer>
 </XYChart>
@@ -41,9 +41,9 @@
         }
     </tr>
 
-    @foreach (var dataSeries in ExampleData.AreaDataSeries) {
+    @foreach (var dataSeries in ExampleData.AreaData) {
         <tr>
-            @foreach (var dataPoint in dataSeries) {
+            @foreach (var dataPoint in dataSeries.DataPoints) {
                 <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
             }
         </tr>
