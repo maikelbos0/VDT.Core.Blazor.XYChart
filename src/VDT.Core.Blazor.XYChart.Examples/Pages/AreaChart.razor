@@ -9,6 +9,8 @@
     customization options.
 </p>
 
+<h2 class="mt-3">Parameters</h2>
+
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="isStacked">Stack mode</label>
@@ -19,13 +21,34 @@
     </div>
 </div>
 
-<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
+<h2 class="mt-3">Chart</h2>
+
+<XYChart Labels="ExampleData.Labels">
     <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
     <AreaLayer IsStacked="IsStacked">
-        <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
-        <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" />
+        @foreach (var dataSeries in ExampleData.AreaDataSeries) {
+            <DataSeries DataPoints="dataSeries" />
+        }
     </AreaLayer>
 </XYChart>
+
+<h2 class="mt-3">Source data</h2>
+
+<table class="table">
+    <tr>
+        @foreach (var label in ExampleData.Labels) {
+            <th>@label</th>
+        }
+    </tr>
+
+    @foreach (var dataSeries in ExampleData.AreaDataSeries) {
+        <tr>
+            @foreach (var dataPoint in dataSeries) {
+                <td>@(dataPoint?.ToString("#,##0") ?? "-")</td>
+            }
+        </tr>
+    }
+</table>
 
 @code {
     private bool IsStacked { get; set; } = false;

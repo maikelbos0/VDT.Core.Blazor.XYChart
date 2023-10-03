@@ -10,4 +10,8 @@ public static class ExampleData {
         new() { 12500, 9500, 20500, 14500, 11000 },
         new() { 6500, -2500, null, 4000, 2000 }
     };
+    public static List<List<decimal?>> AreaDataSeries = new() {
+        new() { 7000, 12500, 8500, 3500, 11000 },
+        new() { 2500, -2500, 3500, 5000, 3000 }
+    };
 }
