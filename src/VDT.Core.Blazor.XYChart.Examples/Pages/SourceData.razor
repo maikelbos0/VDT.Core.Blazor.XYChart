@@ -1,0 +1,79 @@
+﻿@page "/SourceData"
+
+<h3>Source data</h3>
+
+<table class="table table-borderless table-sm">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Color</th>
+
+            @foreach (var label in ExampleData.Labels) {
+                <th class="text-end">@label</th>
+            }
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <th scope="rowgroup" colspan="@(ExampleData.Labels.Count + 2)">
+                <h2>Bar layers</h2>
+            </th>
+        </tr>
+
+        @foreach (var data in ExampleData.BarData) {
+            <tr>
+                <th>@data.Name</th>
+                <th>
+                    <div class="text-center" style="background-color: @(data.Color)">@data.Color</div>
+                </th>
+
+                @foreach (var dataPoint in data.DataPoints.Take(ExampleData.Labels.Count)) {
+                    <td class="text-end">@(dataPoint?.ToString("#,##0") ?? "-")</td>
+                }
+            </tr>
+        }
+    </tbody>
+
+    <tbody>
+        <tr>
+            <th scope="rowgroup" colspan="@(ExampleData.Labels.Count + 2)">
+                <h2>Line layers</h2>
+            </th>
+        </tr>
+
+        @foreach (var data in ExampleData.LineData) {
+            <tr>
+                <th>@data.Name</th>
+                <th>
+                    <div class="text-center" style="background-color: @(data.Color)">@data.Color</div>
+                </th>
+
+                @foreach (var dataPoint in data.DataPoints.Take(ExampleData.Labels.Count)) {
+                    <td class="text-end">@(dataPoint?.ToString("#,##0") ?? "-")</td>
+                }
+            </tr>
+        }
+    </tbody>
+
+    <tbody>
+        <tr>
+            <th scope="rowgroup" colspan="@(ExampleData.Labels.Count + 2)">
+                <h2>Area layers</h2>
+            </th>
+        </tr>
+
+        @foreach (var data in ExampleData.AreaData) {
+            <tr>
+                <th>@data.Name</th>
+                <th>
+                    <div class="text-center" style="background-color: @(data.Color)">@data.Color</div>
+                </th>
+
+                @foreach (var dataPoint in data.DataPoints.Take(ExampleData.Labels.Count)) {
+                    <td class="text-end">@(dataPoint?.ToString("#,##0") ?? "-")</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

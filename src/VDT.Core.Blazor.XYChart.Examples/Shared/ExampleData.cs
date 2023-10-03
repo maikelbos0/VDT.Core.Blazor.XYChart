@@ -1,7 +1,7 @@
 ﻿namespace VDT.Core.Blazor.XYChart.Examples.Shared;
 
 public class ExampleData {
-    public static List<string> Labels => new() { "Foo", "Bar", "Baz", "Quux", "Quuux" };
+    public static List<string> Labels => new() { "Foo", "Bar", "Baz", "Qux", "Quux" };
 
     public static List<ExampleData> BarData = new() {
         new("Bar", "#f1c40f", 11000, 19000, 31500, -2500, 9500),
