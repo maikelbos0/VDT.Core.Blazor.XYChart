@@ -175,7 +175,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[1]"));
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[0,1]"));
 
         Assert.Equal(expectedPath, Path.TrimDecimals(shape.Path));
         Assert.Equal("red", shape.Color);
@@ -222,7 +222,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[{dataSeriesIndex}]"));
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[0,{dataSeriesIndex}]"));
 
         Assert.Equal(expectedPath, Path.TrimDecimals(shape.Path));
         Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
