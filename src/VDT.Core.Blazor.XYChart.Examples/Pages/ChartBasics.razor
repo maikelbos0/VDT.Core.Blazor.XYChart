@@ -38,7 +38,7 @@
 </div>
 
 <div class="d-inline-block">
-    <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" }.Take(LabelCount).ToList())" DataPointSpacingMode="DataPointSpacingMode">
+    <XYChart Labels="@ExampleData.Labels.Take(LabelCount).ToList()" DataPointSpacingMode="DataPointSpacingMode">
         <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
 
         @if (LayerTypes.Contains(ChartLayerType.Area)) {
@@ -76,7 +76,7 @@
     private List<ChartLayerType> LayerTypes { get; set; } = new(Enum.GetValues<ChartLayerType>());
     private List<(ChartLayerType, string)> AllLayerTypes { get; } = Enum.GetValues<ChartLayerType>().Select(layerType => (layerType, layerType.ToString())).ToList();
     private bool IsStacked { get; set; } = false;
-    private ushort LabelCount { get; set; } = 4;
+    private ushort LabelCount { get; set; } = 5;
     private DataPointSpacingMode DataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
 
     private enum ChartLayerType {
