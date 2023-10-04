@@ -26,9 +26,10 @@
 
 <p>
     If you want to have a different shape as a data marker, you can achieve this by implementing your own subclass of <code>Shapes.ShapeBase</code>. Make sure
-    you call the base constructor with the <code>dataSeriesIndex</code> and <code>dataPointIndex</code> that get used to create a unique key for this shape.
-    Return your desired CSS classes in your implementation of the <code>CssClass</code> property, the desired SVG element from <code>ElementName</code>, and
-    return a <code>ShapeAttributeCollection</code> with attribute names and values from your <code>GetAttributes</code> implementation.
+    you call the base constructor with the <code>layerIndex</code>, <code>dataSeriesIndex</code> and <code>dataPointIndex</code> that get used to create a
+    unique key for this shape. Return your desired CSS classes in your implementation of the <code>CssClass</code> property, the desired SVG element from
+    <code>ElementName</code>, and return a <code>ShapeAttributeCollection</code> with attribute names and values from your <code>GetAttributes</code>
+    implementation.
 </p>
 
 <p>
@@ -96,8 +97,8 @@
     private class CrossDataMarkerShape : ShapeBase {
         public const string DefaultCssClass = "data-marker data-marker-cross";
 
-        public static ShapeBase Delegate(decimal x, decimal y, decimal size, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex)
-            => new CrossDataMarkerShape(x, y, size, color, cssClass, dataSeriesIndex, dataPointIndex);
+        public static ShapeBase Delegate(decimal x, decimal y, decimal size, string color, string? cssClass, int layerIndex, int dataSeriesIndex, int dataPointIndex)
+            => new CrossDataMarkerShape(x, y, size, color, cssClass, layerIndex, dataSeriesIndex, dataPointIndex);
 
         public override string ElementName => "path";
         public decimal X { get; }
@@ -106,7 +107,7 @@
         public string Color { get; }
         public override string CssClass { get; }
 
-        public CrossDataMarkerShape(decimal x, decimal y, decimal size, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex) : base(dataSeriesIndex, dataPointIndex) {
+        public CrossDataMarkerShape(decimal x, decimal y, decimal size, string color, string? cssClass, int layerIndex, int dataSeriesIndex, int dataPointIndex) : base(layerIndex, dataSeriesIndex, dataPointIndex) {
             X = x;
             Y = y;
             Size = size;

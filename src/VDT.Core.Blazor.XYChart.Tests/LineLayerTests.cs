@@ -65,7 +65,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<RoundDataMarkerShape>(Assert.Single(result, shape => shape.Key == $"{nameof(RoundDataMarkerShape)}[1,{index}]"));
+        var shape = Assert.IsType<RoundDataMarkerShape>(Assert.Single(result, shape => shape.Key == $"{nameof(RoundDataMarkerShape)}[0,1,{index}]"));
 
         Assert.Equal(expectedX, shape.X);
         Assert.Equal(expectedY, shape.Y);
@@ -110,7 +110,7 @@ public class LineLayerTests {
 
         var result = subject.GetDataSeriesShapes();
 
-        var shape = Assert.IsType<RoundDataMarkerShape>(Assert.Single(result, shape => shape.Key == $"{nameof(RoundDataMarkerShape)}[{dataSeriesIndex},{index}]"));
+        var shape = Assert.IsType<RoundDataMarkerShape>(Assert.Single(result, shape => shape.Key == $"{nameof(RoundDataMarkerShape)}[0,{dataSeriesIndex},{index}]"));
 
         Assert.Equal(expectedX, shape.X);
         Assert.Equal(expectedY, shape.Y);

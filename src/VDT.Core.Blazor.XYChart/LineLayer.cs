@@ -27,7 +27,6 @@ public class LineLayer : LayerBase {
         || parameters.HasParameterChanged(DataMarkerType)
         || parameters.HasParameterChanged(ShowDataLines);
 
-    // TODO fluent lines?
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var layerIndex = Chart.Layers.IndexOf(this);
 
@@ -41,6 +40,7 @@ public class LineLayer : LayerBase {
                             DataMarkerSize,
                             canvasDataSeries.Color,
                             canvasDataSeries.CssClass,
+                            layerIndex,
                             canvasDataSeries.Index,
                             dataPoint.Index
                         );
