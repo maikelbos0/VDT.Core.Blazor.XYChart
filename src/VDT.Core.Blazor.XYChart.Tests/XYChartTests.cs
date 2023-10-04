@@ -17,7 +17,7 @@ public class XYChartTests {
         });
 
         var subject = new XYChart() {
-            Labels = new() { "Foo", "Bar" },
+            Labels = { "Foo", "Bar" },
             DataPointSpacingMode = DataPointSpacingMode.Auto
         };
 

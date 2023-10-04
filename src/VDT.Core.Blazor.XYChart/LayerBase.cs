@@ -59,8 +59,8 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
                     Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
                     Chart.MapDataValueToPlotArea(value.DataPoint),
                     value.Index
-                )).ToList().AsReadOnly())
-        ).ToList();
+                )).ToList())
+        );
     }
 
     public IEnumerable<decimal> GetScaleDataPoints() {

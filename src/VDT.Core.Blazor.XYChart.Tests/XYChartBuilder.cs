@@ -56,7 +56,7 @@ public class XYChartBuilder {
 
     public XYChartBuilder WithDataSeries(params decimal?[] dataPoints)
         => WithDataSeries(new DataSeries() {
-            DataPoints = dataPoints.ToList(),
+            DataPoints = dataPoints,
             Chart = Chart,
             Layer = Chart.Layers.Last()
         });

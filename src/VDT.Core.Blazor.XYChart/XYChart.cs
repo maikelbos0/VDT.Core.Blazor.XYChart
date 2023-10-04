@@ -12,7 +12,7 @@ public class XYChart : ComponentBase {
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public List<string> Labels { get; set; } = new();
+    [Parameter] public IList<string> Labels { get; set; } = new List<string>();
     [Parameter] public DataPointSpacingMode DataPointSpacingMode { get; set; } = DefaultDataPointSpacingMode;
     internal Canvas Canvas { get; set; } = new();
     internal PlotArea PlotArea { get; set; } = new();

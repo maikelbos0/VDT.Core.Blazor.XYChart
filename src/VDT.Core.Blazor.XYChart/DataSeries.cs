@@ -22,7 +22,7 @@ public class DataSeries : ChildComponentBase, IDisposable {
     [CascadingParameter] internal LayerBase Layer { get; set; } = null!;
     [Parameter] public string? Name { get; set; }
     [Parameter] public string? Color { get; set; }
-    [Parameter] public List<decimal?> DataPoints { get; set; } = new();
+    [Parameter] public IList<decimal?> DataPoints { get; set; } = new List<decimal?>();
     [Parameter] public string? CssClass { get; set; }
 
     protected override void OnInitialized() => Layer.AddDataSeries(this);

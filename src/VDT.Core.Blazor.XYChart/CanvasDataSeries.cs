@@ -1,5 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 
 namespace VDT.Core.Blazor.XYChart;
 
-public record class CanvasDataSeries(string Color, string? CssClass, int Index, ReadOnlyCollection<CanvasDataPoint> DataPoints);
+public record class CanvasDataSeries(string Color, string? CssClass, int Index, IList<CanvasDataPoint> DataPoints);
