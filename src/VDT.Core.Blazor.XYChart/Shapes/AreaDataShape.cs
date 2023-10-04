@@ -10,7 +10,7 @@ public class AreaDataShape : ShapeBase {
     public string Color { get; }
     public override string CssClass { get; }
 
-    public AreaDataShape(IEnumerable<string> commands, string color, string? cssClass, int dataSeriesIndex) : base(dataSeriesIndex) {
+    public AreaDataShape(IEnumerable<string> commands, string color, string? cssClass, int layerIndex, int dataSeriesIndex) : base(layerIndex, dataSeriesIndex) {
         Path = string.Join(' ', commands);
         Color = color;
         CssClass = $"{DefaultCssClass} {cssClass}";

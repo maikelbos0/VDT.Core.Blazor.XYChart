@@ -14,6 +14,8 @@ public class AreaLayer : LayerBase {
         => parameters.HasParameterChanged(IsStacked);
 
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
+        var layerIndex = Chart.Layers.IndexOf(this);
+
         foreach (var canvasDataSeries in GetCanvasDataSeries()) {
             if (canvasDataSeries.DataPoints.Any()) {
                 var commands = new List<string>() {
@@ -34,6 +36,7 @@ public class AreaLayer : LayerBase {
                     commands,
                     canvasDataSeries.Color,
                     canvasDataSeries.CssClass,
+                    layerIndex,
                     canvasDataSeries.Index
                 );
             }
