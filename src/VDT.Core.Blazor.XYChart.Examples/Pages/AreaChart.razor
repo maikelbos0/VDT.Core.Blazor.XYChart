@@ -21,7 +21,6 @@
 
 <div class="d-inline-block">
     <XYChart Labels="ExampleData.Labels">
-        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
         <AreaLayer IsStacked="IsStacked">
             @foreach (var data in ExampleData.AreaData) {
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />

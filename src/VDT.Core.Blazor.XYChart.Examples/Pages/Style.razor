@@ -71,7 +71,6 @@
             }
         }
 
-        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
         <PlotArea Multiplier="1000" />
         <AreaLayer>
             @foreach (var data in ExampleData.AreaData) {
@@ -89,7 +88,7 @@
                 }
             }
         </BarLayer>
-        <LineLayer DataMarkerSize="15" DataMarkerType="DefaultDataMarkerTypes.Square">
+        <LineLayer>
             @{
                 var emphasized = false;
 

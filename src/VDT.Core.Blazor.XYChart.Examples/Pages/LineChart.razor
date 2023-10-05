@@ -80,7 +80,6 @@
 
 <div class="d-inline-block">
     <XYChart Labels="ExampleData.Labels">
-        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
         <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
             @foreach (var data in ExampleData.LineData) {
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />

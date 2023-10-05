@@ -39,8 +39,6 @@
 
 <div class="d-inline-block">
     <XYChart Labels="@ExampleData.Labels.Take(LabelCount).ToList()" DataPointSpacingMode="DataPointSpacingMode">
-        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-
         @if (LayerTypes.Contains(ChartLayerType.Area)) {
             <AreaLayer IsStacked="IsStacked">
                 @foreach (var data in ExampleData.AreaData) {
