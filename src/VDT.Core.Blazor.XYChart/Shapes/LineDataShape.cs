@@ -10,7 +10,7 @@ public class LineDataShape : ShapeBase {
     public string Color { get; }
     public override string CssClass { get; }
 
-    public LineDataShape(IEnumerable<string> commands, string color, string? cssClass, int dataSeriesIndex) : base(dataSeriesIndex) {
+    public LineDataShape(IEnumerable<string> commands, string color, string? cssClass, int layerIndex, int dataSeriesIndex) : base(layerIndex, dataSeriesIndex) {
         Path = string.Join(' ', commands);
         Color = color;
         CssClass = $"{DefaultCssClass} {cssClass}";

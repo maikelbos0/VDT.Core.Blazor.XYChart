@@ -9,20 +9,20 @@ public class DataSeries : ChildComponentBase, IDisposable {
     public const string FallbackColor = "#000000";
 
     public static List<string> DefaultColors { get; set; } = new() {
-        // https://coolors.co/550527-688e26-faa613-f44708-a10702
-        // "#550527", "#688e26", "#faa613", "#f44708", "#a10702"
-
-        // https://coolors.co/264653-2a9d8f-e9c46a-f4a261-e76f51
-        // "#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"
-        
-        // https://coolors.co/2274a5-f75c03-f1c40f-d90368-00cc66
-        "#2274a5", "#f75c03", "#f1c40f", "#d90368", "#00cc66"
+        "#ff9933",
+        "#11bbdd",
+        "#aa66ee",
+        "#22cc55",
+        "#3366bb",
+        "#ee4411",
+        "#ffcc11",
+        "#dd3377"
     };
 
     [CascadingParameter] internal LayerBase Layer { get; set; } = null!;
     [Parameter] public string? Name { get; set; }
     [Parameter] public string? Color { get; set; }
-    [Parameter] public List<decimal?> DataPoints { get; set; } = new();
+    [Parameter] public IList<decimal?> DataPoints { get; set; } = new List<decimal?>();
     [Parameter] public string? CssClass { get; set; }
 
     protected override void OnInitialized() => Layer.AddDataSeries(this);
@@ -61,7 +61,7 @@ public class DataSeries : ChildComponentBase, IDisposable {
             return Color;
         }
 
-        var index = Layer.DataSeries.IndexOf(this);
+        var index = Chart.Layers.TakeWhile(layer => layer != Layer).Sum(layer => layer.DataSeries.Count) + Layer.DataSeries.IndexOf(this);
 
         if (DefaultColors.Any() && index >= 0) {
             return DefaultColors[index % DefaultColors.Count];

@@ -5,11 +5,11 @@ namespace VDT.Core.Blazor.XYChart;
 
 public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultWidth { get; set; } = 1200;
-    public static int DefaultHeight { get; set; } = 600;
+    public static int DefaultHeight { get; set; } = 500;
     public static int DefaultPadding { get; set; } = 25;
-    public static int DefaultXAxisLabelHeight { get; set; } = 100;
+    public static int DefaultXAxisLabelHeight { get; set; } = 50;
     public static int DefaultXAxisLabelClearance { get; set; } = 10;
-    public static int DefaultYAxisLabelWidth { get; set; } = 100;
+    public static int DefaultYAxisLabelWidth { get; set; } = 75;
     public static int DefaultYAxisLabelClearance { get; set; } = 10;
     public static string DefaultYAxisLabelFormat { get; set; } = "#,##0.######";
     public static string DefaultYAxisMultiplierFormat { get; set; } = "x #,##0.######";

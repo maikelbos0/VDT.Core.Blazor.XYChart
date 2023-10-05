@@ -26,9 +26,10 @@
 
 <p>
     If you want to have a different shape as a data marker, you can achieve this by implementing your own subclass of <code>Shapes.ShapeBase</code>. Make sure
-    you call the base constructor with the <code>dataSeriesIndex</code> and <code>dataPointIndex</code> that get used to create a unique key for this shape.
-    Return your desired CSS classes in your implementation of the <code>CssClass</code> property, the desired SVG element from <code>ElementName</code>, and
-    return a <code>ShapeAttributeCollection</code> with attribute names and values from your <code>GetAttributes</code> implementation.
+    you call the base constructor with the <code>layerIndex</code>, <code>dataSeriesIndex</code> and <code>dataPointIndex</code> that get used to create a
+    unique key for this shape. Return your desired CSS classes in your implementation of the <code>CssClass</code> property, the desired SVG element from
+    <code>ElementName</code>, and return a <code>ShapeAttributeCollection</code> with attribute names and values from your <code>GetAttributes</code>
+    implementation.
 </p>
 
 <p>
@@ -77,20 +78,26 @@
     </div>
 </div>
 
-<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
-    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-    <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
-        <DataSeries DataPoints="new List<decimal?> { 12500, 9500, 20500, 14500, 11000 }" />
-        <DataSeries DataPoints="new List<decimal?> { 6500, -2500, null, 4000, 2000 }" />
-    </LineLayer>
-</XYChart>
+<div class="d-inline-block">
+    <XYChart Labels="ExampleData.Labels">
+        <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
 
 @code {
     private class CrossDataMarkerShape : ShapeBase {
         public const string DefaultCssClass = "data-marker data-marker-cross";
 
-        public static ShapeBase Delegate(decimal x, decimal y, decimal size, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex)
-            => new CrossDataMarkerShape(x, y, size, color, cssClass, dataSeriesIndex, dataPointIndex);
+        public static ShapeBase Delegate(decimal x, decimal y, decimal size, string color, string? cssClass, int layerIndex, int dataSeriesIndex, int dataPointIndex)
+            => new CrossDataMarkerShape(x, y, size, color, cssClass, layerIndex, dataSeriesIndex, dataPointIndex);
 
         public override string ElementName => "path";
         public decimal X { get; }
@@ -99,7 +106,7 @@
         public string Color { get; }
         public override string CssClass { get; }
 
-        public CrossDataMarkerShape(decimal x, decimal y, decimal size, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex) : base(dataSeriesIndex, dataPointIndex) {
+        public CrossDataMarkerShape(decimal x, decimal y, decimal size, string color, string? cssClass, int layerIndex, int dataSeriesIndex, int dataPointIndex) : base(layerIndex, dataSeriesIndex, dataPointIndex) {
             X = x;
             Y = y;
             Size = size;
@@ -126,8 +133,7 @@
     private bool ShowDataLines { get; set; } = true;
 
     private void SetDataMarkerType(ChangeEventArgs args) {
-        DataMarkerType = args.Value?.ToString() switch
-        {
+        DataMarkerType = args.Value?.ToString() switch {
             "round" => DefaultDataMarkerTypes.Round,
             "square" => DefaultDataMarkerTypes.Square,
             "cross" => CrossDataMarkerShape.Delegate,

@@ -27,8 +27,9 @@ public class BarLayer : LayerBase {
             yield break;
         }
 
+        var layerIndex = Chart.Layers.IndexOf(this);
         var width = Chart.GetDataPointWidth() / 100M * (100M - ClearancePercentage * 2);
-        Func<int, decimal> offsetProvider = dataSeriesIndex => -width / 2M;
+        var offsetProvider = (int dataSeriesIndex) => -width / 2M;
         
         if (!IsStacked) {
             var gapWidth = Chart.GetDataPointWidth() / 100M * GapPercentage;
@@ -47,6 +48,7 @@ public class BarLayer : LayerBase {
                     canvasDataPoint.Height,
                     canvasDataSeries.Color,
                     canvasDataSeries.CssClass,
+                    layerIndex,
                     canvasDataSeries.Index,
                     canvasDataPoint.Index
                 );

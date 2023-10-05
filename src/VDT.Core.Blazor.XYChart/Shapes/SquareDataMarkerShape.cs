@@ -10,7 +10,7 @@ public class SquareDataMarkerShape : ShapeBase {
     public string Color { get; }
     public override string CssClass { get; }
 
-    public SquareDataMarkerShape(decimal x, decimal y, decimal size, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex) : base(dataSeriesIndex, dataPointIndex) {
+    public SquareDataMarkerShape(decimal x, decimal y, decimal size, string color, string? cssClass, int layerIndex, int dataSeriesIndex, int dataPointIndex) : base(layerIndex, dataSeriesIndex, dataPointIndex) {
         X = x;
         Y = y;
         Size = size;

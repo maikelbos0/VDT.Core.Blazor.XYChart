@@ -12,7 +12,7 @@ public class XYChart : ComponentBase {
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public List<string> Labels { get; set; } = new();
+    [Parameter] public IList<string> Labels { get; set; } = new List<string>();
     [Parameter] public DataPointSpacingMode DataPointSpacingMode { get; set; } = DefaultDataPointSpacingMode;
     internal Canvas Canvas { get; set; } = new();
     internal PlotArea PlotArea { get; set; } = new();
@@ -33,26 +33,28 @@ public class XYChart : ComponentBase {
         => parameters.HasParameterChanged(Labels)
         || parameters.HasParameterChanged(DataPointSpacingMode);
 
-    // TODO fix sequence, add svg xmlns
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(1, "svg");
-        builder.AddAttribute(2, "class", "chart-main");
-        builder.AddAttribute(3, "viewbox", $"0 0 {Canvas.Width} {Canvas.Height}");
-        builder.AddAttribute(4, "width", Canvas.Width);
-        builder.AddAttribute(5, "height", Canvas.Height);
+        builder.AddAttribute(2, "xmlns", "http://www.w3.org/2000/svg");
+        builder.AddAttribute(3, "class", "chart-main");
+        builder.AddAttribute(4, "viewbox", $"0 0 {Canvas.Width} {Canvas.Height}");
+        builder.AddAttribute(5, "width", Canvas.Width);
+        builder.AddAttribute(6, "height", Canvas.Height);
 
+        builder.OpenRegion(7);
         foreach (var shape in GetShapes()) {
-            builder.OpenElement(6, shape.ElementName);
+            builder.OpenElement(1, shape.ElementName);
             builder.SetKey(shape.Key);
-            builder.AddAttribute(7, "class", shape.CssClass);
-            builder.AddMultipleAttributes(8, shape.GetAttributes());
-            builder.AddContent(9, shape.GetContent());
+            builder.AddAttribute(2, "class", shape.CssClass);
+            builder.AddMultipleAttributes(3, shape.GetAttributes());
+            builder.AddContent(4, shape.GetContent());
             builder.CloseElement();
         }
+        builder.CloseRegion();
 
-        builder.OpenComponent<CascadingValue<XYChart>>(1);
-        builder.AddAttribute(10, "Value", this);
-        builder.AddAttribute(11, "ChildContent", ChildContent);
+        builder.OpenComponent<CascadingValue<XYChart>>(8);
+        builder.AddAttribute(9, "Value", this);
+        builder.AddAttribute(10, "ChildContent", ChildContent);
         builder.CloseComponent();
 
         builder.CloseElement();

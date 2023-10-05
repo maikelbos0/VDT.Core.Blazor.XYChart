@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 // TODO add example for area chart
-// TODO add example for general chart settings? Plot area? Auto scale? Canvas?
+// TODO add example for Plot area / Auto scale
+// TODO add example for Canvas
 // TODO docs <GenerateDocumentationFile>true</GenerateDocumentationFile>
-// TODO add layer index to data shapes to prevent double keys for multiple same type layers
 // TODO legend
 // TODO explain defaults for all customization
+// TODO make charts responsive?
+// TODO fluent lines?
 
 namespace VDT.Core.Blazor.XYChart.Examples;
 

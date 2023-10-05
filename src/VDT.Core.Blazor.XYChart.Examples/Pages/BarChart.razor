@@ -40,13 +40,20 @@
     </div>
 </div>
 
-<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
-    <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
-    <BarLayer IsStacked="IsStacked" ClearancePercentage="ClearancePercentage" GapPercentage="GapPercentage">
-        <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" />
-        <DataSeries DataPoints="new List<decimal?> { 21000, -12000, 15500, -4000, 3500 }" />
-    </BarLayer>
-</XYChart>
+<div class="d-inline-block">
+    <XYChart Labels="ExampleData.Labels">
+        <BarLayer IsStacked="IsStacked" ClearancePercentage="ClearancePercentage" GapPercentage="GapPercentage">
+
+            @foreach (var data in ExampleData.BarData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </BarLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
 
 @code {
     private bool IsStacked { get; set; } = false;

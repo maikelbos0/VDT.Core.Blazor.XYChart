@@ -8,13 +8,16 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.XYChart</PackageId>
-		<Version>0.5.0</Version>
+		<Version>0.6.0</Version>
 		<Title>VDT.Core.Blazor.XYChart</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component to create SVG bar, line and area charts</Description>
-		<PackageReleaseNotes>- Fixed issues with stacked area charts
-- Area layer and stacked line layer now interpret null as zero
-- Removed line gap mode</PackageReleaseNotes>
+		<PackageReleaseNotes>- Added layer index to data shapes to ensure keys are unique
+- Made automatic color selection aware of colors used in previous layers
+- Improved default color scheme
+- Improved chart rendering sequence
+- Switched DataPoints and Labels to IList interface for more flexibility
+- Added area chart example, source data table and other example improvements</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Maikel Bos</Copyright>

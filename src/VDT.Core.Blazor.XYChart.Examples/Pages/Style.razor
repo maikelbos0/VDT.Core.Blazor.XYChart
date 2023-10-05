@@ -62,8 +62,8 @@
     set on the various chart objects themselves. For more information, see the menu items for the various layer types.
 </p>
 
-<div>
-    <XYChart @ref="Chart" Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Quux", "Quuux" })">
+<div class="d-inline-block">
+    <XYChart @ref="Chart" Labels="ExampleData.Labels">
         @if (Chart != null) {
             foreach (var coordinates in GetCoordinates()) {
                 <line x1="@(coordinates.Item1 - 10)" y1="@coordinates.Item2" x2="@(coordinates.Item1 + 10)" y2="@coordinates.Item2" stroke="red"></line>
@@ -71,21 +71,39 @@
             }
         }
 
-        <Canvas Height="500" Width="1000" XAxisLabelHeight="50" YAxisLabelWidth="75" Padding="25" />
         <PlotArea Multiplier="1000" />
         <AreaLayer>
-            <DataSeries DataPoints="new List<decimal?> { 7000, 12500, 8500, 3500, 11000 }" Color="#ff9933" />
-            <DataSeries DataPoints="new List<decimal?> { 2500, -2500, 3500, 5000, 3000 }" Color="#cc99ff" CssClass="emphasized " />
+            @foreach (var data in ExampleData.AreaData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
         </AreaLayer>
         <BarLayer>
-            <DataSeries DataPoints="new List<decimal?> { 11000, 19000, 31500, -2500, 9500 }" Color="#f1c40f" />
-            <DataSeries DataPoints="new List<decimal?> { 21000, -22000, 15500, 12000, 3500 }" Color="#00cc66" CssClass="emphasized " />
+            @{
+                var emphasized = false;
+
+                foreach (var data in ExampleData.BarData) {
+                    <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" CssClass="@(emphasized ? "emphasized" : "")" />
+
+                    emphasized = !emphasized;
+                }
+            }
         </BarLayer>
-        <LineLayer DataMarkerSize="15" DataMarkerType="DefaultDataMarkerTypes.Square">
-            <DataSeries DataPoints="new List<decimal?> { 12500, 20500, 32500, -5500, -17000 }" Color="#2274a5" />
-            <DataSeries DataPoints="new List<decimal?> { 20500, -19000, -16500, -12500, -11000 }" Color="#d90368" CssClass="emphasized " />
+        <LineLayer>
+            @{
+                var emphasized = false;
+
+                foreach (var data in ExampleData.LineData) {
+                    <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" CssClass="@(emphasized ? "emphasized" : "")" />
+
+                    emphasized = !emphasized;
+                }
+            }
         </LineLayer>
     </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
 </div>
 
 @code {

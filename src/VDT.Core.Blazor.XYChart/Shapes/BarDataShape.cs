@@ -13,7 +13,7 @@ public class BarDataShape : ShapeBase {
     public string Color { get; }
     public override string CssClass { get; }
 
-    public BarDataShape(decimal x, decimal y, decimal width, decimal height, string color, string? cssClass, int dataSeriesIndex, int dataPointIndex) : base(dataSeriesIndex, dataPointIndex) {
+    public BarDataShape(decimal x, decimal y, decimal width, decimal height, string color, string? cssClass, int layerIndex, int dataSeriesIndex, int dataPointIndex) : base(layerIndex, dataSeriesIndex, dataPointIndex) {
         Y = y;
         X = x;
         Height = height;

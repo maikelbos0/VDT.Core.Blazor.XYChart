@@ -69,29 +69,39 @@ public class DataSeriesTests {
     };
 
     [Fact]
-    public void GetColor() {
-        var subject = new DataSeries() {
-            Color = "magenta"
-        };
+    public void GetColor_Specified() {
+        var subject = new XYChartBuilder()
+            .WithLayer<LineLayer>()
+            .WithDataSeries(new DataSeries() { Color = "magenta" })
+            .Chart.Layers.Single().DataSeries.Single();
 
         Assert.Equal("magenta", subject.GetColor());
     }
 
     [Theory]
-    [InlineData(0, "red")]
-    [InlineData(1, "blue")]
-    [InlineData(2, "green")]
-    [InlineData(3, "red")]
-    public void GetColor_Default(int index, string expectedColor) {
+    [InlineData(0, 0, "red")]
+    [InlineData(0, 2, "green")]
+    [InlineData(0, 3, "red")]
+    [InlineData(1, 0, "blue")]
+    [InlineData(2, 0, "blue")]
+    [InlineData(2, 1, "green")]
+    public void GetColor_Default(int layerIndex, int index, string expectedColor) {
         DataSeries.DefaultColors = new List<string>() { "red", "blue", "green" };
 
-        var layer = new TestLayer(false);
-        layer.DataSeries.Add(new DataSeries() { Layer = layer });
-        layer.DataSeries.Add(new DataSeries() { Layer = layer });
-        layer.DataSeries.Add(new DataSeries() { Layer = layer });
-        layer.DataSeries.Add(new DataSeries() { Layer = layer });
-
-        var subject = layer.DataSeries[index];
+        var subject = new XYChartBuilder()
+            .WithLayer<LineLayer>()
+            .WithDataSeries()
+            .WithDataSeries()
+            .WithDataSeries()
+            .WithDataSeries()
+            .WithLayer<LineLayer>()
+            .WithDataSeries()
+            .WithDataSeries()
+            .WithDataSeries()
+            .WithLayer<LineLayer>()
+            .WithDataSeries()
+            .WithDataSeries()
+            .Chart.Layers[layerIndex].DataSeries[index];
 
         Assert.Equal(expectedColor, subject.GetColor());
     }
@@ -100,10 +110,10 @@ public class DataSeriesTests {
     public void GetColor_Fallback() {
         DataSeries.DefaultColors = new();
 
-        var layer = new TestLayer(false);
-        var subject = new DataSeries() { Layer = layer };
-
-        layer.DataSeries.Add(subject);
+        var subject = new XYChartBuilder()
+            .WithLayer<LineLayer>()
+            .WithDataSeries()
+            .Chart.Layers.Single().DataSeries.Single();
 
         Assert.Equal(DataSeries.FallbackColor, subject.GetColor());
     }
