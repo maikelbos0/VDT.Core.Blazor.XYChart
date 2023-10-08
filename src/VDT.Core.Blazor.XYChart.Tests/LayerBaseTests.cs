@@ -4,13 +4,14 @@ using Xunit;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Microsoft.AspNetCore.Components;
 using System.Linq;
+using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class LayerBaseTests {
     private class TestLayer : LayerBase {
         public override StackMode StackMode { get; }
-        public override DataPointSpacingMode DefaultDataPointSpacingMode => throw new NotImplementedException();
+        public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.Center;
         public override bool NullAsZero { get; }
 
         public TestLayer(StackMode stackMode, bool nullAsZero) {
@@ -20,7 +21,7 @@ public class LayerBaseTests {
 
         public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
 
-        public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> canvasDataSeries) => throw new NotImplementedException();
+        public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> canvasDataSeries) => Enumerable.Empty<ShapeBase>();
     }
 
     [Fact]
@@ -48,6 +49,46 @@ public class LayerBaseTests {
 
         Assert.Empty(subject.DataSeries);
         Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Theory]
+    [MemberData(nameof(GetDataSeriesShapes_DataLabels_Data))]
+    public void GetDataSeriesShapes_DataLabels(decimal?[] dataPoints, int index, decimal expectedX, decimal expectedY, string expectedValue) {
+        var subject = new XYChartBuilder(labelCount: 3)
+            .WithLayer(new TestLayer(StackMode.Single, false) { ShowDataLabels = true })
+            .WithDataSeries(new DataSeries() { CssClass = "example-data", DataPoints = dataPoints })
+            .Chart.Layers.Single();
+
+        var result = subject.GetDataSeriesShapes().ToList();
+
+        var shape = Assert.IsType<DataLabelShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataLabelShape)}[0,0,{index}]"));
+
+        Assert.Equal(expectedX, shape.X);
+        Assert.Equal(expectedY, shape.Y);
+        Assert.Equal(expectedValue, shape.Value);
+        Assert.Equal("data-label example-data", shape.CssClass);
+    }
+
+    public static TheoryData<decimal?[], int, decimal, decimal, string> GetDataSeriesShapes_DataLabels_Data() {
+        var dataPointWidth = PlotAreaWidth / 3M;
+
+        return new() {
+            { new decimal?[] { -30M, 30M, 60M }, 0, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, "-30" },
+            { new decimal?[] { -30M, 30M, 60M }, 1, PlotAreaX + 1.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, "30" },
+            { new decimal?[] { -30M, 30M, 60M }, 2, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight, "60" },
+        };
+    }
+
+    [Fact]
+    public void GetDataSeriesShapes_HideDataLabels() {
+        var subject = new XYChartBuilder(labelCount: 3)
+            .WithLayer(new TestLayer(StackMode.Single, false) { ShowDataLabels = false })
+            .WithDataSeries(-30M, 60M, 120M)
+            .Chart.Layers.Single();
+
+        var result = subject.GetDataSeriesShapes();
+
+        Assert.DoesNotContain(result, shape => shape is DataLabelShape);
     }
 
     [Theory]

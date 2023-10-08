@@ -50,24 +50,45 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         var layerIndex = Chart.Layers.IndexOf(this);
         var dataSeries = GetCanvasDataSeries();
 
-        return GetDataSeriesShapes(layerIndex, dataSeries);
+        return GetDataSeriesShapes(layerIndex, dataSeries)
+            .Concat(GetDataLabelShapes(layerIndex, dataSeries));
     }
 
     public abstract IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> canvasDataSeries);
+
+    public IEnumerable<ShapeBase> GetDataLabelShapes(int layerIndex, IEnumerable<CanvasDataSeries> dataSeries) {
+        if (ShowDataLabels) {
+            foreach (var canvasDataSeries in dataSeries) {
+                foreach (var dataPoint in canvasDataSeries.DataPoints) {
+                    yield return new DataLabelShape(
+                        dataPoint.X,
+                        dataPoint.Y,
+                        dataPoint.Value.ToString(), // TODO format
+                        canvasDataSeries.CssClass,
+                        layerIndex,
+                        canvasDataSeries.Index,
+                        dataPoint.Index
+                    );
+
+                }
+            }
+        }
+    }
 
     public IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();
 
         return DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
-            dataSeries.GetColor(), 
-            dataSeries.CssClass, 
-            index, 
+            dataSeries.GetColor(),
+            dataSeries.CssClass,
+            index,
             dataSeries.GetDataPoints()
                 .Select(value => new CanvasDataPoint(
                     Chart.MapDataIndexToCanvas(value.Index),
                     Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
                     Chart.MapDataValueToPlotArea(value.DataPoint),
-                    value.Index
+                    value.Index,
+                    value.DataPoint
                 )).ToList())
         );
     }
