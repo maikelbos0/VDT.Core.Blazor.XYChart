@@ -49,31 +49,27 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     public IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var layerIndex = Chart.Layers.IndexOf(this);
         var dataSeries = GetCanvasDataSeries();
+        var shapes = GetDataSeriesShapes(layerIndex, dataSeries);
 
-        return GetDataSeriesShapes(layerIndex, dataSeries)
-            .Concat(GetDataLabelShapes(layerIndex, dataSeries));
+        if (ShowDataLabels) {
+            shapes = shapes.Concat(GetDataLabelShapes(layerIndex, dataSeries));
+        }
+
+        return shapes;
     }
 
     public abstract IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> canvasDataSeries);
 
-    public IEnumerable<ShapeBase> GetDataLabelShapes(int layerIndex, IEnumerable<CanvasDataSeries> dataSeries) {
-        if (ShowDataLabels) {
-            foreach (var canvasDataSeries in dataSeries) {
-                foreach (var dataPoint in canvasDataSeries.DataPoints) {
-                    yield return new DataLabelShape(
-                        dataPoint.X,
-                        dataPoint.Y,
-                        dataPoint.Value,
-                        canvasDataSeries.CssClass,
-                        layerIndex,
-                        canvasDataSeries.Index,
-                        dataPoint.Index
-                    );
-
-                }
-            }
-        }
-    }
+    public IEnumerable<ShapeBase> GetDataLabelShapes(int layerIndex, IEnumerable<CanvasDataSeries> dataSeries) 
+        => dataSeries.SelectMany(canvasDataSeries => canvasDataSeries.DataPoints.Select(dataPoint => new DataLabelShape(
+            dataPoint.X,
+            dataPoint.Y,
+            dataPoint.Value,
+            canvasDataSeries.CssClass,
+            layerIndex,
+            canvasDataSeries.Index,
+            dataPoint.Index
+        )));
 
     public IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();
