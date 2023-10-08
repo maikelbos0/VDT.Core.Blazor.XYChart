@@ -91,6 +91,21 @@ public class LayerBaseTests {
         Assert.DoesNotContain(result, shape => shape is DataLabelShape);
     }
 
+    [Fact]
+    public void GetDataSeriesShapes_DataLabels_Multiplier() {
+        var subject = new XYChartBuilder(labelCount: 1)
+            .WithPlotArea(multiplier: 10)
+            .WithLayer(new TestLayer(StackMode.Single, false) { ShowDataLabels = true })
+            .WithDataSeries(-30M)
+            .Chart.Layers.Single();
+
+        var result = subject.GetDataSeriesShapes();
+
+        var shape = Assert.IsType<DataLabelShape>(Assert.Single(result));
+
+        Assert.Equal("-3", shape.Value);
+    }
+
     [Theory]
     [MemberData(nameof(GetScaleDataPoints_Data))]
     public void GetScaleDataPoints(bool isStacked, StackMode stackMode, bool nullAsZero, decimal[] expectedDataPoints) {
