@@ -84,7 +84,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
                     Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
                     Chart.MapDataValueToPlotArea(value.DataPoint),
                     value.Index,
-                    (value.DataPoint / Chart.PlotArea.Multiplier).ToString() // TODO format                    
+                    (value.DataPoint / Chart.PlotArea.Multiplier).ToString(Chart.Canvas.DataLabelFormat)
                 )).ToList())
         );
     }

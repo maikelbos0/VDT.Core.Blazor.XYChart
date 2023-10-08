@@ -13,6 +13,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultYAxisLabelClearance { get; set; } = 10;
     public static string DefaultYAxisLabelFormat { get; set; } = "#,##0.######";
     public static string DefaultYAxisMultiplierFormat { get; set; } = "x #,##0.######";
+    public static string DefaultDataLabelFormat { get; set; } = "#,##0.######";
 
     [Parameter] public int Width { get; set; } = DefaultWidth;
     [Parameter] public int Height { get; set; } = DefaultHeight;
@@ -23,6 +24,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public int YAxisLabelClearance { get; set; } = DefaultYAxisLabelClearance;
     [Parameter] public string YAxisLabelFormat { get; set; } = DefaultYAxisLabelFormat;
     [Parameter] public string YAxisMultiplierFormat { get; set; } = DefaultYAxisMultiplierFormat;
+    [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
     public int PlotAreaX => Padding + YAxisLabelWidth;
     public int PlotAreaY => Padding;
     public int PlotAreaWidth => Width - Padding * 2 - YAxisLabelWidth;

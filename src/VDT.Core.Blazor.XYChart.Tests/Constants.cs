@@ -11,8 +11,9 @@ public static class Constants {
     public const int CanvasXAxisLabelClearance = 5;
     public const int CanvasYAxisLabelWidth = 100;
     public const int CanvasYAxisLabelClearance = 10;
-    public const string CanvasYAxisLabelFormat = "0,000";
-    public const string CanvasYAxisMultiplierFormat = "x 0,000";
+    public const string CanvasYAxisLabelFormat = "0.00";
+    public const string CanvasYAxisMultiplierFormat = "x 0.00";
+    public const string CanvasDataLabelFormat = "0.00";
 
     public const int PlotAreaX = CanvasPadding + CanvasYAxisLabelWidth;
     public const int PlotAreaY = CanvasPadding;

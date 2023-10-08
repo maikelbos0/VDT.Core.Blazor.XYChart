@@ -73,9 +73,9 @@ public class LayerBaseTests {
         var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
-            { new decimal?[] { -30M, 30M, 60M }, 0, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, "-30" },
-            { new decimal?[] { -30M, 30M, 60M }, 1, PlotAreaX + 1.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, "30" },
-            { new decimal?[] { -30M, 30M, 60M }, 2, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight, "60" },
+            { new decimal?[] { -30M, 30M, 60M }, 0, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, (-30M).ToString(CanvasDataLabelFormat) },
+            { new decimal?[] { -30M, 30M, 60M }, 1, PlotAreaX + 1.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 30M.ToString(CanvasDataLabelFormat) },
+            { new decimal?[] { -30M, 30M, 60M }, 2, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight, 60M.ToString(CanvasDataLabelFormat) },
         };
     }
 
@@ -103,7 +103,7 @@ public class LayerBaseTests {
 
         var shape = Assert.IsType<DataLabelShape>(Assert.Single(result));
 
-        Assert.Equal("-3", shape.Value);
+        Assert.Equal((-3M).ToString(CanvasDataLabelFormat), shape.Value);
     }
 
     [Theory]
