@@ -13,10 +13,8 @@ public class AreaLayer : LayerBase {
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsStacked);
 
-    public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
-        var layerIndex = Chart.Layers.IndexOf(this);
-
-        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
+    public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> dataSeries) {
+        foreach (var canvasDataSeries in dataSeries) {
             if (canvasDataSeries.DataPoints.Any()) {
                 var commands = new List<string>() {
                     PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[0].X, canvasDataSeries.DataPoints[0].Y)

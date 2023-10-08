@@ -27,10 +27,8 @@ public class LineLayer : LayerBase {
         || parameters.HasParameterChanged(DataMarkerType)
         || parameters.HasParameterChanged(ShowDataLines);
 
-    public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
-        var layerIndex = Chart.Layers.IndexOf(this);
-
-        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
+    public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> dataSeries) {
+        foreach (var canvasDataSeries in dataSeries) {
             if (canvasDataSeries.DataPoints.Any()) {
                 if (ShowDataMarkers) {
                     foreach (var dataPoint in canvasDataSeries.DataPoints) {

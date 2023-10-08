@@ -9,9 +9,11 @@ namespace VDT.Core.Blazor.XYChart;
 
 public abstract class LayerBase : ChildComponentBase, IDisposable {
     public static bool DefaultIsStacked { get; set; } = false;
+    public static bool DefaultShowDataLabels { get; set; } = false;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool IsStacked { get; set; } = DefaultIsStacked;
+    [Parameter] public bool ShowDataLabels { get; set; } = DefaultShowDataLabels;
     internal List<DataSeries> DataSeries { get; set; } = new();
     public abstract StackMode StackMode { get; }
     public abstract DataPointSpacingMode DefaultDataPointSpacingMode { get; }
@@ -44,7 +46,14 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         builder.CloseComponent();
     }
 
-    public abstract IEnumerable<ShapeBase> GetDataSeriesShapes();
+    public IEnumerable<ShapeBase> GetDataSeriesShapes() {
+        var layerIndex = Chart.Layers.IndexOf(this);
+        var dataSeries = GetCanvasDataSeries();
+
+        return GetDataSeriesShapes(layerIndex, dataSeries);
+    }
+
+    public abstract IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> canvasDataSeries);
 
     public IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();

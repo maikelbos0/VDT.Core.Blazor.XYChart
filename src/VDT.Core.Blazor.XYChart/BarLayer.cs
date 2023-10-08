@@ -22,12 +22,11 @@ public class BarLayer : LayerBase {
         || parameters.HasParameterChanged(ClearancePercentage)
         || parameters.HasParameterChanged(GapPercentage);
 
-    public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
+    public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> dataSeries) {
         if (!DataSeries.Any()) {
             yield break;
         }
 
-        var layerIndex = Chart.Layers.IndexOf(this);
         var width = Chart.GetDataPointWidth() / 100M * (100M - ClearancePercentage * 2);
         var offsetProvider = (int dataSeriesIndex) => -width / 2M;
         
@@ -39,7 +38,7 @@ public class BarLayer : LayerBase {
             offsetProvider = dataSeriesIndex => (dataSeriesIndex - DataSeries.Count / 2M) * dataSeriesWidth + (dataSeriesIndex - (DataSeries.Count - 1) / 2M) * gapWidth;
         }
 
-        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
+        foreach (var canvasDataSeries in dataSeries) {
             foreach (var canvasDataPoint in canvasDataSeries.DataPoints) {
                 yield return new BarDataShape(
                     canvasDataPoint.X + offsetProvider(canvasDataSeries.Index),
