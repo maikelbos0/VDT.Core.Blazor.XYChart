@@ -5,7 +5,8 @@
 <p>
     An XY chart is composed of layers, each of which groups a number of data series and defines how they should be rendered. Currently, bar, line and area
     layers are supported, each of which can be either stacked or unstacked. The amount of data points shown is determined by the labels you've added to the
-    chart itself, and while each layer type has a default spacing mode, you can override this on the chart level.
+    chart itself, and you have the option to show a value label at each data point. While each layer type has a default spacing mode, you can override this
+    on the chart level.
 </p>
 
 <div class="row">
@@ -19,6 +20,14 @@
         <select class="form-select" id="isStacked" @onchange="args => IsStacked = bool.Parse(args.Value?.ToString()!)">
             <option value="false" selected="@(!IsStacked)">Unstacked</option>
             <option value="true" selected="@IsStacked">Stacked</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="showDataLabels">Data labels</label>
+        <select class="form-select" id="showDataLabels" @onchange="args => ShowDataLabels = bool.Parse(args.Value?.ToString()!)">
+            <option value="true" selected="@ShowDataLabels">Show</option>
+            <option value="false" selected="@(!ShowDataLabels)">Hide</option>
         </select>
     </div>
 
@@ -40,7 +49,7 @@
 <div class="d-inline-block">
     <XYChart Labels="@ExampleData.Labels.Take(LabelCount).ToList()" DataPointSpacingMode="DataPointSpacingMode">
         @if (LayerTypes.Contains(ChartLayerType.Area)) {
-            <AreaLayer IsStacked="IsStacked">
+            <AreaLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels">
                 @foreach (var data in ExampleData.AreaData) {
                     <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
                 }
@@ -48,7 +57,7 @@
         }
 
         @if (LayerTypes.Contains(ChartLayerType.Bar)) {
-            <BarLayer IsStacked="IsStacked">
+            <BarLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels">
                 @foreach (var data in ExampleData.BarData) {
                     <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
                 }
@@ -56,7 +65,7 @@
         }
 
         @if (LayerTypes.Contains(ChartLayerType.Line)) {
-            <LineLayer IsStacked="IsStacked">
+            <LineLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels">
                 @foreach (var data in ExampleData.LineData) {
                     <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
                 }
@@ -74,6 +83,7 @@
     private List<ChartLayerType> LayerTypes { get; set; } = new(Enum.GetValues<ChartLayerType>());
     private List<(ChartLayerType, string)> AllLayerTypes { get; } = Enum.GetValues<ChartLayerType>().Select(layerType => (layerType, layerType.ToString())).ToList();
     private bool IsStacked { get; set; } = false;
+    private bool ShowDataLabels { get; set; } = false;
     private ushort LabelCount { get; set; } = 5;
     private DataPointSpacingMode DataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
 
