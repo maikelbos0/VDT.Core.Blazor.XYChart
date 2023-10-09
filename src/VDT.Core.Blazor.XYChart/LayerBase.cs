@@ -86,7 +86,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
                     value.Index,
                     (value.DataPoint / Chart.PlotArea.Multiplier).ToString(Chart.Canvas.DataLabelFormat)
                 )).ToList())
-        );
+        ).ToList();
     }
 
     public IEnumerable<decimal> GetScaleDataPoints() {
