@@ -10,15 +10,17 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class BarLayerTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(bool isStacked, decimal clearancePercentage, decimal gapPercentage, bool expectedResult) {
+    public void HaveParametersChanged(bool isStacked, bool showDataLabels, decimal clearancePercentage, decimal gapPercentage, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(BarLayer.IsStacked), isStacked },
+            { nameof(BarLayer.ShowDataLabels), showDataLabels },
             { nameof(BarLayer.ClearancePercentage), clearancePercentage },
             { nameof(BarLayer.GapPercentage), gapPercentage }
         });
 
         var subject = new BarLayer {
             IsStacked = false,
+            ShowDataLabels = false,
             ClearancePercentage = 20M,
             GapPercentage = 20M
         };
@@ -26,11 +28,12 @@ public class BarLayerTests {
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<bool, decimal, decimal, bool> HaveParametersChanged_Data() => new() {
-        { false, 20M, 20M, false },
-        { true, 20M, 20M, true },
-        { false, 20M, 30M, true },
-        { false, 30M, 20M, true }
+    public static TheoryData<bool, bool, decimal, decimal, bool> HaveParametersChanged_Data() => new() {
+        { false, false, 20M, 20M, false },
+        { true, false, 20M, 20M, true },
+        { false, true, 20M, 20M, true },
+        { false, false, 20M, 30M, true },
+        { false, false, 30M, 20M, true }
     };
 
     [Theory]

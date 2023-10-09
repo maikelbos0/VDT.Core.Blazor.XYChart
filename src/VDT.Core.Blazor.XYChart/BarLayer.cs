@@ -19,6 +19,7 @@ public class BarLayer : LayerBase {
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsStacked)
+        || parameters.HasParameterChanged(ShowDataLabels)
         || parameters.HasParameterChanged(ClearancePercentage)
         || parameters.HasParameterChanged(GapPercentage);
 
