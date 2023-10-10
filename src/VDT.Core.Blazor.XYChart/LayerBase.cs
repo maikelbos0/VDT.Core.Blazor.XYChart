@@ -71,21 +71,21 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             dataPoint.Index
         )));
 
-    public IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
+    public virtual IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();
 
         return DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
             dataSeries.GetColor(),
             dataSeries.CssClass,
             index,
-            dataSeries.GetDataPoints()
-                .Select(value => new CanvasDataPoint(
-                    Chart.MapDataIndexToCanvas(value.Index),
-                    Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
-                    Chart.MapDataValueToPlotArea(value.DataPoint),
-                    value.Index,
-                    (value.DataPoint / Chart.PlotArea.Multiplier).ToString(Chart.Canvas.DataLabelFormat)
-                )).ToList())
+            dataSeries.GetDataPoints().Select(value => new CanvasDataPoint(
+                Chart.MapDataIndexToCanvas(value.Index),
+                Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
+                Chart.MapDataValueToPlotArea(value.DataPoint),
+                0, // By default, data point shapes don't require a width
+                value.Index,
+                (value.DataPoint / Chart.PlotArea.Multiplier).ToString(Chart.Canvas.DataLabelFormat)
+            )).ToList())
         ).ToList();
     }
 
@@ -96,7 +96,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             .Select(value => dataPointTransformer(value.DataPoint, value.Index)));
     }
 
-    private Func<decimal, int, decimal> GetDataPointTransformer() {
+    protected Func<decimal, int, decimal> GetDataPointTransformer() {
         if (IsStacked) {
             switch (StackMode) {
                 case StackMode.Single:
