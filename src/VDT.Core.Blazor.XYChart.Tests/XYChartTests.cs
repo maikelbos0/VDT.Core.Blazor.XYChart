@@ -196,6 +196,16 @@ public class XYChartTests {
     }
 
     [Fact]
+    public void GetShapes_DataLabelShapes() {
+        var subject = new XYChartBuilder(labelCount: 2)
+            .WithLayer(new BarLayer() { ShowDataLabels = true })
+            .WithDataSeries(5M, 10M)
+            .Chart;
+
+        Assert.Contains(subject.GetShapes(), shape => shape is DataLabelShape);
+    }
+
+    [Fact]
     public void GetGridLineShapes() {
         var subject = new XYChartBuilder()
             .Chart;
@@ -284,6 +294,21 @@ public class XYChartTests {
         Assert.Equal(4, result.Count());
 
         Assert.All(result, shape => Assert.IsType<BarDataShape>(shape));
+    }
+
+    [Fact]
+    public void GetDataLabelShapes() {
+        var subject = new XYChartBuilder(labelCount: 3)
+            .WithLayer(new BarLayer() { ShowDataLabels = true })
+            .WithDataSeries(5M, null, 15M)
+            .WithDataSeries(11M, 8M, null)
+            .Chart;
+
+        var result = subject.GetDataLabelShapes();
+
+        Assert.Equal(4, result.Count());
+
+        Assert.All(result, shape => Assert.IsType<DataLabelShape>(shape));
     }
 
     [Theory]

@@ -105,6 +105,10 @@ public class XYChart : ComponentBase {
         foreach (var shape in GetDataSeriesShapes()) {
             yield return shape;
         }
+        
+        foreach (var shape in GetDataLabelShapes()) {
+            yield return shape;
+        }
 
         yield return Canvas.GetPlotAreaShape();
 
@@ -135,6 +139,9 @@ public class XYChart : ComponentBase {
 
     public IEnumerable<ShapeBase> GetDataSeriesShapes()
         => Layers.SelectMany(layer => layer.GetDataSeriesShapes());
+
+    public IEnumerable<ShapeBase> GetDataLabelShapes()
+        => Layers.SelectMany(layer => layer.GetDataLabelShapes());
 
     public decimal MapDataPointToCanvas(decimal dataPoint) => Canvas.PlotAreaY + MapDataValueToPlotArea(PlotArea.Max - dataPoint);
 
