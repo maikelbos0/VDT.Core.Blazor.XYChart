@@ -14,8 +14,10 @@ public class AreaLayer : LayerBase {
         => parameters.HasParameterChanged(IsStacked)
         || parameters.HasParameterChanged(ShowDataLabels);
 
-    public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> dataSeries) {
-        foreach (var canvasDataSeries in dataSeries) {
+    public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
+        var layerIndex = Chart.Layers.IndexOf(this);
+
+        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
             if (canvasDataSeries.DataPoints.Any()) {
                 var commands = new List<string>() {
                     PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[0].X, canvasDataSeries.DataPoints[0].Y)

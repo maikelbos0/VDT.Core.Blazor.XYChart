@@ -19,7 +19,7 @@ public class DataSeriesTests {
 
         public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
 
-        public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> canvasDataSeries) => throw new NotImplementedException();
+        public override IEnumerable<ShapeBase> GetDataSeriesShapes() => throw new NotImplementedException();
     }
 
     [Theory]

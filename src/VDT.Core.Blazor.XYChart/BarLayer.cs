@@ -22,8 +22,10 @@ public class BarLayer : LayerBase {
         || parameters.HasParameterChanged(ClearancePercentage)
         || parameters.HasParameterChanged(GapPercentage);
 
-    public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> dataSeries) {
-        foreach (var canvasDataSeries in dataSeries) {
+    public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
+        var layerIndex = Chart.Layers.IndexOf(this);
+
+        foreach (var canvasDataSeries in GetCanvasDataSeries()) {
             foreach (var canvasDataPoint in canvasDataSeries.DataPoints) {
                 yield return new BarDataShape(
                     canvasDataPoint.X - canvasDataPoint.Width / 2M,

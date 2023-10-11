@@ -21,7 +21,7 @@ public class LayerBaseTests {
 
         public override bool HaveParametersChanged(ParameterView parameters) => throw new NotImplementedException();
 
-        public override IEnumerable<ShapeBase> GetDataSeriesShapes(int layerIndex, IEnumerable<CanvasDataSeries> canvasDataSeries) => Enumerable.Empty<ShapeBase>();
+        public override IEnumerable<ShapeBase> GetDataSeriesShapes() => throw new NotImplementedException();
     }
 
     [Fact]
@@ -52,14 +52,14 @@ public class LayerBaseTests {
     }
 
     [Theory]
-    [MemberData(nameof(GetDataSeriesShapes_DataLabels_Data))]
-    public void GetDataSeriesShapes_DataLabels(decimal?[] dataPoints, int index, decimal expectedX, decimal expectedY, string expectedValue) {
+    [MemberData(nameof(GetDataLabelShapes_Data))]
+    public void GetDataLabelShapes(decimal?[] dataPoints, int index, decimal expectedX, decimal expectedY, string expectedValue) {
         var subject = new XYChartBuilder(labelCount: 3)
             .WithLayer(new TestLayer(StackMode.Single, false) { ShowDataLabels = true })
             .WithDataSeries(new DataSeries() { CssClass = "example-data", DataPoints = dataPoints })
             .Chart.Layers.Single();
 
-        var result = subject.GetDataSeriesShapes().ToList();
+        var result = subject.GetDataLabelShapes().ToList();
 
         var shape = Assert.IsType<DataLabelShape>(Assert.Single(result, shape => shape.Key == $"{nameof(DataLabelShape)}[0,0,{index}]"));
 
@@ -69,7 +69,7 @@ public class LayerBaseTests {
         Assert.Equal("data-label example-data", shape.CssClass);
     }
 
-    public static TheoryData<decimal?[], int, decimal, decimal, string> GetDataSeriesShapes_DataLabels_Data() {
+    public static TheoryData<decimal?[], int, decimal, decimal, string> GetDataLabelShapes_Data() {
         var dataPointWidth = PlotAreaWidth / 3M;
 
         return new() {
@@ -80,26 +80,26 @@ public class LayerBaseTests {
     }
 
     [Fact]
-    public void GetDataSeriesShapes_HideDataLabels() {
+    public void GetDataLabelShapes_HideDataLabels() {
         var subject = new XYChartBuilder(labelCount: 3)
             .WithLayer(new TestLayer(StackMode.Single, false) { ShowDataLabels = false })
             .WithDataSeries(-30M, 60M, 120M)
             .Chart.Layers.Single();
 
-        var result = subject.GetDataSeriesShapes();
+        var result = subject.GetDataLabelShapes();
 
         Assert.DoesNotContain(result, shape => shape is DataLabelShape);
     }
 
     [Fact]
-    public void GetDataSeriesShapes_DataLabels_Multiplier() {
+    public void GetDataLabelShapes_Multiplier() {
         var subject = new XYChartBuilder(labelCount: 1)
             .WithPlotArea(multiplier: 10)
             .WithLayer(new TestLayer(StackMode.Single, false) { ShowDataLabels = true })
             .WithDataSeries(-30M)
             .Chart.Layers.Single();
 
-        var result = subject.GetDataSeriesShapes();
+        var result = subject.GetDataLabelShapes();
 
         var shape = Assert.IsType<DataLabelShape>(Assert.Single(result));
 
