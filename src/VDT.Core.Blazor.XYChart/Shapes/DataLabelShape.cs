@@ -8,17 +8,20 @@ public class DataLabelShape : ShapeBase {
     public decimal Y { get; }
     public string Value { get; }
     public override string CssClass { get; }
+    public bool IsPositive { get; }
 
-    public DataLabelShape(decimal x, decimal y, string value, string? cssClass, int layerIndex, int dataSeriesIndex, int dataPointIndex) : base(layerIndex, dataSeriesIndex, dataPointIndex) {
+    public DataLabelShape(decimal x, decimal y, string value, string? cssClass, bool isPositive, int layerIndex, int dataSeriesIndex, int dataPointIndex) : base(layerIndex, dataSeriesIndex, dataPointIndex) {
         Y = y;
         X = x;
         Value = value;
         CssClass = $"{DefaultCssClass} {cssClass}";
+        IsPositive = isPositive;
     }
 
     public override ShapeAttributeCollection GetAttributes() => new() {
         { "x", X },
-        { "y", Y }
+        { "y", Y },
+        { IsPositive ? "data-positive" : "data-negative", true }
     };
 
     public override string? GetContent() => Value;

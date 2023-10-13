@@ -55,8 +55,9 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             return GetCanvasDataSeries().SelectMany(canvasDataSeries => canvasDataSeries.DataPoints.Select(dataPoint => new DataLabelShape(
                 dataPoint.X,
                 dataPoint.Y,
-                dataPoint.Value,
+                dataPoint.Value.ToString(Chart.Canvas.DataLabelFormat),
                 canvasDataSeries.CssClass,
+                dataPoint.Value >= 0,
                 layerIndex,
                 canvasDataSeries.Index,
                 dataPoint.Index
@@ -80,7 +81,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
                 Chart.MapDataValueToPlotArea(value.DataPoint),
                 0, // By default, data point shapes don't require a width
                 value.Index,
-                (value.DataPoint / Chart.PlotArea.Multiplier).ToString(Chart.Canvas.DataLabelFormat)
+                (value.DataPoint / Chart.PlotArea.Multiplier)
             )).ToList())
         ).ToList();
     }

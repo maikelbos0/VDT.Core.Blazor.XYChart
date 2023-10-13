@@ -65,7 +65,7 @@ public class BarLayer : LayerBase {
                 Chart.MapDataValueToPlotArea(value.DataPoint),
                 width,
                 value.Index,
-                (value.DataPoint / Chart.PlotArea.Multiplier).ToString(Chart.Canvas.DataLabelFormat)
+                (value.DataPoint / Chart.PlotArea.Multiplier)
             )).ToList())
         ).ToList();
     }

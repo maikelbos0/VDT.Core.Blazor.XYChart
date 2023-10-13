@@ -9,7 +9,7 @@ public class ShapeAttributeCollection : IEnumerable<KeyValuePair<string, object>
 
     public void Add(string key, decimal value) => attributes.Add(key, DecimalMath.Trim(value).ToString(CultureInfo.InvariantCulture));
 
-    public void Add(string key, string value) => attributes.Add(key, value);
+    public void Add(string key, object value) => attributes.Add(key, value);
 
     public IEnumerator<KeyValuePair<string, object>> GetEnumerator() => attributes.GetEnumerator();
 
