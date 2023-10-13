@@ -51,3 +51,6 @@
     fill: #dd0000;
 }
 
+::deep .chart-main .anchor-marker {
+    stroke: #dd0000;
+}
