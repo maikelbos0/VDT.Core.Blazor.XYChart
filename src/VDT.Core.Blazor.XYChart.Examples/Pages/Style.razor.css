@@ -46,3 +46,8 @@
     fill-opacity: 1;
     stroke-opacity: 1;
 }
+
+::deep .chart-main .data-label[data-negative] {
+    fill: #dd0000;
+}
+

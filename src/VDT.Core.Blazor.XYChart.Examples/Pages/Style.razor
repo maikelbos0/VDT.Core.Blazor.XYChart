@@ -38,6 +38,13 @@
             <li>Square data markers: <code>.data-marker.data-marker-square</code></li>
         </ul>
     </li>
+    <li>
+        Data labels: <code>.data-label</code>
+        <ul>
+            <li>Positive values (including 0) also get the attribute <code>data-positive</code></li>
+            <li>Negative values (including 0) also get the attribute <code>data-negative</code></li>
+        </ul>
+    </li>
 </ul>
 
 <p>
@@ -77,7 +84,7 @@
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
             }
         </AreaLayer>
-        <BarLayer>
+        <BarLayer ShowDataLabels="true">
             @{
                 var emphasized = false;
 
