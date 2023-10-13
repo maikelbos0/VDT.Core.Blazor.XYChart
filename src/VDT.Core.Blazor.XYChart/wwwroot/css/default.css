@@ -50,7 +50,15 @@
 .chart-main .data-label {
     transform-box: fill-box;
     transform-origin: 50% 50% 0;
-    transform: translate(0, -5pt);
     font-size: 10pt;
     text-anchor: middle;
+    alignment-baseline: central;
+}
+
+.chart-main .data-label[data-positive] {
+    transform: translate(0, -10pt);
+}
+
+.chart-main .data-label[data-negative] {
+    transform: translate(0, 10pt);
 }
