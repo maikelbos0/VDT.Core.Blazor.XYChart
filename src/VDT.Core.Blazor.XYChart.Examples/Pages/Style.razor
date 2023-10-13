@@ -60,19 +60,20 @@
 </p>
 
 <p>
-    The axis labels and y-axis multiplier only get positioned with a single x/y coordinate as an anchor, so horizontal and vertical aligning, rotation and any
-    other positional transforming should be done with CSS. In the below chart example the anchors of these elements are made visible with red crosses.
+    The axis labels, data labels and y-axis multiplier only get positioned with a single x/y coordinate as an anchor, so horizontal and vertical aligning, 
+    rotation and any other positional transforming should be done with CSS. In the below chart example the anchors of these elements are made visible with red 
+    crosses.
 </p>
 
 <p>
-    Styles that are not universal, such as the color for a data series, the line and marker settings for a line layer, or the gap width for a bar layer, can be
-    set on the various chart objects themselves. For more information, see the menu items for the various layer types.
+    Styles that are not universal, such as the color for a data series, the marker size for a line layer, or the gap width for a bar layer, can be set on the 
+    various chart objects themselves. For more information, see the menu items for the various layer types.
 </p>
 
 <div class="d-inline-block">
     <XYChart @ref="Chart" Labels="ExampleData.Labels">
         @if (Chart != null) {
-            foreach (var coordinates in GetCoordinates()) {
+            foreach (var coordinates in GetAnchorCoordinates()) {
                 <line x1="@(coordinates.Item1 - 10)" y1="@coordinates.Item2" x2="@(coordinates.Item1 + 10)" y2="@coordinates.Item2" class="anchor-marker"></line>
                 <line x1="@coordinates.Item1" y1="@(coordinates.Item2 - 10)" x2="@coordinates.Item1" y2="@(coordinates.Item2 + 10)" class="anchor-marker"></line>
             }
@@ -116,7 +117,7 @@
 @code {
     private XYChart? Chart { get; set; }
 
-    private IEnumerable<(int, int)> GetCoordinates() {
+    private IEnumerable<(int, int)> GetAnchorCoordinates() {
         if (Chart != null) {
             foreach (var shape in Chart.GetYAxisLabelShapes()) {
                 yield return ((int)shape.X, (int)shape.Y);
@@ -127,6 +128,10 @@
             }
 
             foreach (var shape in Chart.GetXAxisLabelShapes()) {
+                yield return ((int)shape.X, (int)shape.Y);
+            }
+
+            foreach (var shape in Chart.GetDataLabelShapes()) {
                 yield return ((int)shape.X, (int)shape.Y);
             }
         }

@@ -140,7 +140,7 @@ public class XYChart : ComponentBase {
     public IEnumerable<ShapeBase> GetDataSeriesShapes()
         => Layers.SelectMany(layer => layer.GetDataSeriesShapes());
 
-    public IEnumerable<ShapeBase> GetDataLabelShapes()
+    public IEnumerable<DataLabelShape> GetDataLabelShapes()
         => Layers.SelectMany(layer => layer.GetDataLabelShapes());
 
     public decimal MapDataPointToCanvas(decimal dataPoint) => Canvas.PlotAreaY + MapDataValueToPlotArea(PlotArea.Max - dataPoint);

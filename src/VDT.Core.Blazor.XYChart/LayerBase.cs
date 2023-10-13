@@ -48,7 +48,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
 
     public abstract IEnumerable<ShapeBase> GetDataSeriesShapes();
 
-    public IEnumerable<ShapeBase> GetDataLabelShapes() {
+    public IEnumerable<DataLabelShape> GetDataLabelShapes() {
         var layerIndex = Chart.Layers.IndexOf(this);
 
         if (ShowDataLabels) {
@@ -64,7 +64,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             )));
         }
         else {
-            return Enumerable.Empty<ShapeBase>();
+            return Enumerable.Empty<DataLabelShape>();
         }
     }
 
