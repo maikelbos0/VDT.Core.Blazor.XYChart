@@ -4,11 +4,14 @@
 
 <p>
     A bar chart is an XY chart with a bar layer, in which the data is displayed as vertical bars which have a height corresponding to the data values. Bar
-    charts offer the customization parameters listed below.
+    layers offer the customization parameters listed below.
 </p>
 
 <ul>
-    <li><code>IsStacked</code> toggles stacking of data points; a stacked line layer stacks positive and negative values together</li>
+    <li>
+        <code>IsStacked</code> toggles stacking of data points; a stacked bar layer divides its bars into a positive stack of bars displayed above the 0 line
+        and a negative stack of bars below the 0 line, so that positive and negative values are always visible without overlap
+    </li>
     <li><code>ShowDataLabels</code> toggles visibility of labels with the value at each data point</li>
     <li>
         <code>ClearancePercentage</code> is the amount of white space on either side of the group of bars for an index, expressed as a percentage of the total
