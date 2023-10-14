@@ -7,7 +7,7 @@ namespace VDT.Core.Blazor.XYChart;
 
 public class AreaLayer : LayerBase {
     public override StackMode StackMode => StackMode.Single;
-    public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.EdgeToEdge; // TODO what about data labels
+    public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.EdgeToEdge;
     public override bool NullAsZero => true;
 
     public override bool HaveParametersChanged(ParameterView parameters)
