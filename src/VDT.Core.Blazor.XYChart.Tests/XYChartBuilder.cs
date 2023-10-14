@@ -26,7 +26,8 @@ public class XYChartBuilder {
             YAxisLabelWidth = CanvasYAxisLabelWidth,
             YAxisLabelClearance = CanvasYAxisLabelClearance,
             YAxisLabelFormat = CanvasYAxisLabelFormat,
-            YAxisMultiplierFormat = CanvasYAxisMultiplierFormat
+            YAxisMultiplierFormat = CanvasYAxisMultiplierFormat,
+            DataLabelFormat = CanvasDataLabelFormat
         };
         Chart.PlotArea = new() {
             Chart = Chart,

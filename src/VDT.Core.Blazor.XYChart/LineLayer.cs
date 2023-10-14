@@ -22,6 +22,7 @@ public class LineLayer : LayerBase {
 
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsStacked)
+        || parameters.HasParameterChanged(ShowDataLabels)
         || parameters.HasParameterChanged(ShowDataMarkers)
         || parameters.HasParameterChanged(DataMarkerSize)
         || parameters.HasParameterChanged(DataMarkerType)

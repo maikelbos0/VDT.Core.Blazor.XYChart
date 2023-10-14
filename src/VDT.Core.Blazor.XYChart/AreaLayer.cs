@@ -11,7 +11,8 @@ public class AreaLayer : LayerBase {
     public override bool NullAsZero => true;
 
     public override bool HaveParametersChanged(ParameterView parameters)
-        => parameters.HasParameterChanged(IsStacked);
+        => parameters.HasParameterChanged(IsStacked)
+        || parameters.HasParameterChanged(ShowDataLabels);
 
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var layerIndex = Chart.Layers.IndexOf(this);

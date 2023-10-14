@@ -5,12 +5,12 @@
 
 <p>
     A line chart is an XY chart with a line layer, in which the data is displayed as a series of points at positions corresponding to the data values,
-    connected by lines. As can be seen in <a href="/ChartBasics">chart basics</a>, a line layer can be either stacked or unstacked. A stacked line layer stacks
-    positive and negative values together since there can not be any visibility issues. For line charts, you can also use the customization parameters listed
-    below.
+    connected by lines. Line layers offer the customization parameters listed below.
 </p>
 
 <ul>
+    <li><code>IsStacked</code> toggles stacking of data points; a stacked line layer stacks positive and negative values together</li>
+    <li><code>ShowDataLabels</code> toggles visibility of labels with the value at each data point</li>
     <li><code>ShowDataMarkers</code> toggles visibility of the markers at the positions of the data points</li>
     <li><code>DataMarkerSize</code> is the size of the data markers</li>
     <li>
@@ -48,6 +48,14 @@
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="showDataLabels">Data labels</label>
+        <select class="form-select" id="showDataLabels" @onchange="args => ShowDataLabels = bool.Parse(args.Value?.ToString()!)">
+            <option value="true" selected="@ShowDataLabels">Show</option>
+            <option value="false" selected="@(!ShowDataLabels)">Hide</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="showDataMarkers">Data markers</label>
         <select class="form-select" id="showDataMarkers" @onchange="args => ShowDataMarkers = bool.Parse(args.Value?.ToString()!)">
             <option value="true" selected="@ShowDataMarkers">Show</option>
@@ -80,7 +88,7 @@
 
 <div class="d-inline-block">
     <XYChart Labels="ExampleData.Labels">
-        <LineLayer IsStacked="IsStacked" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
+        <LineLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
             @foreach (var data in ExampleData.LineData) {
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
             }
@@ -127,6 +135,7 @@
     }
 
     private bool IsStacked { get; set; } = false;
+    private bool ShowDataLabels { get; set; } = false;
     private bool ShowDataMarkers { get; set; } = true;
     private decimal DataMarkerSize { get; set; } = 10M;
     private DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;

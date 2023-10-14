@@ -4,10 +4,13 @@
 
 <p>
     An area chart is an XY chart with an area layer, in which the data is displayed as filled shapes connecting the points at positions corresponding to the
-    data values. As can be seen in <a href="/ChartBasics">chart basics</a>, an area layer can be either stacked or unstacked. A stacked area layer stacks
-    positive and negative values together to more clearly express the relationship between data layers. For area charts, there are currently not additional
-    customization options.
+    data values. Area layers offer only the standard customization parameters as listed below.
 </p>
+
+<ul>
+    <li><code>IsStacked</code> toggles stacking of data points; a stacked area layer stacks positive and negative values together</li>
+    <li><code>ShowDataLabels</code> toggles visibility of labels with the value at each data point</li>
+</ul>
 
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
@@ -17,11 +20,19 @@
             <option value="true" selected="@IsStacked">Stacked</option>
         </select>
     </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="showDataLabels">Data labels</label>
+        <select class="form-select" id="showDataLabels" @onchange="args => ShowDataLabels = bool.Parse(args.Value?.ToString()!)">
+            <option value="true" selected="@ShowDataLabels">Show</option>
+            <option value="false" selected="@(!ShowDataLabels)">Hide</option>
+        </select>
+    </div>
 </div>
 
 <div class="d-inline-block">
     <XYChart Labels="ExampleData.Labels">
-        <AreaLayer IsStacked="IsStacked">
+        <AreaLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels">
             @foreach (var data in ExampleData.AreaData) {
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
             }
@@ -35,4 +46,5 @@
 
 @code {
     private bool IsStacked { get; set; } = false;
+    private bool ShowDataLabels { get; set; } = false;
 }

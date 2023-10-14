@@ -46,3 +46,11 @@
     fill-opacity: 1;
     stroke-opacity: 1;
 }
+
+::deep .chart-main .data-label[data-negative] {
+    fill: #dd0000;
+}
+
+::deep .chart-main .anchor-marker {
+    stroke: #dd0000;
+}

@@ -9,15 +9,18 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class AreaLayerTests {
     [Theory]
-    [InlineData(false, false)]
-    [InlineData(true, true)]
-    public void HaveParametersChanged(bool isStacked, bool expectedResult) {
+    [InlineData(false, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(false, true, true)]
+    public void HaveParametersChanged(bool isStacked, bool showDataLabels, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
-            { nameof(AreaLayer.IsStacked), isStacked }
+            { nameof(AreaLayer.IsStacked), isStacked },
+            { nameof(AreaLayer.ShowDataLabels), showDataLabels }
         });
 
         var subject = new AreaLayer {
-            IsStacked = false
+            IsStacked = false,
+            ShowDataLabels = false
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));

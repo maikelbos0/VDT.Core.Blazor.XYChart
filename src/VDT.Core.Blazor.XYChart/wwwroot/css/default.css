@@ -22,8 +22,8 @@
 }
 
 .chart-main .y-axis-label {
-    text-anchor: end;
     font-size: 10pt;
+    text-anchor: end;
     alignment-baseline: central;
 }
 
@@ -31,16 +31,34 @@
     transform-box: fill-box;
     transform-origin: 50% 50% 0;
     transform: translate(6pt, 0) rotate(-90deg);
-    dominant-baseline: central;
+    font-size: 12pt;
     text-anchor: middle;
+    dominant-baseline: central;
 }
 
 .chart-main .x-axis-label {
-    dominant-baseline: hanging;
+    font-size: 10pt;
     text-anchor: middle;
+    dominant-baseline: hanging;
 }
 
 .chart-main .line-data {
     fill: none;
     stroke-width: 2px;
+}
+
+.chart-main .data-label {
+    transform-box: fill-box;
+    transform-origin: 50% 50% 0;
+    font-size: 10pt;
+    text-anchor: middle;
+    alignment-baseline: central;
+}
+
+.chart-main .data-label[data-positive] {
+    transform: translate(0, -10pt);
+}
+
+.chart-main .data-label[data-negative] {
+    transform: translate(0, 10pt);
 }

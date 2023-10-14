@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-// TODO add example for area chart
 // TODO add example for Plot area / Auto scale
 // TODO add example for Canvas
 // TODO docs <GenerateDocumentationFile>true</GenerateDocumentationFile>

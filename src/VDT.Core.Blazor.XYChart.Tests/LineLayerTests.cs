@@ -10,9 +10,10 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class LineLayerTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(bool isStacked, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, bool expectedResult) {
+    public void HaveParametersChanged(bool isStacked, bool showDataLabels, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(LineLayer.IsStacked), isStacked },
+            { nameof(LineLayer.ShowDataLabels), showDataLabels },
             { nameof(LineLayer.ShowDataMarkers), showDataMarkers },
             { nameof(LineLayer.DataMarkerSize), dataMarkerSize },
             { nameof(LineLayer.DataMarkerType), dataMarkerType },
@@ -21,6 +22,7 @@ public class LineLayerTests {
 
         var subject = new LineLayer {
             IsStacked = false,
+            ShowDataLabels = false,
             ShowDataMarkers = true,
             DataMarkerSize = 10M,
             DataMarkerType = DefaultDataMarkerTypes.Square,
@@ -30,13 +32,14 @@ public class LineLayerTests {
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<bool, bool, decimal, DataMarkerDelegate, bool, bool> HaveParametersChanged_Data() => new() {
-        { false, true, 10M, DefaultDataMarkerTypes.Square, true, false },
-        { true, true, 10M, DefaultDataMarkerTypes.Square, true, true },
-        { false, false, 10M, DefaultDataMarkerTypes.Square, true, true },
-        { false, true, 15M, DefaultDataMarkerTypes.Square, true, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Round, true, true },
-        { false, true, 10M, DefaultDataMarkerTypes.Square, false, true }
+    public static TheoryData<bool, bool, bool, decimal, DataMarkerDelegate, bool, bool> HaveParametersChanged_Data() => new() {
+        { false, false, true, 10M, DefaultDataMarkerTypes.Square, true, false },
+        { true, false, true, 10M, DefaultDataMarkerTypes.Square, true, true },
+        { false, true, true, 10M, DefaultDataMarkerTypes.Square, true, true },
+        { false, false, false, 10M, DefaultDataMarkerTypes.Square, true, true },
+        { false, false, true, 15M, DefaultDataMarkerTypes.Square, true, true },
+        { false, false, true, 10M, DefaultDataMarkerTypes.Round, true, true },
+        { false, false, true, 10M, DefaultDataMarkerTypes.Square, false, true }
     };
 
     [Theory]

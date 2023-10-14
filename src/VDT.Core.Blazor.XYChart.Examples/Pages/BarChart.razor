@@ -3,13 +3,16 @@
 <h1>Bar chart</h1>
 
 <p>
-    A bar chart is an XY chart with a bar layer, in which the data is displayed as vertical bars which have a height corresponding to the data values. As can
-    be seen in <a href="/ChartBasics">chart basics</a>, a bar layer can be either stacked or unstacked. A stacked bar layer divides its bars into a positive
-    stack of bars displayed above the 0 line and a negative stack of bars below the 0 line, so that positive and negative values are always visible without
-    overlap. For bar charts, you can also use the customization parameters listed below.
+    A bar chart is an XY chart with a bar layer, in which the data is displayed as vertical bars which have a height corresponding to the data values. Bar
+    layers offer the customization parameters listed below.
 </p>
 
 <ul>
+    <li>
+        <code>IsStacked</code> toggles stacking of data points; a stacked bar layer divides its bars into a positive stack of bars displayed above the 0 line
+        and a negative stack of bars below the 0 line, so that positive and negative values are always visible without overlap
+    </li>
+    <li><code>ShowDataLabels</code> toggles visibility of labels with the value at each data point</li>
     <li>
         <code>ClearancePercentage</code> is the amount of white space on either side of the group of bars for an index, expressed as a percentage of the total
         amount of space available for this index
@@ -30,6 +33,14 @@
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="showDataLabels">Data labels</label>
+        <select class="form-select" id="showDataLabels" @onchange="args => ShowDataLabels = bool.Parse(args.Value?.ToString()!)">
+            <option value="true" selected="@ShowDataLabels">Show</option>
+            <option value="false" selected="@(!ShowDataLabels)">Hide</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="clearancePercentage">Clearance percentage</label>
         <input type="number" class="form-control" id="clearancePercentage" @bind-value="@ClearancePercentage" />
     </div>
@@ -42,7 +53,7 @@
 
 <div class="d-inline-block">
     <XYChart Labels="ExampleData.Labels">
-        <BarLayer IsStacked="IsStacked" ClearancePercentage="ClearancePercentage" GapPercentage="GapPercentage">
+        <BarLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels" ClearancePercentage="ClearancePercentage" GapPercentage="GapPercentage">
 
             @foreach (var data in ExampleData.BarData) {
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
@@ -57,6 +68,7 @@
 
 @code {
     private bool IsStacked { get; set; } = false;
+    private bool ShowDataLabels { get; set; } = false;
     private decimal ClearancePercentage { get; set; } = 10M;
     private decimal GapPercentage { get; set; } = 5M;
 }

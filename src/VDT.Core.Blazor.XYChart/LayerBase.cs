@@ -9,9 +9,11 @@ namespace VDT.Core.Blazor.XYChart;
 
 public abstract class LayerBase : ChildComponentBase, IDisposable {
     public static bool DefaultIsStacked { get; set; } = false;
+    public static bool DefaultShowDataLabels { get; set; } = false;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool IsStacked { get; set; } = DefaultIsStacked;
+    [Parameter] public bool ShowDataLabels { get; set; } = DefaultShowDataLabels;
     internal List<DataSeries> DataSeries { get; set; } = new();
     public abstract StackMode StackMode { get; }
     public abstract DataPointSpacingMode DefaultDataPointSpacingMode { get; }
@@ -46,21 +48,42 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
 
     public abstract IEnumerable<ShapeBase> GetDataSeriesShapes();
 
-    public IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
+    public IEnumerable<DataLabelShape> GetDataLabelShapes() {
+        var layerIndex = Chart.Layers.IndexOf(this);
+
+        if (ShowDataLabels) {
+            return GetCanvasDataSeries().SelectMany(canvasDataSeries => canvasDataSeries.DataPoints.Select(dataPoint => new DataLabelShape(
+                dataPoint.X,
+                dataPoint.Y,
+                dataPoint.Value.ToString(Chart.Canvas.DataLabelFormat),
+                canvasDataSeries.CssClass,
+                dataPoint.Value >= 0,
+                layerIndex,
+                canvasDataSeries.Index,
+                dataPoint.Index
+            )));
+        }
+        else {
+            return Enumerable.Empty<DataLabelShape>();
+        }
+    }
+
+    public virtual IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();
 
         return DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
-            dataSeries.GetColor(), 
-            dataSeries.CssClass, 
-            index, 
-            dataSeries.GetDataPoints()
-                .Select(value => new CanvasDataPoint(
-                    Chart.MapDataIndexToCanvas(value.Index),
-                    Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
-                    Chart.MapDataValueToPlotArea(value.DataPoint),
-                    value.Index
-                )).ToList())
-        );
+            dataSeries.GetColor(),
+            dataSeries.CssClass,
+            index,
+            dataSeries.GetDataPoints().Select(value => new CanvasDataPoint(
+                Chart.MapDataIndexToCanvas(value.Index),
+                Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
+                Chart.MapDataValueToPlotArea(value.DataPoint),
+                0, // By default, data point shapes don't require a width
+                value.Index,
+                (value.DataPoint / Chart.PlotArea.Multiplier)
+            )).ToList())
+        ).ToList();
     }
 
     public IEnumerable<decimal> GetScaleDataPoints() {
@@ -70,7 +93,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             .Select(value => dataPointTransformer(value.DataPoint, value.Index)));
     }
 
-    private Func<decimal, int, decimal> GetDataPointTransformer() {
+    protected Func<decimal, int, decimal> GetDataPointTransformer() {
         if (IsStacked) {
             switch (StackMode) {
                 case StackMode.Single:
