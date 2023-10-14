@@ -105,12 +105,12 @@ public class XYChart : ComponentBase {
         foreach (var shape in GetDataSeriesShapes()) {
             yield return shape;
         }
-        
+
+        yield return Canvas.GetPlotAreaShape();
+
         foreach (var shape in GetDataLabelShapes()) {
             yield return shape;
         }
-
-        yield return Canvas.GetPlotAreaShape();
 
         foreach (var shape in GetYAxisLabelShapes()) {
             yield return shape;
