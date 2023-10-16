@@ -7,17 +7,8 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Theory]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", false)]
-    [InlineData(900, 500, 10, 100, 10, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 600, 10, 100, 10, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 20, 100, 10, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 75, 10, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 15, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 10, 75, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 15, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#.##", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #.##", true)]
-    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, bool expectedResult) {
+    [MemberData(nameof(HaveParametersChanged_Data))]
+    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, LegendPosition legendPosition, decimal legendHeight, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
@@ -27,7 +18,9 @@ public class CanvasTests {
             { nameof(Canvas.YAxisLabelWidth), yAxisLabelWidth },
             { nameof(Canvas.YAxisLabelClearance), yAxisLabelClearance },
             { nameof(Canvas.YAxisLabelFormat), yAxisLabelFormat },
-            { nameof(Canvas.YAxisMultiplierFormat), yAxisMultiplierFormat }
+            { nameof(Canvas.YAxisMultiplierFormat), yAxisMultiplierFormat },
+            { nameof(Canvas.LegendPosition), legendPosition },
+            { nameof(Canvas.LegendHeight), legendHeight }
         });
 
         var subject = new Canvas {
@@ -39,10 +32,33 @@ public class CanvasTests {
             YAxisLabelWidth = 100,
             YAxisLabelClearance = 10,
             YAxisLabelFormat = "#",
-            YAxisMultiplierFormat = "x #"
+            YAxisMultiplierFormat = "x #",
+            LegendPosition = LegendPosition.None,
+            LegendHeight = 25M
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
+    }
+
+    public static HaveParametersChangedTheoryData HaveParametersChanged_Data() => new() {
+        { 1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, false },
+        { 1100, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
+        { 1000, 600, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
+        { 1000, 500, 20, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
+        { 1000, 500, 10, 125, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
+        { 1000, 500, 10, 100, 20, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
+        { 1000, 500, 10, 100, 10, 125, 10, "#", "x #", LegendPosition.None, 25M, true },
+        { 1000, 500, 10, 100, 10, 100, 20, "#", "x #", LegendPosition.None, 25M, true },
+        { 1000, 500, 10, 100, 10, 100, 10, "#.##", "x #", LegendPosition.None, 25M, true },
+        { 1000, 500, 10, 100, 10, 100, 10, "#", "x #.##", LegendPosition.None, 25M, true },
+        { 1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.Top, 25M, true },
+        { 1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 50M, true }
+    };
+
+    public class HaveParametersChangedTheoryData : TheoryData {
+        public void Add(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, LegendPosition legendPosition, decimal legendHeight, bool expectedResult) {
+            AddRow(width, height, padding, xAxisLabelHeight, xAxisLabelClearance, yAxisLabelWidth, yAxisLabelClearance, yAxisLabelFormat, yAxisMultiplierFormat, legendPosition, legendHeight, expectedResult);
+        }
     }
 
     [Fact]
