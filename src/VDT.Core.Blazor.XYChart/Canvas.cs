@@ -15,7 +15,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static string DefaultYAxisMultiplierFormat { get; set; } = "x #,##0.######";
     public static string DefaultDataLabelFormat { get; set; } = "#,##0.######";
     public static LegendPosition DefaultLegendPosition { get; set; } = LegendPosition.None;
-    public static decimal DefaultLegendHeight { get; set; } = 25;
+    public static int DefaultLegendHeight { get; set; } = 25;
 
     [Parameter] public int Width { get; set; } = DefaultWidth;
     [Parameter] public int Height { get; set; } = DefaultHeight;
@@ -28,7 +28,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public string YAxisMultiplierFormat { get; set; } = DefaultYAxisMultiplierFormat;
     [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
     [Parameter] public LegendPosition LegendPosition { get; set; } = DefaultLegendPosition;
-    [Parameter] public decimal LegendHeight { get; set; } = DefaultLegendHeight;
+    [Parameter] public int LegendHeight { get; set; } = DefaultLegendHeight;
     public int PlotAreaX => Padding + YAxisLabelWidth;
     public int PlotAreaY => Padding;
     public int PlotAreaWidth => Width - Padding * 2 - YAxisLabelWidth;

@@ -7,8 +7,19 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Theory]
-    [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, LegendPosition legendPosition, decimal legendHeight, bool expectedResult) {
+    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, false)]
+    [InlineData(900, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, true)]
+    [InlineData(1000, 600, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, true)]
+    [InlineData(1000, 500, 20, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, true)]
+    [InlineData(1000, 500, 10, 75, 10, 100, 10, "#", "x #", LegendPosition.None, 25, true)]
+    [InlineData(1000, 500, 10, 100, 15, 100, 10, "#", "x #", LegendPosition.None, 25, true)]
+    [InlineData(1000, 500, 10, 100, 10, 75, 10, "#", "x #", LegendPosition.None, 25, true)]
+    [InlineData(1000, 500, 10, 100, 10, 100, 15, "#", "x #", LegendPosition.None, 25, true)]
+    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#.##", "x #", LegendPosition.None, 25, true)]
+    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #.##", LegendPosition.None, 25, true)]
+    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.Top, 25, true)]
+    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 50, true)]
+    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, LegendPosition legendPosition, int legendHeight, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
@@ -34,31 +45,10 @@ public class CanvasTests {
             YAxisLabelFormat = "#",
             YAxisMultiplierFormat = "x #",
             LegendPosition = LegendPosition.None,
-            LegendHeight = 25M
+            LegendHeight = 25
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
-    }
-
-    public static HaveParametersChangedTheoryData HaveParametersChanged_Data() => new() {
-        { 1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, false },
-        { 1100, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
-        { 1000, 600, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
-        { 1000, 500, 20, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
-        { 1000, 500, 10, 125, 10, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
-        { 1000, 500, 10, 100, 20, 100, 10, "#", "x #", LegendPosition.None, 25M, true },
-        { 1000, 500, 10, 100, 10, 125, 10, "#", "x #", LegendPosition.None, 25M, true },
-        { 1000, 500, 10, 100, 10, 100, 20, "#", "x #", LegendPosition.None, 25M, true },
-        { 1000, 500, 10, 100, 10, 100, 10, "#.##", "x #", LegendPosition.None, 25M, true },
-        { 1000, 500, 10, 100, 10, 100, 10, "#", "x #.##", LegendPosition.None, 25M, true },
-        { 1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.Top, 25M, true },
-        { 1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 50M, true }
-    };
-
-    public class HaveParametersChangedTheoryData : TheoryData {
-        public void Add(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, LegendPosition legendPosition, decimal legendHeight, bool expectedResult) {
-            AddRow(width, height, padding, xAxisLabelHeight, xAxisLabelClearance, yAxisLabelWidth, yAxisLabelClearance, yAxisLabelFormat, yAxisMultiplierFormat, legendPosition, legendHeight, expectedResult);
-        }
     }
 
     [Fact]
