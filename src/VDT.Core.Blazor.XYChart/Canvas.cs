@@ -30,9 +30,9 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public LegendPosition LegendPosition { get; set; } = DefaultLegendPosition;
     [Parameter] public int LegendHeight { get; set; } = DefaultLegendHeight;
     public int PlotAreaX => Padding + YAxisLabelWidth;
-    public int PlotAreaY => Padding;
+    public int PlotAreaY => Padding + (LegendPosition == LegendPosition.Top ? LegendHeight : 0);
     public int PlotAreaWidth => Width - Padding * 2 - YAxisLabelWidth;
-    public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight;
+    public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight - (LegendPosition == LegendPosition.None ? 0 : LegendHeight);
 
     protected override void OnInitialized() => Chart.SetCanvas(this);
 

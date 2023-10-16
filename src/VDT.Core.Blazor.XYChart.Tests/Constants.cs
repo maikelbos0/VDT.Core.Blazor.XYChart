@@ -14,11 +14,13 @@ public static class Constants {
     public const string CanvasYAxisLabelFormat = "0.00";
     public const string CanvasYAxisMultiplierFormat = "x 0.00";
     public const string CanvasDataLabelFormat = "0.00";
+    public const LegendPosition CanvasLegendPosition = LegendPosition.Top;
+    public const int CanvasLegendHeight = 25;
 
     public const int PlotAreaX = CanvasPadding + CanvasYAxisLabelWidth;
-    public const int PlotAreaY = CanvasPadding;
+    public const int PlotAreaY = CanvasPadding + CanvasLegendHeight;
     public const int PlotAreaWidth = CanvasWidth - CanvasPadding * 2 - CanvasYAxisLabelWidth;
-    public const int PlotAreaHeight = CanvasHeight - CanvasPadding * 2 - CanvasXAxisLabelHeight;
+    public const int PlotAreaHeight = CanvasHeight - CanvasPadding * 2 - CanvasXAxisLabelHeight - CanvasLegendHeight;
 
     public const decimal PlotAreaMin = -120M;
     public const decimal PlotAreaMax = 480M;

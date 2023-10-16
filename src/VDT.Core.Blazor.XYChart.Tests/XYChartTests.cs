@@ -249,7 +249,7 @@ public class XYChartTests {
 
         Assert.NotNull(result);
         Assert.Equal(CanvasPadding, result.X);
-        Assert.Equal(CanvasPadding + PlotAreaHeight / 2M, result.Y);
+        Assert.Equal(PlotAreaY + PlotAreaHeight / 2M, result.Y);
         Assert.Equal(1000.ToString(CanvasYAxisMultiplierFormat), result.Multiplier);
     }
 
