@@ -14,10 +14,6 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static string DefaultYAxisLabelFormat { get; set; } = "#,##0.######";
     public static string DefaultYAxisMultiplierFormat { get; set; } = "x #,##0.######";
     public static string DefaultDataLabelFormat { get; set; } = "#,##0.######";
-    public static LegendPosition DefaultLegendPosition { get; set; } = LegendPosition.None;
-    public static int DefaultLegendHeight { get; set; } = 25;
-    public static int DefaultLegendItemWidth { get; set; } = 25;
-    public static int DefaultLegendItemHeight { get; set; } = 1000;
     
 
     [Parameter] public int Width { get; set; } = DefaultWidth;
@@ -30,14 +26,10 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public string YAxisLabelFormat { get; set; } = DefaultYAxisLabelFormat;
     [Parameter] public string YAxisMultiplierFormat { get; set; } = DefaultYAxisMultiplierFormat;
     [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
-    [Parameter] public LegendPosition LegendPosition { get; set; } = DefaultLegendPosition;
-    [Parameter] public int LegendHeight { get; set; } = DefaultLegendHeight;
-    [Parameter] public int LegendItemWidth { get; set; } = DefaultLegendItemWidth;
-    [Parameter] public int LegendItemHeight { get; set; } = DefaultLegendItemHeight;
     public int PlotAreaX => Padding + YAxisLabelWidth;
-    public int PlotAreaY => Padding + (LegendPosition == LegendPosition.Top ? LegendHeight : 0);
+    public int PlotAreaY => Padding + (Chart.Legend.LegendPosition == LegendPosition.Top ? Chart.Legend.LegendHeight : 0);
     public int PlotAreaWidth => Width - Padding * 2 - YAxisLabelWidth;
-    public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight - (LegendPosition == LegendPosition.None ? 0 : LegendHeight);
+    public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight - (Chart.Legend.LegendPosition == LegendPosition.None ? 0 : Chart.Legend.LegendHeight);
 
     protected override void OnInitialized() => Chart.SetCanvas(this);
 
@@ -55,11 +47,7 @@ public class Canvas : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(YAxisLabelWidth)
         || parameters.HasParameterChanged(YAxisLabelClearance)
         || parameters.HasParameterChanged(YAxisLabelFormat)
-        || parameters.HasParameterChanged(YAxisMultiplierFormat)
-        || parameters.HasParameterChanged(LegendPosition)
-        || parameters.HasParameterChanged(LegendHeight)
-        || parameters.HasParameterChanged(LegendItemWidth)
-        || parameters.HasParameterChanged(LegendItemHeight);
+        || parameters.HasParameterChanged(YAxisMultiplierFormat);
 
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 }

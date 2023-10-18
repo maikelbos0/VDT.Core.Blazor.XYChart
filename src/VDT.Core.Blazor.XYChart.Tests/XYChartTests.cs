@@ -55,6 +55,30 @@ public class XYChartTests {
     }
 
     [Fact]
+    public void SetLegend() {
+        var legend = new Legend();
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+
+        subject.SetLegend(legend);
+
+        Assert.Same(legend, subject.Legend);
+        Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Fact]
+    public void ResetLegend() {
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+        var legend = subject.Legend;
+
+        subject.ResetLegend();
+
+        Assert.NotSame(legend, subject.Legend);
+        Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Fact]
     public void SetPlotArea() {
         var plotArea = new PlotArea();
         var builder = new XYChartBuilder();

@@ -15,6 +15,7 @@ public class XYChart : ComponentBase {
     [Parameter] public IList<string> Labels { get; set; } = new List<string>();
     [Parameter] public DataPointSpacingMode DataPointSpacingMode { get; set; } = DefaultDataPointSpacingMode;
     internal Canvas Canvas { get; set; } = new();
+    internal Legend Legend { get; set; } = new();
     internal PlotArea PlotArea { get; set; } = new();
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
@@ -67,6 +68,16 @@ public class XYChart : ComponentBase {
 
     internal void ResetCanvas() {
         Canvas = new();
+        HandleStateChange();
+    }
+
+    internal void SetLegend(Legend legend) {
+        Legend = legend;
+        HandleStateChange();
+    }
+
+    internal void ResetLegend() {
+        Legend = new();
         HandleStateChange();
     }
 

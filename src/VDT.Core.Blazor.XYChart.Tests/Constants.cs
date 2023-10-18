@@ -14,7 +14,7 @@ public static class Constants {
     public const string CanvasYAxisLabelFormat = "0.00";
     public const string CanvasYAxisMultiplierFormat = "x 0.00";
     public const string CanvasDataLabelFormat = "0.00";
-    public const LegendPosition CanvasLegendPosition = LegendPosition.Top;
+    public const LegendPosition CanvasLegendPosition = LegendPosition.Top; // TODO rename properties here and in legend
     public const int CanvasLegendHeight = 25;
 
     public const int PlotAreaX = CanvasPadding + CanvasYAxisLabelWidth;

@@ -7,21 +7,17 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Theory]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, 100, 25, false)]
-    [InlineData(900, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 600, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 500, 20, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 500, 10, 75, 10, 100, 10, "#", "x #", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 500, 10, 100, 15, 100, 10, "#", "x #", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 500, 10, 100, 10, 75, 10, "#", "x #", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 15, "#", "x #", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#.##", "x #", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #.##", LegendPosition.None, 25, 100, 25, true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.Top, 25, 100, 25, true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 50, 100, 25, true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, 75, 25, true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", LegendPosition.None, 25, 100, 10, true)]
-    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, LegendPosition legendPosition, int legendHeight, int legendItemWidth, int legendItemHeight, bool expectedResult) {
+    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", false)]
+    [InlineData(900, 500, 10, 100, 10, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 600, 10, 100, 10, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 20, 100, 10, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 75, 10, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 15, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 10, 75, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 10, 100, 15, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#.##", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #.##", true)]
+    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
@@ -31,11 +27,7 @@ public class CanvasTests {
             { nameof(Canvas.YAxisLabelWidth), yAxisLabelWidth },
             { nameof(Canvas.YAxisLabelClearance), yAxisLabelClearance },
             { nameof(Canvas.YAxisLabelFormat), yAxisLabelFormat },
-            { nameof(Canvas.YAxisMultiplierFormat), yAxisMultiplierFormat },
-            { nameof(Canvas.LegendPosition), legendPosition },
-            { nameof(Canvas.LegendHeight), legendHeight },
-            { nameof(Canvas.LegendItemWidth), legendItemWidth },
-            { nameof(Canvas.LegendItemHeight), legendItemHeight }
+            { nameof(Canvas.YAxisMultiplierFormat), yAxisMultiplierFormat }
         });
 
         var subject = new Canvas {
@@ -47,11 +39,7 @@ public class CanvasTests {
             YAxisLabelWidth = 100,
             YAxisLabelClearance = 10,
             YAxisLabelFormat = "#",
-            YAxisMultiplierFormat = "x #",
-            LegendPosition = LegendPosition.None,
-            LegendHeight = 25,
-            LegendItemWidth = 100,
-            LegendItemHeight = 25
+            YAxisMultiplierFormat = "x #"
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));

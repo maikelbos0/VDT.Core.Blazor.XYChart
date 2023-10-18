@@ -28,8 +28,11 @@ public class XYChartBuilder {
             YAxisLabelFormat = CanvasYAxisLabelFormat,
             YAxisMultiplierFormat = CanvasYAxisMultiplierFormat,
             DataLabelFormat = CanvasDataLabelFormat,
+        };
+        Chart.Legend = new() {
             LegendPosition = CanvasLegendPosition,
             LegendHeight = CanvasLegendHeight
+            // TODO legend item, other legend properties
         };
         Chart.PlotArea = new() {
             Chart = Chart,
