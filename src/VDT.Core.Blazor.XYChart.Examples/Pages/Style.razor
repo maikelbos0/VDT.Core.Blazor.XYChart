@@ -6,7 +6,8 @@
 <p>
     Since the chart is rendered as SVG, each chart element is fully customizable using the powerful SVG options in CSS. Each element type can be referenced
     using the below CSS classes. The chart itself can be referenced with the CSS class <code>svg.chart-main</code>. Aside from the default CSS classes, it
-    is also possible to assign each data series its own custom CSS class using the <code>CssClass</code> parameter.
+    is also possible to assign each data series its own custom CSS class using the <code>CssClass</code> parameter. All SVG elements that are associated with
+    this data series will contain this CSS class, including data labels and legend items.
 </p>
 
 <ul>
@@ -45,6 +46,8 @@
             <li>Negative values (including 0) also get the attribute <code>data-negative</code></li>
         </ul>
     </li>
+    <li>Legend item keys: <code>.legend-key</code></li>
+    <li>Legend item text: <code>.legend-text</code></li>
 </ul>
 
 <p>
