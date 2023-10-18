@@ -9,7 +9,7 @@ public class YAxisLabelShapeTests {
     public void Key() {
         var subject = new YAxisLabelShape(100M, 50M, "150", 2);
 
-        Assert.Equal("YAxisLabelShape[2]", subject.Key);
+        Assert.Equal($"{nameof(YAxisLabelShape)}[2]", subject.Key);
     }
 
     [Fact]

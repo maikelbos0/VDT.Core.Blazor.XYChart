@@ -9,7 +9,7 @@ public class GridLineShapeTests {
     public void Key() {
         var subject = new GridLineShape(20M, 50M, 80, 10M, 2);
 
-        Assert.Equal("GridLineShape[2]", subject.Key);
+        Assert.Equal($"{nameof(GridLineShape)}[2]", subject.Key);
     }
 
     [Fact]

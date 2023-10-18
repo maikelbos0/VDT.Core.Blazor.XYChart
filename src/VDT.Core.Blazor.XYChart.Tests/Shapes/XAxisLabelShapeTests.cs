@@ -9,7 +9,7 @@ public class XAxisLabelShapeTests {
     public void Key() {
         var subject = new XAxisLabelShape(100M, 50M, "Foo", 2);
 
-        Assert.Equal("XAxisLabelShape[2]", subject.Key);
+        Assert.Equal($"{nameof(XAxisLabelShape)}[2]", subject.Key);
     }
 
     [Fact]

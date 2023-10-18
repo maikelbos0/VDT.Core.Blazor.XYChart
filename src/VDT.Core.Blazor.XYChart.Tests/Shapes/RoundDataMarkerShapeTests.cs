@@ -9,7 +9,7 @@ public class RoundDataMarkerShapeTests {
     public void Key() {
         var subject = new RoundDataMarkerShape(150, 50, 20, "red", "example-data", 1, 2, 5);
 
-        Assert.Equal("RoundDataMarkerShape[1,2,5]", subject.Key);
+        Assert.Equal($"{nameof(RoundDataMarkerShape)}[1,2,5]", subject.Key);
     }
 
     [Fact]
