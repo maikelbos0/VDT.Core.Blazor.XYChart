@@ -30,8 +30,8 @@ public class XYChartBuilder {
             DataLabelFormat = CanvasDataLabelFormat,
         };
         Chart.Legend = new() {
-            LegendPosition = CanvasLegendPosition,
-            LegendHeight = CanvasLegendHeight
+            Position = Constants.Position,
+            Height = LegendHeight
             // TODO legend item, other legend properties
         };
         Chart.PlotArea = new() {
