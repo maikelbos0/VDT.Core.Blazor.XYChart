@@ -53,9 +53,9 @@ public class CanvasTests {
 
         var result = subject.GetPlotAreaShape();
 
-        Assert.Equal(PlotAreaX, result.X);
-        Assert.Equal(PlotAreaY, result.Y);
-        Assert.Equal(PlotAreaWidth, result.Width);
-        Assert.Equal(PlotAreaHeight, result.Height);
+        Assert.Equal(PlotArea_X, result.X);
+        Assert.Equal(PlotArea_Y, result.Y);
+        Assert.Equal(PlotArea_Width, result.Width);
+        Assert.Equal(PlotArea_Height, result.Height);
     }
 }

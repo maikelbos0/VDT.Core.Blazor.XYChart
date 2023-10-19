@@ -137,9 +137,9 @@ public class PlotAreaTests {
 
         subject.AutoScale(new[] { 0.006M, 0.044M });
 
-        Assert.Equal(PlotAreaMin, subject.Min);
-        Assert.Equal(PlotAreaMax, subject.Max);
-        Assert.Equal(PlotAreaGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(PlotArea_Min, subject.Min);
+        Assert.Equal(PlotArea_Max, subject.Max);
+        Assert.Equal(PlotArea_GridLineInterval, subject.GridLineInterval);
     }
 
     [Theory]

@@ -72,12 +72,12 @@ public class BarLayerTests {
     }
 
     public static TheoryData<int, int, decimal, decimal, decimal, decimal, decimal> GetUnstackedDataSeriesShapes_Data() {
-        var dataPointWidth = PlotAreaWidth / 3M;
+        var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
-            { 0, 0, -30M, PlotAreaX + (0.5M - 0.25M) * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 0.2M * dataPointWidth, -30M / PlotAreaRange * PlotAreaHeight },
-            { 1, 1, 30M, PlotAreaX + (1.5M + 0.1M / 2) * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 0.2M * dataPointWidth, 30M / PlotAreaRange * PlotAreaHeight },
-            { 0, 2, 210M, PlotAreaX + (2.5M - 0.25M) * dataPointWidth, PlotAreaY + (PlotAreaMax - 210M) / PlotAreaRange * PlotAreaHeight, 0.2M * dataPointWidth, 210M / PlotAreaRange * PlotAreaHeight },
+            { 0, 0, -30M, PlotArea_X + (0.5M - 0.25M) * dataPointWidth, PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height, 0.2M * dataPointWidth, -30M / PlotArea_Range * PlotArea_Height },
+            { 1, 1, 30M, PlotArea_X + (1.5M + 0.1M / 2) * dataPointWidth, PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height, 0.2M * dataPointWidth, 30M / PlotArea_Range * PlotArea_Height },
+            { 0, 2, 210M, PlotArea_X + (2.5M - 0.25M) * dataPointWidth, PlotArea_Y + (PlotArea_Max - 210M) / PlotArea_Range * PlotArea_Height, 0.2M * dataPointWidth, 210M / PlotArea_Range * PlotArea_Height },
         };
     }
 
@@ -117,15 +117,15 @@ public class BarLayerTests {
     }
 
     public static TheoryData<int, int, decimal, decimal, decimal, decimal, decimal> GetStackedDataSeriesShapes_Data() {
-        var dataPointWidth = PlotAreaWidth / 3M;
+        var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
-            { 0, 0, -30M, PlotAreaX + (0.5M - 0.25M) * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 0.5M * dataPointWidth, -30M / PlotAreaRange * PlotAreaHeight },
-            { 0, 2, 30M, PlotAreaX + (2.5M - 0.25M) * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 0.5M * dataPointWidth, 30M / PlotAreaRange * PlotAreaHeight },
-            { 1, 0, -30M, PlotAreaX + (0.5M - 0.25M) * dataPointWidth, PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight, 0.5M * dataPointWidth, -30M / PlotAreaRange * PlotAreaHeight },
-            { 1, 0, 30M, PlotAreaX + (0.5M - 0.25M) * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 0.5M * dataPointWidth, 30M / PlotAreaRange * PlotAreaHeight },
-            { 1, 2, -30M, PlotAreaX + (2.5M - 0.25M) * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 0.5M * dataPointWidth, -30M / PlotAreaRange * PlotAreaHeight },
-            { 1, 2, 30M, PlotAreaX + (2.5M - 0.25M) * dataPointWidth, PlotAreaY + (PlotAreaMax - 90M) / PlotAreaRange * PlotAreaHeight, 0.5M * dataPointWidth, 30M / PlotAreaRange * PlotAreaHeight }
+            { 0, 0, -30M, PlotArea_X + (0.5M - 0.25M) * dataPointWidth, PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height, 0.5M * dataPointWidth, -30M / PlotArea_Range * PlotArea_Height },
+            { 0, 2, 30M, PlotArea_X + (2.5M - 0.25M) * dataPointWidth, PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height, 0.5M * dataPointWidth, 30M / PlotArea_Range * PlotArea_Height },
+            { 1, 0, -30M, PlotArea_X + (0.5M - 0.25M) * dataPointWidth, PlotArea_Y + (PlotArea_Max + 90M) / PlotArea_Range * PlotArea_Height, 0.5M * dataPointWidth, -30M / PlotArea_Range * PlotArea_Height },
+            { 1, 0, 30M, PlotArea_X + (0.5M - 0.25M) * dataPointWidth, PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height, 0.5M * dataPointWidth, 30M / PlotArea_Range * PlotArea_Height },
+            { 1, 2, -30M, PlotArea_X + (2.5M - 0.25M) * dataPointWidth, PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height, 0.5M * dataPointWidth, -30M / PlotArea_Range * PlotArea_Height },
+            { 1, 2, 30M, PlotArea_X + (2.5M - 0.25M) * dataPointWidth, PlotArea_Y + (PlotArea_Max - 90M) / PlotArea_Range * PlotArea_Height, 0.5M * dataPointWidth, 30M / PlotArea_Range * PlotArea_Height }
         };
     }
 

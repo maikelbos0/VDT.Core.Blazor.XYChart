@@ -178,9 +178,9 @@ public class XYChartTests {
 
         _ = subject.GetShapes().ToList();
 
-        Assert.Equal(PlotAreaMin, subject.PlotArea.Min);
-        Assert.Equal(PlotAreaMax, subject.PlotArea.Max);
-        Assert.Equal(PlotAreaGridLineInterval, subject.PlotArea.GridLineInterval);
+        Assert.Equal(PlotArea_Min, subject.PlotArea.Min);
+        Assert.Equal(PlotArea_Max, subject.PlotArea.Max);
+        Assert.Equal(PlotArea_GridLineInterval, subject.PlotArea.GridLineInterval);
     }
 
     [Fact]
@@ -260,12 +260,12 @@ public class XYChartTests {
 
         var result = subject.GetGridLineShapes();
 
-        Assert.Equal(PlotAreaRange / PlotAreaGridLineInterval, result.Count());
+        Assert.Equal(PlotArea_Range / PlotArea_GridLineInterval, result.Count());
 
         Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
-            Assert.Equal(PlotAreaY + (PlotAreaMax - PlotAreaGridLineInterval * value.Index) / PlotAreaRange * PlotAreaHeight, value.Shape.Y);
-            Assert.Equal(PlotAreaX, value.Shape.X);
-            Assert.Equal(PlotAreaWidth, value.Shape.Width);
+            Assert.Equal(PlotArea_Y + (PlotArea_Max - PlotArea_GridLineInterval * value.Index) / PlotArea_Range * PlotArea_Height, value.Shape.Y);
+            Assert.Equal(PlotArea_X, value.Shape.X);
+            Assert.Equal(PlotArea_Width, value.Shape.Width);
             Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
         });
     }
@@ -277,12 +277,12 @@ public class XYChartTests {
         
         var result = subject.GetYAxisLabelShapes();
 
-        Assert.Equal(PlotAreaRange / PlotAreaGridLineInterval, result.Count());
+        Assert.Equal(PlotArea_Range / PlotArea_GridLineInterval, result.Count());
 
         Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
-            Assert.Equal(PlotAreaY + (PlotAreaMax - PlotAreaGridLineInterval * value.Index) / PlotAreaRange * PlotAreaHeight, value.Shape.Y);
-            Assert.Equal(PlotAreaX - CanvasYAxisLabelClearance, value.Shape.X);
-            Assert.Equal((PlotAreaGridLineInterval * value.Index).ToString(CanvasYAxisLabelFormat), value.Shape.Value);
+            Assert.Equal(PlotArea_Y + (PlotArea_Max - PlotArea_GridLineInterval * value.Index) / PlotArea_Range * PlotArea_Height, value.Shape.Y);
+            Assert.Equal(PlotArea_X - Canvas_YAxisLabelClearance, value.Shape.X);
+            Assert.Equal((PlotArea_GridLineInterval * value.Index).ToString(Canvas_YAxisLabelFormat), value.Shape.Value);
             Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
         });
     }
@@ -296,9 +296,9 @@ public class XYChartTests {
         var result = subject.GetYAxisMultiplierShape();
 
         Assert.NotNull(result);
-        Assert.Equal(CanvasPadding, result.X);
-        Assert.Equal(PlotAreaY + PlotAreaHeight / 2M, result.Y);
-        Assert.Equal(1000.ToString(CanvasYAxisMultiplierFormat), result.Multiplier);
+        Assert.Equal(Canvas_Padding, result.X);
+        Assert.Equal(PlotArea_Y + PlotArea_Height / 2M, result.Y);
+        Assert.Equal(1000.ToString(Canvas_YAxisMultiplierFormat), result.Multiplier);
     }
 
     [Fact]
@@ -322,9 +322,9 @@ public class XYChartTests {
         Assert.Equal(subject.Labels.Count, result.Count());
 
         Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
-            Assert.Equal(PlotAreaY + PlotAreaHeight + CanvasXAxisLabelClearance, value.Shape.Y);
+            Assert.Equal(PlotArea_Y + PlotArea_Height + Canvas_XAxisLabelClearance, value.Shape.Y);
             Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
-            Assert.Equal(PlotAreaX + (0.5M + value.Index) * PlotAreaWidth / subject.Labels.Count, value.Shape.X);
+            Assert.Equal(PlotArea_X + (0.5M + value.Index) * PlotArea_Width / subject.Labels.Count, value.Shape.X);
             Assert.Equal(subject.Labels[value.Index], value.Shape.Label);
         });
     }
@@ -369,9 +369,9 @@ public class XYChartTests {
     }
 
     public static TheoryData<decimal, decimal> MapDataPointToCanvas_Data() => new() {
-        { 50M, PlotAreaY + (PlotAreaMax - 50M) / PlotAreaRange * PlotAreaHeight },
-        { 200M, PlotAreaY + (PlotAreaMax - 200M) / PlotAreaRange * PlotAreaHeight },
-        { 350M, PlotAreaY + (PlotAreaMax - 350M) / PlotAreaRange * PlotAreaHeight }
+        { 50M, PlotArea_Y + (PlotArea_Max - 50M) / PlotArea_Range * PlotArea_Height },
+        { 200M, PlotArea_Y + (PlotArea_Max - 200M) / PlotArea_Range * PlotArea_Height },
+        { 350M, PlotArea_Y + (PlotArea_Max - 350M) / PlotArea_Range * PlotArea_Height }
     };
 
     [Theory]
@@ -384,9 +384,9 @@ public class XYChartTests {
     }
 
     public static TheoryData<decimal, decimal> MapDataValueToPlotArea_Data() => new() {
-        { 50M, 50M / PlotAreaRange * PlotAreaHeight },
-        { 200M, 200M / PlotAreaRange * PlotAreaHeight },
-        { 350M, 350M / PlotAreaRange * PlotAreaHeight }
+        { 50M, 50M / PlotArea_Range * PlotArea_Height },
+        { 200M, 200M / PlotArea_Range * PlotArea_Height },
+        { 350M, 350M / PlotArea_Range * PlotArea_Height }
     };
 
     [Theory]
@@ -417,12 +417,12 @@ public class XYChartTests {
     }
 
     public static TheoryData<DataPointSpacingMode, int, decimal> GetDataPointWidth_Data() => new() {
-        { DataPointSpacingMode.EdgeToEdge, 3, PlotAreaWidth / 2M },
-        { DataPointSpacingMode.Center, 3, PlotAreaWidth / 3M },
-        { DataPointSpacingMode.EdgeToEdge, 1, PlotAreaWidth },
-        { DataPointSpacingMode.Center, 1, PlotAreaWidth },
-        { DataPointSpacingMode.EdgeToEdge, 0, PlotAreaWidth },
-        { DataPointSpacingMode.Center, 0, PlotAreaWidth },
+        { DataPointSpacingMode.EdgeToEdge, 3, PlotArea_Width / 2M },
+        { DataPointSpacingMode.Center, 3, PlotArea_Width / 3M },
+        { DataPointSpacingMode.EdgeToEdge, 1, PlotArea_Width },
+        { DataPointSpacingMode.Center, 1, PlotArea_Width },
+        { DataPointSpacingMode.EdgeToEdge, 0, PlotArea_Width },
+        { DataPointSpacingMode.Center, 0, PlotArea_Width },
     };
 
     [Theory]
@@ -435,11 +435,11 @@ public class XYChartTests {
     }
 
     public static TheoryData<DataPointSpacingMode, int, decimal> MapDataIndexToCanvas_Data() => new() {
-        { DataPointSpacingMode.EdgeToEdge, 0, PlotAreaX },
-        { DataPointSpacingMode.EdgeToEdge, 1, PlotAreaX + 1 * PlotAreaWidth / 2M },
-        { DataPointSpacingMode.EdgeToEdge, 2, PlotAreaX + 2 * PlotAreaWidth / 2M },
-        { DataPointSpacingMode.Center, 0, PlotAreaX + 0.5M * PlotAreaWidth / 3M },
-        { DataPointSpacingMode.Center, 1, PlotAreaX + 1.5M * PlotAreaWidth / 3M },
-        { DataPointSpacingMode.Center, 2, PlotAreaX + 2.5M * PlotAreaWidth / 3M },
+        { DataPointSpacingMode.EdgeToEdge, 0, PlotArea_X },
+        { DataPointSpacingMode.EdgeToEdge, 1, PlotArea_X + 1 * PlotArea_Width / 2M },
+        { DataPointSpacingMode.EdgeToEdge, 2, PlotArea_X + 2 * PlotArea_Width / 2M },
+        { DataPointSpacingMode.Center, 0, PlotArea_X + 0.5M * PlotArea_Width / 3M },
+        { DataPointSpacingMode.Center, 1, PlotArea_X + 1.5M * PlotArea_Width / 3M },
+        { DataPointSpacingMode.Center, 2, PlotArea_X + 2.5M * PlotArea_Width / 3M },
     };
 }

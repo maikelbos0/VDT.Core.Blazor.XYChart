@@ -10,7 +10,7 @@ public class XYChartBuilder {
     public XYChart Chart { get; }
     public bool StateHasChangedInvoked { get; private set; }
 
-    public XYChartBuilder(int labelCount = LabelCount, DataPointSpacingMode dataPointSpacingMode = SpacingMode) {
+    public XYChartBuilder(int labelCount = Chart_LabelCount, DataPointSpacingMode dataPointSpacingMode = Chart_DataPointSpacingMode) {
         Chart = new() {
             Labels = defaultLabels.Take(labelCount).ToList(),
             DataPointSpacingMode = dataPointSpacingMode,
@@ -18,35 +18,35 @@ public class XYChartBuilder {
         };
         Chart.Canvas = new() {
             Chart = Chart,
-            Width = CanvasWidth,
-            Height = CanvasHeight,
-            Padding = CanvasPadding,
-            XAxisLabelHeight = CanvasXAxisLabelHeight,
-            XAxisLabelClearance = CanvasXAxisLabelClearance,
-            YAxisLabelWidth = CanvasYAxisLabelWidth,
-            YAxisLabelClearance = CanvasYAxisLabelClearance,
-            YAxisLabelFormat = CanvasYAxisLabelFormat,
-            YAxisMultiplierFormat = CanvasYAxisMultiplierFormat,
-            DataLabelFormat = CanvasDataLabelFormat,
+            Width = Canvas_Width,
+            Height = Canvas_Height,
+            Padding = Canvas_Padding,
+            XAxisLabelHeight = Canvas_XAxisLabelHeight,
+            XAxisLabelClearance = Canvas_XAxisLabelClearance,
+            YAxisLabelWidth = Canvas_YAxisLabelWidth,
+            YAxisLabelClearance = Canvas_YAxisLabelClearance,
+            YAxisLabelFormat = Canvas_YAxisLabelFormat,
+            YAxisMultiplierFormat = Canvas_YAxisMultiplierFormat,
+            DataLabelFormat = Canvas_DataLabelFormat,
         };
         Chart.Legend = new() {
-            Position = Constants.Position,
-            Height = LegendHeight
+            Position = Legend_Position,
+            Height = Legend_Height
             // TODO legend item, other legend properties
         };
         Chart.PlotArea = new() {
             Chart = Chart,
-            Min = PlotAreaMin,
-            Max = PlotAreaMax,
-            GridLineInterval = PlotAreaGridLineInterval,
-            Multiplier = PlotAreaMultiplier
+            Min = PlotArea_Min,
+            Max = PlotArea_Max,
+            GridLineInterval = PlotArea_GridLineInterval,
+            Multiplier = PlotArea_Multiplier
         };
         Chart.AutoScaleSettings = new() {
             Chart = Chart,
-            IsEnabled = AutoScaleSettingsIsEnabled,
-            RequestedGridLineCount = AutoScaleSettingsRequestedGridLineCount,
-            IncludeZero = AutoScaleSettingsIncludeZero,
-            ClearancePercentage = AutoScaleSettingsClearancePercentage
+            IsEnabled = AutoScaleSettings_IsEnabled,
+            RequestedGridLineCount = AutoScaleSettings_RequestedGridLineCount,
+            IncludeZero = AutoScaleSettings_IncludeZero,
+            ClearancePercentage = AutoScaleSettings_ClearancePercentage
         };
     }
 
@@ -75,10 +75,10 @@ public class XYChartBuilder {
 
     public XYChartBuilder WithPlotArea(decimal? min = null, decimal? max = null, decimal? gridLineInterval = null, decimal? multiplier = null)
         => WithPlotArea(new PlotArea() {
-            Min = min ?? PlotAreaMin,
-            Max = max ?? PlotAreaMax,
-            GridLineInterval = gridLineInterval ?? PlotAreaGridLineInterval,
-            Multiplier = multiplier ?? PlotAreaMultiplier
+            Min = min ?? PlotArea_Min,
+            Max = max ?? PlotArea_Max,
+            GridLineInterval = gridLineInterval ?? PlotArea_GridLineInterval,
+            Multiplier = multiplier ?? PlotArea_Multiplier
         });
 
     public XYChartBuilder WithPlotArea(PlotArea plotArea) {
@@ -89,10 +89,10 @@ public class XYChartBuilder {
 
     public XYChartBuilder WithAutoScaleSettings(bool? isEnabled = null, int? requestedGridLineCount = null, bool? includeZero = null, decimal? clearancePercentage = null)
         => WithAutoScaleSettings(new AutoScaleSettings() {
-            IsEnabled = isEnabled ?? AutoScaleSettingsIsEnabled,
-            RequestedGridLineCount = requestedGridLineCount ?? AutoScaleSettingsRequestedGridLineCount,
-            IncludeZero = includeZero ?? AutoScaleSettingsIncludeZero,
-            ClearancePercentage = clearancePercentage ?? AutoScaleSettingsClearancePercentage
+            IsEnabled = isEnabled ?? AutoScaleSettings_IsEnabled,
+            RequestedGridLineCount = requestedGridLineCount ?? AutoScaleSettings_RequestedGridLineCount,
+            IncludeZero = includeZero ?? AutoScaleSettings_IncludeZero,
+            ClearancePercentage = clearancePercentage ?? AutoScaleSettings_ClearancePercentage
         });
 
     public XYChartBuilder WithAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
