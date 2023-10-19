@@ -103,6 +103,30 @@ public class XYChartTests {
     }
 
     [Fact]
+    public void SetAutoScaleSettings() {
+        var autoScaleSettings = new AutoScaleSettings();
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+
+        subject.SetAutoScaleSettings(autoScaleSettings);
+
+        Assert.Same(autoScaleSettings, subject.AutoScaleSettings);
+        Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Fact]
+    public void ResetAutoScaleSettings() {
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+        var autoScaleSettings = subject.AutoScaleSettings;
+
+        subject.ResetAutoScaleSettings();
+
+        Assert.NotSame(autoScaleSettings, subject.AutoScaleSettings);
+        Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Fact]
     public void AddLayer() {
         var layer = new BarLayer();
         var builder = new XYChartBuilder();

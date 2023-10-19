@@ -17,6 +17,7 @@ public class XYChart : ComponentBase {
     internal Canvas Canvas { get; set; } = new();
     internal Legend Legend { get; set; } = new();
     internal PlotArea PlotArea { get; set; } = new();
+    internal AutoScaleSettings AutoScaleSettings { get; set; } = new();
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
 
@@ -88,6 +89,16 @@ public class XYChart : ComponentBase {
 
     internal void ResetPlotArea() {
         PlotArea = new();
+        HandleStateChange();
+    }
+
+    internal void SetAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
+        AutoScaleSettings = autoScaleSettings;
+        HandleStateChange();
+    }
+
+    internal void ResetAutoScaleSettings() {
+        AutoScaleSettings = new();
         HandleStateChange();
     }
 

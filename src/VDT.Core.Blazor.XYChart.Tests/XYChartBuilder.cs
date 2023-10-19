@@ -41,9 +41,8 @@ public class XYChartBuilder {
             GridLineInterval = PlotAreaGridLineInterval,
             Multiplier = PlotAreaMultiplier
         };
-        Chart.PlotArea.AutoScaleSettings = new() {
+        Chart.AutoScaleSettings = new() {
             Chart = Chart,
-            PlotArea = Chart.PlotArea,
             IsEnabled = AutoScaleSettingsIsEnabled,
             RequestedGridLineCount = AutoScaleSettingsRequestedGridLineCount,
             IncludeZero = AutoScaleSettingsIncludeZero,
@@ -97,9 +96,8 @@ public class XYChartBuilder {
         });
 
     public XYChartBuilder WithAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
-        Chart.PlotArea.AutoScaleSettings = autoScaleSettings;
+        Chart.AutoScaleSettings = autoScaleSettings;
         autoScaleSettings.Chart = Chart;
-        autoScaleSettings.PlotArea = Chart.PlotArea;
         return this;
     }
 }

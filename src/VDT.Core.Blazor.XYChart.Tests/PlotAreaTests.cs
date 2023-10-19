@@ -35,30 +35,6 @@ public class PlotAreaTests {
         { 0M, 100M, 10M, 100M, true },
     };
 
-    [Fact]
-    public void SetAutoScaleSettings() {
-        var autoScaleSettings = new AutoScaleSettings();
-        var builder = new XYChartBuilder();
-        var subject = builder.Chart.PlotArea;
-
-        subject.SetAutoScaleSettings(autoScaleSettings);
-
-        Assert.Same(autoScaleSettings, subject.AutoScaleSettings);
-        Assert.True(builder.StateHasChangedInvoked);
-    }
-
-    [Fact]
-    public void ResetAutoScaleSettings() {
-        var builder = new XYChartBuilder();
-        var subject = builder.Chart.PlotArea;
-        var autoScaleSettings = subject.AutoScaleSettings;
-
-        subject.ResetAutoScaleSettings();
-
-        Assert.NotSame(autoScaleSettings, subject.AutoScaleSettings);
-        Assert.True(builder.StateHasChangedInvoked);
-    }
-
     [Theory]
     [MemberData(nameof(AutoScale_Data))]
     public void AutoScale(decimal[] dataPoints, int requestedGridLineCount, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {

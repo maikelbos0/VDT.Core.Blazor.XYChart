@@ -9,17 +9,15 @@ public class AutoScaleSettings : ChildComponentBase, IDisposable {
     public static bool DefaultIncludeZero { get; set; } = false;
     public static decimal DefaultClearancePercentage { get; set; } = 5M;
 
-    [CascadingParameter] internal PlotArea PlotArea { get; set; } = null!;
-
     [Parameter] public bool IsEnabled { get; set; } = DefaultIsEnabled;
     [Parameter] public int RequestedGridLineCount { get; set; } = DefaultRequestedGridLineCount;
     [Parameter] public bool IncludeZero { get; set; } = DefaultIncludeZero;
     [Parameter] public decimal ClearancePercentage { get; set; } = DefaultClearancePercentage;
 
-    protected override void OnInitialized() => PlotArea.SetAutoScaleSettings(this);
+    protected override void OnInitialized() => Chart.SetAutoScaleSettings(this);
 
     public void Dispose() {
-        PlotArea.ResetAutoScaleSettings();
+        Chart.ResetAutoScaleSettings();
         GC.SuppressFinalize(this);
     }
 
