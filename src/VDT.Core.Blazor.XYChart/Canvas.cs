@@ -27,9 +27,9 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public string YAxisMultiplierFormat { get; set; } = DefaultYAxisMultiplierFormat;
     [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
     public int PlotAreaX => Padding + YAxisLabelWidth;
-    public int PlotAreaY => Padding + (Chart.Legend.Position == LegendPosition.Top ? Chart.Legend.Height : 0);
+    public int PlotAreaY => Padding + (Chart.Legend.IsEnabled && Chart.Legend.Position == LegendPosition.Top ? Chart.Legend.Height : 0);
     public int PlotAreaWidth => Width - Padding * 2 - YAxisLabelWidth;
-    public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight - (Chart.Legend.Position == LegendPosition.None ? 0 : Chart.Legend.Height);
+    public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight - (Chart.Legend.IsEnabled ? Chart.Legend.Height : 0);
 
     protected override void OnInitialized() => Chart.SetCanvas(this);
 
