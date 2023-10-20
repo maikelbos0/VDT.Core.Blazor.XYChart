@@ -49,9 +49,9 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     public abstract IEnumerable<ShapeBase> GetDataSeriesShapes();
 
     public IEnumerable<DataLabelShape> GetDataLabelShapes() {
-        var layerIndex = Chart.Layers.IndexOf(this);
-
         if (ShowDataLabels) {
+            var layerIndex = Chart.Layers.IndexOf(this);
+
             return GetCanvasDataSeries().SelectMany(canvasDataSeries => canvasDataSeries.DataPoints.Select(dataPoint => new DataLabelShape(
                 dataPoint.X,
                 dataPoint.Y,
