@@ -86,6 +86,9 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         ).ToList();
     }
 
+    public IEnumerable<LegendItem> GetLegendItems()
+        => DataSeries.Select(dataSeries => new LegendItem(dataSeries.GetColor(), dataSeries.Name ?? "?"));
+
     public IEnumerable<decimal> GetScaleDataPoints() {
         var dataPointTransformer = GetDataPointTransformer();
 

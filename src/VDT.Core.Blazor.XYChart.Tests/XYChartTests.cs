@@ -254,6 +254,17 @@ public class XYChartTests {
     }
 
     [Fact]
+    public void GetShapes_LegendShapes() {
+        var subject = new XYChartBuilder(labelCount: 2)
+            .WithLayer(new BarLayer())
+            .WithDataSeries(5M, 10M)
+            .Chart;
+
+        Assert.Contains(subject.GetShapes(), shape => shape is LegendKeyShape);
+        Assert.Contains(subject.GetShapes(), shape => shape is LegendTextShape);
+    }
+
+    [Fact]
     public void GetGridLineShapes() {
         var subject = new XYChartBuilder()
             .Chart;

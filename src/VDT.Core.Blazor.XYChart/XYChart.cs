@@ -152,6 +152,10 @@ public class XYChart : ComponentBase {
         foreach (var shape in GetXAxisLabelShapes()) {
             yield return shape;
         }
+
+        foreach (var shape in GetLegendShapes()) {
+            yield return shape;
+        }
     }
 
     public IEnumerable<GridLineShape> GetGridLineShapes()
@@ -171,6 +175,32 @@ public class XYChart : ComponentBase {
 
     public IEnumerable<DataLabelShape> GetDataLabelShapes()
         => Layers.SelectMany(layer => layer.GetDataLabelShapes());
+
+    // TODO test
+    public IEnumerable<ShapeBase> GetLegendShapes() {
+        if (!Legend.IsEnabled) {
+            yield break;
+        }
+
+        var items = Layers.SelectMany(layer => layer.GetLegendItems()).ToList();
+        var itemsPerRow = (Canvas.Width - Canvas.Padding * 2) / Legend.ItemWidth;
+        var rows = items
+            .Select((item, index) => new { Item = item, Index = index })
+            .GroupBy(value => (value.Index - 1) / itemsPerRow + 1, value => value.Item);
+
+        foreach (var row in rows) {
+            var rowIndex = row.Key;
+            var rowItems = row.ToList();
+
+            for (var index = 0; index < rowItems.Count; index++) {
+                // TODO calculate x/y, simplify size, add css class, add indices
+                yield return new LegendKeyShape(index * 100, rowIndex * 10, Legend.KeySize, Legend.KeySize, rowItems[index].Color, null, rowIndex, index);
+
+                // TODO calculate x/y, simplify size, add css class, add indices
+                yield return new LegendTextShape(index * 100, rowIndex * 10, rowItems[index].Text, null, rowIndex, index);
+            }
+        }
+    }
 
     public decimal MapDataPointToCanvas(decimal dataPoint) => Canvas.PlotAreaY + MapDataValueToPlotArea(PlotArea.Max - dataPoint);
 
