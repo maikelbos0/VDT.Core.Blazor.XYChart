@@ -14,12 +14,19 @@ public class XYChart : ComponentBase {
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public IList<string> Labels { get; set; } = new List<string>();
     [Parameter] public DataPointSpacingMode DataPointSpacingMode { get; set; } = DefaultDataPointSpacingMode;
-    internal Canvas Canvas { get; set; } = new();
-    internal Legend Legend { get; set; } = new();
-    internal PlotArea PlotArea { get; set; } = new();
-    internal AutoScaleSettings AutoScaleSettings { get; set; } = new();
+    internal Canvas Canvas { get; set; }
+    internal Legend Legend { get; set; }
+    internal PlotArea PlotArea { get; set; }
+    internal AutoScaleSettings AutoScaleSettings { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
+
+    public XYChart() {
+        Canvas = new Canvas() { Chart = this };
+        Legend = new Legend() { Chart = this };
+        PlotArea = new PlotArea() { Chart = this };
+        AutoScaleSettings = new AutoScaleSettings() { Chart = this };
+    }
 
     public override async Task SetParametersAsync(ParameterView parameters) {
         var parametersHaveChanged = HaveParametersChanged(parameters);
