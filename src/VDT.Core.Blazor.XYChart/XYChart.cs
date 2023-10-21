@@ -183,10 +183,10 @@ public class XYChart : ComponentBase {
         }
 
         var items = Layers.SelectMany(layer => layer.GetLegendItems()).ToList();
-        var itemsPerRow = (Canvas.Width - Canvas.Padding * 2) / Legend.ItemWidth;
+        var itemsPerRow = Canvas.LegendWidth / Legend.ItemWidth;
         var rows = items
             .Select((item, index) => new { Item = item, Index = index })
-            .GroupBy(value => (value.Index - 1) / itemsPerRow + 1, value => value.Item);
+            .GroupBy(value => (value.Index - 1) / itemsPerRow, value => value.Item);
 
         foreach (var row in rows) {
             var rowIndex = row.Key;
@@ -194,12 +194,13 @@ public class XYChart : ComponentBase {
 
             for (var index = 0; index < rowItems.Count; index++) {
                 var item = rowItems[index];
+                Console.WriteLine(rowIndex);
 
-                // TODO calculate x/y, simplify size
-                yield return new LegendKeyShape(index * 100, rowIndex * 10, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
+                // TODO calculate x, adjust y
+                yield return new LegendKeyShape(index * 100, Canvas.LegendY + rowIndex * Legend.ItemHeight, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
 
-                // TODO calculate x/y
-                yield return new LegendTextShape(index * 100, rowIndex * 10, item.Text, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
+                // TODO calculate x, adjust y
+                yield return new LegendTextShape(index * 100, Canvas.LegendY + rowIndex * Legend.ItemHeight, item.Text, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
             }
         }
     }

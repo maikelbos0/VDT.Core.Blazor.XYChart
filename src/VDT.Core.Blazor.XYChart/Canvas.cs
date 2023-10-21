@@ -30,6 +30,12 @@ public class Canvas : ChildComponentBase, IDisposable {
     public int PlotAreaY => Padding + (Chart.Legend.IsEnabled && Chart.Legend.Position == LegendPosition.Top ? Chart.Legend.Height : 0);
     public int PlotAreaWidth => Width - Padding * 2 - YAxisLabelWidth;
     public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight - (Chart.Legend.IsEnabled ? Chart.Legend.Height : 0);
+    public int LegendY => Chart.Legend.Position switch {
+        LegendPosition.Top => Padding,
+        LegendPosition.Bottom => Height - Padding - Chart.Legend.Height,
+        _ => throw new NotImplementedException($"No implementation found for {nameof(LegendPosition)} '{Chart.Legend.Position}'.")
+    };
+    public int LegendWidth => Width - Padding * 2;
 
     protected override void OnInitialized() => Chart.SetCanvas(this);
 

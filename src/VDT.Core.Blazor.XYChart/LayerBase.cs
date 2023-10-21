@@ -112,7 +112,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
 
                     return (dataPoint, index) => (dataPoint < 0 ? negativeOffsets : positiveOffsets)[index] += dataPoint;
                 default:
-                    throw new NotImplementedException($"Missing stacked transformer implementation for {nameof(StackMode)}{StackMode}");
+                    throw new NotImplementedException($"No implementation found for {nameof(StackMode)} '{StackMode}'.");
             }
         }
         else {
