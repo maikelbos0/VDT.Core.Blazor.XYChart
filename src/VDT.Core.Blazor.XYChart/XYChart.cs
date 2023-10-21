@@ -195,11 +195,11 @@ public class XYChart : ComponentBase {
             for (var index = 0; index < rowItems.Count; index++) {
                 var item = rowItems[index];
 
-                // TODO calculate x/y, simplify size, add indices
-                yield return new LegendKeyShape(index * 100, rowIndex * 10, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, rowIndex, index);
+                // TODO calculate x/y, simplify size
+                yield return new LegendKeyShape(index * 100, rowIndex * 10, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
 
-                // TODO calculate x/y, add indices
-                yield return new LegendTextShape(index * 100, rowIndex * 10, item.Text, item.CssClass, rowIndex, index);
+                // TODO calculate x/y
+                yield return new LegendTextShape(index * 100, rowIndex * 10, item.Text, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
             }
         }
     }
