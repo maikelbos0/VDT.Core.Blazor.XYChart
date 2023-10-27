@@ -168,7 +168,7 @@ public class XYChart : ComponentBase {
         => PlotArea.Multiplier == 1M ? null : new YAxisMultiplierShape(Canvas.Padding, Canvas.PlotAreaY + Canvas.PlotAreaHeight / 2M, PlotArea.Multiplier.ToString(Canvas.YAxisMultiplierFormat));
 
     public IEnumerable<XAxisLabelShape> GetXAxisLabelShapes()
-        => Labels.Select((label, index) => new XAxisLabelShape(MapDataIndexToCanvas(index), Canvas.PlotAreaY + Canvas.PlotAreaHeight + Canvas.XAxisLabelClearance, label, index));
+        => Labels.Select((label, index) => new XAxisLabelShape(MapDataIndexToCanvas(index), Canvas.PlotAreaY + Canvas.PlotAreaHeight, label, index));
 
     public IEnumerable<ShapeBase> GetDataSeriesShapes()
         => Layers.SelectMany(layer => layer.GetDataSeriesShapes());

@@ -7,23 +7,21 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Theory]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #", false)]
-    [InlineData(900, 500, 10, 100, 10, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 600, 10, 100, 10, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 20, 100, 10, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 75, 10, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 15, 100, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 10, 75, 10, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 15, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#.##", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 10, 100, 10, "#", "x #.##", true)]
-    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int xAxisLabelClearance, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, bool expectedResult) {
+    [InlineData(1000, 500, 10, 100, 100, 10, "#", "x #", false)]
+    [InlineData(900, 500, 10, 100, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 600, 10, 100, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 20, 100, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 75, 100, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 75, 10, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 100, 15, "#", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 100, 10, "#.##", "x #", true)]
+    [InlineData(1000, 500, 10, 100, 100, 10, "#", "x #.##", true)]
+    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int yAxisLabelWidth, int yAxisLabelClearance, string yAxisLabelFormat, string yAxisMultiplierFormat, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
             { nameof(Canvas.Padding), padding },
             { nameof(Canvas.XAxisLabelHeight), xAxisLabelHeight },
-            { nameof(Canvas.XAxisLabelClearance), xAxisLabelClearance },
             { nameof(Canvas.YAxisLabelWidth), yAxisLabelWidth },
             { nameof(Canvas.YAxisLabelClearance), yAxisLabelClearance },
             { nameof(Canvas.YAxisLabelFormat), yAxisLabelFormat },
@@ -35,7 +33,6 @@ public class CanvasTests {
             Height = 500,
             Padding = 10,
             XAxisLabelHeight = 100,
-            XAxisLabelClearance = 10,
             YAxisLabelWidth = 100,
             YAxisLabelClearance = 10,
             YAxisLabelFormat = "#",

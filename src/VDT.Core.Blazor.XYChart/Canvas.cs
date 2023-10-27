@@ -20,7 +20,6 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public int Height { get; set; } = DefaultHeight;
     [Parameter] public int Padding { get; set; } = DefaultPadding;
     [Parameter] public int XAxisLabelHeight { get; set; } = DefaultXAxisLabelHeight;
-    [Parameter] public int XAxisLabelClearance { get; set; } = DefaultXAxisLabelClearance;
     [Parameter] public int YAxisLabelWidth { get; set; } = DefaultYAxisLabelWidth;
     [Parameter] public int YAxisLabelClearance { get; set; } = DefaultYAxisLabelClearance;
     [Parameter] public string YAxisLabelFormat { get; set; } = DefaultYAxisLabelFormat;
@@ -49,7 +48,6 @@ public class Canvas : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(Height)
         || parameters.HasParameterChanged(Padding)
         || parameters.HasParameterChanged(XAxisLabelHeight)
-        || parameters.HasParameterChanged(XAxisLabelClearance)
         || parameters.HasParameterChanged(YAxisLabelWidth)
         || parameters.HasParameterChanged(YAxisLabelClearance)
         || parameters.HasParameterChanged(YAxisLabelFormat)

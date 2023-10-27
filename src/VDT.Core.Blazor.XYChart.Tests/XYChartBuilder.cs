@@ -22,7 +22,6 @@ public class XYChartBuilder {
             Height = Canvas_Height,
             Padding = Canvas_Padding,
             XAxisLabelHeight = Canvas_XAxisLabelHeight,
-            XAxisLabelClearance = Canvas_XAxisLabelClearance,
             YAxisLabelWidth = Canvas_YAxisLabelWidth,
             YAxisLabelClearance = Canvas_YAxisLabelClearance,
             YAxisLabelFormat = Canvas_YAxisLabelFormat,

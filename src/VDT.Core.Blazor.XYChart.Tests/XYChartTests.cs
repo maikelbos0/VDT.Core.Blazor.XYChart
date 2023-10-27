@@ -333,7 +333,7 @@ public class XYChartTests {
         Assert.Equal(subject.Labels.Count, result.Count());
 
         Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
-            Assert.Equal(PlotArea_Y + PlotArea_Height + Canvas_XAxisLabelClearance, value.Shape.Y);
+            Assert.Equal(PlotArea_Y + PlotArea_Height, value.Shape.Y);
             Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
             Assert.Equal(PlotArea_X + (0.5M + value.Index) * PlotArea_Width / subject.Labels.Count, value.Shape.X);
             Assert.Equal(subject.Labels[value.Index], value.Shape.Label);
