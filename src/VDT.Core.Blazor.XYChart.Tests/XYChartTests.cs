@@ -292,7 +292,7 @@ public class XYChartTests {
 
         Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
             Assert.Equal(PlotArea_Y + (PlotArea_Max - PlotArea_GridLineInterval * value.Index) / PlotArea_Range * PlotArea_Height, value.Shape.Y);
-            Assert.Equal(PlotArea_X - Canvas_YAxisLabelClearance, value.Shape.X);
+            Assert.Equal(PlotArea_X, value.Shape.X);
             Assert.Equal((PlotArea_GridLineInterval * value.Index).ToString(Canvas_YAxisLabelFormat), value.Shape.Value);
             Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
         });

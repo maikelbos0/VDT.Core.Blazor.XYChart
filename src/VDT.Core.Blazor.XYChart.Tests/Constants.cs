@@ -9,7 +9,6 @@ public static class Constants {
     public const int Canvas_Padding = 25;
     public const int Canvas_XAxisLabelHeight = 50;
     public const int Canvas_YAxisLabelWidth = 100;
-    public const int Canvas_YAxisLabelClearance = 10;
     public const string Canvas_YAxisLabelFormat = "0.00";
     public const string Canvas_YAxisMultiplierFormat = "x 0.00";
     public const string Canvas_DataLabelFormat = "0.00";
