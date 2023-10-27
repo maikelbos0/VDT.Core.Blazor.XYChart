@@ -201,9 +201,25 @@ public class XYChart : ComponentBase {
             for (var index = 0; index < rowItems.Count; index++) {
                 var item = rowItems[index];
 
-                yield return new LegendKeyShape(offsetProvider(index, rowItems.Count), Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight - Legend.KeySize / 2M, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
+                yield return new LegendKeyShape(
+                    offsetProvider(index, rowItems.Count) + (Legend.ItemHeight - Legend.KeySize) / 2M,
+                    Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight - Legend.KeySize / 2M,
+                    Legend.KeySize,
+                    Legend.KeySize,
+                    item.Color,
+                    item.CssClass,
+                    item.LayerIndex,
+                    item.DataSeriesIndex
+                );
 
-                yield return new LegendTextShape(offsetProvider(index, rowItems.Count) + Legend.ItemHeight, Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight, item.Text, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
+                yield return new LegendTextShape(
+                    offsetProvider(index, rowItems.Count) + Legend.ItemHeight,
+                    Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight,
+                    item.Text,
+                    item.CssClass,
+                    item.LayerIndex,
+                    item.DataSeriesIndex
+                );
             }
         }
     }
