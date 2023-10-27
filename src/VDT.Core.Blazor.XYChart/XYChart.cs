@@ -205,7 +205,6 @@ public class XYChart : ComponentBase {
                     offsetProvider(index, rowItems.Count) + (Legend.ItemHeight - Legend.KeySize) / 2M,
                     Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight - Legend.KeySize / 2M,
                     Legend.KeySize,
-                    Legend.KeySize,
                     item.Color,
                     item.CssClass,
                     item.LayerIndex,

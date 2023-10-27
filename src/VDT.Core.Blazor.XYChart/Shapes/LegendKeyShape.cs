@@ -8,16 +8,14 @@ public class LegendKeyShape : ShapeBase {
     public override string ElementName => "rect";
     public decimal X { get; }
     public decimal Y { get; }
-    public decimal Width { get; }
-    public decimal Height { get; }
+    public decimal Size { get; }
     public string Color { get; }
     public override string CssClass { get; }
 
-    public LegendKeyShape(decimal x, decimal y, decimal width, decimal height, string color, string? cssClass, int layerIndex, int dataSeriesIndex) : base(layerIndex, dataSeriesIndex) {
+    public LegendKeyShape(decimal x, decimal y, decimal size, string color, string? cssClass, int layerIndex, int dataSeriesIndex) : base(layerIndex, dataSeriesIndex) {
         Y = y;
         X = x;
-        Height = height;
-        Width = width;
+        Size = size;
         Color = color;
         CssClass = $"{DefaultCssClass} {cssClass}";
     }
@@ -25,8 +23,8 @@ public class LegendKeyShape : ShapeBase {
     public override ShapeAttributeCollection GetAttributes() => new() {
         { "x", X },
         { "y", Y },
-        { "width", Width },
-        { "height", Height },
+        { "width", Size },
+        { "height", Size },
         { "fill", Color }
     };
 }
