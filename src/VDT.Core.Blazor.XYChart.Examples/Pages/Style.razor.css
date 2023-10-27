@@ -9,8 +9,8 @@
 ::deep .chart-main .x-axis-label {
     transform-box: fill-box;
     transform-origin: 50% 50% 0;
-    transform: rotate(-90deg) translate(-50%, 0);
-    dominant-baseline: central;
+    transform: rotate(-90deg) translate(-50%, 0) translate(-10px, 0);
+    dominant-baseline: middle;
 }
 
 ::deep .chart-main .y-axis-label, ::deep .chart-main .y-axis-label {
@@ -28,15 +28,6 @@
 }
 
 ::deep .chart-main .area-data {
-    fill-opacity: 0.6;
-    stroke: #787c80;
-    stroke-opacity: 0.6;
-}
-
-::deep .chart-main .data-marker {
-    transform-box: fill-box;
-    transform-origin: 50% 50% 0;
-    transform: rotate(45deg);
     fill-opacity: 0.6;
     stroke: #787c80;
     stroke-opacity: 0.6;
