@@ -75,6 +75,23 @@ public class XYChartBuilder {
         return this;
     }
 
+    public XYChartBuilder WithLegend(bool? isEnabled = null, LegendPosition? position = null, LegendAlignment? alignment = null, int? height = null, int? itemWidth = null, int? itemHeight = null, int? keySize = null)
+        => WithLegend(new Legend() {
+            IsEnabled = isEnabled ?? Legend_IsEnabled,
+            Position = position ?? Legend_Position,
+            Alignment = alignment ?? Legend_Alignment,
+            Height = height ?? Legend_Height,
+            ItemWidth = itemWidth ?? Legend_ItemWidth,
+            ItemHeight = itemHeight ?? Legend_ItemHeight,
+            KeySize = keySize ?? Legend_KeySize
+        });
+
+    public XYChartBuilder WithLegend(Legend legend) {
+        legend.Chart = Chart;
+        Chart.Legend = legend;
+        return this;
+    }
+
     public XYChartBuilder WithPlotArea(decimal? min = null, decimal? max = null, decimal? gridLineInterval = null, decimal? multiplier = null)
         => WithPlotArea(new PlotArea() {
             Min = min ?? PlotArea_Min,

@@ -16,10 +16,12 @@ public static class Constants {
     public const bool Legend_IsEnabled = true;
     public const LegendPosition Legend_Position = LegendPosition.Top;
     public const LegendAlignment Legend_Alignment = LegendAlignment.Center;
-    public const int Legend_Height = 25;
+    public const int Legend_Height = 60;
     public const int Legend_ItemWidth = 100;
-    public const int Legend_ItemHeight = 25;
+    public const int Legend_ItemHeight = 30;
     public const int Legend_KeySize = 16;
+
+    public const decimal Legend_KeyPadding = (Legend_ItemHeight - Legend_KeySize) / 2M;
 
     public const int PlotArea_X = Canvas_Padding + Canvas_YAxisLabelWidth;
     public const int PlotArea_Y = Canvas_Padding + Legend_Height;

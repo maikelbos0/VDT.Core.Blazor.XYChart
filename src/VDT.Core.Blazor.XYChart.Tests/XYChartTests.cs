@@ -370,6 +370,55 @@ public class XYChartTests {
         Assert.All(result, shape => Assert.IsType<DataLabelShape>(shape));
     }
 
+    [Fact]
+    public void GetLegendShapes_Disabled() {
+        var subject = new XYChartBuilder(labelCount: 3)
+            .WithLegend(false)
+            .WithLayer<BarLayer>()
+            .WithDataSeries(5M, 15M, 25M)
+            .Chart;
+
+        var result = subject.GetLegendShapes();
+
+        Assert.Empty(result);
+    }
+
+    //750
+    [Theory]
+    [MemberData(nameof(GetLegendShapes_KeyShapes_Data))]
+    public void GetLegendShapes_KeyShapes(LegendPosition legendPosition, LegendAlignment legendAlignment, int layerIndex, int dataSeriesIndex, decimal expectedX, decimal expectedY) {
+        var builder = new XYChartBuilder()
+            .WithLegend(true, legendPosition, legendAlignment);
+
+        for (var i = 0; i < 3; i++) {
+            // todo rewrite somehow??
+            builder = builder
+                .WithLayer(new BarLayer() { ShowDataLabels = true })
+                .WithDataSeries(new DataSeries() { Color = "red", CssClass = "example-data" })
+                .WithDataSeries(new DataSeries() { Color = "green", CssClass = "example-data" })
+                .WithDataSeries(new DataSeries() { Color = "blue", CssClass = "example-data" });
+        }
+
+        var subject = builder.Chart;
+
+        var result = subject.GetLegendShapes();
+
+        var shape = Assert.IsType<LegendKeyShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LegendKeyShape)}[{layerIndex},{dataSeriesIndex}]"));
+
+        Assert.Equal(expectedX, shape.X);
+        Assert.Equal(expectedY, shape.Y);
+        Assert.Equal(Legend_KeySize, shape.Size);
+        Assert.Equal(subject.Layers[layerIndex].DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("legend-key example-data", shape.CssClass);
+    }
+
+    public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_KeyShapes_Data() => new() {
+        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding }
+        // TODO more tests
+    };
+
+    // TODO text tests
+
     [Theory]
     [MemberData(nameof(MapDataPointToCanvas_Data))]
     public void MapDataPointToCanvas(decimal dataPoint, decimal expectedValue) {
@@ -403,6 +452,7 @@ public class XYChartTests {
     [Theory]
     [MemberData(nameof(GetDataPointSpacingMode_Data))]
     public void GetDataPointSpacingMode(DataPointSpacingMode dataPointSpacingMode, List<LayerBase> layers, DataPointSpacingMode expectedDataPointSpacingMode) {
+        // todo rewrite somehow??
         var subject = layers.Aggregate(new XYChartBuilder(dataPointSpacingMode: dataPointSpacingMode), (builder, layer) => builder.WithLayer(layer))
             .Chart;
 
