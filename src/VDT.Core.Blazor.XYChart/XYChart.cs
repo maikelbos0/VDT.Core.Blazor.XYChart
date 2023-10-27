@@ -187,6 +187,12 @@ public class XYChart : ComponentBase {
         var rows = items
             .Select((item, index) => new { Item = item, Index = index })
             .GroupBy(value => (value.Index - 1) / itemsPerRow, value => value.Item);
+        Func<int, int, decimal> offsetProvider = Legend.Alignment switch {
+            LegendAlignment.Left => (index, _) => Canvas.PlotAreaX + index * Legend.ItemWidth,
+            LegendAlignment.Center => (index, count) => Canvas.PlotAreaX + Canvas.PlotAreaWidth / 2 - (count / 2M - index) * Legend.ItemWidth,
+            LegendAlignment.Right => (index, count) => Canvas.Width - Canvas.Padding - (count - index) * Legend.ItemWidth,
+            _ => throw new NotImplementedException($"No implementation found for {nameof(LegendAlignment)} '{Legend.Alignment}'.")
+        };
 
         foreach (var row in rows) {
             var rowIndex = row.Key;
@@ -195,11 +201,9 @@ public class XYChart : ComponentBase {
             for (var index = 0; index < rowItems.Count; index++) {
                 var item = rowItems[index];
 
-                // TODO calculate x
-                yield return new LegendKeyShape(index * 100, Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight - Legend.KeySize / 2M, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
+                yield return new LegendKeyShape(offsetProvider(index, rowItems.Count), Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight - Legend.KeySize / 2M, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
 
-                // TODO calculate x
-                yield return new LegendTextShape(index * 100 + Legend.ItemHeight, Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight, item.Text, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
+                yield return new LegendTextShape(offsetProvider(index, rowItems.Count) + Legend.ItemHeight, Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight, item.Text, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
             }
         }
     }
