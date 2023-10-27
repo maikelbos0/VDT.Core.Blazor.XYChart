@@ -194,13 +194,12 @@ public class XYChart : ComponentBase {
 
             for (var index = 0; index < rowItems.Count; index++) {
                 var item = rowItems[index];
-                Console.WriteLine(rowIndex);
 
-                // TODO calculate x, adjust y
-                yield return new LegendKeyShape(index * 100, Canvas.LegendY + rowIndex * Legend.ItemHeight, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
+                // TODO calculate x
+                yield return new LegendKeyShape(index * 100, Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight - Legend.KeySize / 2M, Legend.KeySize, Legend.KeySize, item.Color, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
 
-                // TODO calculate x, adjust y
-                yield return new LegendTextShape(index * 100, Canvas.LegendY + rowIndex * Legend.ItemHeight, item.Text, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
+                // TODO calculate x
+                yield return new LegendTextShape(index * 100 + Legend.ItemHeight, Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight, item.Text, item.CssClass, item.LayerIndex, item.DataSeriesIndex);
             }
         }
     }
