@@ -391,7 +391,6 @@ public class XYChartTests {
             .WithLegend(true, legendPosition, legendAlignment);
 
         for (var i = 0; i < 3; i++) {
-            // todo rewrite somehow??
             builder = builder
                 .WithLayer(new BarLayer() { ShowDataLabels = true })
                 .WithDataSeries(new DataSeries() { Color = "red", CssClass = "example-data" })
@@ -413,11 +412,39 @@ public class XYChartTests {
     }
 
     public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_KeyShapes_Data() => new() {
-        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding }
-        // TODO more tests
+        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
     };
 
-    // TODO text tests
+    [Theory]
+    [MemberData(nameof(GetLegendShapes_TextShapes_Data))]
+    public void GetLegendShapes_TextShapes(LegendPosition legendPosition, LegendAlignment legendAlignment, int layerIndex, int dataSeriesIndex, decimal expectedX, decimal expectedY) {
+        var builder = new XYChartBuilder()
+            .WithLegend(true, legendPosition, legendAlignment);
+
+        for (var i = 0; i < 3; i++) {
+            builder = builder
+                .WithLayer(new BarLayer() { ShowDataLabels = true })
+                .WithDataSeries(new DataSeries() { Name = "foo", CssClass = "example-data" })
+                .WithDataSeries(new DataSeries() { Name = "bar", CssClass = "example-data" })
+                .WithDataSeries(new DataSeries() { Name = "baz", CssClass = "example-data" });
+        }
+
+        var subject = builder.Chart;
+
+        var result = subject.GetLegendShapes();
+
+        var shape = Assert.IsType<LegendTextShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LegendTextShape)}[{layerIndex},{dataSeriesIndex}]"));
+
+        Assert.Equal(expectedX, shape.X);
+        Assert.Equal(expectedY, shape.Y);
+        Assert.Equal(subject.Layers[layerIndex].DataSeries[dataSeriesIndex].Name, shape.DataSeriesName);
+        Assert.Equal("legend-text example-data", shape.CssClass);
+    }
+
+    public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_TextShapes_Data() => new() {
+        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M }
+        // TODO more tests
+    };
 
     [Theory]
     [MemberData(nameof(MapDataPointToCanvas_Data))]
