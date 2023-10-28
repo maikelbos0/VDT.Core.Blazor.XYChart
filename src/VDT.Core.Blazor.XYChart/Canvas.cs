@@ -31,7 +31,6 @@ public class Canvas : ChildComponentBase, IDisposable {
         LegendPosition.Bottom => Height - Padding - Chart.Legend.Height,
         _ => throw new NotImplementedException($"No implementation found for {nameof(LegendPosition)} '{Chart.Legend.Position}'.")
     };
-    public int LegendWidth => Width - Padding * 2;
 
     protected override void OnInitialized() => Chart.SetCanvas(this);
 

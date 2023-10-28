@@ -182,11 +182,11 @@ public class XYChart : ComponentBase {
             yield break;
         }
 
-        var items = Layers.SelectMany(layer => layer.GetLegendItems()).ToList();
-        var itemsPerRow = Canvas.LegendWidth / Legend.ItemWidth;
-        var rows = items
+        var itemsPerRow = Canvas.PlotAreaWidth / Legend.ItemWidth;
+        var rows = Layers
+            .SelectMany(layer => layer.GetLegendItems())
             .Select((item, index) => new { Item = item, Index = index })
-            .GroupBy(value => (value.Index - 1) / itemsPerRow, value => value.Item);
+            .GroupBy(value => value.Index / itemsPerRow, value => value.Item);
         Func<int, int, decimal> offsetProvider = Legend.Alignment switch {
             LegendAlignment.Left => (index, _) => Canvas.PlotAreaX + index * Legend.ItemWidth,
             LegendAlignment.Center => (index, count) => Canvas.PlotAreaX + Canvas.PlotAreaWidth / 2 - (count / 2M - index) * Legend.ItemWidth,

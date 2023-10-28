@@ -383,7 +383,6 @@ public class XYChartTests {
         Assert.Empty(result);
     }
 
-    //750
     [Theory]
     [MemberData(nameof(GetLegendShapes_KeyShapes_Data))]
     public void GetLegendShapes_KeyShapes(LegendPosition legendPosition, LegendAlignment legendAlignment, int layerIndex, int dataSeriesIndex, decimal expectedX, decimal expectedY) {
@@ -413,6 +412,9 @@ public class XYChartTests {
 
     public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_KeyShapes_Data() => new() {
         { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding }
+        // TODO more tests
     };
 
     [Theory]
@@ -442,7 +444,9 @@ public class XYChartTests {
     }
 
     public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_TextShapes_Data() => new() {
-        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M }
+        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M }
         // TODO more tests
     };
 
