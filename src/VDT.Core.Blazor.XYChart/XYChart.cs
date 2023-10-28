@@ -176,7 +176,6 @@ public class XYChart : ComponentBase {
     public IEnumerable<DataLabelShape> GetDataLabelShapes()
         => Layers.SelectMany(layer => layer.GetDataLabelShapes());
 
-    // TODO test
     public IEnumerable<ShapeBase> GetLegendShapes() {
         if (!Legend.IsEnabled) {
             yield break;
