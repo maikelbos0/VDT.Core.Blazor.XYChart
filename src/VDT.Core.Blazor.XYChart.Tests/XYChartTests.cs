@@ -499,7 +499,6 @@ public class XYChartTests {
     [Theory]
     [MemberData(nameof(GetDataPointSpacingMode_Data))]
     public void GetDataPointSpacingMode(DataPointSpacingMode dataPointSpacingMode, List<LayerBase> layers, DataPointSpacingMode expectedDataPointSpacingMode) {
-        // todo rewrite somehow??
         var subject = layers.Aggregate(new XYChartBuilder(dataPointSpacingMode: dataPointSpacingMode), (builder, layer) => builder.WithLayer(layer))
             .Chart;
 
