@@ -373,7 +373,7 @@ public class XYChartTests {
     [Fact]
     public void GetLegendShapes_Disabled() {
         var subject = new XYChartBuilder(labelCount: 3)
-            .WithLegend(false)
+            .WithLegend(isEnabled: false)
             .WithLayer<BarLayer>()
             .WithDataSeries(5M, 15M, 25M)
             .Chart;
@@ -387,7 +387,7 @@ public class XYChartTests {
     [MemberData(nameof(GetLegendShapes_KeyShapes_Data))]
     public void GetLegendShapes_KeyShapes(LegendPosition legendPosition, LegendAlignment legendAlignment, int layerIndex, int dataSeriesIndex, decimal expectedX, decimal expectedY) {
         var builder = new XYChartBuilder()
-            .WithLegend(true, legendPosition, legendAlignment);
+            .WithLegend(isEnabled: true, position: legendPosition, alignment: legendAlignment);
 
         for (var i = 0; i < 3; i++) {
             builder = builder
@@ -429,7 +429,7 @@ public class XYChartTests {
     [MemberData(nameof(GetLegendShapes_TextShapes_Data))]
     public void GetLegendShapes_TextShapes(LegendPosition legendPosition, LegendAlignment legendAlignment, int layerIndex, int dataSeriesIndex, decimal expectedX, decimal expectedY) {
         var builder = new XYChartBuilder()
-            .WithLegend(true, legendPosition, legendAlignment);
+            .WithLegend(isEnabled: true, position: legendPosition, alignment: legendAlignment);
 
         for (var i = 0; i < 3; i++) {
             builder = builder

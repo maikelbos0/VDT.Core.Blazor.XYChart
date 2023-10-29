@@ -12,7 +12,6 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static string DefaultYAxisLabelFormat { get; set; } = "#,##0.######";
     public static string DefaultYAxisMultiplierFormat { get; set; } = "x #,##0.######";
     public static string DefaultDataLabelFormat { get; set; } = "#,##0.######";
-    
 
     [Parameter] public int Width { get; set; } = DefaultWidth;
     [Parameter] public int Height { get; set; } = DefaultHeight;
