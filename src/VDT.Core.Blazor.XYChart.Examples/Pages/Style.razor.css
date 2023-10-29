@@ -21,7 +21,7 @@
     stroke-opacity: 0.8;
 }
 
-::deep .chart-main .bar-data {
+::deep .chart-main .bar-data, ::deep .chart-main .legend-key {
     fill-opacity: 0.8;
     stroke: #787c80;
     stroke-opacity: 0.8;
