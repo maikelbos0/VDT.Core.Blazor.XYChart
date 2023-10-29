@@ -9,7 +9,7 @@ public class SquareDataMarkerShapeTests {
     public void Key() {
         var subject = new SquareDataMarkerShape(150, 50, 20, "red", "example-data", 1, 2, 5);
 
-        Assert.Equal("SquareDataMarkerShape[1,2,5]", subject.Key);
+        Assert.Equal($"{nameof(SquareDataMarkerShape)}[1,2,5]", subject.Key);
     }
 
     [Fact]

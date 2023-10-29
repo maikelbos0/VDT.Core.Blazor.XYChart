@@ -9,7 +9,7 @@ public class YAxisMultiplierShapeTests {
     public void Key() {
         var subject = new YAxisMultiplierShape(100M, 50M, "x 1.000");
 
-        Assert.Equal("YAxisMultiplierShape[]", subject.Key);
+        Assert.Equal($"{nameof(YAxisMultiplierShape)}[]", subject.Key);
     }
 
     [Fact]

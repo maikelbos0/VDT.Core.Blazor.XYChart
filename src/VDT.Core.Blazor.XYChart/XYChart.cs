@@ -14,10 +14,19 @@ public class XYChart : ComponentBase {
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public IList<string> Labels { get; set; } = new List<string>();
     [Parameter] public DataPointSpacingMode DataPointSpacingMode { get; set; } = DefaultDataPointSpacingMode;
-    internal Canvas Canvas { get; set; } = new();
-    internal PlotArea PlotArea { get; set; } = new();
+    internal Canvas Canvas { get; set; }
+    internal Legend Legend { get; set; }
+    internal PlotArea PlotArea { get; set; }
+    internal AutoScaleSettings AutoScaleSettings { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
+
+    public XYChart() {
+        Canvas = new Canvas() { Chart = this };
+        Legend = new Legend() { Chart = this };
+        PlotArea = new PlotArea() { Chart = this };
+        AutoScaleSettings = new AutoScaleSettings() { Chart = this };
+    }
 
     public override async Task SetParametersAsync(ParameterView parameters) {
         var parametersHaveChanged = HaveParametersChanged(parameters);
@@ -70,6 +79,16 @@ public class XYChart : ComponentBase {
         HandleStateChange();
     }
 
+    internal void SetLegend(Legend legend) {
+        Legend = legend;
+        HandleStateChange();
+    }
+
+    internal void ResetLegend() {
+        Legend = new();
+        HandleStateChange();
+    }
+
     internal void SetPlotArea(PlotArea plotArea) {
         PlotArea = plotArea;
         HandleStateChange();
@@ -77,6 +96,16 @@ public class XYChart : ComponentBase {
 
     internal void ResetPlotArea() {
         PlotArea = new();
+        HandleStateChange();
+    }
+
+    internal void SetAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
+        AutoScaleSettings = autoScaleSettings;
+        HandleStateChange();
+    }
+
+    internal void ResetAutoScaleSettings() {
+        AutoScaleSettings = new();
         HandleStateChange();
     }
 
@@ -123,25 +152,75 @@ public class XYChart : ComponentBase {
         foreach (var shape in GetXAxisLabelShapes()) {
             yield return shape;
         }
+
+        foreach (var shape in GetLegendShapes()) {
+            yield return shape;
+        }
     }
 
     public IEnumerable<GridLineShape> GetGridLineShapes()
         => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new GridLineShape(Canvas.PlotAreaX, MapDataPointToCanvas(dataPoint), Canvas.PlotAreaWidth, dataPoint, index));
 
     public IEnumerable<YAxisLabelShape> GetYAxisLabelShapes()
-        => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new YAxisLabelShape(Canvas.PlotAreaX - Canvas.YAxisLabelClearance, MapDataPointToCanvas(dataPoint), (dataPoint / PlotArea.Multiplier).ToString(Canvas.YAxisLabelFormat), index));
+        => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new YAxisLabelShape(Canvas.PlotAreaX, MapDataPointToCanvas(dataPoint), (dataPoint / PlotArea.Multiplier).ToString(Canvas.YAxisLabelFormat), index));
 
     public YAxisMultiplierShape? GetYAxisMultiplierShape()
         => PlotArea.Multiplier == 1M ? null : new YAxisMultiplierShape(Canvas.Padding, Canvas.PlotAreaY + Canvas.PlotAreaHeight / 2M, PlotArea.Multiplier.ToString(Canvas.YAxisMultiplierFormat));
 
     public IEnumerable<XAxisLabelShape> GetXAxisLabelShapes()
-        => Labels.Select((label, index) => new XAxisLabelShape(MapDataIndexToCanvas(index), Canvas.PlotAreaY + Canvas.PlotAreaHeight + Canvas.XAxisLabelClearance, label, index));
+        => Labels.Select((label, index) => new XAxisLabelShape(MapDataIndexToCanvas(index), Canvas.PlotAreaY + Canvas.PlotAreaHeight, label, index));
 
     public IEnumerable<ShapeBase> GetDataSeriesShapes()
         => Layers.SelectMany(layer => layer.GetDataSeriesShapes());
 
     public IEnumerable<DataLabelShape> GetDataLabelShapes()
         => Layers.SelectMany(layer => layer.GetDataLabelShapes());
+
+    public IEnumerable<ShapeBase> GetLegendShapes() {
+        if (!Legend.IsEnabled) {
+            yield break;
+        }
+
+        var itemsPerRow = Canvas.PlotAreaWidth / Legend.ItemWidth;
+        var rows = Layers
+            .SelectMany(layer => layer.GetLegendItems())
+            .Select((item, index) => new { Item = item, Index = index })
+            .GroupBy(value => value.Index / itemsPerRow, value => value.Item);
+        Func<int, int, decimal> offsetProvider = Legend.Alignment switch {
+            LegendAlignment.Left => (index, _) => Canvas.PlotAreaX + index * Legend.ItemWidth,
+            LegendAlignment.Center => (index, count) => Canvas.PlotAreaX + Canvas.PlotAreaWidth / 2 - (count / 2M - index) * Legend.ItemWidth,
+            LegendAlignment.Right => (index, count) => Canvas.Width - Canvas.Padding - (count - index) * Legend.ItemWidth,
+            _ => throw new NotImplementedException($"No implementation found for {nameof(LegendAlignment)} '{Legend.Alignment}'.")
+        };
+
+        foreach (var row in rows) {
+            var rowIndex = row.Key;
+            var rowItems = row.ToList();
+
+            for (var index = 0; index < rowItems.Count; index++) {
+                var item = rowItems[index];
+
+                yield return new LegendKeyShape(
+                    offsetProvider(index, rowItems.Count) + (Legend.ItemHeight - Legend.KeySize) / 2M,
+                    Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight - Legend.KeySize / 2M,
+                    Legend.KeySize,
+                    item.Color,
+                    item.CssClass,
+                    item.LayerIndex,
+                    item.DataSeriesIndex
+                );
+
+                yield return new LegendTextShape(
+                    offsetProvider(index, rowItems.Count) + Legend.ItemHeight,
+                    Canvas.LegendY + (rowIndex + 0.5M) * Legend.ItemHeight,
+                    item.Text,
+                    item.CssClass,
+                    item.LayerIndex,
+                    item.DataSeriesIndex
+                );
+            }
+        }
+    }
 
     public decimal MapDataPointToCanvas(decimal dataPoint) => Canvas.PlotAreaY + MapDataValueToPlotArea(PlotArea.Max - dataPoint);
 

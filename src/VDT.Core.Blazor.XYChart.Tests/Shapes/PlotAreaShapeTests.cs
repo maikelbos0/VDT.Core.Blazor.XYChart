@@ -9,7 +9,7 @@ public class PlotAreaShapeTests {
     public void Key() {
         var subject = new PlotAreaShape(300, 200, 20, 50, 130, 90);
 
-        Assert.Equal("PlotAreaShape[]", subject.Key);
+        Assert.Equal($"{nameof(PlotAreaShape)}[]", subject.Key);
     }
 
     [Fact]

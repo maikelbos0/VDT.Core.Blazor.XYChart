@@ -70,12 +70,12 @@ public class LayerBaseTests {
     }
 
     public static TheoryData<decimal?[], int, decimal, decimal, string> GetDataLabelShapes_Data() {
-        var dataPointWidth = PlotAreaWidth / 3M;
+        var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
-            { new decimal?[] { -30M, 30M, 60M }, 0, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, (-30M).ToString(CanvasDataLabelFormat) },
-            { new decimal?[] { -30M, 30M, 60M }, 1, PlotAreaX + 1.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 30M.ToString(CanvasDataLabelFormat) },
-            { new decimal?[] { -30M, 30M, 60M }, 2, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight, 60M.ToString(CanvasDataLabelFormat) },
+            { new decimal?[] { -30M, 30M, 60M }, 0, PlotArea_X + 0.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height, (-30M).ToString(Canvas_DataLabelFormat) },
+            { new decimal?[] { -30M, 30M, 60M }, 1, PlotArea_X + 1.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height, 30M.ToString(Canvas_DataLabelFormat) },
+            { new decimal?[] { -30M, 30M, 60M }, 2, PlotArea_X + 2.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max - 60M) / PlotArea_Range * PlotArea_Height, 60M.ToString(Canvas_DataLabelFormat) },
         };
     }
 
@@ -103,7 +103,7 @@ public class LayerBaseTests {
 
         var shape = Assert.IsType<DataLabelShape>(Assert.Single(result));
 
-        Assert.Equal((-3M).ToString(CanvasDataLabelFormat), shape.Value);
+        Assert.Equal((-3M).ToString(Canvas_DataLabelFormat), shape.Value);
     }
 
     [Theory]

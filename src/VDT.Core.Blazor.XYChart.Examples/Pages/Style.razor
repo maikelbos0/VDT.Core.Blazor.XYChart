@@ -6,7 +6,8 @@
 <p>
     Since the chart is rendered as SVG, each chart element is fully customizable using the powerful SVG options in CSS. Each element type can be referenced
     using the below CSS classes. The chart itself can be referenced with the CSS class <code>svg.chart-main</code>. Aside from the default CSS classes, it
-    is also possible to assign each data series its own custom CSS class using the <code>CssClass</code> parameter.
+    is also possible to assign each data series its own custom CSS class using the <code>CssClass</code> parameter. All SVG elements that are associated with
+    this data series will contain this CSS class, including data labels and legend items.
 </p>
 
 <ul>
@@ -42,9 +43,11 @@
         Data labels: <code>.data-label</code>
         <ul>
             <li>Positive values (including 0) also get the attribute <code>data-positive</code></li>
-            <li>Negative values (including 0) also get the attribute <code>data-negative</code></li>
+            <li>Negative values also get the attribute <code>data-negative</code></li>
         </ul>
     </li>
+    <li>Legend item keys: <code>.legend-key</code></li>
+    <li>Legend item text: <code>.legend-text</code></li>
 </ul>
 
 <p>
@@ -60,9 +63,9 @@
 </p>
 
 <p>
-    The axis labels, data labels and y-axis multiplier only get positioned with a single x/y coordinate as an anchor, so horizontal and vertical aligning, 
-    rotation and any other positional transforming should be done with CSS. In the below chart example the anchors of these elements are made visible with red 
-    crosses.
+    The axis labels, data labels, y-axis multiplier and legend text only get positioned with a single x/y coordinate as an anchor, so horizontal and vertical
+    aligning, rotation and any other positional transforming should be done with CSS. In the below chart example the anchors of these elements are made visible
+    with red crosses.
 </p>
 
 <p>
@@ -132,6 +135,10 @@
             }
 
             foreach (var shape in Chart.GetDataLabelShapes()) {
+                yield return ((int)shape.X, (int)shape.Y);
+            }
+
+            foreach (var shape in Chart.GetLegendShapes().OfType<LegendTextShape>()) {
                 yield return ((int)shape.X, (int)shape.Y);
             }
         }

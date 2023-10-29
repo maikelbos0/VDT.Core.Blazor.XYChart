@@ -49,9 +49,9 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     public abstract IEnumerable<ShapeBase> GetDataSeriesShapes();
 
     public IEnumerable<DataLabelShape> GetDataLabelShapes() {
-        var layerIndex = Chart.Layers.IndexOf(this);
-
         if (ShowDataLabels) {
+            var layerIndex = Chart.Layers.IndexOf(this);
+
             return GetCanvasDataSeries().SelectMany(canvasDataSeries => canvasDataSeries.DataPoints.Select(dataPoint => new DataLabelShape(
                 dataPoint.X,
                 dataPoint.Y,
@@ -86,6 +86,12 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         ).ToList();
     }
 
+    public IEnumerable<LegendItem> GetLegendItems() {
+        var layerIndex = Chart.Layers.IndexOf(this);
+
+        return DataSeries.Select((dataSeries, index) => new LegendItem(dataSeries.GetColor(), dataSeries.Name ?? "?", dataSeries.CssClass, layerIndex, index));
+    }
+
     public IEnumerable<decimal> GetScaleDataPoints() {
         var dataPointTransformer = GetDataPointTransformer();
 
@@ -106,7 +112,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
 
                     return (dataPoint, index) => (dataPoint < 0 ? negativeOffsets : positiveOffsets)[index] += dataPoint;
                 default:
-                    throw new NotImplementedException($"Missing stacked transformer implementation for {nameof(StackMode)}{StackMode}");
+                    throw new NotImplementedException($"No implementation found for {nameof(StackMode)} '{StackMode}'.");
             }
         }
         else {

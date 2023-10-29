@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +16,6 @@ public class PlotArea : ChildComponentBase, IDisposable {
     [Parameter] public decimal Max { get; set; } = DefaultMax;
     [Parameter] public decimal GridLineInterval { get; set; } = DefaultGridLineInterval;
     [Parameter] public decimal Multiplier { get; set; } = DefaultMultiplier;
-    public AutoScaleSettings AutoScaleSettings { get; set; } = new();
 
     protected override void OnInitialized() => Chart.SetPlotArea(this);
 
@@ -32,25 +30,8 @@ public class PlotArea : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(GridLineInterval)
         || parameters.HasParameterChanged(Multiplier); 
 
-    internal void SetAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
-        AutoScaleSettings = autoScaleSettings;
-        Chart.HandleStateChange();
-    }
-
-    internal void ResetAutoScaleSettings() {
-        AutoScaleSettings = new();
-        Chart.HandleStateChange();
-    }
-
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenComponent<CascadingValue<PlotArea>>(1);
-        builder.AddAttribute(2, "Value", this);
-        builder.AddAttribute(3, "ChildContent", ChildContent);
-        builder.CloseComponent();
-    }
-
     public void AutoScale(IEnumerable<decimal> dataPoints) {
-        if (!AutoScaleSettings.IsEnabled) {
+        if (!Chart.AutoScaleSettings.IsEnabled) {
             return;
         }
 
@@ -66,22 +47,22 @@ public class PlotArea : ChildComponentBase, IDisposable {
                 max += (DefaultMax - DefaultMin) / 2M;
             }
             else {
-                var clearance = (max - min) / (100M - AutoScaleSettings.ClearancePercentage * 2) * AutoScaleSettings.ClearancePercentage;
+                var clearance = (max - min) / (100M - Chart.AutoScaleSettings.ClearancePercentage * 2) * Chart.AutoScaleSettings.ClearancePercentage;
 
                 min -= clearance;
                 max += clearance;
             }
 
-            if (min > 0M && AutoScaleSettings.IncludeZero) {
+            if (min > 0M && Chart.AutoScaleSettings.IncludeZero) {
                 min = 0M;
             }
 
-            if (max < 0M && AutoScaleSettings.IncludeZero) {
+            if (max < 0M && Chart.AutoScaleSettings.IncludeZero) {
                 max = 0M;
             }
         }
 
-        var rawGridLineInterval = (max - min) / Math.Max(1, AutoScaleSettings.RequestedGridLineCount - 1);
+        var rawGridLineInterval = (max - min) / Math.Max(1, Chart.AutoScaleSettings.RequestedGridLineCount - 1);
         var baseMultiplier = DecimalMath.Pow(10M, (int)Math.Floor((decimal)Math.Log10((double)rawGridLineInterval)));
         var scale = new[] { 1M, 2M, 5M, 10M }
             .Select(baseGridLineInterval => baseGridLineInterval * baseMultiplier)
@@ -90,7 +71,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
                 Min = DecimalMath.FloorToScale(min, gridLineInterval),
                 Max = DecimalMath.CeilingToScale(max, gridLineInterval)
             })
-            .OrderBy(candidate => Math.Abs((candidate.Max - candidate.Min) / candidate.GridLineInterval - AutoScaleSettings.RequestedGridLineCount))
+            .OrderBy(candidate => Math.Abs((candidate.Max - candidate.Min) / candidate.GridLineInterval - Chart.AutoScaleSettings.RequestedGridLineCount))
             .First();
 
         Min = DecimalMath.Trim(scale.Min);

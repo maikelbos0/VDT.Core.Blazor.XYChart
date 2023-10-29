@@ -55,6 +55,30 @@ public class XYChartTests {
     }
 
     [Fact]
+    public void SetLegend() {
+        var legend = new Legend();
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+
+        subject.SetLegend(legend);
+
+        Assert.Same(legend, subject.Legend);
+        Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Fact]
+    public void ResetLegend() {
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+        var legend = subject.Legend;
+
+        subject.ResetLegend();
+
+        Assert.NotSame(legend, subject.Legend);
+        Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Fact]
     public void SetPlotArea() {
         var plotArea = new PlotArea();
         var builder = new XYChartBuilder();
@@ -75,6 +99,30 @@ public class XYChartTests {
         subject.ResetPlotArea();
 
         Assert.NotSame(plotArea, subject.PlotArea);
+        Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Fact]
+    public void SetAutoScaleSettings() {
+        var autoScaleSettings = new AutoScaleSettings();
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+
+        subject.SetAutoScaleSettings(autoScaleSettings);
+
+        Assert.Same(autoScaleSettings, subject.AutoScaleSettings);
+        Assert.True(builder.StateHasChangedInvoked);
+    }
+
+    [Fact]
+    public void ResetAutoScaleSettings() {
+        var builder = new XYChartBuilder();
+        var subject = builder.Chart;
+        var autoScaleSettings = subject.AutoScaleSettings;
+
+        subject.ResetAutoScaleSettings();
+
+        Assert.NotSame(autoScaleSettings, subject.AutoScaleSettings);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
@@ -130,9 +178,9 @@ public class XYChartTests {
 
         _ = subject.GetShapes().ToList();
 
-        Assert.Equal(PlotAreaMin, subject.PlotArea.Min);
-        Assert.Equal(PlotAreaMax, subject.PlotArea.Max);
-        Assert.Equal(PlotAreaGridLineInterval, subject.PlotArea.GridLineInterval);
+        Assert.Equal(PlotArea_Min, subject.PlotArea.Min);
+        Assert.Equal(PlotArea_Max, subject.PlotArea.Max);
+        Assert.Equal(PlotArea_GridLineInterval, subject.PlotArea.GridLineInterval);
     }
 
     [Fact]
@@ -206,18 +254,29 @@ public class XYChartTests {
     }
 
     [Fact]
+    public void GetShapes_LegendShapes() {
+        var subject = new XYChartBuilder(labelCount: 2)
+            .WithLayer(new BarLayer())
+            .WithDataSeries(5M, 10M)
+            .Chart;
+
+        Assert.Contains(subject.GetShapes(), shape => shape is LegendKeyShape);
+        Assert.Contains(subject.GetShapes(), shape => shape is LegendTextShape);
+    }
+
+    [Fact]
     public void GetGridLineShapes() {
         var subject = new XYChartBuilder()
             .Chart;
 
         var result = subject.GetGridLineShapes();
 
-        Assert.Equal(PlotAreaRange / PlotAreaGridLineInterval, result.Count());
+        Assert.Equal(PlotArea_Range / PlotArea_GridLineInterval, result.Count());
 
         Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
-            Assert.Equal(PlotAreaY + (PlotAreaMax - PlotAreaGridLineInterval * value.Index) / PlotAreaRange * PlotAreaHeight, value.Shape.Y);
-            Assert.Equal(PlotAreaX, value.Shape.X);
-            Assert.Equal(PlotAreaWidth, value.Shape.Width);
+            Assert.Equal(PlotArea_Y + (PlotArea_Max - PlotArea_GridLineInterval * value.Index) / PlotArea_Range * PlotArea_Height, value.Shape.Y);
+            Assert.Equal(PlotArea_X, value.Shape.X);
+            Assert.Equal(PlotArea_Width, value.Shape.Width);
             Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
         });
     }
@@ -229,12 +288,12 @@ public class XYChartTests {
         
         var result = subject.GetYAxisLabelShapes();
 
-        Assert.Equal(PlotAreaRange / PlotAreaGridLineInterval, result.Count());
+        Assert.Equal(PlotArea_Range / PlotArea_GridLineInterval, result.Count());
 
         Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
-            Assert.Equal(PlotAreaY + (PlotAreaMax - PlotAreaGridLineInterval * value.Index) / PlotAreaRange * PlotAreaHeight, value.Shape.Y);
-            Assert.Equal(PlotAreaX - CanvasYAxisLabelClearance, value.Shape.X);
-            Assert.Equal((PlotAreaGridLineInterval * value.Index).ToString(CanvasYAxisLabelFormat), value.Shape.Value);
+            Assert.Equal(PlotArea_Y + (PlotArea_Max - PlotArea_GridLineInterval * value.Index) / PlotArea_Range * PlotArea_Height, value.Shape.Y);
+            Assert.Equal(PlotArea_X, value.Shape.X);
+            Assert.Equal((PlotArea_GridLineInterval * value.Index).ToString(Canvas_YAxisLabelFormat), value.Shape.Value);
             Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
         });
     }
@@ -248,9 +307,9 @@ public class XYChartTests {
         var result = subject.GetYAxisMultiplierShape();
 
         Assert.NotNull(result);
-        Assert.Equal(CanvasPadding, result.X);
-        Assert.Equal(CanvasPadding + PlotAreaHeight / 2M, result.Y);
-        Assert.Equal(1000.ToString(CanvasYAxisMultiplierFormat), result.Multiplier);
+        Assert.Equal(Canvas_Padding, result.X);
+        Assert.Equal(PlotArea_Y + PlotArea_Height / 2M, result.Y);
+        Assert.Equal(1000.ToString(Canvas_YAxisMultiplierFormat), result.Multiplier);
     }
 
     [Fact]
@@ -274,9 +333,9 @@ public class XYChartTests {
         Assert.Equal(subject.Labels.Count, result.Count());
 
         Assert.All(result.Select((shape, index) => new { Shape = shape, Index = index }), value => {
-            Assert.Equal(PlotAreaY + PlotAreaHeight + CanvasXAxisLabelClearance, value.Shape.Y);
+            Assert.Equal(PlotArea_Y + PlotArea_Height, value.Shape.Y);
             Assert.EndsWith($"[{value.Index}]", value.Shape.Key);
-            Assert.Equal(PlotAreaX + (0.5M + value.Index) * PlotAreaWidth / subject.Labels.Count, value.Shape.X);
+            Assert.Equal(PlotArea_X + (0.5M + value.Index) * PlotArea_Width / subject.Labels.Count, value.Shape.X);
             Assert.Equal(subject.Labels[value.Index], value.Shape.Label);
         });
     }
@@ -311,6 +370,102 @@ public class XYChartTests {
         Assert.All(result, shape => Assert.IsType<DataLabelShape>(shape));
     }
 
+    [Fact]
+    public void GetLegendShapes_Disabled() {
+        var subject = new XYChartBuilder(labelCount: 3)
+            .WithLegend(isEnabled: false)
+            .WithLayer<BarLayer>()
+            .WithDataSeries(5M, 15M, 25M)
+            .Chart;
+
+        var result = subject.GetLegendShapes();
+
+        Assert.Empty(result);
+    }
+
+    [Theory]
+    [MemberData(nameof(GetLegendShapes_KeyShapes_Data))]
+    public void GetLegendShapes_KeyShapes(LegendPosition legendPosition, LegendAlignment legendAlignment, int layerIndex, int dataSeriesIndex, decimal expectedX, decimal expectedY) {
+        var builder = new XYChartBuilder()
+            .WithLegend(isEnabled: true, position: legendPosition, alignment: legendAlignment);
+
+        for (var i = 0; i < 3; i++) {
+            builder = builder
+                .WithLayer(new BarLayer() { ShowDataLabels = true })
+                .WithDataSeries(new DataSeries() { Color = "red", CssClass = "example-data" })
+                .WithDataSeries(new DataSeries() { Color = "green", CssClass = "example-data" })
+                .WithDataSeries(new DataSeries() { Color = "blue", CssClass = "example-data" });
+        }
+
+        var subject = builder.Chart;
+
+        var result = subject.GetLegendShapes();
+
+        var shape = Assert.IsType<LegendKeyShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LegendKeyShape)}[{layerIndex},{dataSeriesIndex}]"));
+
+        Assert.Equal(expectedX, shape.X);
+        Assert.Equal(expectedY, shape.Y);
+        Assert.Equal(Legend_KeySize, shape.Size);
+        Assert.Equal(subject.Layers[layerIndex].DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("legend-key example-data", shape.CssClass);
+    }
+
+    public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_KeyShapes_Data() => new() {
+        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Center, 0, 0, PlotArea_X + PlotArea_Width / 2M - 3.5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Center, 0, 2, PlotArea_X + PlotArea_Width / 2M - 1.5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Center, 2, 1, PlotArea_X + PlotArea_Width / 2M - Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Right, 0, 0, PlotArea_X + PlotArea_Width - 7M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Right, 0, 2, PlotArea_X + PlotArea_Width - 5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+        { LegendPosition.Top, LegendAlignment.Right, 2, 1, PlotArea_X + PlotArea_Width - 2M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
+        { LegendPosition.Bottom, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_KeyPadding },
+        { LegendPosition.Bottom, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_KeyPadding, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_KeyPadding },
+        { LegendPosition.Bottom, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_KeyPadding, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_ItemHeight + Legend_KeyPadding }
+    };
+
+    [Theory]
+    [MemberData(nameof(GetLegendShapes_TextShapes_Data))]
+    public void GetLegendShapes_TextShapes(LegendPosition legendPosition, LegendAlignment legendAlignment, int layerIndex, int dataSeriesIndex, decimal expectedX, decimal expectedY) {
+        var builder = new XYChartBuilder()
+            .WithLegend(isEnabled: true, position: legendPosition, alignment: legendAlignment);
+
+        for (var i = 0; i < 3; i++) {
+            builder = builder
+                .WithLayer(new BarLayer() { ShowDataLabels = true })
+                .WithDataSeries(new DataSeries() { Name = "foo", CssClass = "example-data" })
+                .WithDataSeries(new DataSeries() { Name = "bar", CssClass = "example-data" })
+                .WithDataSeries(new DataSeries() { Name = "baz", CssClass = "example-data" });
+        }
+
+        var subject = builder.Chart;
+
+        var result = subject.GetLegendShapes();
+
+        var shape = Assert.IsType<LegendTextShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LegendTextShape)}[{layerIndex},{dataSeriesIndex}]"));
+
+        Assert.Equal(expectedX, shape.X);
+        Assert.Equal(expectedY, shape.Y);
+        Assert.Equal(subject.Layers[layerIndex].DataSeries[dataSeriesIndex].Name, shape.DataSeriesName);
+        Assert.Equal("legend-text example-data", shape.CssClass);
+    }
+
+    public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_TextShapes_Data() => new() {
+        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Center, 0, 0, PlotArea_X + PlotArea_Width / 2M - 3.5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Center, 0, 2, PlotArea_X + PlotArea_Width / 2M - 1.5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Center, 2, 1, PlotArea_X + PlotArea_Width / 2M - Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Right, 0, 0, PlotArea_X + PlotArea_Width - 7M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Right, 0, 2, PlotArea_X + PlotArea_Width - 5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+        { LegendPosition.Top, LegendAlignment.Right, 2, 1, PlotArea_X + PlotArea_Width - 2M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
+        { LegendPosition.Bottom, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_ItemHeight / 2M },
+        { LegendPosition.Bottom, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_ItemHeight, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_ItemHeight / 2M },
+        { LegendPosition.Bottom, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_ItemHeight, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_ItemHeight + Legend_ItemHeight / 2M }
+    };
+
     [Theory]
     [MemberData(nameof(MapDataPointToCanvas_Data))]
     public void MapDataPointToCanvas(decimal dataPoint, decimal expectedValue) {
@@ -321,9 +476,9 @@ public class XYChartTests {
     }
 
     public static TheoryData<decimal, decimal> MapDataPointToCanvas_Data() => new() {
-        { 50M, PlotAreaY + (PlotAreaMax - 50M) / PlotAreaRange * PlotAreaHeight },
-        { 200M, PlotAreaY + (PlotAreaMax - 200M) / PlotAreaRange * PlotAreaHeight },
-        { 350M, PlotAreaY + (PlotAreaMax - 350M) / PlotAreaRange * PlotAreaHeight }
+        { 50M, PlotArea_Y + (PlotArea_Max - 50M) / PlotArea_Range * PlotArea_Height },
+        { 200M, PlotArea_Y + (PlotArea_Max - 200M) / PlotArea_Range * PlotArea_Height },
+        { 350M, PlotArea_Y + (PlotArea_Max - 350M) / PlotArea_Range * PlotArea_Height }
     };
 
     [Theory]
@@ -336,9 +491,9 @@ public class XYChartTests {
     }
 
     public static TheoryData<decimal, decimal> MapDataValueToPlotArea_Data() => new() {
-        { 50M, 50M / PlotAreaRange * PlotAreaHeight },
-        { 200M, 200M / PlotAreaRange * PlotAreaHeight },
-        { 350M, 350M / PlotAreaRange * PlotAreaHeight }
+        { 50M, 50M / PlotArea_Range * PlotArea_Height },
+        { 200M, 200M / PlotArea_Range * PlotArea_Height },
+        { 350M, 350M / PlotArea_Range * PlotArea_Height }
     };
 
     [Theory]
@@ -369,12 +524,12 @@ public class XYChartTests {
     }
 
     public static TheoryData<DataPointSpacingMode, int, decimal> GetDataPointWidth_Data() => new() {
-        { DataPointSpacingMode.EdgeToEdge, 3, PlotAreaWidth / 2M },
-        { DataPointSpacingMode.Center, 3, PlotAreaWidth / 3M },
-        { DataPointSpacingMode.EdgeToEdge, 1, PlotAreaWidth },
-        { DataPointSpacingMode.Center, 1, PlotAreaWidth },
-        { DataPointSpacingMode.EdgeToEdge, 0, PlotAreaWidth },
-        { DataPointSpacingMode.Center, 0, PlotAreaWidth },
+        { DataPointSpacingMode.EdgeToEdge, 3, PlotArea_Width / 2M },
+        { DataPointSpacingMode.Center, 3, PlotArea_Width / 3M },
+        { DataPointSpacingMode.EdgeToEdge, 1, PlotArea_Width },
+        { DataPointSpacingMode.Center, 1, PlotArea_Width },
+        { DataPointSpacingMode.EdgeToEdge, 0, PlotArea_Width },
+        { DataPointSpacingMode.Center, 0, PlotArea_Width },
     };
 
     [Theory]
@@ -387,11 +542,11 @@ public class XYChartTests {
     }
 
     public static TheoryData<DataPointSpacingMode, int, decimal> MapDataIndexToCanvas_Data() => new() {
-        { DataPointSpacingMode.EdgeToEdge, 0, PlotAreaX },
-        { DataPointSpacingMode.EdgeToEdge, 1, PlotAreaX + 1 * PlotAreaWidth / 2M },
-        { DataPointSpacingMode.EdgeToEdge, 2, PlotAreaX + 2 * PlotAreaWidth / 2M },
-        { DataPointSpacingMode.Center, 0, PlotAreaX + 0.5M * PlotAreaWidth / 3M },
-        { DataPointSpacingMode.Center, 1, PlotAreaX + 1.5M * PlotAreaWidth / 3M },
-        { DataPointSpacingMode.Center, 2, PlotAreaX + 2.5M * PlotAreaWidth / 3M },
+        { DataPointSpacingMode.EdgeToEdge, 0, PlotArea_X },
+        { DataPointSpacingMode.EdgeToEdge, 1, PlotArea_X + 1 * PlotArea_Width / 2M },
+        { DataPointSpacingMode.EdgeToEdge, 2, PlotArea_X + 2 * PlotArea_Width / 2M },
+        { DataPointSpacingMode.Center, 0, PlotArea_X + 0.5M * PlotArea_Width / 3M },
+        { DataPointSpacingMode.Center, 1, PlotArea_X + 1.5M * PlotArea_Width / 3M },
+        { DataPointSpacingMode.Center, 2, PlotArea_X + 2.5M * PlotArea_Width / 3M },
     };
 }

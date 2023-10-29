@@ -9,7 +9,7 @@ public class DataLabelShapeTests {
     public void Key() {
         var subject = new DataLabelShape(100M, 50M, "150", "example-data", true, 1, 2, 5);
 
-        Assert.Equal("DataLabelShape[1,2,5]", subject.Key);
+        Assert.Equal($"{nameof(DataLabelShape)}[1,2,5]", subject.Key);
     }
 
     [Theory]

@@ -78,12 +78,12 @@ public class LineLayerTests {
     }
 
     public static TheoryData<int, decimal, decimal, decimal, decimal> GetUnstackedDataSeriesShapes_Markers_Data() {
-        var dataPointWidth = PlotAreaWidth / 3M;
+        var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
-            { 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 30M, PlotAreaX + 1.5M * dataPointWidth, PlotAreaY  + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 2, 210M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY  + (PlotAreaMax - 210M) / PlotAreaRange * PlotAreaHeight, 20M },
+            { 0, -30M, PlotArea_X + 0.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height, 20M },
+            { 1, 30M, PlotArea_X + 1.5M * dataPointWidth, PlotArea_Y  + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height, 20M },
+            { 2, 210M, PlotArea_X + 2.5M * dataPointWidth, PlotArea_Y  + (PlotArea_Max - 210M) / PlotArea_Range * PlotArea_Height, 20M },
         };
     }
 
@@ -123,15 +123,15 @@ public class LineLayerTests {
     }
 
     public static TheoryData<int, int, decimal, decimal, decimal, decimal> GetStackedDataSeriesShapes_Markers_Data() {
-        var dataPointWidth = PlotAreaWidth / 3M;
+        var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
-            { 0, 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 0, 2, 30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 0, -30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 0, 30M, PlotAreaX + 0.5M * dataPointWidth, PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 2, -30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight, 20M },
-            { 1, 2, 30M, PlotAreaX + 2.5M * dataPointWidth, PlotAreaY + (PlotAreaMax - 90M) / PlotAreaRange * PlotAreaHeight, 20M }
+            { 0, 0, -30M, PlotArea_X + 0.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height, 20M },
+            { 0, 2, 30M, PlotArea_X + 2.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height, 20M },
+            { 1, 0, -30M, PlotArea_X + 0.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max + 90M) / PlotArea_Range * PlotArea_Height, 20M },
+            { 1, 0, 30M, PlotArea_X + 0.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height, 20M },
+            { 1, 2, -30M, PlotArea_X + 2.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height, 20M },
+            { 1, 2, 30M, PlotArea_X + 2.5M * dataPointWidth, PlotArea_Y + (PlotArea_Max - 90M) / PlotArea_Range * PlotArea_Height, 20M }
         };
     }
 
@@ -186,16 +186,16 @@ public class LineLayerTests {
     }
 
     public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_Lines_Data() {
-        var dataPointWidth = PlotAreaWidth / 3M;
+        var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
             { 0, 30M, 1, -30M, Path.Create(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}"
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height}"
             ) },
             { 1, -30M, 2, 30M, Path.Create(
-                $"M {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}"
+                $"M {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height}"
             ) }
         };
     }
@@ -233,33 +233,33 @@ public class LineLayerTests {
     }
 
     public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_Lines_Data() {
-        var dataPointWidth = PlotAreaWidth / 3M;
+        var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
             { 0, 0, 30M, 1, 30M, Path.Create(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 60M) / PlotArea_Range * PlotArea_Height}"
             ) },
             { 1, 0, 30M, 1, -30M, Path.Create(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 90M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 60M) / PlotArea_Range * PlotArea_Height}"
             ) },
             { 1, 0, -30M, 1, 30M, Path.Create(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 60M) / PlotAreaRange * PlotAreaHeight}"
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 90M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 60M) / PlotArea_Range * PlotArea_Height}"
             ) },
             { 1, 1, 30M, 2, -30M, Path.Create(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 60M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 30M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 30M) / PlotAreaRange * PlotAreaHeight}"
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 60M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 30M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 30M) / PlotArea_Range * PlotArea_Height}"
             ) },
             { 1, 1, -30M, 2, 30M, Path.Create(
-                $"M {PlotAreaX + 0.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 60M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 1.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax + 90M) / PlotAreaRange * PlotAreaHeight}",
-                $"L {PlotAreaX + 2.5M * dataPointWidth} {PlotAreaY + (PlotAreaMax - 90M) / PlotAreaRange * PlotAreaHeight}"
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 60M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 90M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 90M) / PlotArea_Range * PlotArea_Height}"
             ) },
         };
     }

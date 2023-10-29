@@ -4,17 +4,17 @@ using Xunit;
 
 namespace VDT.Core.Blazor.XYChart.Tests.Shapes;
 
-public class XAxisLabelShapeTests {
+public class LegendTextShapeTests {
     [Fact]
     public void Key() {
-        var subject = new XAxisLabelShape(100M, 50M, "Foo", 2);
+        var subject = new LegendTextShape(100M, 50M, "Foo", "example-data", 1, 2);
 
-        Assert.Equal($"{nameof(XAxisLabelShape)}[2]", subject.Key);
+        Assert.Equal($"{nameof(LegendTextShape)}[1,2]", subject.Key);
     }
 
     [Fact]
     public void GetAttributes() {
-        var subject = new XAxisLabelShape(100M, 50M, "Foo", 2);
+        var subject = new LegendTextShape(100M, 50M, "Foo", "example-data", 1, 2);
 
         var result = subject.GetAttributes();
 
@@ -25,7 +25,7 @@ public class XAxisLabelShapeTests {
 
     [Fact]
     public void GetContent() {
-        var subject = new XAxisLabelShape(100M, 50M, "Foo", 2);
+        var subject = new LegendTextShape(100M, 50M, "Foo", "example-data", 1, 2);
 
         Assert.Equal("Foo", subject.GetContent());
     }
