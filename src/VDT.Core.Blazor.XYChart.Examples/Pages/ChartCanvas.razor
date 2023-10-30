@@ -2,6 +2,49 @@
 
 <h1>Canvas</h1>
 
+
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="width">Width</label>
+        <input type="number" class="form-control" id="width" @bind-value="@Width" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="height">Height</label>
+        <input type="number" class="form-control" id="height" @bind-value="@Height" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="padding">Padding</label>
+        <input type="number" class="form-control" id="padding" @bind-value="@Padding" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="xAxisLabelHeight">X-axis label height</label>
+        <input type="number" class="form-control" id="xAxisLabelHeight" @bind-value="@XAxisLabelHeight" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="yAxisLabelWidth">Y-axis label width</label>
+        <input type="number" class="form-control" id="yAxisLabelWidth" @bind-value="@YAxisLabelWidth" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="yAxisLabelFormat">Y-axis label format</label>
+        <input type="text" class="form-control" id="yAxisLabelFormat" @bind-value="@YAxisLabelFormat" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="yAxisMultiplierFormat">Y-axis multiplier format</label>
+        <input type="text" class="form-control" id="yAxisMultiplierFormat" @bind-value="@YAxisMultiplierFormat" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="dataLabelFormat">Data label format</label>
+        <input type="text" class="form-control" id="dataLabelFormat" @bind-value="@DataLabelFormat" />
+    </div>
+</div>
+
 <div class="d-inline-block">
     <XYChart Labels="@ExampleData.Labels">
         <Canvas Width="Width" Height="Height" Padding="Padding" XAxisLabelHeight="XAxisLabelHeight" YAxisLabelWidth="YAxisLabelWidth"
