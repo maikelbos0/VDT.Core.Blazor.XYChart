@@ -2,6 +2,23 @@
 
 <h1>Canvas</h1>
 
+<p>
+    The canvas component is the place where all general chart dimensions and number format strings can be set. All dimension settings are in pixels. Number
+    format strings can be standard or custom numeric format strings; see the 
+    <a href="https://learn.microsoft.com/en-us/dotnet/standard/base-types/formatting-types"> Microsoft documentation on formatting</a> for more information.
+</p>
+
+<ul>
+    <li><code>Width</code> is the total width of the chart, including axis labels and padding</li>
+    <li><code>Height</code> is the total height of the chart, including axis labels and padding</li>
+    <li><code>Padding</code> is the distance between the canvas edge and any chart elements</li>
+    <li><code>XAxisLabelHeight</code> is the vertical room reserved for labels on the x-axis</li>
+    <li><code>YAxisLabelWidth</code> is the horizontal room reserved for labels on the y-axis, including the multiplier if applicable</li>
+    <li><code>YAxisLabelFormat</code> is the string used to format the numeric labels on the y-axis</li>
+    <li><code>YAxisMultiplierFormat</code> is the string used to format the y-axis multiplier, if it's not exactly 1</li>
+    <li><code>DataLabelFormat</code> is the string used to format the numeric data labels optionally displayed at each data point</li>
+</ul>
+
 
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
