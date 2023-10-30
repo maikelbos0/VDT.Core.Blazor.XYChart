@@ -1,0 +1,43 @@
+﻿@page "/Canvas"
+
+<h1>Canvas</h1>
+
+<div class="d-inline-block">
+    <XYChart Labels="@ExampleData.Labels">
+        <Canvas Width="Width" Height="Height" Padding="Padding" XAxisLabelHeight="XAxisLabelHeight" YAxisLabelWidth="YAxisLabelWidth"
+                YAxisLabelFormat="@YAxisLabelFormat" YAxisMultiplierFormat="@YAxisMultiplierFormat" DataLabelFormat="@DataLabelFormat" />
+
+        <PlotArea Multiplier="1000" />
+
+        <AreaLayer ShowDataLabels="true">
+            @foreach (var data in ExampleData.AreaData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </AreaLayer>
+        <BarLayer ShowDataLabels="true">
+            @foreach (var data in ExampleData.BarData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </BarLayer>
+        <LineLayer ShowDataLabels="true">
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
+
+@code {
+    private int Width { get; set; } = Canvas.DefaultWidth;
+    private int Height { get; set; } = Canvas.DefaultHeight;
+    private int Padding { get; set; } = Canvas.DefaultPadding;
+    private int XAxisLabelHeight { get; set; } = Canvas.DefaultXAxisLabelHeight;
+    private int YAxisLabelWidth { get; set; } = Canvas.DefaultYAxisLabelWidth;
+    private string YAxisLabelFormat { get; set; } = Canvas.DefaultYAxisLabelFormat;
+    private string YAxisMultiplierFormat { get; set; } = Canvas.DefaultYAxisMultiplierFormat;
+    private string DataLabelFormat { get; set; } = Canvas.DefaultDataLabelFormat;
+}
