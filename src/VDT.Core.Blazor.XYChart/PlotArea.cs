@@ -11,7 +11,6 @@ public class PlotArea : ChildComponentBase, IDisposable {
     public static decimal DefaultGridLineInterval { get; set; } = 5M;
     public static decimal DefaultMultiplier { get; set; } = 1M;
 
-    [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public decimal Min { get; set; } = DefaultMin;
     [Parameter] public decimal Max { get; set; } = DefaultMax;
     [Parameter] public decimal GridLineInterval { get; set; } = DefaultGridLineInterval;
