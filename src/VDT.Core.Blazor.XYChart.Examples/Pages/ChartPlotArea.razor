@@ -1,0 +1,38 @@
+﻿@page "/PlotArea"
+
+<h1>Plot area</h1>
+
+<div class="d-inline-block">
+    <XYChart Labels="@ExampleData.Labels">
+        <PlotArea Min="Min" Max="Max" GridLineInterval="GridLineInterval" Multiplier="Multiplier" />
+
+        <AutoScaleSettings IsEnabled="false" />
+
+        <AreaLayer>
+            @foreach (var data in ExampleData.AreaData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </AreaLayer>
+        <BarLayer>
+            @foreach (var data in ExampleData.BarData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </BarLayer>
+        <LineLayer>
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
+
+@code {
+    private decimal Min { get; set; } = -100_000;
+    private decimal Max { get; set; } = 500_000;
+    private decimal GridLineInterval { get; set; } = 40_000;
+    private decimal Multiplier { get; set; } = 1_000;
+}
