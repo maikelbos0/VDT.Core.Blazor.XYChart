@@ -2,6 +2,28 @@
 
 <h1>Plot area</h1>
 
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="min">Min</label>
+        <input type="number" class="form-control" id="min" @bind-value="@Min" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="max">Max</label>
+        <input type="number" class="form-control" id="max" @bind-value="@Max" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="gridLineInterval">Grid line interval</label>
+        <input type="number" class="form-control" id="gridLineInterval" @bind-value="@GridLineInterval" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="multiplier">Multiplier</label>
+        <input type="number" class="form-control" id="multiplier" @bind-value="@Multiplier" />
+    </div>
+</div>
+
 <div class="d-inline-block">
     <XYChart Labels="@ExampleData.Labels">
         <PlotArea Min="Min" Max="Max" GridLineInterval="GridLineInterval" Multiplier="Multiplier" />
@@ -31,8 +53,8 @@
 </div>
 
 @code {
-    private decimal Min { get; set; } = -100_000;
-    private decimal Max { get; set; } = 500_000;
+    private decimal Min { get; set; } = -200_000;
+    private decimal Max { get; set; } = 400_000;
     private decimal GridLineInterval { get; set; } = 40_000;
     private decimal Multiplier { get; set; } = 1_000;
 }
