@@ -40,8 +40,6 @@
     <XYChart Labels="@ExampleData.Labels">
         <PlotArea Min="Min" Max="Max" GridLineInterval="GridLineInterval" Multiplier="Multiplier" AutoScaleIsEnabled="false" />
 
-        <AutoScaleSettings IsEnabled="false" />
-
         <AreaLayer>
             @foreach (var data in ExampleData.AreaData) {
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />

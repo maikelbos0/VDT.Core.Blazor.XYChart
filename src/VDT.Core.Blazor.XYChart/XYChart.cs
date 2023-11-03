@@ -17,7 +17,6 @@ public class XYChart : ComponentBase {
     internal Canvas Canvas { get; set; }
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
-    internal AutoScaleSettings AutoScaleSettings { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
 
@@ -25,7 +24,6 @@ public class XYChart : ComponentBase {
         Canvas = new Canvas() { Chart = this };
         Legend = new Legend() { Chart = this };
         PlotArea = new PlotArea() { Chart = this };
-        AutoScaleSettings = new AutoScaleSettings() { Chart = this };
     }
 
     public override async Task SetParametersAsync(ParameterView parameters) {
@@ -96,16 +94,6 @@ public class XYChart : ComponentBase {
 
     internal void ResetPlotArea() {
         PlotArea = new();
-        HandleStateChange();
-    }
-
-    internal void SetAutoScaleSettings(AutoScaleSettings autoScaleSettings) {
-        AutoScaleSettings = autoScaleSettings;
-        HandleStateChange();
-    }
-
-    internal void ResetAutoScaleSettings() {
-        AutoScaleSettings = new();
         HandleStateChange();
     }
 
