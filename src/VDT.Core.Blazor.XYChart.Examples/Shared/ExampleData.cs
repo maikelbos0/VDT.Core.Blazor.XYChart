@@ -9,7 +9,7 @@ public class ExampleData {
     };
     public static List<ExampleData> LineData => new() {
         new("Line", "#3366bb", 125000, 95000, 205000, 145000, 110000, 155000, 135500, 140000),
-        new("Linz", "#dd3377", 65000, -25000, null, 40000, 20000, null, 55000, 70500)
+        new("Linz", "#dd3377", 65000, 55000, null, 81000, 52500, null, 58000, 70500)
     };
     public static List<ExampleData> AreaData => new() {
         new("Area", "#ff9933", 70000, 125000, 85000, 35000, 110000, 80000, 85000, 60000),
