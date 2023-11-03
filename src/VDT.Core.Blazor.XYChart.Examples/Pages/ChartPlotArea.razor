@@ -31,6 +31,8 @@
     </li>
 </ul>
 
+<h2>Chart without automatic scaling</h2>
+
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="min">Min</label>
@@ -79,9 +81,52 @@
     </div>
 </div>
 
+<h2>Chart with automatic scaling</h2>
+
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="autoScaleRequestedGridLineCount">Auto scale requested grid line count</label>
+        <input type="number" class="form-control" id="autoScaleRequestedGridLineCount" @bind-value="@AutoScaleRequestedGridLineCount" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="autoScaleIncludesZero">Auto scale zero value</label>
+        <select class="form-select" id="autoScaleIncludesZero" @onchange="args => AutoScaleIncludesZero = bool.Parse(args.Value?.ToString()!)">
+            <option value="true" selected="@AutoScaleIncludesZero">Include</option>
+            <option value="false" selected="@(!AutoScaleIncludesZero)">Exclude</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="autoScaleClearancePercentage">Auto scale clearance percentage</label>
+        <input type="number" class="form-control" id="autoScaleClearancePercentage" @bind-value="@AutoScaleClearancePercentage" />
+    </div>
+</div>
+
+<div class="d-inline-block">
+    <XYChart Labels="@ExampleData.Labels">
+        <PlotArea AutoScaleIsEnabled="true" AutoScaleRequestedGridLineCount="AutoScaleRequestedGridLineCount"
+                  AutoScaleIncludesZero="AutoScaleIncludesZero" AutoScaleClearancePercentage="AutoScaleClearancePercentage" />
+
+        <LineLayer>
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
+
 @code {
     private decimal Min { get; set; } = -200_000;
     private decimal Max { get; set; } = 400_000;
     private decimal GridLineInterval { get; set; } = 40_000;
     private decimal Multiplier { get; set; } = 1_000;
+    private bool AutoScaleIsEnabled { get; set; } = false;
+    private int AutoScaleRequestedGridLineCount { get; set; } = 11;
+    private bool AutoScaleIncludesZero { get; set; } = true;
+    private decimal AutoScaleClearancePercentage { get; set; } = 5M;
 }
