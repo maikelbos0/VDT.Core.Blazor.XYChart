@@ -10,11 +10,19 @@ public class PlotArea : ChildComponentBase, IDisposable {
     public static decimal DefaultMax { get; set; } = 50M;
     public static decimal DefaultGridLineInterval { get; set; } = 5M;
     public static decimal DefaultMultiplier { get; set; } = 1M;
+    public static bool DefaultAutoScaleIsEnabled { get; set; } = true;
+    public static int DefaultAutoScaleRequestedGridLineCount { get; set; } = 11;
+    public static bool DefaultAutoScaleIncludesZero { get; set; } = true;
+    public static decimal DefaultAutoScaleClearancePercentage { get; set; } = 5M;
 
     [Parameter] public decimal Min { get; set; } = DefaultMin;
     [Parameter] public decimal Max { get; set; } = DefaultMax;
     [Parameter] public decimal GridLineInterval { get; set; } = DefaultGridLineInterval;
     [Parameter] public decimal Multiplier { get; set; } = DefaultMultiplier;
+    [Parameter] public bool AutoScaleIsEnabled { get; set; } = DefaultAutoScaleIsEnabled;
+    [Parameter] public int AutoScaleRequestedGridLineCount { get; set; } = DefaultAutoScaleRequestedGridLineCount;
+    [Parameter] public bool AutoScaleIncludesZero { get; set; } = DefaultAutoScaleIncludesZero;
+    [Parameter] public decimal AutoScaleClearancePercentage { get; set; } = DefaultAutoScaleClearancePercentage;
 
     protected override void OnInitialized() => Chart.SetPlotArea(this);
 
@@ -27,7 +35,11 @@ public class PlotArea : ChildComponentBase, IDisposable {
         => parameters.HasParameterChanged(Min)
         || parameters.HasParameterChanged(Max)
         || parameters.HasParameterChanged(GridLineInterval)
-        || parameters.HasParameterChanged(Multiplier); 
+        || parameters.HasParameterChanged(Multiplier)
+        || parameters.HasParameterChanged(AutoScaleIsEnabled)
+        || parameters.HasParameterChanged(AutoScaleRequestedGridLineCount)
+        || parameters.HasParameterChanged(AutoScaleIncludesZero)
+        || parameters.HasParameterChanged(AutoScaleClearancePercentage);
 
     public void AutoScale(IEnumerable<decimal> dataPoints) {
         if (!Chart.AutoScaleSettings.IsEnabled) {

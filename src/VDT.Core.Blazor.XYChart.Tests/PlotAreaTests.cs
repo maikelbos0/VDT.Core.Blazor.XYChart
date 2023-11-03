@@ -7,32 +7,49 @@ using static VDT.Core.Blazor.XYChart.Tests.Constants;
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class PlotAreaTests {
+
+    //[Parameter] public bool AutoScaleIsEnabled { get; set; } = DefaultAutoScaleIsEnabled;
+    //[Parameter] public int AutoScaleRequestedGridLineCount { get; set; } = DefaultAutoScaleRequestedGridLineCount;
+    //[Parameter] public bool AutoScaleIncludesZero { get; set; } = DefaultAutoScaleIncludesZero;
+    //[Parameter] public decimal AutoScaleClearancePercentage { get; set; } = DefaultAutoScaleClearancePercentage;
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(decimal min, decimal max, decimal gridLineInterval, decimal multiplier, bool expectedResult) {
+    public void HaveParametersChanged(decimal min, decimal max, decimal gridLineInterval, decimal multiplier, bool autoScaleIsEnabled, int autoScaleRequestedGridLineCount, bool autoScaleIncludesZero, decimal autoScaleClearancePercentage, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(PlotArea.Min), min },
             { nameof(PlotArea.Max), max },
             { nameof(PlotArea.GridLineInterval), gridLineInterval },
-            { nameof(PlotArea.Multiplier), multiplier}
+            { nameof(PlotArea.Multiplier), multiplier},
+            { nameof(PlotArea.AutoScaleIsEnabled), autoScaleIsEnabled},
+            { nameof(PlotArea.AutoScaleRequestedGridLineCount), autoScaleRequestedGridLineCount},
+            { nameof(PlotArea.AutoScaleIncludesZero), autoScaleIncludesZero},
+            { nameof(PlotArea.AutoScaleClearancePercentage), autoScaleClearancePercentage}
         });
 
         var subject = new PlotArea {
             Min = 0M,
             Max = 100M,
             GridLineInterval = 10M,
-            Multiplier = 1M
+            Multiplier = 1M,
+            AutoScaleIsEnabled = true,
+            AutoScaleRequestedGridLineCount = 11,
+            AutoScaleIncludesZero = true,
+            AutoScaleClearancePercentage = 5M
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<decimal, decimal, decimal, decimal, bool> HaveParametersChanged_Data() => new() {
-        { 0M, 100M, 10M, 1M, false },
-        { -10M, 100M, 10M, 1M, true },
-        { 0M, 150M, 10M, 1M, true },
-        { 0M, 100M, 5M, 1M, true },
-        { 0M, 100M, 10M, 100M, true },
+    public static TheoryData<decimal, decimal, decimal, decimal, bool, int, bool, decimal, bool> HaveParametersChanged_Data() => new() {
+        { 0M, 100M, 10M, 1M, true, 11, true, 5M, false },
+        { -10M, 100M, 10M, 1M, true, 11, true, 5M, true },
+        { 0M, 150M, 10M, 1M, true, 11, true, 5M, true },
+        { 0M, 100M, 5M, 1M, true, 11, true, 5M, true },
+        { 0M, 100M, 10M, 100M, true, 11, true, 5M, true },
+        { 0M, 100M, 10M, 1M, false, 11, true, 5M, true },
+        { 0M, 100M, 10M, 1M, true, 12, true, 5M, true },
+        { 0M, 100M, 10M, 1M, true, 11, false, 5M, true },
+        { 0M, 100M, 10M, 1M, true, 11, true, 10M, true }
     };
 
     [Theory]
