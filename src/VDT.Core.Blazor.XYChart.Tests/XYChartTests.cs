@@ -154,7 +154,7 @@ public class XYChartTests {
     [Fact]
     public void GetShapes_AutoScale() {
         var subject = new XYChartBuilder(labelCount: 2)
-            .WithAutoScaleSettings(isEnabled: true, requestedGridLineCount: 15, clearancePercentage: 0M)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleRequestedGridLineCount: 15, autoScaleClearancePercentage: 0M)
             .WithLayer<BarLayer>()
             .WithDataSeries(-9M, 0M)
             .WithDataSeries(-5M, 19M)
@@ -170,7 +170,7 @@ public class XYChartTests {
     [Fact]
     public void GetShapes_No_AutoScale() {
         var subject = new XYChartBuilder(labelCount: 2)
-            .WithAutoScaleSettings(isEnabled: false)
+            .WithPlotArea(autoScaleIsEnabled: false)
             .WithLayer<BarLayer>()
             .WithDataSeries(-9M, 0M)
             .WithDataSeries(-5M, 19M)

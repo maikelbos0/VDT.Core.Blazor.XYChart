@@ -7,11 +7,6 @@ using static VDT.Core.Blazor.XYChart.Tests.Constants;
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class PlotAreaTests {
-
-    //[Parameter] public bool AutoScaleIsEnabled { get; set; } = DefaultAutoScaleIsEnabled;
-    //[Parameter] public int AutoScaleRequestedGridLineCount { get; set; } = DefaultAutoScaleRequestedGridLineCount;
-    //[Parameter] public bool AutoScaleIncludesZero { get; set; } = DefaultAutoScaleIncludesZero;
-    //[Parameter] public decimal AutoScaleClearancePercentage { get; set; } = DefaultAutoScaleClearancePercentage;
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
     public void HaveParametersChanged(decimal min, decimal max, decimal gridLineInterval, decimal multiplier, bool autoScaleIsEnabled, int autoScaleRequestedGridLineCount, bool autoScaleIncludesZero, decimal autoScaleClearancePercentage, bool expectedResult) {
@@ -56,7 +51,7 @@ public class PlotAreaTests {
     [MemberData(nameof(AutoScale_Data))]
     public void AutoScale(decimal[] dataPoints, int requestedGridLineCount, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 0M, requestedGridLineCount: requestedGridLineCount)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: false, autoScaleClearancePercentage: 0M, autoScaleRequestedGridLineCount: requestedGridLineCount)
             .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
@@ -84,7 +79,7 @@ public class PlotAreaTests {
     [MemberData(nameof(AutoScale_No_DataPoints_Data))]
     public void AutoScale_No_DataPoints(int requestedGridLineCount, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 0M, requestedGridLineCount: requestedGridLineCount)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: false, autoScaleClearancePercentage: 0M, autoScaleRequestedGridLineCount: requestedGridLineCount)
             .Chart.PlotArea;
 
         subject.AutoScale(Array.Empty<decimal>());
@@ -110,7 +105,7 @@ public class PlotAreaTests {
     [MemberData(nameof(AutoScale_IncludeZero_Data))]
     public void AutoScale_IncludeZero(decimal[] dataPoints, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: true, includeZero: true, clearancePercentage: 0M, requestedGridLineCount: 5)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: true, autoScaleClearancePercentage: 0M, autoScaleRequestedGridLineCount: 5)
             .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
@@ -130,7 +125,7 @@ public class PlotAreaTests {
     [MemberData(nameof(AutoScale_ClearancePercentage_Data))]
     public void AutoScale_ClearancePercentage(decimal[] dataPoints, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 5M, requestedGridLineCount: 5)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: false, autoScaleClearancePercentage: 5M, autoScaleRequestedGridLineCount: 5)
             .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
@@ -149,7 +144,7 @@ public class PlotAreaTests {
     [Fact]
     public void AutoScale_Disabled() {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: false)
+            .WithPlotArea(autoScaleIsEnabled: false)
             .Chart.PlotArea;
 
         subject.AutoScale(new[] { 0.006M, 0.044M });

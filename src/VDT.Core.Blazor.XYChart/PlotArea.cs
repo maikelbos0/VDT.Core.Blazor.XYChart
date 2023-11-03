@@ -42,7 +42,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(AutoScaleClearancePercentage);
 
     public void AutoScale(IEnumerable<decimal> dataPoints) {
-        if (!Chart.AutoScaleSettings.IsEnabled) {
+        if (!AutoScaleIsEnabled) {
             return;
         }
 
@@ -58,22 +58,22 @@ public class PlotArea : ChildComponentBase, IDisposable {
                 max += (DefaultMax - DefaultMin) / 2M;
             }
             else {
-                var clearance = (max - min) / (100M - Chart.AutoScaleSettings.ClearancePercentage * 2) * Chart.AutoScaleSettings.ClearancePercentage;
+                var clearance = (max - min) / (100M - AutoScaleClearancePercentage * 2) * AutoScaleClearancePercentage;
 
                 min -= clearance;
                 max += clearance;
             }
 
-            if (min > 0M && Chart.AutoScaleSettings.IncludeZero) {
+            if (min > 0M && AutoScaleIncludesZero) {
                 min = 0M;
             }
 
-            if (max < 0M && Chart.AutoScaleSettings.IncludeZero) {
+            if (max < 0M && AutoScaleIncludesZero) {
                 max = 0M;
             }
         }
 
-        var rawGridLineInterval = (max - min) / Math.Max(1, Chart.AutoScaleSettings.RequestedGridLineCount - 1);
+        var rawGridLineInterval = (max - min) / Math.Max(1, AutoScaleRequestedGridLineCount - 1);
         var baseMultiplier = DecimalMath.Pow(10M, (int)Math.Floor((decimal)Math.Log10((double)rawGridLineInterval)));
         var scale = new[] { 1M, 2M, 5M, 10M }
             .Select(baseGridLineInterval => baseGridLineInterval * baseMultiplier)
@@ -82,7 +82,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
                 Min = DecimalMath.FloorToScale(min, gridLineInterval),
                 Max = DecimalMath.CeilingToScale(max, gridLineInterval)
             })
-            .OrderBy(candidate => Math.Abs((candidate.Max - candidate.Min) / candidate.GridLineInterval - Chart.AutoScaleSettings.RequestedGridLineCount))
+            .OrderBy(candidate => Math.Abs((candidate.Max - candidate.Min) / candidate.GridLineInterval - AutoScaleRequestedGridLineCount))
             .First();
 
         Min = DecimalMath.Trim(scale.Min);

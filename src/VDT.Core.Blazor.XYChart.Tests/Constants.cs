@@ -33,9 +33,8 @@ public static class Constants {
     public const decimal PlotArea_Range = PlotArea_Max - PlotArea_Min;
     public const decimal PlotArea_GridLineInterval = 200M;
     public const decimal PlotArea_Multiplier = 1M;
-
-    public const bool AutoScaleSettings_IsEnabled = true;
-    public const int AutoScaleSettings_RequestedGridLineCount = 11;
-    public const bool AutoScaleSettings_IncludeZero = false;
-    public const decimal AutoScaleSettings_ClearancePercentage = 5M;
+    public const bool PlotArea_AutoScaleIsEnabled = true;
+    public const int PlotArea_AutoScaleRequestedGridLineCount = 11;
+    public const bool PlotArea_AutoScaleIncludesZero = false;
+    public const decimal PlotArea_AutoScaleClearancePercentage = 5M;
 }
