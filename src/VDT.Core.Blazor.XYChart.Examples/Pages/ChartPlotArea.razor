@@ -11,7 +11,24 @@
     <li><code>Min</code> is the lowest data point value that is visible in the chart</li>
     <li><code>Max</code> is the highest data point value that is visible in the chart</li>
     <li><code>GridLineInterval</code> is the interval with which grid lines are shown; the starting point is zero</li>
-    <li><code>Multiplier</code> is the unit multiplier when showing y-axis labels and data labels; all values get divided by this value before being displayed</li>
+    <li>
+        <code>Multiplier</code> is the unit multiplier when showing y-axis labels and data labels; all values get divided by this value before being
+        displayed
+    </li>
+    <li>
+        <code>AutoScaleIsEnabled</code> enables automatic scaling of the plot area, meaning the values for <code>Min</code>, <code>Max</code> and
+        <code>GridLineInterval</code> will be automatically determined when rendering; please note that if automatic scaling is enabled you can not manually
+        set these parameters
+    </li>
+    <li>
+        <code>AutoScaleRequestedGridLineCount</code> is the number of grid lines you would ideally like to see if automatic scaling is enabled; please note
+        that the end result can differ from the requested count
+    </li>
+    <li><code>AutoScaleIncludesZero</code> toggles the forced inclusion of the zero line in the plot area</li>
+    <li>
+        <code>AutoScaleClearancePercentage</code> is the minimum clearance between the highest/lowest data point and the edge of the plot area, expressed as a
+        percentage of the total plot area range
+    </li>
 </ul>
 
 <div class="row">
