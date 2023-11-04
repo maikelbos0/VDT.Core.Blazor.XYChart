@@ -2,6 +2,32 @@
 
 <h1>Legend</h1>
 
+<p>
+    The legend component allows you to configure the positioning and dimensions of the optional chart legend. All dimension settings are in pixels.
+</p>
+
+<ul>
+    <li><code>IsEnabled</code> toggles whether or not the legend is displayed</li>
+    <li>
+        <code>Position</code> sets the legend position
+        <ul>
+            <li><code>LegendPosition.Top</code> displays the legend above the plot area</li>
+            <li><code>LegendPosition.Bottom</code> displays the legend below the plot area</li>
+        </ul>
+    </li>
+    <li><code>Alignment</code> aligns the legend items inside the legend area left, right or centered</li>
+    <li><code>Height</code> is the total height reserved for the legend</li>
+    <li><code>ItemWidth</code> is the total width reserved for each legend item (key and text) inside the legend</li>
+    <li><code>ItemHeight</code> is the total height reserved for each legend item</li>
+    <li><code>KeySize</code> is the width/height of the legend item key</li>
+</ul>
+
+<p>
+    Legend item keys are centered horizontally and vertically inside a partition of the legend item area, dimensions of this space are <code>ItemHeight</code> 
+    by <code>ItemHeight</code>. Legend item text is centered vertically inside the legend item area, and are offset by the previously mentioned partition, 
+    meaning they are offset by <code>ItemHeight</code> horizontally.
+</p>
+
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="isEnabled">Legend</label>

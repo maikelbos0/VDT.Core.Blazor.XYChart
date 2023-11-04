@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-// TODO add example for Plot area / Auto scale
-// TODO add example for Canvas
 // TODO docs <GenerateDocumentationFile>true</GenerateDocumentationFile>
 // TODO explain defaults for all customization
 // TODO make charts responsive?
