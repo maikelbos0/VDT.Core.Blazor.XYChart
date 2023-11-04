@@ -56,9 +56,9 @@ public class PlotAreaTests {
 
         subject.AutoScale(dataPoints);
 
-        Assert.Equal(expectedMin, subject.Min);
-        Assert.Equal(expectedMax, subject.Max);
-        Assert.Equal(expectedGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(expectedMin, subject.ActualMin);
+        Assert.Equal(expectedMax, subject.ActualMax);
+        Assert.Equal(expectedGridLineInterval, subject.ActualGridLineInterval);
     }
 
     public static TheoryData<decimal[], int, decimal, decimal, decimal> AutoScale_Data() => new() {
@@ -84,9 +84,9 @@ public class PlotAreaTests {
 
         subject.AutoScale(Array.Empty<decimal>());
 
-        Assert.Equal(expectedMin, subject.Min);
-        Assert.Equal(expectedMax, subject.Max);
-        Assert.Equal(expectedGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(expectedMin, subject.ActualMin);
+        Assert.Equal(expectedMax, subject.ActualMax);
+        Assert.Equal(expectedGridLineInterval, subject.ActualGridLineInterval);
     }
 
     public static TheoryData<int, decimal, decimal, decimal> AutoScale_No_DataPoints_Data() => new() {
@@ -110,9 +110,9 @@ public class PlotAreaTests {
 
         subject.AutoScale(dataPoints);
 
-        Assert.Equal(expectedMin, subject.Min);
-        Assert.Equal(expectedMax, subject.Max);
-        Assert.Equal(expectedGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(expectedMin, subject.ActualMin);
+        Assert.Equal(expectedMax, subject.ActualMax);
+        Assert.Equal(expectedGridLineInterval, subject.ActualGridLineInterval);
     }
 
     public static TheoryData<decimal[], decimal, decimal, decimal> AutoScale_IncludeZero_Data() => new() {
@@ -130,9 +130,9 @@ public class PlotAreaTests {
 
         subject.AutoScale(dataPoints);
 
-        Assert.Equal(expectedMin, subject.Min);
-        Assert.Equal(expectedMax, subject.Max);
-        Assert.Equal(expectedGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(expectedMin, subject.ActualMin);
+        Assert.Equal(expectedMax, subject.ActualMax);
+        Assert.Equal(expectedGridLineInterval, subject.ActualGridLineInterval);
     }
 
     public static TheoryData<decimal[], decimal, decimal, decimal> AutoScale_ClearancePercentage_Data() => new() {
@@ -149,9 +149,9 @@ public class PlotAreaTests {
 
         subject.AutoScale(new[] { 0.006M, 0.044M });
 
-        Assert.Equal(PlotArea_Min, subject.Min);
-        Assert.Equal(PlotArea_Max, subject.Max);
-        Assert.Equal(PlotArea_GridLineInterval, subject.GridLineInterval);
+        Assert.Equal(PlotArea_Min, subject.ActualMin);
+        Assert.Equal(PlotArea_Max, subject.ActualMax);
+        Assert.Equal(PlotArea_GridLineInterval, subject.ActualGridLineInterval);
     }
 
     [Theory]

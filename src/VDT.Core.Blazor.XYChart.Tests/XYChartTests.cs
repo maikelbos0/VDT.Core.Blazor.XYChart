@@ -138,9 +138,9 @@ public class XYChartTests {
 
         _ = subject.GetShapes().ToList();
 
-        Assert.Equal(-10M, subject.PlotArea.Min);
-        Assert.Equal(20M, subject.PlotArea.Max);
-        Assert.Equal(2M, subject.PlotArea.GridLineInterval);
+        Assert.Equal(-10M, subject.PlotArea.ActualMin);
+        Assert.Equal(20M, subject.PlotArea.ActualMax);
+        Assert.Equal(2M, subject.PlotArea.ActualGridLineInterval);
     }
 
     [Fact]
@@ -154,9 +154,9 @@ public class XYChartTests {
 
         _ = subject.GetShapes().ToList();
 
-        Assert.Equal(PlotArea_Min, subject.PlotArea.Min);
-        Assert.Equal(PlotArea_Max, subject.PlotArea.Max);
-        Assert.Equal(PlotArea_GridLineInterval, subject.PlotArea.GridLineInterval);
+        Assert.Equal(PlotArea_Min, subject.PlotArea.ActualMin);
+        Assert.Equal(PlotArea_Max, subject.PlotArea.ActualMax);
+        Assert.Equal(PlotArea_GridLineInterval, subject.PlotArea.ActualGridLineInterval);
     }
 
     [Fact]

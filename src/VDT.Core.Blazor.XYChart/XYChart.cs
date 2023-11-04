@@ -210,9 +210,9 @@ public class XYChart : ComponentBase {
         }
     }
 
-    public decimal MapDataPointToCanvas(decimal dataPoint) => Canvas.PlotAreaY + MapDataValueToPlotArea(PlotArea.Max - dataPoint);
+    public decimal MapDataPointToCanvas(decimal dataPoint) => Canvas.PlotAreaY + MapDataValueToPlotArea(PlotArea.ActualMax - dataPoint);
 
-    public decimal MapDataValueToPlotArea(decimal dataPoint) => dataPoint / (PlotArea.Max - PlotArea.Min) * Canvas.PlotAreaHeight;
+    public decimal MapDataValueToPlotArea(decimal dataPoint) => dataPoint / (PlotArea.ActualMax - PlotArea.ActualMin) * Canvas.PlotAreaHeight;
 
     public DataPointSpacingMode GetDataPointSpacingMode() => DataPointSpacingMode switch {
         DataPointSpacingMode.Auto => Layers.Select(layer => layer.DefaultDataPointSpacingMode).DefaultIfEmpty(DataPointSpacingMode.EdgeToEdge).Max(),

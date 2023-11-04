@@ -24,6 +24,15 @@ public class PlotArea : ChildComponentBase, IDisposable {
     [Parameter] public bool AutoScaleIncludesZero { get; set; } = DefaultAutoScaleIncludesZero;
     [Parameter] public decimal AutoScaleClearancePercentage { get; set; } = DefaultAutoScaleClearancePercentage;
 
+    private decimal? AutoScaleMin { get; set; }
+    private decimal? AutoScaleMax { get; set; }
+    private decimal? AutoScaleGridLineInterval { get; set; }
+
+    internal decimal ActualMin => AutoScaleMin ?? Min;
+    internal decimal ActualMax => AutoScaleMax ?? Max;
+    internal decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
+
+
     protected override void OnInitialized() => Chart.SetPlotArea(this);
 
     public void Dispose() {
@@ -85,18 +94,18 @@ public class PlotArea : ChildComponentBase, IDisposable {
             .OrderBy(candidate => Math.Abs((candidate.Max - candidate.Min) / candidate.GridLineInterval - AutoScaleRequestedGridLineCount))
             .First();
 
-        Min = DecimalMath.Trim(scale.Min);
-        Max = DecimalMath.Trim(scale.Max);
-        GridLineInterval = DecimalMath.Trim(scale.GridLineInterval);
+        AutoScaleMin = DecimalMath.Trim(scale.Min);
+        AutoScaleMax = DecimalMath.Trim(scale.Max);
+        AutoScaleGridLineInterval = DecimalMath.Trim(scale.GridLineInterval);
     }
 
     public IEnumerable<decimal> GetGridLineDataPoints() {
-        var dataPoint = DecimalMath.CeilingToScale(Min, GridLineInterval);
+        var dataPoint = DecimalMath.CeilingToScale(ActualMin, ActualGridLineInterval);
 
-        while (dataPoint <= Max) {
+        while (dataPoint <= ActualMax) {
             yield return dataPoint;
 
-            dataPoint += GridLineInterval;
+            dataPoint += ActualGridLineInterval;
         }
     }
 }
