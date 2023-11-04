@@ -2,6 +2,53 @@
 
 <h1>Legend</h1>
 
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="isEnabled">Legend</label>
+        <select class="form-select" id="isEnabled" @onchange="args => IsEnabled = bool.Parse(args.Value?.ToString()!)">
+            <option value="false" selected="@(!IsEnabled)">Disabled</option>
+            <option value="true" selected="@IsEnabled">Enabled</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="position">Position</label>
+        <select class="form-select" id="position" @onchange="args => Position = Enum.Parse<LegendPosition>(args.Value?.ToString() ?? throw new InvalidOperationException())">
+            <option value="@LegendPosition.Top" selected="@(Position == LegendPosition.Top)">Top</option>
+            <option value="@LegendPosition.Bottom" selected="@(Position == LegendPosition.Bottom)">Bottom</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="alignment">Alignment</label>
+        <select class="form-select" id="alignment" @onchange="args => Alignment = Enum.Parse<LegendAlignment>(args.Value?.ToString() ?? throw new InvalidOperationException())">
+            <option value="@LegendAlignment.Left" selected="@(Alignment == LegendAlignment.Left)">Left</option>
+            <option value="@LegendAlignment.Center" selected="@(Alignment == LegendAlignment.Center)">Center</option>
+            <option value="@LegendAlignment.Right" selected="@(Alignment == LegendAlignment.Right)">Right</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="height">Height</label>
+        <input type="number" class="form-control" id="height" @bind-value="@Height" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="itemWidth">Item width</label>
+        <input type="number" class="form-control" id="itemWidth" @bind-value="@ItemWidth" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="itemHeight">Item height</label>
+        <input type="number" class="form-control" id="itemHeight" @bind-value="@ItemHeight" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="keySize">Key size</label>
+        <input type="number" class="form-control" id="keySize" @bind-value="@KeySize" />
+    </div>
+</div>
+
 <div class="d-inline-block">
     <XYChart Labels="@ExampleData.Labels">
         <Legend IsEnabled="IsEnabled" Position="Position" Alignment="Alignment" Height="Height" ItemWidth="ItemWidth" ItemHeight="ItemHeight" KeySize="KeySize" />
