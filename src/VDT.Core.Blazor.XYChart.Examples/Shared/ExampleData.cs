@@ -4,16 +4,16 @@ public class ExampleData {
     public static List<string> Labels => new() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" };
 
     public static List<ExampleData> BarData => new() {
-        new("Bar", "#ffcc11", 11000, 19000, 31500, -2500, 9500, 4500, 3500, 4000),
-        new("Baz", "#22cc55", 21000, -12000, 15500, -4000, 3500, 2500, -500, 3000)
+        new("Bar", "#ffcc11", 110500, 190000, 315000, -25000, 95000, 45000, 35000, 40000),
+        new("Baz", "#22cc55", 210000, -120500, 155000, -40000, 35000, 25000, -5000, 30000)
     };
     public static List<ExampleData> LineData => new() {
-        new("Line", "#3366bb", 12500, 9500, 20500, 14500, 11000, 15500, 13500, 14000),
-        new("Linz", "#dd3377", 6500, -2500, null, 4000, 2000, null, 5500, 7000)
+        new("Line", "#3366bb", 125000, 95000, 205000, 145000, 110000, 155000, 135500, 140000),
+        new("Linz", "#dd3377", 65000, 55000, null, 81000, 52500, null, 58000, 70500)
     };
     public static List<ExampleData> AreaData => new() {
-        new("Area", "#ff9933", 7000, 12500, 8500, 3500, 11000, 8000, 8500, 6000),
-        new("Arez", "#aa66ee", 2500, -2500, 3500, 5000, 3000, null, null, 4500)
+        new("Area", "#ff9933", 70000, 125000, 85000, 35000, 110000, 80000, 85000, 60000),
+        new("Arez", "#aa66ee", 25500, -25000, 35000, 50500, 30000, null, null, 45000)
     };
 
     public string Name { get; }

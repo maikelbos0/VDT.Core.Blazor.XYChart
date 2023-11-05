@@ -1,0 +1,112 @@
+﻿@page "/Legend"
+
+<h1>Legend</h1>
+
+<p>
+    The legend component allows you to configure the positioning and dimensions of the optional chart legend. All dimension settings are in pixels.
+</p>
+
+<ul>
+    <li><code>IsEnabled</code> toggles whether or not the legend is displayed</li>
+    <li>
+        <code>Position</code> sets the legend position
+        <ul>
+            <li><code>LegendPosition.Top</code> displays the legend above the plot area</li>
+            <li><code>LegendPosition.Bottom</code> displays the legend below the plot area</li>
+        </ul>
+    </li>
+    <li><code>Alignment</code> aligns the legend items inside the legend area left, right or centered</li>
+    <li><code>Height</code> is the total height reserved for the legend</li>
+    <li><code>ItemWidth</code> is the total width reserved for each legend item (key and text) inside the legend</li>
+    <li><code>ItemHeight</code> is the total height reserved for each legend item</li>
+    <li><code>KeySize</code> is the width/height of the legend item key</li>
+</ul>
+
+<p>
+    Legend item keys are centered horizontally and vertically inside a partition of the legend item area, dimensions of this space are <code>ItemHeight</code> 
+    by <code>ItemHeight</code>. Legend item text is centered vertically inside the legend item area, and are offset by the previously mentioned partition, 
+    meaning they are offset by <code>ItemHeight</code> horizontally.
+</p>
+
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="isEnabled">Legend</label>
+        <select class="form-select" id="isEnabled" @onchange="args => IsEnabled = bool.Parse(args.Value?.ToString()!)">
+            <option value="false" selected="@(!IsEnabled)">Disabled</option>
+            <option value="true" selected="@IsEnabled">Enabled</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="position">Position</label>
+        <select class="form-select" id="position" @onchange="args => Position = Enum.Parse<LegendPosition>(args.Value?.ToString() ?? throw new InvalidOperationException())">
+            <option value="@LegendPosition.Top" selected="@(Position == LegendPosition.Top)">Top</option>
+            <option value="@LegendPosition.Bottom" selected="@(Position == LegendPosition.Bottom)">Bottom</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="alignment">Alignment</label>
+        <select class="form-select" id="alignment" @onchange="args => Alignment = Enum.Parse<LegendAlignment>(args.Value?.ToString() ?? throw new InvalidOperationException())">
+            <option value="@LegendAlignment.Left" selected="@(Alignment == LegendAlignment.Left)">Left</option>
+            <option value="@LegendAlignment.Center" selected="@(Alignment == LegendAlignment.Center)">Center</option>
+            <option value="@LegendAlignment.Right" selected="@(Alignment == LegendAlignment.Right)">Right</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="height">Height</label>
+        <input type="number" class="form-control" id="height" @bind-value="@Height" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="itemWidth">Item width</label>
+        <input type="number" class="form-control" id="itemWidth" @bind-value="@ItemWidth" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="itemHeight">Item height</label>
+        <input type="number" class="form-control" id="itemHeight" @bind-value="@ItemHeight" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="keySize">Key size</label>
+        <input type="number" class="form-control" id="keySize" @bind-value="@KeySize" />
+    </div>
+</div>
+
+<div class="d-inline-block">
+    <XYChart Labels="@ExampleData.Labels">
+        <Legend IsEnabled="IsEnabled" Position="Position" Alignment="Alignment" Height="Height" ItemWidth="ItemWidth" ItemHeight="ItemHeight" KeySize="KeySize" />
+
+        <AreaLayer>
+            @foreach (var data in ExampleData.AreaData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </AreaLayer>
+        <BarLayer>
+            @foreach (var data in ExampleData.BarData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </BarLayer>
+        <LineLayer>
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
+
+@code {
+    private bool IsEnabled { get; set; } = Legend.DefaultIsEnabled;
+    private LegendPosition Position { get; set; } = Legend.DefaultPosition;
+    private LegendAlignment Alignment { get; set; } = Legend.DefaultAlignment;
+    private int Height { get; set; } = Legend.DefaultHeight;
+    private int ItemWidth { get; set; } = Legend.DefaultItemWidth;
+    private int ItemHeight { get; set; } = Legend.DefaultItemHeight;
+    private int KeySize { get; set; } = Legend.DefaultKeySize;
+}

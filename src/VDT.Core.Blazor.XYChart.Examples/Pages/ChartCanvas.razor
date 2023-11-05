@@ -1,0 +1,102 @@
+﻿@page "/Canvas"
+
+<h1>Canvas</h1>
+
+<p>
+    The canvas component is the place where all general chart dimensions and number format strings can be set. All dimension settings are in pixels. Number
+    format strings can be standard or custom numeric format strings; see the 
+    <a href="https://learn.microsoft.com/en-us/dotnet/standard/base-types/formatting-types"> Microsoft documentation on formatting</a> for more information.
+</p>
+
+<ul>
+    <li><code>Width</code> is the total width of the chart, including axis labels and padding</li>
+    <li><code>Height</code> is the total height of the chart, including axis labels and padding</li>
+    <li><code>Padding</code> is the distance between the canvas edge and any chart elements</li>
+    <li><code>XAxisLabelHeight</code> is the vertical room reserved for labels on the x-axis</li>
+    <li><code>YAxisLabelWidth</code> is the horizontal room reserved for labels on the y-axis, including the multiplier if applicable</li>
+    <li><code>YAxisLabelFormat</code> is the string used to format the numeric labels on the y-axis</li>
+    <li><code>YAxisMultiplierFormat</code> is the string used to format the y-axis multiplier, if it's visible</li>
+    <li><code>DataLabelFormat</code> is the string used to format the numeric data labels optionally displayed at each data point</li>
+</ul>
+
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="width">Width</label>
+        <input type="number" class="form-control" id="width" @bind-value="@Width" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="height">Height</label>
+        <input type="number" class="form-control" id="height" @bind-value="@Height" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="padding">Padding</label>
+        <input type="number" class="form-control" id="padding" @bind-value="@Padding" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="xAxisLabelHeight">X-axis label height</label>
+        <input type="number" class="form-control" id="xAxisLabelHeight" @bind-value="@XAxisLabelHeight" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="yAxisLabelWidth">Y-axis label width</label>
+        <input type="number" class="form-control" id="yAxisLabelWidth" @bind-value="@YAxisLabelWidth" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="yAxisLabelFormat">Y-axis label format</label>
+        <input type="text" class="form-control" id="yAxisLabelFormat" @bind-value="@YAxisLabelFormat" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="yAxisMultiplierFormat">Y-axis multiplier format</label>
+        <input type="text" class="form-control" id="yAxisMultiplierFormat" @bind-value="@YAxisMultiplierFormat" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="dataLabelFormat">Data label format</label>
+        <input type="text" class="form-control" id="dataLabelFormat" @bind-value="@DataLabelFormat" />
+    </div>
+</div>
+
+<div class="d-inline-block">
+    <XYChart Labels="@ExampleData.Labels">
+        <Canvas Width="Width" Height="Height" Padding="Padding" XAxisLabelHeight="XAxisLabelHeight" YAxisLabelWidth="YAxisLabelWidth"
+                YAxisLabelFormat="@YAxisLabelFormat" YAxisMultiplierFormat="@YAxisMultiplierFormat" DataLabelFormat="@DataLabelFormat" />
+
+        <PlotArea Multiplier="1000" />
+
+        <AreaLayer ShowDataLabels="true">
+            @foreach (var data in ExampleData.AreaData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </AreaLayer>
+        <BarLayer ShowDataLabels="true">
+            @foreach (var data in ExampleData.BarData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </BarLayer>
+        <LineLayer ShowDataLabels="true">
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
+
+@code {
+    private int Width { get; set; } = Canvas.DefaultWidth;
+    private int Height { get; set; } = Canvas.DefaultHeight;
+    private int Padding { get; set; } = Canvas.DefaultPadding;
+    private int XAxisLabelHeight { get; set; } = Canvas.DefaultXAxisLabelHeight;
+    private int YAxisLabelWidth { get; set; } = Canvas.DefaultYAxisLabelWidth;
+    private string YAxisLabelFormat { get; set; } = Canvas.DefaultYAxisLabelFormat;
+    private string YAxisMultiplierFormat { get; set; } = Canvas.DefaultYAxisMultiplierFormat;
+    private string DataLabelFormat { get; set; } = Canvas.DefaultDataLabelFormat;
+}

@@ -45,7 +45,8 @@ public class Canvas : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(XAxisLabelHeight)
         || parameters.HasParameterChanged(YAxisLabelWidth)
         || parameters.HasParameterChanged(YAxisLabelFormat)
-        || parameters.HasParameterChanged(YAxisMultiplierFormat);
+        || parameters.HasParameterChanged(YAxisMultiplierFormat)
+        || parameters.HasParameterChanged(DataLabelFormat);
 
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 }

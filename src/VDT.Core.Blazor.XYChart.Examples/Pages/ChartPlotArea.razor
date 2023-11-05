@@ -1,0 +1,131 @@
+﻿@page "/PlotArea"
+
+<h1>Plot area</h1>
+
+<p>
+    The plot area component allows you to set the range of the plot area, as well as the multiplier and the interval used to determine where to place grid
+    lines. It also allows you to set up parameters for automatic scaling.
+</p>
+
+<ul>
+    <li><code>Min</code> is the lowest data point value that is visible in the chart</li>
+    <li><code>Max</code> is the highest data point value that is visible in the chart</li>
+    <li><code>GridLineInterval</code> is the interval with which grid lines are shown; the starting point is zero</li>
+    <li>
+        <code>Multiplier</code> is the unit multiplier when showing y-axis labels and data labels; all values get divided by this value before being
+        displayed
+    </li>
+    <li>
+        <code>AutoScaleIsEnabled</code> enables automatic scaling of the plot area minimum, maximum and grid line interval; if enabled the values for 
+        <code>Min</code>, <code>Max</code> and <code>GridLineInterval</code> will be ignored
+    </li>
+    <li>
+        <code>AutoScaleRequestedGridLineCount</code> is the number of grid lines you would ideally like to see if automatic scaling is enabled; please note
+        that the end result can differ from the requested count
+    </li>
+    <li><code>AutoScaleIncludesZero</code> toggles the forced inclusion of the zero line in the plot area</li>
+    <li>
+        <code>AutoScaleClearancePercentage</code> is the minimum clearance between the highest/lowest data point and the edge of the plot area, expressed as a
+        percentage of the total plot area range
+    </li>
+</ul>
+
+<h2>Chart without automatic scaling</h2>
+
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="min">Min</label>
+        <input type="number" class="form-control" id="min" @bind-value="@Min" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="max">Max</label>
+        <input type="number" class="form-control" id="max" @bind-value="@Max" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="gridLineInterval">Grid line interval</label>
+        <input type="number" class="form-control" id="gridLineInterval" @bind-value="@GridLineInterval" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="multiplier">Multiplier</label>
+        <input type="number" class="form-control" id="multiplier" @bind-value="@Multiplier" />
+    </div>
+</div>
+
+<div class="d-inline-block">
+    <XYChart Labels="@ExampleData.Labels">
+        <PlotArea Min="Min" Max="Max" GridLineInterval="GridLineInterval" Multiplier="Multiplier" AutoScaleIsEnabled="false" />
+
+        <AreaLayer>
+            @foreach (var data in ExampleData.AreaData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </AreaLayer>
+        <BarLayer>
+            @foreach (var data in ExampleData.BarData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </BarLayer>
+        <LineLayer>
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
+
+<h2>Chart with automatic scaling</h2>
+
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="autoScaleRequestedGridLineCount">Auto scale requested grid line count</label>
+        <input type="number" class="form-control" id="autoScaleRequestedGridLineCount" @bind-value="@AutoScaleRequestedGridLineCount" />
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="autoScaleIncludesZero">Auto scale zero value</label>
+        <select class="form-select" id="autoScaleIncludesZero" @onchange="args => AutoScaleIncludesZero = bool.Parse(args.Value?.ToString()!)">
+            <option value="true" selected="@AutoScaleIncludesZero">Include</option>
+            <option value="false" selected="@(!AutoScaleIncludesZero)">Exclude</option>
+        </select>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="autoScaleClearancePercentage">Auto scale clearance percentage</label>
+        <input type="number" class="form-control" id="autoScaleClearancePercentage" @bind-value="@AutoScaleClearancePercentage" />
+    </div>
+</div>
+
+<div class="d-inline-block">
+    <XYChart Labels="@ExampleData.Labels">
+        <PlotArea AutoScaleIsEnabled="true" AutoScaleRequestedGridLineCount="AutoScaleRequestedGridLineCount"
+                  AutoScaleIncludesZero="AutoScaleIncludesZero" AutoScaleClearancePercentage="AutoScaleClearancePercentage" />
+
+        <LineLayer>
+            @foreach (var data in ExampleData.LineData) {
+                <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
+            }
+        </LineLayer>
+    </XYChart>
+
+    <div class="text-end">
+        (<a href="/SourceData">source data</a>)
+    </div>
+</div>
+
+@code {
+    private decimal Min { get; set; } = -200_000;
+    private decimal Max { get; set; } = 400_000;
+    private decimal GridLineInterval { get; set; } = 40_000;
+    private decimal Multiplier { get; set; } = 1_000;
+    private bool AutoScaleIsEnabled { get; set; } = false;
+    private int AutoScaleRequestedGridLineCount { get; set; } = 11;
+    private bool AutoScaleIncludesZero { get; set; } = true;
+    private decimal AutoScaleClearancePercentage { get; set; } = 5M;
+}

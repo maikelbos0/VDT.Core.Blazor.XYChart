@@ -103,30 +103,6 @@ public class XYChartTests {
     }
 
     [Fact]
-    public void SetAutoScaleSettings() {
-        var autoScaleSettings = new AutoScaleSettings();
-        var builder = new XYChartBuilder();
-        var subject = builder.Chart;
-
-        subject.SetAutoScaleSettings(autoScaleSettings);
-
-        Assert.Same(autoScaleSettings, subject.AutoScaleSettings);
-        Assert.True(builder.StateHasChangedInvoked);
-    }
-
-    [Fact]
-    public void ResetAutoScaleSettings() {
-        var builder = new XYChartBuilder();
-        var subject = builder.Chart;
-        var autoScaleSettings = subject.AutoScaleSettings;
-
-        subject.ResetAutoScaleSettings();
-
-        Assert.NotSame(autoScaleSettings, subject.AutoScaleSettings);
-        Assert.True(builder.StateHasChangedInvoked);
-    }
-
-    [Fact]
     public void AddLayer() {
         var layer = new BarLayer();
         var builder = new XYChartBuilder();
@@ -154,7 +130,7 @@ public class XYChartTests {
     [Fact]
     public void GetShapes_AutoScale() {
         var subject = new XYChartBuilder(labelCount: 2)
-            .WithAutoScaleSettings(isEnabled: true, requestedGridLineCount: 15, clearancePercentage: 0M)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleRequestedGridLineCount: 15, autoScaleClearancePercentage: 0M)
             .WithLayer<BarLayer>()
             .WithDataSeries(-9M, 0M)
             .WithDataSeries(-5M, 19M)
@@ -162,15 +138,15 @@ public class XYChartTests {
 
         _ = subject.GetShapes().ToList();
 
-        Assert.Equal(-10M, subject.PlotArea.Min);
-        Assert.Equal(20M, subject.PlotArea.Max);
-        Assert.Equal(2M, subject.PlotArea.GridLineInterval);
+        Assert.Equal(-10M, subject.PlotArea.ActualMin);
+        Assert.Equal(20M, subject.PlotArea.ActualMax);
+        Assert.Equal(2M, subject.PlotArea.ActualGridLineInterval);
     }
 
     [Fact]
     public void GetShapes_No_AutoScale() {
         var subject = new XYChartBuilder(labelCount: 2)
-            .WithAutoScaleSettings(isEnabled: false)
+            .WithPlotArea(autoScaleIsEnabled: false)
             .WithLayer<BarLayer>()
             .WithDataSeries(-9M, 0M)
             .WithDataSeries(-5M, 19M)
@@ -178,9 +154,9 @@ public class XYChartTests {
 
         _ = subject.GetShapes().ToList();
 
-        Assert.Equal(PlotArea_Min, subject.PlotArea.Min);
-        Assert.Equal(PlotArea_Max, subject.PlotArea.Max);
-        Assert.Equal(PlotArea_GridLineInterval, subject.PlotArea.GridLineInterval);
+        Assert.Equal(PlotArea_Min, subject.PlotArea.ActualMin);
+        Assert.Equal(PlotArea_Max, subject.PlotArea.ActualMax);
+        Assert.Equal(PlotArea_GridLineInterval, subject.PlotArea.ActualGridLineInterval);
     }
 
     [Fact]

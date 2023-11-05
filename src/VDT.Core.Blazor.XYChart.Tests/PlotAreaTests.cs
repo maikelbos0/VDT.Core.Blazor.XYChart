@@ -9,44 +9,56 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class PlotAreaTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(decimal min, decimal max, decimal gridLineInterval, decimal multiplier, bool expectedResult) {
+    public void HaveParametersChanged(decimal min, decimal max, decimal gridLineInterval, decimal multiplier, bool autoScaleIsEnabled, int autoScaleRequestedGridLineCount, bool autoScaleIncludesZero, decimal autoScaleClearancePercentage, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(PlotArea.Min), min },
             { nameof(PlotArea.Max), max },
             { nameof(PlotArea.GridLineInterval), gridLineInterval },
-            { nameof(PlotArea.Multiplier), multiplier}
+            { nameof(PlotArea.Multiplier), multiplier},
+            { nameof(PlotArea.AutoScaleIsEnabled), autoScaleIsEnabled},
+            { nameof(PlotArea.AutoScaleRequestedGridLineCount), autoScaleRequestedGridLineCount},
+            { nameof(PlotArea.AutoScaleIncludesZero), autoScaleIncludesZero},
+            { nameof(PlotArea.AutoScaleClearancePercentage), autoScaleClearancePercentage}
         });
 
         var subject = new PlotArea {
             Min = 0M,
             Max = 100M,
             GridLineInterval = 10M,
-            Multiplier = 1M
+            Multiplier = 1M,
+            AutoScaleIsEnabled = true,
+            AutoScaleRequestedGridLineCount = 11,
+            AutoScaleIncludesZero = true,
+            AutoScaleClearancePercentage = 5M
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<decimal, decimal, decimal, decimal, bool> HaveParametersChanged_Data() => new() {
-        { 0M, 100M, 10M, 1M, false },
-        { -10M, 100M, 10M, 1M, true },
-        { 0M, 150M, 10M, 1M, true },
-        { 0M, 100M, 5M, 1M, true },
-        { 0M, 100M, 10M, 100M, true },
+    public static TheoryData<decimal, decimal, decimal, decimal, bool, int, bool, decimal, bool> HaveParametersChanged_Data() => new() {
+        { 0M, 100M, 10M, 1M, true, 11, true, 5M, false },
+        { -10M, 100M, 10M, 1M, true, 11, true, 5M, true },
+        { 0M, 150M, 10M, 1M, true, 11, true, 5M, true },
+        { 0M, 100M, 5M, 1M, true, 11, true, 5M, true },
+        { 0M, 100M, 10M, 100M, true, 11, true, 5M, true },
+        { 0M, 100M, 10M, 1M, false, 11, true, 5M, true },
+        { 0M, 100M, 10M, 1M, true, 12, true, 5M, true },
+        { 0M, 100M, 10M, 1M, true, 11, false, 5M, true },
+        { 0M, 100M, 10M, 1M, true, 11, true, 10M, true }
     };
 
     [Theory]
     [MemberData(nameof(AutoScale_Data))]
     public void AutoScale(decimal[] dataPoints, int requestedGridLineCount, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 0M, requestedGridLineCount: requestedGridLineCount)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: false, autoScaleClearancePercentage: 0M, autoScaleRequestedGridLineCount: requestedGridLineCount)
             .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
 
-        Assert.Equal(expectedMin, subject.Min);
-        Assert.Equal(expectedMax, subject.Max);
-        Assert.Equal(expectedGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(expectedMin, subject.ActualMin);
+        Assert.Equal(expectedMax, subject.ActualMax);
+        Assert.Equal(expectedGridLineInterval, subject.ActualGridLineInterval);
     }
 
     public static TheoryData<decimal[], int, decimal, decimal, decimal> AutoScale_Data() => new() {
@@ -67,14 +79,14 @@ public class PlotAreaTests {
     [MemberData(nameof(AutoScale_No_DataPoints_Data))]
     public void AutoScale_No_DataPoints(int requestedGridLineCount, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 0M, requestedGridLineCount: requestedGridLineCount)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: false, autoScaleClearancePercentage: 0M, autoScaleRequestedGridLineCount: requestedGridLineCount)
             .Chart.PlotArea;
 
         subject.AutoScale(Array.Empty<decimal>());
 
-        Assert.Equal(expectedMin, subject.Min);
-        Assert.Equal(expectedMax, subject.Max);
-        Assert.Equal(expectedGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(expectedMin, subject.ActualMin);
+        Assert.Equal(expectedMax, subject.ActualMax);
+        Assert.Equal(expectedGridLineInterval, subject.ActualGridLineInterval);
     }
 
     public static TheoryData<int, decimal, decimal, decimal> AutoScale_No_DataPoints_Data() => new() {
@@ -93,14 +105,14 @@ public class PlotAreaTests {
     [MemberData(nameof(AutoScale_IncludeZero_Data))]
     public void AutoScale_IncludeZero(decimal[] dataPoints, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: true, includeZero: true, clearancePercentage: 0M, requestedGridLineCount: 5)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: true, autoScaleClearancePercentage: 0M, autoScaleRequestedGridLineCount: 5)
             .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
 
-        Assert.Equal(expectedMin, subject.Min);
-        Assert.Equal(expectedMax, subject.Max);
-        Assert.Equal(expectedGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(expectedMin, subject.ActualMin);
+        Assert.Equal(expectedMax, subject.ActualMax);
+        Assert.Equal(expectedGridLineInterval, subject.ActualGridLineInterval);
     }
 
     public static TheoryData<decimal[], decimal, decimal, decimal> AutoScale_IncludeZero_Data() => new() {
@@ -113,14 +125,14 @@ public class PlotAreaTests {
     [MemberData(nameof(AutoScale_ClearancePercentage_Data))]
     public void AutoScale_ClearancePercentage(decimal[] dataPoints, decimal expectedGridLineInterval, decimal expectedMin, decimal expectedMax) {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: true, includeZero: false, clearancePercentage: 5M, requestedGridLineCount: 5)
+            .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: false, autoScaleClearancePercentage: 5M, autoScaleRequestedGridLineCount: 5)
             .Chart.PlotArea;
 
         subject.AutoScale(dataPoints);
 
-        Assert.Equal(expectedMin, subject.Min);
-        Assert.Equal(expectedMax, subject.Max);
-        Assert.Equal(expectedGridLineInterval, subject.GridLineInterval);
+        Assert.Equal(expectedMin, subject.ActualMin);
+        Assert.Equal(expectedMax, subject.ActualMax);
+        Assert.Equal(expectedGridLineInterval, subject.ActualGridLineInterval);
     }
 
     public static TheoryData<decimal[], decimal, decimal, decimal> AutoScale_ClearancePercentage_Data() => new() {
@@ -132,14 +144,14 @@ public class PlotAreaTests {
     [Fact]
     public void AutoScale_Disabled() {
         var subject = new XYChartBuilder()
-            .WithAutoScaleSettings(isEnabled: false)
+            .WithPlotArea(autoScaleIsEnabled: false)
             .Chart.PlotArea;
 
         subject.AutoScale(new[] { 0.006M, 0.044M });
 
-        Assert.Equal(PlotArea_Min, subject.Min);
-        Assert.Equal(PlotArea_Max, subject.Max);
-        Assert.Equal(PlotArea_GridLineInterval, subject.GridLineInterval);
+        Assert.Equal(PlotArea_Min, subject.ActualMin);
+        Assert.Equal(PlotArea_Max, subject.ActualMax);
+        Assert.Equal(PlotArea_GridLineInterval, subject.ActualGridLineInterval);
     }
 
     [Theory]

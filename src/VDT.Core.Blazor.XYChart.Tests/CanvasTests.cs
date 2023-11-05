@@ -7,15 +7,16 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Theory]
-    [InlineData(1000, 500, 10, 100, 100, "#", "x #", false)]
-    [InlineData(900, 500, 10, 100, 100, "#", "x #", true)]
-    [InlineData(1000, 600, 10, 100, 100, "#", "x #", true)]
-    [InlineData(1000, 500, 20, 100, 100, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 75, 100, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 75, "#", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 100, "#.##", "x #", true)]
-    [InlineData(1000, 500, 10, 100, 100, "#", "x #.##", true)]
-    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int yAxisLabelWidth, string yAxisLabelFormat, string yAxisMultiplierFormat, bool expectedResult) {
+    [InlineData(1000, 500, 10, 100, 100, "#", "x #", "#", false)]
+    [InlineData(900, 500, 10, 100, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 600, 10, 100, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 20, 100, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 10, 75, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 10, 100, 75, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 10, 100, 100, "#.##", "x #", "#", true)]
+    [InlineData(1000, 500, 10, 100, 100, "#", "x #.##", "#", true)]
+    [InlineData(1000, 500, 10, 100, 100, "#", "x #", "#.##", true)]
+    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int yAxisLabelWidth, string yAxisLabelFormat, string yAxisMultiplierFormat, string dataLabelFormat, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
@@ -23,7 +24,8 @@ public class CanvasTests {
             { nameof(Canvas.XAxisLabelHeight), xAxisLabelHeight },
             { nameof(Canvas.YAxisLabelWidth), yAxisLabelWidth },
             { nameof(Canvas.YAxisLabelFormat), yAxisLabelFormat },
-            { nameof(Canvas.YAxisMultiplierFormat), yAxisMultiplierFormat }
+            { nameof(Canvas.YAxisMultiplierFormat), yAxisMultiplierFormat },
+            { nameof(Canvas.DataLabelFormat), dataLabelFormat}
         });
 
         var subject = new Canvas {
@@ -33,7 +35,8 @@ public class CanvasTests {
             XAxisLabelHeight = 100,
             YAxisLabelWidth = 100,
             YAxisLabelFormat = "#",
-            YAxisMultiplierFormat = "x #"
+            YAxisMultiplierFormat = "x #",
+            DataLabelFormat = "#"
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
