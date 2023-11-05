@@ -88,7 +88,7 @@ public class LayerBaseTests {
 
         var result = subject.GetDataLabelShapes();
 
-        Assert.DoesNotContain(result, shape => shape is DataLabelShape);
+        Assert.Empty(result);
     }
 
     [Fact]
