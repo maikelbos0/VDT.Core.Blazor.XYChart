@@ -28,7 +28,7 @@ public abstract class ShapeBase {
     }
 
     /// <summary>
-    /// Gets the attributes needed to render this SVG shape element
+    /// Gets the additional attributes needed to render this SVG shape element
     /// </summary>
     /// <returns>A collection of key-value pairs representing attributes</returns>
     public abstract ShapeAttributeCollection GetAttributes();
