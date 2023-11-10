@@ -26,7 +26,7 @@ public class YAxisLabelShape : ShapeBase {
     public string Value { get; }
 
     /// <summary>
-    /// Creates an SVG X-axis label
+    /// Creates an SVG Y-axis label
     /// </summary>
     /// <param name="x">X coordinate of the anchor for this label</param>
     /// <param name="y">Y coordinate of the anchor for this label</param>
