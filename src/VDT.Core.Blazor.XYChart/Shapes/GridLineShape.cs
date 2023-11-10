@@ -11,7 +11,7 @@ public class GridLineShape : ShapeBase {
     public override string ElementName => "line";
 
     /// <summary>
-    /// Gets the X coordinate of the grid line
+    /// Gets the X coordinate of the left edge of the grid line
     /// </summary>
     public decimal X { get; }
 
@@ -33,7 +33,7 @@ public class GridLineShape : ShapeBase {
     /// <summary>
     /// Creates an SVG grid line shape
     /// </summary>
-    /// <param name="x">X coordinate of the grid line</param>
+    /// <param name="x">X coordinate of the left edge of the grid line</param>
     /// <param name="y">Y coordinate of the grid line</param>
     /// <param name="width">Width of the grid line</param>
     /// <param name="value">Data value of the grid line</param>

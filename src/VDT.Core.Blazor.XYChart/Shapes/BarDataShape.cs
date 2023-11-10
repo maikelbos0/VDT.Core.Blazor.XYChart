@@ -15,12 +15,12 @@ public class BarDataShape : ShapeBase {
     public override string ElementName => "rect";
 
     /// <summary>
-    /// Gets the X coordinate of the bar
+    /// Gets the X coordinate of the top left corner of the bar
     /// </summary>
     public decimal X { get; }
 
     /// <summary>
-    /// Gets the Y coordinate of the bar; if <see cref="Height"/> is negative it will be added to the resulting attribute
+    /// Gets the Y coordinate of the top left corner of the bar; if <see cref="Height"/> is negative it will be added to the resulting attribute
     /// </summary>
     public decimal Y { get; }
 
@@ -45,8 +45,8 @@ public class BarDataShape : ShapeBase {
     /// <summary>
     /// Creates an SVG bar data shape
     /// </summary>
-    /// <param name="x">X coordinate of the bar</param>
-    /// <param name="y">Y coordinate of the bar</param>
+    /// <param name="x">X coordinate of the top left corner of the bar</param>
+    /// <param name="y">Y coordinate of the top left corner of the bar</param>
     /// <param name="width">Width of the bar</param>
     /// <param name="height">Height of the bar</param>
     /// <param name="color">Data series color</param>
