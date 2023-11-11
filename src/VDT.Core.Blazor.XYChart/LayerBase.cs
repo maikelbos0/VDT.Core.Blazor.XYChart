@@ -7,20 +7,56 @@ using VDT.Core.Blazor.XYChart.Shapes;
 
 namespace VDT.Core.Blazor.XYChart;
 
+/// <summary>
+/// A layer in an <see cref="XYChart"/> defines the layout of the data series in it
+/// </summary>
 public abstract class LayerBase : ChildComponentBase, IDisposable {
+    /// <summary>
+    /// Gets or sets the default value for whether or not the data series should be stacked
+    /// </summary>
     public static bool DefaultIsStacked { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets the default value for whether or not to show value labels at data points
+    /// </summary>
     public static bool DefaultShowDataLabels { get; set; } = false;
 
+    /// <summary>
+    /// Gets or sets the content containing data series components
+    /// </summary>
     [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether or not the data series should be stacked
+    /// </summary>
     [Parameter] public bool IsStacked { get; set; } = DefaultIsStacked;
+
+    /// <summary>
+    /// Gets or sets whether or not to show value labels at data points
+    /// </summary>
     [Parameter] public bool ShowDataLabels { get; set; } = DefaultShowDataLabels;
+
     internal List<DataSeries> DataSeries { get; set; } = new();
+
+    /// <summary>
+    /// Gets the way data points are stacked
+    /// </summary>
     public abstract StackMode StackMode { get; }
+
+    /// <summary>
+    /// Gets the way data points are spaced out over the plot area
+    /// </summary>
     public abstract DataPointSpacingMode DefaultDataPointSpacingMode { get; }
+
+    /// <summary>
+    /// Gets whether a null data point value should be interpreted as a zero value or skipped
+    /// </summary>
     public abstract bool NullAsZero { get; }
 
+    /// <inheritdoc/>
     protected override void OnInitialized() => Chart.AddLayer(this);
 
+    /// <inheritdoc/>
     public void Dispose() {
         Chart.RemoveLayer(this);
         GC.SuppressFinalize(this);
@@ -39,6 +75,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         Chart.HandleStateChange();
     }
 
+    /// <inheritdoc/>
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenComponent<CascadingValue<LayerBase>>(1);
         builder.AddAttribute(2, "Value", this);
@@ -46,8 +83,16 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         builder.CloseComponent();
     }
 
+    /// <summary>
+    /// Gets the SVG shapes that make up the data series in this layer
+    /// </summary>
+    /// <returns>The SVG shapes</returns>
     public abstract IEnumerable<ShapeBase> GetDataSeriesShapes();
 
+    /// <summary>
+    /// Gets the SVG shapes to display data value labels for this layer, if applicable
+    /// </summary>
+    /// <returns>The SVG shapes</returns>
     public IEnumerable<DataLabelShape> GetDataLabelShapes() {
         if (ShowDataLabels) {
             var layerIndex = Chart.Layers.IndexOf(this);
@@ -68,6 +113,10 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         }
     }
 
+    /// <summary>
+    /// Gets a collection of data series information for displaying data points on a canvas
+    /// </summary>
+    /// <returns>Data series information</returns>
     public virtual IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();
 
@@ -86,12 +135,20 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         ).ToList();
     }
 
+    /// <summary>
+    /// Gets a collection of legend items for this layer
+    /// </summary>
+    /// <returns>The legend items for this layer</returns>
     public IEnumerable<LegendItem> GetLegendItems() {
         var layerIndex = Chart.Layers.IndexOf(this);
 
         return DataSeries.Select((dataSeries, index) => new LegendItem(dataSeries.GetColor(), dataSeries.Name ?? "?", dataSeries.CssClass, layerIndex, index));
     }
 
+    /// <summary>
+    /// Gets all data points in this layer for purposes of scaling the plot area
+    /// </summary>
+    /// <returns>All data points</returns>
     public IEnumerable<decimal> GetScaleDataPoints() {
         var dataPointTransformer = GetDataPointTransformer();
 
@@ -99,6 +156,11 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             .Select(value => dataPointTransformer(value.DataPoint, value.Index)));
     }
 
+    /// <summary>
+    /// Gets a transformer method for transforming data point values for stacking
+    /// </summary>
+    /// <returns>The transformer method</returns>
+    /// <exception cref="NotImplementedException">Thrown when the layer uses an unknown <see cref="StackMode"/></exception>
     protected Func<decimal, int, decimal> GetDataPointTransformer() {
         if (IsStacked) {
             switch (StackMode) {
