@@ -8,7 +8,7 @@ using VDT.Core.Blazor.XYChart.Shapes;
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
-/// A layer in an <see cref="XYChart"/> defines the layout of the data series in it
+/// Base class for defining a layer in an <see cref="XYChart"/> that defines the layout of the data series in it
 /// </summary>
 public abstract class LayerBase : ChildComponentBase, IDisposable {
     /// <summary>
