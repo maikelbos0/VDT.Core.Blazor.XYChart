@@ -13,12 +13,12 @@ public class LegendTextShape : ShapeBase {
     public override string ElementName => "text";
 
     /// <summary>
-    /// Gets the X coordinate of the legend text
+    /// Gets the X-coordinate of the legend text
     /// </summary>
     public decimal X { get; }
 
     /// <summary>
-    /// Gets the Y coordinate of the legend text
+    /// Gets the Y-coordinate of the legend text
     /// </summary>
     public decimal Y { get; }
 
@@ -33,8 +33,8 @@ public class LegendTextShape : ShapeBase {
     /// <summary>
     /// Create an SVG legend text shape
     /// </summary>
-    /// <param name="x">X coordinate of the legend text</param>
-    /// <param name="y">Y coordinate of the legend text</param>
+    /// <param name="x">X-coordinate of the legend text</param>
+    /// <param name="y">Y-coordinate of the legend text</param>
     /// <param name="dataSeriesName">Data series name</param>
     /// <param name="cssClass">Data series CSS class</param>
     /// <param name="layerIndex">Index of the layer that contains the data series</param>

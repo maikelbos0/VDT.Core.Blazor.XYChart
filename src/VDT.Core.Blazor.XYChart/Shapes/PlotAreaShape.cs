@@ -27,12 +27,12 @@ public class PlotAreaShape : ShapeBase {
     public int CanvasHeight { get; }
 
     /// <summary>
-    /// Gets the X coordinate of the top left corner of the plot area
+    /// Gets the X-coordinate of the top left corner of the plot area
     /// </summary>
     public int X { get; }
 
     /// <summary>
-    /// Gets the Y coordinate of the top left corner of the plot area
+    /// Gets the Y-coordinate of the top left corner of the plot area
     /// </summary>
     public int Y { get; }
 
@@ -51,8 +51,8 @@ public class PlotAreaShape : ShapeBase {
     /// </summary>
     /// <param name="canvasWidth">Total width of the canvas</param>
     /// <param name="canvasHeight">Total height of the canvas</param>
-    /// <param name="x">X coordinate of the top left corner of the plot area</param>
-    /// <param name="y">Y coordinate of the top left corner of the plot area</param>
+    /// <param name="x">X-coordinate of the top left corner of the plot area</param>
+    /// <param name="y">Y-coordinate of the top left corner of the plot area</param>
     /// <param name="width">Width of the plot area</param>
     /// <param name="height">Height of the plot area</param>
     public PlotAreaShape(int canvasWidth, int canvasHeight, int x, int y, int width, int height) {

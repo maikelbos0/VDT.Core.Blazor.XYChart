@@ -11,12 +11,12 @@ public class YAxisMultiplierShape : ShapeBase {
     public override string ElementName => "text";
 
     /// <summary>
-    /// Gets the X coordinate of the anchor for the multiplier
+    /// Gets the X-coordinate of the anchor for the multiplier
     /// </summary>
     public decimal X { get; }
 
     /// <summary>
-    /// Gets the Y coordinate of the anchor for the multiplier
+    /// Gets the Y-coordinate of the anchor for the multiplier
     /// </summary>
     public decimal Y { get; }
 
@@ -28,8 +28,8 @@ public class YAxisMultiplierShape : ShapeBase {
     /// <summary>
     /// Creates an SVG Y-axis multiplier
     /// </summary>
-    /// <param name="x">X coordinate of the anchor for the multiplier</param>
-    /// <param name="y">Y coordinate of the anchor for the multiplier</param>
+    /// <param name="x">X-coordinate of the anchor for the multiplier</param>
+    /// <param name="y">Y-coordinate of the anchor for the multiplier</param>
     /// <param name="multiplier">Multiplier value</param>
     public YAxisMultiplierShape(decimal x, decimal y, string multiplier) {
         X = x;

@@ -11,12 +11,12 @@ public class XAxisLabelShape : ShapeBase {
     public override string ElementName => "text";
 
     /// <summary>
-    /// Gets the X coordinate of the anchor for this label
+    /// Gets the X-coordinate of the anchor for this label
     /// </summary>
     public decimal X { get; }
 
     /// <summary>
-    /// Gets the Y coordinate of the anchor for this label
+    /// Gets the Y-coordinate of the anchor for this label
     /// </summary>
     public decimal Y { get; }
 
@@ -28,8 +28,8 @@ public class XAxisLabelShape : ShapeBase {
     /// <summary>
     /// Creates an SVG X-axis label
     /// </summary>
-    /// <param name="x">X coordinate of the anchor for this label</param>
-    /// <param name="y">Y coordinate of the anchor for this label</param>
+    /// <param name="x">X-coordinate of the anchor for this label</param>
+    /// <param name="y">Y-coordinate of the anchor for this label</param>
     /// <param name="label">Label value</param>
     /// <param name="index">Label index</param>
     public XAxisLabelShape(decimal x, decimal y, string label, int index) : base(index) {

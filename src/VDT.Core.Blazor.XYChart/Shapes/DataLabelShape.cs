@@ -13,12 +13,12 @@ public class DataLabelShape : ShapeBase {
     public override string ElementName => "text";
 
     /// <summary>
-    /// Gets the X coordinate of the anchor for this label
+    /// Gets the X-coordinate of the anchor for this label
     /// </summary>
     public decimal X { get; }
 
     /// <summary>
-    /// Gets the Y coordinate of the anchor for this label
+    /// Gets the Y-coordinate of the anchor for this label
     /// </summary>
     public decimal Y { get; }
 
@@ -38,8 +38,8 @@ public class DataLabelShape : ShapeBase {
     /// <summary>
     /// Creates an SVG data label shape
     /// </summary>
-    /// <param name="x">X coordinate of the anchor for this label</param>
-    /// <param name="y">Y coordinate of the anchor for this label</param>
+    /// <param name="x">X-coordinate of the anchor for this label</param>
+    /// <param name="y">Y-coordinate of the anchor for this label</param>
     /// <param name="value">Data label value</param>
     /// <param name="cssClass">Data series CSS class</param>
     /// <param name="isPositive"><see langword="true"/> if the data point value is positive; otherwise <see langword="false"/></param>

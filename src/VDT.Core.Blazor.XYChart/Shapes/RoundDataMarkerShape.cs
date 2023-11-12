@@ -13,12 +13,12 @@ public class RoundDataMarkerShape : ShapeBase {
     public override string ElementName => "circle";
 
     /// <summary>
-    /// Gets the X coordinate of the center point of the marker
+    /// Gets the X-coordinate of the center point of the marker
     /// </summary>
     public decimal X { get; }
 
     /// <summary>
-    /// Gets the Y coordinate of the center point of the marker
+    /// Gets the Y-coordinate of the center point of the marker
     /// </summary>
     public decimal Y { get; }
 
@@ -39,8 +39,8 @@ public class RoundDataMarkerShape : ShapeBase {
     /// <summary>
     /// Creates an SVG round data marker shape
     /// </summary>
-    /// <param name="x">X coordinate of the center point of the marker</param>
-    /// <param name="y">Y coordinate of the center point of the marker</param>
+    /// <param name="x">X-coordinate of the center point of the marker</param>
+    /// <param name="y">Y-coordinate of the center point of the marker</param>
     /// <param name="size">Width/height of the marker</param>
     /// <param name="color">Data series color</param>
     /// <param name="cssClass">Data series CSS class</param>
