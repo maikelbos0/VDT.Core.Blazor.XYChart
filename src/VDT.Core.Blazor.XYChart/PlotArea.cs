@@ -5,23 +5,95 @@ using System.Linq;
 
 namespace VDT.Core.Blazor.XYChart;
 
+/// <summary>
+/// Ploy area/scaling settings for an <see cref="XYChart"/>
+/// </summary>
 public class PlotArea : ChildComponentBase, IDisposable {
+    /// <summary>
+    /// Gets or sets the default value for the lowest data point value that is visible in the chart
+    /// </summary>
     public static decimal DefaultMin { get; set; } = 0M;
+
+    /// <summary>
+    /// Gets or sets the default value for the highest data point value that is visible in the chart
+    /// </summary>
     public static decimal DefaultMax { get; set; } = 50M;
+
+    /// <summary>
+    /// Gets or sets the default value for the interval with which grid lines are shown; the starting point is zero
+    /// </summary>
     public static decimal DefaultGridLineInterval { get; set; } = 5M;
+
+    /// <summary>
+    /// Gets or sets the default value for the unit multiplier when showing y-axis labels and data labels; all values get divided by this value before
+    /// being displayed
+    /// </summary>
     public static decimal DefaultMultiplier { get; set; } = 1M;
+
+    /// <summary>
+    /// Gets or sets the default value for whether or not automatic scaling of the plot area minimum, maximum and grid line interval is enabled; if enabled
+    /// the values for <see cref="Min"/>, <see cref="Max"/> and <see cref="GridLineInterval"/> will be ignored
+    /// </summary>
     public static bool DefaultAutoScaleIsEnabled { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the default value for the number of grid lines you would ideally like to see if automatic scaling is enabled; please note that the end
+    /// result can differ from the requested count
+    /// </summary>
     public static int DefaultAutoScaleRequestedGridLineCount { get; set; } = 11;
+
+    /// <summary>
+    /// Gets or sets the default value for the forced inclusion of the zero line in the plot area when automatically scaling
+    /// </summary>
     public static bool DefaultAutoScaleIncludesZero { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the default value for the minimum clearance between the highest/lowest data point and the edge of the plot area, expressed as a percentage
+    /// of the total plot area range
+    /// </summary>
     public static decimal DefaultAutoScaleClearancePercentage { get; set; } = 5M;
 
+    /// <summary>
+    /// Gets or sets the lowest data point value that is visible in the chart
+    /// </summary>
     [Parameter] public decimal Min { get; set; } = DefaultMin;
+
+    /// <summary>
+    /// Gets or sets the highest data point value that is visible in the chart
+    /// </summary>
     [Parameter] public decimal Max { get; set; } = DefaultMax;
+
+    /// <summary>
+    /// Gets or sets the interval with which grid lines are shown; the starting point is zero
+    /// </summary>
     [Parameter] public decimal GridLineInterval { get; set; } = DefaultGridLineInterval;
+
+    /// <summary>
+    /// Gets or sets the unit multiplier when showing y-axis labels and data labels; all values get divided by this value before being displayed
+    /// </summary>
     [Parameter] public decimal Multiplier { get; set; } = DefaultMultiplier;
+
+    /// <summary>
+    /// Gets or sets whether or not automatic scaling of the plot area minimum, maximum and grid line interval is enabled; if enabled the values for 
+    /// <see cref="Min"/>, <see cref="Max"/> and <see cref="GridLineInterval"/> will be ignored
+    /// </summary>
     [Parameter] public bool AutoScaleIsEnabled { get; set; } = DefaultAutoScaleIsEnabled;
+
+    /// <summary>
+    /// Gets or sets the number of grid lines you would ideally like to see if automatic scaling is enabled; please note that the end result can differ from 
+    /// the requested count
+    /// </summary>
     [Parameter] public int AutoScaleRequestedGridLineCount { get; set; } = DefaultAutoScaleRequestedGridLineCount;
+
+    /// <summary>
+    /// Gets or sets the forced inclusion of the zero line in the plot area when automatically scaling
+    /// </summary>
     [Parameter] public bool AutoScaleIncludesZero { get; set; } = DefaultAutoScaleIncludesZero;
+
+    /// <summary>
+    /// Gets or sets the minimum clearance between the highest/lowest data point and the edge of the plot area, expressed as a percentage of the total plot
+    /// area range
+    /// </summary>
     [Parameter] public decimal AutoScaleClearancePercentage { get; set; } = DefaultAutoScaleClearancePercentage;
 
     private decimal? AutoScaleMin { get; set; }
@@ -32,14 +104,16 @@ public class PlotArea : ChildComponentBase, IDisposable {
     internal decimal ActualMax => AutoScaleMax ?? Max;
     internal decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
 
-
+    /// <inheritdoc/>
     protected override void OnInitialized() => Chart.SetPlotArea(this);
 
+    /// <inheritdoc/>
     public void Dispose() {
         Chart.ResetPlotArea();
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc/>
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(Min)
         || parameters.HasParameterChanged(Max)
@@ -50,6 +124,10 @@ public class PlotArea : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(AutoScaleIncludesZero)
         || parameters.HasParameterChanged(AutoScaleClearancePercentage);
 
+    /// <summary>
+    /// Apply automatic scaling to the plot area if <see cref="AutoScaleIsEnabled"/> is <see langword="true"/>
+    /// </summary>
+    /// <param name="dataPoints">All data points that should be displayed in the plot area, taking stacking into account</param>
     public void AutoScale(IEnumerable<decimal> dataPoints) {
         if (!AutoScaleIsEnabled) {
             return;
@@ -99,6 +177,10 @@ public class PlotArea : ChildComponentBase, IDisposable {
         AutoScaleGridLineInterval = DecimalMath.Trim(scale.GridLineInterval);
     }
 
+    /// <summary>
+    /// Gets the data point values on which grid lines and their value labels should be placed
+    /// </summary>
+    /// <returns>The data point values</returns>
     public IEnumerable<decimal> GetGridLineDataPoints() {
         var dataPoint = DecimalMath.CeilingToScale(ActualMin, ActualGridLineInterval);
 
