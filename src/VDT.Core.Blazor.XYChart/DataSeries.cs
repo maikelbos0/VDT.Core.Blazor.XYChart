@@ -6,17 +6,17 @@ using System.Linq;
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
-/// Series of data points to be displayed in a layer in the <see cref="XYChart"/>
+/// Series of data points to be displayed in a layer in an <see cref="XYChart"/>
 /// </summary>
 public class DataSeries : ChildComponentBase, IDisposable {
     /// <summary>
-    /// Color that is applied to data series if no <see cref="Color"/> was provided and <see cref="DefaultColors"/> is empty
+    /// Color that is applied to a data series if no <see cref="Color"/> was provided and <see cref="DefaultColors"/> is empty
     /// </summary>
     public const string FallbackColor = "#000000";
 
     /// <summary>
     /// Gets or sets the default colors for data series without a <see cref="Color"/>; the color is chosen by determining the data series index within the 
-    /// entire <see cref="XYChart"/>, using a modulus if required
+    /// entire <see cref="XYChart"/>, using modulus if required
     /// </summary>
     public static List<string> DefaultColors { get; set; } = new() {
         "#ff9933",
@@ -37,12 +37,12 @@ public class DataSeries : ChildComponentBase, IDisposable {
     [Parameter] public string? Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the color to be used for shapes representing this data series
+    /// Gets or sets the color to be used for shapes representing this data series; if null a color will be determined automatically
     /// </summary>
     [Parameter] public string? Color { get; set; }
 
     /// <summary>
-    /// Gets or sets the data point values that make up this data series; data points are matched to category labels in the chart by index
+    /// Gets or sets the data point values that make up this data series; data points are matched to category labels in the <see cref="XYChart"/> by index
     /// </summary>
     [Parameter] public IList<decimal?> DataPoints { get; set; } = new List<decimal?>();
 

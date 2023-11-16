@@ -6,7 +6,7 @@ using VDT.Core.Blazor.XYChart.Shapes;
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
-/// Layer in which the data is displayed as vertical bars which have a height corresponding to the data values
+/// Layer in an <see cref="XYChart"/> in which the data is displayed as vertical bars which have a height corresponding to the data values
 /// </summary>
 public class BarLayer : LayerBase {
     /// <summary>

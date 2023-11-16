@@ -6,7 +6,7 @@ using VDT.Core.Blazor.XYChart.Shapes;
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
-/// Layer in which the data series get displayed as filled shapes connecting the data point values
+/// Layer in an <see cref="XYChart"/> in which the data series get displayed as filled shapes connecting the data point values
 /// </summary>
 public class AreaLayer : LayerBase {
     /// <inheritdoc/>

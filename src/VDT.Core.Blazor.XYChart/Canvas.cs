@@ -33,17 +33,17 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultYAxisLabelWidth { get; set; } = 75;
 
     /// <summary>
-    /// Gets or sets the default value for the string used to format the numeric labels on the y-axis
+    /// Gets or sets the default value for the format string for the numeric labels on the y-axis
     /// </summary>
     public static string DefaultYAxisLabelFormat { get; set; } = "#,##0.######";
 
     /// <summary>
-    /// Gets or sets the default value for the string used to format the y-axis multiplier, if it's visible
+    /// Gets or sets the default value for the format string for the y-axis multiplier, if it's visible
     /// </summary>
     public static string DefaultYAxisMultiplierFormat { get; set; } = "x #,##0.######";
 
     /// <summary>
-    /// Gets or sets the default value for the string used to format the numeric data labels optionally displayed at each data point
+    /// Gets or sets the default value for the format string for the numeric data labels optionally displayed at each data point
     /// </summary>
     public static string DefaultDataLabelFormat { get; set; } = "#,##0.######";
 
@@ -73,17 +73,17 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public int YAxisLabelWidth { get; set; } = DefaultYAxisLabelWidth;
 
     /// <summary>
-    /// Gets or sets the string used to format the numeric labels on the y-axis
+    /// Gets or sets the format string for the numeric labels on the y-axis
     /// </summary>
     [Parameter] public string YAxisLabelFormat { get; set; } = DefaultYAxisLabelFormat;
 
     /// <summary>
-    /// Gets or sets the string used to format the y-axis multiplier, if it's visible
+    /// Gets or sets the format string for the y-axis multiplier, if it's visible
     /// </summary>
     [Parameter] public string YAxisMultiplierFormat { get; set; } = DefaultYAxisMultiplierFormat;
 
     /// <summary>
-    /// Gets or sets the string used to format the numeric data labels optionally displayed at each data point
+    /// Gets or sets the format string for the numeric data labels optionally displayed at each data point
     /// </summary>
     [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
 

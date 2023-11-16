@@ -21,7 +21,7 @@ public abstract class ChildComponentBase : ComponentBase {
     }
     
     /// <summary>
-    /// Determine whether or not any parameters have changed so that the containing chart can be re-rendered
+    /// Determines whether or not any parameters have changed and the containing chart has to be re-rendered
     /// </summary>
     /// <param name="parameters">New parameters</param>
     /// <returns><see langword="true"/> of any parameter has changed; otherwise <see langword="false"/></returns>

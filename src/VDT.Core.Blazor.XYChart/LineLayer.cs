@@ -6,7 +6,7 @@ using VDT.Core.Blazor.XYChart.Shapes;
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
-/// Layer in which the data is displayed as a series of points at positions corresponding to the data values, connected by lines
+/// Layer in an <see cref="XYChart"/> in which the data is displayed as a series of points at positions corresponding to the data values, connected by lines
 /// </summary>
 public class LineLayer : LayerBase {
     /// <summary>
