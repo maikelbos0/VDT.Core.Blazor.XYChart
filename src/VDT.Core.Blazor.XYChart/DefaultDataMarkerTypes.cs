@@ -7,7 +7,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// </summary>
 public static class DefaultDataMarkerTypes {
     /// <summary>
-    /// Creates an SVG shape to display a marker in line data as a circle
+    /// Creates an SVG shape to display a circle-shaped marker in line data
     /// </summary>
     /// <param name="x">X-coordinate of the center point of the marker</param>
     /// <param name="y">Y-coordinate of the center point of the marker</param>
@@ -22,7 +22,7 @@ public static class DefaultDataMarkerTypes {
         => new RoundDataMarkerShape(x, y, size, color, cssClass, layerIndex, dataSeriesIndex, dataPointIndex);
 
     /// <summary>
-    /// Creates an SVG square data marker shape
+    /// Creates an SVG shape to display a square-shaped marker in line data
     /// </summary>
     /// <param name="x">X-coordinate of the center point of the marker</param>
     /// <param name="y">Y-coordinate of the center point of the marker</param>

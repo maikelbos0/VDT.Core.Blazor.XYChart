@@ -11,7 +11,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// </summary>
 public static class ParameterViewExtensions {
     /// <summary>
-    /// Checks if the value of the parameter has changed
+    /// Checks if the value of a parameter has changed
     /// </summary>
     /// <param name="parameters">The parameter view</param>
     /// <param name="oldValue">Previous value of the parameter</param>
@@ -21,7 +21,7 @@ public static class ParameterViewExtensions {
         => parameters.TryGetValue(parameterName, out string? value) && !string.Equals(value, oldValue);
 
     /// <summary>
-    /// Checks if the value of the parameter has changed
+    /// Checks if the value of a parameter has changed
     /// </summary>
     /// <param name="parameters">The parameter view</param>
     /// <param name="oldValue">Previous value of the parameter</param>
@@ -31,7 +31,7 @@ public static class ParameterViewExtensions {
         => parameters.TryGetValue(parameterName, out T? value) && !value.Equals(oldValue);
 
     /// <summary>
-    /// Checks if the value of the parameter has changed
+    /// Checks if the value of a parameter has changed
     /// </summary>
     /// <param name="parameters">The parameter view</param>
     /// <param name="oldValue">Previous value of the parameter</param>
@@ -41,7 +41,7 @@ public static class ParameterViewExtensions {
         => parameters.TryGetValue(parameterName, out Delegate? value) && (value == null || !value.Equals(oldValue));
 
     /// <summary>
-    /// Checks if the value of the parameter has changed
+    /// Checks if the value of a parameter has changed
     /// </summary>
     /// <param name="parameters">The parameter view</param>
     /// <param name="oldValue">Previous value of the parameter</param>
@@ -51,7 +51,7 @@ public static class ParameterViewExtensions {
         => parameters.TryGetValue(parameterName, out IEnumerable<T?>? value) && (value == null || !value.SequenceEqual(oldValue));
 
     /// <summary>
-    /// Checks if the value of the parameter has changed
+    /// Checks if the value of a parameter has changed
     /// </summary>
     /// <param name="parameters">The parameter view</param>
     /// <param name="oldValue">Previous value of the parameter</param>

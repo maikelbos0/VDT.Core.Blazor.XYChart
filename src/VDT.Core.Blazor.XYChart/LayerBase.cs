@@ -8,7 +8,7 @@ using VDT.Core.Blazor.XYChart.Shapes;
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
-/// Base class for defining a layer in an <see cref="XYChart"/> that defines the layout of the data series in it
+/// Base class for defining a layer in an <see cref="XYChart"/> that defines the layout of the data series it contains
 /// </summary>
 public abstract class LayerBase : ChildComponentBase, IDisposable {
     /// <summary>
@@ -39,7 +39,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     internal List<DataSeries> DataSeries { get; set; } = new();
 
     /// <summary>
-    /// Gets the way data points are stacked
+    /// Gets the way data points are stacked if stacking is enabled
     /// </summary>
     public abstract StackMode StackMode { get; }
 
@@ -138,7 +138,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     /// <summary>
     /// Gets a collection of legend items for this layer
     /// </summary>
-    /// <returns>The legend items for this layer</returns>
+    /// <returns>The legend items</returns>
     public IEnumerable<LegendItem> GetLegendItems() {
         var layerIndex = Chart.Layers.IndexOf(this);
 
@@ -146,7 +146,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     }
 
     /// <summary>
-    /// Gets all data points in this layer for purposes of scaling the plot area
+    /// Gets all data points in this layer for the purpose of scaling the plot area
     /// </summary>
     /// <returns>All data points</returns>
     public IEnumerable<decimal> GetScaleDataPoints() {

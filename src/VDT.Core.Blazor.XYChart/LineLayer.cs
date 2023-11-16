@@ -20,10 +20,9 @@ public class LineLayer : LayerBase {
     public static decimal DefaultDataMarkerSize { get; set; } = 10M;
 
     /// <summary>
-    /// Gets or sets the default value for the type of data marker to use; this library offers
-    /// <see cref="DefaultDataMarkerTypes.Round(decimal, decimal, decimal, string, string?, int, int, int)"/>
-    /// and <see cref="DefaultDataMarkerTypes.Square(decimal, decimal, decimal, string, string?, int, int, int)"/> , but implementing your own is as simple as
-    /// creating your own implementation of <see cref="ShapeBase"/> and setting this property to a <see cref="DataMarkerDelegate"/> that returns it
+    /// Gets or sets the default value for the type of data marker to use; this library offers options in the <see cref="DefaultDataMarkerTypes"/> static
+    /// class, but implementing your own is as simple as creating your own implementation of <see cref="ShapeBase"/> and setting this property to a
+    /// <see cref="DataMarkerDelegate"/> that returns it
     /// </summary>
     public static DataMarkerDelegate DefaultDataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
 
@@ -52,10 +51,9 @@ public class LineLayer : LayerBase {
     [Parameter] public decimal DataMarkerSize { get; set; } = DefaultDataMarkerSize;
 
     /// <summary>
-    /// Gets or sets the type of data marker to use; this library offers
-    /// <see cref="DefaultDataMarkerTypes.Round(decimal, decimal, decimal, string, string?, int, int, int)"/>
-    /// and <see cref="DefaultDataMarkerTypes.Square(decimal, decimal, decimal, string, string?, int, int, int)"/> , but implementing your own is as simple as
-    /// creating your own implementation of <see cref="ShapeBase"/> and setting this property to a <see cref="DataMarkerDelegate"/> that returns it
+    /// Gets or sets the type of data marker to use; this library offers options in the <see cref="DefaultDataMarkerTypes"/> static class, but implementing
+    /// your own is as simple as creating your own implementation of <see cref="ShapeBase"/> and setting this property to a <see cref="DataMarkerDelegate"/>
+    /// that returns it
     /// </summary>
     [Parameter] public DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerType;
 
