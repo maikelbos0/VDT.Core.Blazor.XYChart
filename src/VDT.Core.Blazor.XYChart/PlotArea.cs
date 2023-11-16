@@ -37,7 +37,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
     public static bool DefaultAutoScaleIsEnabled { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the default value for the number of grid lines you would ideally like to see if automatic scaling is enabled; please note that the end
+    /// Gets or sets the default value for the preferred number of grid lines that should be visible if automatic scaling is enabled; please note that the end
     /// result can differ from the requested count
     /// </summary>
     public static int DefaultAutoScaleRequestedGridLineCount { get; set; } = 11;
@@ -48,8 +48,8 @@ public class PlotArea : ChildComponentBase, IDisposable {
     public static bool DefaultAutoScaleIncludesZero { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the default value for the minimum clearance between the highest/lowest data point and the edge of the plot area, expressed as a percentage
-    /// of the total plot area range
+    /// Gets or sets the default value for the minimum clearance between the highest/lowest data point and the edge of the plot area when automatically 
+    /// scaling, expressed as a percentage of the total plot area range
     /// </summary>
     public static decimal DefaultAutoScaleClearancePercentage { get; set; } = 5M;
 
@@ -80,8 +80,8 @@ public class PlotArea : ChildComponentBase, IDisposable {
     [Parameter] public bool AutoScaleIsEnabled { get; set; } = DefaultAutoScaleIsEnabled;
 
     /// <summary>
-    /// Gets or sets the number of grid lines you would ideally like to see if automatic scaling is enabled; please note that the end result can differ from 
-    /// the requested count
+    /// Gets or sets the preferred number of grid lines that should be visible if automatic scaling is enabled; please note that the end result can differ 
+    /// from the requested count
     /// </summary>
     [Parameter] public int AutoScaleRequestedGridLineCount { get; set; } = DefaultAutoScaleRequestedGridLineCount;
 
@@ -91,8 +91,8 @@ public class PlotArea : ChildComponentBase, IDisposable {
     [Parameter] public bool AutoScaleIncludesZero { get; set; } = DefaultAutoScaleIncludesZero;
 
     /// <summary>
-    /// Gets or sets the minimum clearance between the highest/lowest data point and the edge of the plot area, expressed as a percentage of the total plot
-    /// area range
+    /// Gets or sets the minimum clearance between the highest/lowest data point and the edge of the plot area when automatically scaling, expressed as a
+    /// percentage of the total plot area range
     /// </summary>
     [Parameter] public decimal AutoScaleClearancePercentage { get; set; } = DefaultAutoScaleClearancePercentage;
 
@@ -125,7 +125,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(AutoScaleClearancePercentage);
 
     /// <summary>
-    /// Apply automatic scaling to the plot area if <see cref="AutoScaleIsEnabled"/> is <see langword="true"/>
+    /// Applies automatic scaling to the plot area if <see cref="AutoScaleIsEnabled"/> is <see langword="true"/>
     /// </summary>
     /// <param name="dataPoints">All data points that should be displayed in the plot area, taking stacking into account</param>
     public void AutoScale(IEnumerable<decimal> dataPoints) {

@@ -30,7 +30,7 @@ public class BarDataShape : ShapeBase {
     public decimal Width { get; }
 
     /// <summary>
-    /// Gets the height of the bar; if negative it will be negated
+    /// Gets the height of the bar; if negative it will be negated for the resulting attribute
     /// </summary>
     public decimal Height { get; }
 
