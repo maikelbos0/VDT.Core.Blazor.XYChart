@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-// TODO docs <GenerateDocumentationFile>true</GenerateDocumentationFile>
 // TODO explain defaults for all customization
+// TODO README
 // TODO make charts responsive?
 // TODO fluent lines?
 

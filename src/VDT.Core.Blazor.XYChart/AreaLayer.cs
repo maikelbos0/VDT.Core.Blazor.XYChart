@@ -5,15 +5,25 @@ using VDT.Core.Blazor.XYChart.Shapes;
 
 namespace VDT.Core.Blazor.XYChart;
 
+/// <summary>
+/// Layer in an <see cref="XYChart"/> in which the data series get displayed as filled shapes connecting the data point values
+/// </summary>
 public class AreaLayer : LayerBase {
+    /// <inheritdoc/>
     public override StackMode StackMode => StackMode.Single;
+
+    /// <inheritdoc/>
     public override DataPointSpacingMode DefaultDataPointSpacingMode => DataPointSpacingMode.EdgeToEdge;
+
+    /// <inheritdoc/>
     public override bool NullAsZero => true;
 
+    /// <inheritdoc/>
     public override bool HaveParametersChanged(ParameterView parameters)
         => parameters.HasParameterChanged(IsStacked)
         || parameters.HasParameterChanged(ShowDataLabels);
 
+    /// <inheritdoc/>
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var layerIndex = Chart.Layers.IndexOf(this);
 

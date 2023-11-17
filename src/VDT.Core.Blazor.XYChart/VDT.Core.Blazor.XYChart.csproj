@@ -4,18 +4,16 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.XYChart</PackageId>
-		<Version>0.9.0</Version>
+		<Version>0.10.0</Version>
 		<Title>VDT.Core.Blazor.XYChart</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component to create SVG bar, line and area charts</Description>
-		<PackageReleaseNotes>- Integrated auto scale settings into plot area
-- Fixed potential infinite rendering loop when setting both auto scale and manual plot area parameters
-- Fixed bug where data label format changes didn't trigger a rerender
-- Added example pages for canvas, plot area and legend</PackageReleaseNotes>
+		<PackageReleaseNotes>- Add documentation to all public classes and class members</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Maikel Bos</Copyright>
