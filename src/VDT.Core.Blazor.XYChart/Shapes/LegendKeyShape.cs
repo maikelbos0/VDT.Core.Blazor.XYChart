@@ -13,12 +13,12 @@ public class LegendKeyShape : ShapeBase {
     public override string ElementName => "rect";
 
     /// <summary>
-    /// Gets the X-coordinate of the legend key
+    /// Gets the X-coordinate of the center point of the legend key
     /// </summary>
     public decimal X { get; }
 
     /// <summary>
-    /// Gets the Y-coordinate of the legend key
+    /// Gets the Y-coordinate of the center point of the legend key
     /// </summary>
     public decimal Y { get; }
 
@@ -38,8 +38,8 @@ public class LegendKeyShape : ShapeBase {
     /// <summary>
     /// Create an SVG legend key shape
     /// </summary>
-    /// <param name="x">X-coordinate of the legend key</param>
-    /// <param name="y">Y-coordinate of the legend key</param>
+    /// <param name="x">X-coordinate of the center point of the legend key</param>
+    /// <param name="y">Y-coordinate of the center point of the legend key</param>
     /// <param name="size">Width/height of the legend key</param>
     /// <param name="color">Data series color</param>
     /// <param name="cssClass">Data series CSS class</param>

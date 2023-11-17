@@ -39,7 +39,7 @@ public class XYChart : ComponentBase {
     internal Action? StateHasChangedHandler { get; init; }
 
     /// <summary>
-    /// Create a component to render charts with a category X-axis and a value Y-axis
+    /// Create an XY chart
     /// </summary>
     public XYChart() {
         Canvas = new Canvas() { Chart = this };
@@ -59,7 +59,7 @@ public class XYChart : ComponentBase {
     }
 
     /// <summary>
-    /// Determine whether or not any parameters have changed so that the chart can be re-rendered
+    /// Determines whether or not any parameters have changed and the chart has to be re-rendered
     /// </summary>
     /// <param name="parameters">New parameters</param>
     /// <returns><see langword="true"/> of any parameter has changed; otherwise <see langword="false"/></returns>

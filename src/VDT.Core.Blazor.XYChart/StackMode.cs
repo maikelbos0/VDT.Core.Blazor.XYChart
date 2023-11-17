@@ -1,7 +1,7 @@
 ﻿namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
-/// Determines the way data points are stacked
+/// Determines the way data points are stacked in a layer
 /// </summary>
 public enum StackMode {
     /// <summary>
