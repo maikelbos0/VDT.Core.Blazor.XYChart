@@ -148,7 +148,16 @@ offset by `ItemHeight` horizontally.
 
 ### Example
 
-TODO
+```
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" })">
+    <Legend IsEnabled="true" Position="@LegendPosition.Bottom" Alignment="@LegendAlignment.Right" Height="30" ItemWidth="90" ItemHeight="30" KeySize="20" />
+
+    <BarLayer>
+        <DataSeries Name="Bar" Color="#ffcc11" DataPoints="@(new List<decimal?> { 110500, 190000, 315000, -25000, 95000, 45000, 35000, 40000 })" />
+        <DataSeries Name="Baz" Color="#22cc55" DataPoints="@(new List<decimal?> { 210000, -120500, 155000, -40000, 35000, 25000, -5000, 30000 })" />
+    </BarLayer>
+</XYChart>
+```
 
 ## Style
 
