@@ -79,16 +79,6 @@ customization parameters:
 </XYChart>
 ```
 
-TODO
-
-## Chart options
-
-TODO
-
-### Example
-
-TODO
-
 ## Canvas
    
 The canvas component is the place where all general chart dimensions and number format strings can be set. All dimension settings are in pixels. Number format
@@ -228,10 +218,6 @@ with red crosses.
 
 Styles that are not universal, such as the color for a data series, the marker size for a line layer, or the gap width for a bar layer, can be set on the
 various chart objects themselves. For more information, see the menu items for the various layer types.
-
-### Example
-
-TODO
 
 ## Defaults
 
