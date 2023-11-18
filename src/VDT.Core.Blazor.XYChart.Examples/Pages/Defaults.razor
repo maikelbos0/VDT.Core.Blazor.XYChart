@@ -8,23 +8,7 @@
     default canvas and legend dimensions are set.
 </p>
 
-<pre><code>
-public class Program {
-    public static async Task Main(string[] args) {
-        var builder = WebAssemblyHostBuilder.CreateDefault(args);
-        builder.RootComponents.Add&lt;App&gt;("#app");
-
-        Canvas.DefaultWidth = 900;
-        Canvas.DefaultHeight = 400;
-        Legend.DefaultPosition = LegendPosition.Bottom;
-        Legend.DefaultHeight = 50;
-
-        await builder.Build().RunAsync();
-    }
-}
-</code></pre>
-
-<p>The only exception to this pattern is the <code>DataSeries</code> class; its parameters either have special rules or can not have a default applied:</p>
+<p>The only exception to this pattern is the <code>DataSeries</code> class; its parameters either have special rules or can not have a default applied.</p>
 
 <ul>
     <li><code>DataSeries.Name</code> does not have a default, but can be null</li>
@@ -41,3 +25,19 @@ public class Program {
         built-in CSS classes as explained on the <a href="/Style">style</a> page
     </li>
 </ul>
+
+<pre><code>
+public class Program {
+    public static async Task Main(string[] args) {
+        var builder = WebAssemblyHostBuilder.CreateDefault(args);
+        builder.RootComponents.Add&lt;App&gt;("#app");
+
+        Canvas.DefaultWidth = 900;
+        Canvas.DefaultHeight = 400;
+        Legend.DefaultPosition = LegendPosition.Bottom;
+        Legend.DefaultHeight = 50;
+
+        await builder.Build().RunAsync();
+    }
+}
+</code></pre>

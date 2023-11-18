@@ -124,8 +124,34 @@ TODO
 
 ## Defaults
 
-TODO
+It's possible to apply default values for parameters in almost all chart components by setting the static property corresponding to the parameter to the 
+desired value. To ensure these values are set before any charts are rendered it is best to apply these values in your startup. In the example below, default
+canvas and legend dimensions are set.
+
+The only exception to this pattern is the `DataSeries` class; its parameters either have special rules or can not have a default applied.
+
+- `DataSeries.Name` does not have a default, but can be null
+- `DataSeries.Color` does not have a single default, but rather a list of defaults; if a data series doesn't have an assigned color it will be picked from this
+  list by the index of the data series inside the entire chart, applying modulus if needed
+- `DataSeries.DataPoints` does not have a default, but can be empty; in this case the empty values are either not shown or interpreted as zero depending on the
+  layer type and settings
+- `DataSeries.CssClass` does not have a default, but can be null; if you wish to apply styles across all data series elements you can use the built-in CSS
+  classes
 
 ### Example
 
-TODO
+```
+public class Program {
+    public static async Task Main(string[] args) {
+        var builder = WebAssemblyHostBuilder.CreateDefault(args);
+        builder.RootComponents.Add&lt;App&gt;("#app");
+
+        Canvas.DefaultWidth = 900;
+        Canvas.DefaultHeight = 400;
+        Legend.DefaultPosition = LegendPosition.Bottom;
+        Legend.DefaultHeight = 50;
+
+        await builder.Build().RunAsync();
+    }
+}
+```
