@@ -105,7 +105,19 @@ strings can be standard or custom numeric format strings.
 
 ### Example
 
-TODO
+```
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" })">
+    <Canvas Width="900" Height="400" Padding="20" XAxisLabelHeight="40" YAxisLabelWidth="70"
+            YAxisLabelFormat="#,##0.00" YAxisMultiplierFormat="x #,##0.00" DataLabelFormat="#,##0.00" />
+
+    <PlotArea Multiplier="1000" />
+
+    <BarLayer ShowDataLabels="true">
+        <DataSeries Name="Bar" Color="#ffcc11" DataPoints="@(new List<decimal?> { 110500, 190000, 315000, -25000, 95000, 45000, 35000, 40000 })" />
+        <DataSeries Name="Baz" Color="#22cc55" DataPoints="@(new List<decimal?> { 210000, -120500, 155000, -40000, 35000, 25000, -5000, 30000 })" />
+    </BarLayer>
+</XYChart>
+```
 
 ## Plot area
 
