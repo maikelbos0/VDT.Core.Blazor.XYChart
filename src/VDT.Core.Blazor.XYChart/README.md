@@ -129,7 +129,43 @@ TODO
 
 ## Style
 
-TODO
+Since the chart is rendered as SVG, each chart element is fully customizable using the powerful SVG options in CSS. Each element type can be referenced using
+the below CSS classes. The chart itself can be referenced with the CSS class `svg.chart-main`. Aside from the default CSS classes, it is also possible to
+assign each data series its own custom CSS class using the `CssClass` parameter. All SVG elements that are associated with this data series will contain this
+CSS class, including data labels and legend items.
+
+- Plot area: `.plot-area`; please note that this shape is inverted so that it covers chart data elements that would otherwise extend into the rest of the
+  canvas
+- Grid lines: `.grid-line`
+- Axes:
+  - X-axis labels: `.x-axis-label`
+  - Y-axis labels: `.y-axis-label`
+  - Y-axis multiplier: `.y-axis-multiplier`
+- Data: `.data`
+  - Area data: `.data.area-data`
+  - Bar data: `.data.bar-data`
+  - Line data: `.data.line-data`
+- Data markers for line data: `.data-marker`
+  - Round data markers: `.data-marker.data-marker-round`
+  - Square data markers: `.data-marker.data-marker-square`
+- Data labels: `.data-label`
+  - Positive values (including 0) also get the attribute `data-positive`
+  - Negative values also get the attribute `data-negative`
+- Legend item keys: `.legend-key`
+- Legend item text: `.legend-text`
+
+If you use Blazor CSS isolation on a child component, the `::deep` pseudo-element is used and the chart component must be inside an HTML element that the
+isolation attribute will be applied to.
+
+The chart also allows you to add SVG elements or other custom content as part of the `ChildContent`. This content is always rendered last, which means custom
+content will be rendered top-most in the chart SVG.
+
+The axis labels, data labels, y-axis multiplier and legend text only get positioned with a single x/y coordinate as an anchor, so horizontal and vertical
+aligning, rotation and any other positional transforming should be done with CSS. In the below chart example the anchors of these elements are made visible
+with red crosses.
+
+Styles that are not universal, such as the color for a data series, the marker size for a line layer, or the gap width for a bar layer, can be set on the
+various chart objects themselves. For more information, see the menu items for the various layer types.
 
 ### Example
 
