@@ -86,7 +86,20 @@ TODO
 
 ## Plot area
 
-TODO
+The plot area component allows you to set the range of the plot area, as well as the multiplier and the interval used to determine where to place grid
+lines. It also allows you to set up parameters for automatic scaling.
+
+- `Min` is the lowest data point value that is visible in the chart
+- `Max` is the highest data point value that is visible in the chart
+- `GridLineInterval` is the interval with which grid lines are shown; the starting point is zero
+- `Multiplier` is the unit multiplier when showing y-axis labels and data labels; all values get divided by this value before being displayed
+- `AutoScaleIsEnabled` enables automatic scaling of the plot area minimum, maximum and grid line interval; if enabled the values for `Min`, `Max` and
+  `GridLineInterval` will be ignored
+- `AutoScaleRequestedGridLineCount` is the number of grid lines you would ideally like to see if automatic scaling is enabled; please note that the end result
+  can differ from the requested count
+- `AutoScaleIncludesZero` toggles the forced inclusion of the zero line in the plot area when automatically scaling
+- `AutoScaleClearancePercentage` is the minimum clearance between the highest/lowest data point and the edge of the plot area, expressed as a percentage of the
+  total plot area range
 
 ### Example
 
