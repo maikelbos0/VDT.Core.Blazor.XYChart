@@ -136,9 +136,27 @@ lines. It also allows you to set up parameters for automatic scaling.
 - `AutoScaleClearancePercentage` is the minimum clearance between the highest/lowest data point and the edge of the plot area, expressed as a percentage of the
   total plot area range
 
-### Example
+### Examples
 
-TODO
+```
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" })">
+    <PlotArea Min="-200000" Max="500000" GridLineInterval="100000" Multiplier="1000" AutoScaleIsEnabled="false" />
+
+    <BarLayer>
+        <DataSeries Name="Bar" Color="#ffcc11" DataPoints="@(new List<decimal?> { 110500, 190000, 315000, -25000, 95000, 45000, 35000, 40000 })" />
+        <DataSeries Name="Baz" Color="#22cc55" DataPoints="@(new List<decimal?> { 210000, -120500, 155000, -40000, 35000, 25000, -5000, 30000 })" />
+    </BarLayer>
+</XYChart>
+
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" })">
+    <PlotArea AutoScaleIsEnabled="true" AutoScaleRequestedGridLineCount="20" AutoScaleIncludesZero="true" AutoScaleClearancePercentage="20" />
+
+    <BarLayer>
+        <DataSeries Name="Bar" Color="#ffcc11" DataPoints="@(new List<decimal?> { 110500, 190000, 315000, -25000, 95000, 45000, 35000, 40000 })" />
+        <DataSeries Name="Baz" Color="#22cc55" DataPoints="@(new List<decimal?> { 210000, -120500, 155000, -40000, 35000, 25000, -5000, 30000 })" />
+    </BarLayer>
+</XYChart>
+```
 
 ## Legend
 
