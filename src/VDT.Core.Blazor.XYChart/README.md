@@ -67,8 +67,18 @@ TODO
 TODO
 
 ## Canvas
+   
+The canvas component is the place where all general chart dimensions and number format strings can be set. All dimension settings are in pixels. Number format
+strings can be standard or custom numeric format strings.
 
-TODO
+- `Width` is the total width of the chart, including axis labels and padding
+- `Height` is the total height of the chart, including axis labels and padding
+- `Padding` is the distance between the canvas edge and any chart elements
+- `XAxisLabelHeight` is the vertical room reserved for labels on the x-axis
+- `YAxisLabelWidth` is the horizontal room reserved for labels on the y-axis, including the multiplier if applicable
+- `YAxisLabelFormat` is the format string for the numeric labels on the y-axis
+- `YAxisMultiplierFormat` is the format string for the y-axis multiplier, if it's visible
+- `DataLabelFormat` is the format string for the numeric data labels optionally displayed at each data point
 
 ### Example
 
@@ -84,7 +94,21 @@ TODO
 
 ## Legend
 
-TODO
+The &lt;Legend&gt; component allows you to configure the positioning and dimensions of the optional chart legend. All dimension settings are in pixels.
+
+- `IsEnabled` toggles whether or not the legend is displayed
+- `Position` sets the legend position:
+    - `LegendPosition.Top` displays the legend above the plot area
+    - `LegendPosition.Bottom` displays the legend below the plot area
+- `Alignment` aligns the legend items inside the legend area left, right or centered
+- `Height` is the total height reserved for the legend
+- `ItemWidth` is the total width reserved for each legend item (key and text) inside the legend
+- `ItemHeight` is the total height reserved for each legend item
+- `KeySize` is the width/height of the legend item key
+
+Legend item keys are centered horizontally and vertically inside a partition of the legend item area, dimensions of this space are `ItemHeight` by
+`ItemHeight`. Legend item text is centered vertically inside the legend item area, and are offset by the previously mentioned partition,  meaning they are
+offset by `ItemHeight` horizontally.
 
 ### Example
 
