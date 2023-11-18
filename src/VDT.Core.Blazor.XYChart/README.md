@@ -28,7 +28,14 @@ parameters:
 
 ### Example
 
-TODO
+```
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" })">
+    <BarLayer IsStacked="false" ShowDataLabels="true" ClearancePercentage="25" GapPercentage="-10">
+        <DataSeries Name="Bar" Color="#ffcc11" DataPoints="@(new List<decimal?> { 110500, 190000, 315000, -25000, 95000, 45000, 35000, 40000 })" />
+        <DataSeries Name="Baz" Color="#22cc55" DataPoints="@(new List<decimal?> { 210000, -120500, 155000, -40000, 35000, 25000, -5000, 30000 })" />
+    </BarLayer>
+</XYChart>
+```
 
 ## Line layer
 
@@ -44,7 +51,14 @@ customization parameters:
 
 ### Example
 
-TODO
+```
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" })">
+    <LineLayer IsStacked="true" ShowDataLabels="true" ShowDataMarkers="true" DataMarkerSize="16" DataMarkerType="@DefaultDataMarkerTypes.Square" ShowDataLines="false">
+        <DataSeries Name="Line" Color="#3366bb" DataPoints="@(new List<decimal?> { 125000, 95000, 205000, 145000, 110000, 155000, 135500, 140000 })" />
+        <DataSeries Name="Linz" Color="#dd3377" DataPoints="@(new List<decimal?> { 65000, 55000, null, 81000, 52500, null, 58000, 70500 })" />
+    </LineLayer>
+</XYChart>
+```
 
 ## Area layer
 
@@ -55,6 +69,15 @@ customization parameters:
 - `ShowDataLabels` toggles visibility of labels with the value at each data point
 
 ### Example
+
+```
+<XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" })">
+    <AreaLayer IsStacked="true" ShowDataLabels="true">
+        <DataSeries Name="Area" Color="#ff9933" DataPoints="@(new List<decimal?> { 70000, 125000, 85000, 35000, 110000, 80000, 85000, 60000 })" />
+        <DataSeries Name="Arez" Color="#aa66ee" DataPoints="@(new List<decimal?> { 25500, -25000, 35000, 50500, 30000, null, null, 45000 })" />
+    </AreaLayer>
+</XYChart>
+```
 
 TODO
 
