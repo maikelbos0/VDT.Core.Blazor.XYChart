@@ -8,7 +8,7 @@ Blazor component to create SVG charts with a category X-axis and a value Y-axis,
 - Line layers with configurable lines and data markers
 - Bar layers with configurable bar width and gaps
 - Area layers
-- Possibiliy to extend with your own layer types
+- Possibility to extend with your own layer types
 - Fully customizable canvas and legend
 - Plot area with manual or automatic scaling
 - CSS classes for customizable appearance of all chart elements
