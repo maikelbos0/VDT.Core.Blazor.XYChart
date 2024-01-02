@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
@@ -525,4 +528,29 @@ public class XYChartTests {
         { DataPointSpacingMode.Center, 1, PlotArea_X + 1.5M * PlotArea_Width / 3M },
         { DataPointSpacingMode.Center, 2, PlotArea_X + 2.5M * PlotArea_Width / 3M },
     };
+
+    [Fact]
+    public void XYChart_ModuleLocation_Is_Correct() {
+        var fileName = System.IO.Path.GetFileName(XYChart.ModuleLocation);
+
+        // TODO: find a more reliable way to get the location of the javascript module
+        var expectedFilePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "xychart.*.js").Single();
+        var expectedFileName = System.IO.Path.GetFileName(expectedFilePath);
+
+        Assert.Equal(expectedFileName, fileName);
+    }
+
+    [Fact]
+    public void XYChart_Module_Has_Correct_Fingerprint() {
+        using var sha256 = SHA256.Create();
+
+        // TODO: find a more reliable way to get the location of the javascript module
+        var filePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "xychart.*.js").Single();
+        var fingerprintFinder = new Regex("xychart\\.([a-f0-9]+)\\.js$", RegexOptions.IgnoreCase);
+        var fingerprint = fingerprintFinder.Match(filePath).Groups[1].Value;
+        var fileContents = File.ReadAllBytes(filePath).Where(b => b != '\r').ToArray(); // Normalize newlines between Windows and Linux
+        var expectedFingerprint = string.Join("", sha256.ComputeHash(fileContents).Take(5).Select(b => b.ToString("x2")));
+
+        Assert.Equal(expectedFingerprint, fingerprint);
+    }
 }

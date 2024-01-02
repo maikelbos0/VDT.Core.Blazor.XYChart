@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,17 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Component to render charts with a category X-axis and a value Y-axis
 /// </summary>
-public class XYChart : ComponentBase {
+public class XYChart : ComponentBase, IAsyncDisposable {
+    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/xychart.be75333fd4.js";
+
     /// <summary>
     /// Gets or sets the default value for the the way data points are spaced out over the plot area
     /// </summary>
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
+
+    private IJSObjectReference? moduleReference;
+
+    [Inject] internal IJSRuntime JSRuntime { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the content containing chart components
@@ -45,6 +52,21 @@ public class XYChart : ComponentBase {
         Canvas = new Canvas() { Chart = this };
         Legend = new Legend() { Chart = this };
         PlotArea = new PlotArea() { Chart = this };
+    }
+
+    private async Task<IJSObjectReference> GetModuleReference()
+        => moduleReference ?? await JSRuntime.InvokeAsync<IJSObjectReference>("import", ModuleLocation);
+
+    internal async Task<TextSize> GetTextSize(string text, string? cssClass)
+        => await (await GetModuleReference()).InvokeAsync<TextSize>("getTextSize", text, cssClass);
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync() {
+        if (moduleReference != null) {
+            await moduleReference.DisposeAsync();
+        }
+
+        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
