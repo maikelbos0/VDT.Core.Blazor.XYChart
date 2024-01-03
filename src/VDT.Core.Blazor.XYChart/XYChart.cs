@@ -77,6 +77,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
 
         if (parametersHaveChanged) {
             PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
+            await Canvas.AutoSize();
 
             HandleStateChange();
         }

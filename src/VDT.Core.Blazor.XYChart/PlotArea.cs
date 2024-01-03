@@ -100,6 +100,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
     private decimal? AutoScaleMax { get; set; }
     private decimal? AutoScaleGridLineInterval { get; set; }
 
+    // TODO could be public
     internal decimal ActualMin => AutoScaleMin ?? Min;
     internal decimal ActualMax => AutoScaleMax ?? Max;
     internal decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
