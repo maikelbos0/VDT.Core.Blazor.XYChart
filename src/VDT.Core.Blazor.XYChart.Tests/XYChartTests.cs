@@ -131,38 +131,6 @@ public class XYChartTests {
     }
 
     [Fact]
-    public void GetShapes_AutoScale() {
-        var subject = new XYChartBuilder(labelCount: 2)
-            .WithPlotArea(autoScaleIsEnabled: true, autoScaleRequestedGridLineCount: 15, autoScaleClearancePercentage: 0M)
-            .WithLayer<BarLayer>()
-            .WithDataSeries(-9M, 0M)
-            .WithDataSeries(-5M, 19M)
-            .Chart;
-
-        _ = subject.GetShapes().ToList();
-
-        Assert.Equal(-10M, subject.PlotArea.ActualMin);
-        Assert.Equal(20M, subject.PlotArea.ActualMax);
-        Assert.Equal(2M, subject.PlotArea.ActualGridLineInterval);
-    }
-
-    [Fact]
-    public void GetShapes_No_AutoScale() {
-        var subject = new XYChartBuilder(labelCount: 2)
-            .WithPlotArea(autoScaleIsEnabled: false)
-            .WithLayer<BarLayer>()
-            .WithDataSeries(-9M, 0M)
-            .WithDataSeries(-5M, 19M)
-            .Chart;
-
-        _ = subject.GetShapes().ToList();
-
-        Assert.Equal(PlotArea_Min, subject.PlotArea.ActualMin);
-        Assert.Equal(PlotArea_Max, subject.PlotArea.ActualMax);
-        Assert.Equal(PlotArea_GridLineInterval, subject.PlotArea.ActualGridLineInterval);
-    }
-
-    [Fact]
     public void GetShapes_PlotAreaShape() {
         var subject = new XYChartBuilder()
             .Chart;

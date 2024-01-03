@@ -76,6 +76,8 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         await base.SetParametersAsync(parameters);
 
         if (parametersHaveChanged) {
+            PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
+
             HandleStateChange();
         }
     }
@@ -167,8 +169,6 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// </summary>
     /// <returns>The SVG shapes</returns>
     public IEnumerable<ShapeBase> GetShapes() {
-        PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
-
         foreach (var shape in GetGridLineShapes()) {
             yield return shape;
         }
