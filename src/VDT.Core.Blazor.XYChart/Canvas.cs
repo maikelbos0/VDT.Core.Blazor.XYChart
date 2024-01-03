@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -62,6 +64,9 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// </summary>
     [Parameter] public int Padding { get; set; } = DefaultPadding;
 
+    // TODO add docxml and default value
+    [Parameter] public bool AutoSizeIsEnabled { get; set; } = false;
+
     /// <summary>
     /// Gets or sets the vertical room reserved for labels on the x-axis
     /// </summary>
@@ -87,6 +92,10 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// </summary>
     [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
 
+    internal int? AutoSizeXAxisLabelHeight { get; set; }
+
+    internal int ActualXAxisLabelHeight => AutoSizeXAxisLabelHeight ?? XAxisLabelHeight;
+
     /// <summary>
     /// X-coordinate of the top left corner of the plot area
     /// </summary>
@@ -105,7 +114,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// <summary>
     /// Height of the plot area
     /// </summary>
-    public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight - (Chart.Legend.IsEnabled ? Chart.Legend.Height : 0);
+    public int PlotAreaHeight => Height - Padding * 2 - ActualXAxisLabelHeight - (Chart.Legend.IsEnabled ? Chart.Legend.Height : 0);
 
     /// <summary>
     /// Y-coordinate of the top left corner of the legend
@@ -141,4 +150,17 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// </summary>
     /// <returns>The SVG plot area shape</returns>
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
+
+    // TODO docxml
+    // TODO test
+    public async Task AutoSize() {
+        if (!AutoSizeIsEnabled) {
+            AutoSizeXAxisLabelHeight = null;
+            return;
+        }
+
+        // TODO centralize css class
+        AutoSizeXAxisLabelHeight = (int)(await Task.WhenAll(Chart.Labels.Select(async label => await Chart.GetTextSize(label, "x-axis-label"))))
+            .Max(size => size.Height);
+    }
 }
