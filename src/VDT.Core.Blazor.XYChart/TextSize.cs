@@ -1,3 +1,3 @@
 ﻿namespace VDT.Core.Blazor.XYChart;
 
-internal record TextSize(int Width, int Height);
+internal record TextSize(decimal Width, decimal Height);
