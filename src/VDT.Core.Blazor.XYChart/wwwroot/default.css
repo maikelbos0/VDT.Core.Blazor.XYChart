@@ -2,6 +2,7 @@
     border: 1px solid #ced4da;
     border-radius: 0.375rem;
     user-select: none;
+    box-sizing: content-box;
 }
 
 .chart-main .plot-area {
