@@ -25,6 +25,11 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultPadding { get; set; } = 25;
 
     /// <summary>
+    /// Gets or sets the default value for whether or not axis labels should be automatically sized
+    /// </summary>
+    public static bool DefaultAutoSizeLabelsIsEnabled { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets the default value for the vertical room reserved for labels on the x-axis
     /// </summary>
     public static int DefaultXAxisLabelHeight { get; set; } = 50;
@@ -64,8 +69,10 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// </summary>
     [Parameter] public int Padding { get; set; } = DefaultPadding;
 
-    // TODO add docxml and default value
-    [Parameter] public bool AutoSizeIsEnabled { get; set; } = false;
+    /// <summary>
+    /// Gets or sets whether or not axis labels should be automatically sized
+    /// </summary>
+    [Parameter] public bool AutoSizeLabelsIsEnabled { get; set; } = DefaultAutoSizeLabelsIsEnabled;
 
     /// <summary>
     /// Gets or sets the vertical room reserved for labels on the x-axis
@@ -92,9 +99,12 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// </summary>
     [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
 
-    internal int? AutoSizeXAxisLabelHeight { get; set; }
+    private int? AutoSizeXAxisLabelHeight { get; set; }
 
-    internal int ActualXAxisLabelHeight => AutoSizeXAxisLabelHeight ?? XAxisLabelHeight;
+    /// <summary>
+    /// Gets the lowest value that is visible in the chart, taking automatic scaling into account if enabled
+    /// </summary>
+    public int ActualXAxisLabelHeight => AutoSizeXAxisLabelHeight ?? XAxisLabelHeight;
 
     /// <summary>
     /// X-coordinate of the top left corner of the plot area
@@ -151,10 +161,13 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// <returns>The SVG plot area shape</returns>
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 
-    // TODO docxml
     // TODO test
+    /// <summary>
+    /// Applies automatic sizing to labels if <see cref="AutoSizeLabelsIsEnabled"/> is <see langword="true" />
+    /// </summary>
+    /// <returns></returns>
     public async Task AutoSize() {
-        if (!AutoSizeIsEnabled) {
+        if (!AutoSizeLabelsIsEnabled) {
             AutoSizeXAxisLabelHeight = null;
             return;
         }
