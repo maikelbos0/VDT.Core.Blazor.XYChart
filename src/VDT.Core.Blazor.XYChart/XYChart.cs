@@ -12,7 +12,10 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Component to render charts with a category X-axis and a value Y-axis
 /// </summary>
-public class XYChart : ComponentBase, IAsyncDisposable {
+public class XYChart : ComponentBase {
+    // TODO rename
+    // TODO only create one svg element per thing
+    // Move to sizeprovider
     internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/xychart.bfc42c57b9.js";
 
     /// <summary>
@@ -20,15 +23,13 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// </summary>
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
 
-    private IJSObjectReference? moduleReference;
-
     [Inject] internal IJSRuntime JSRuntime { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the content containing chart components
     /// </summary>
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the category labels of of the chart; this list determines the amount of data point values shown
     /// </summary>
@@ -44,6 +45,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
+    internal Func<Task<ISizeProvider>>? SizeProviderProvider { get; init; }
 
     /// <summary>
     /// Create an XY chart
@@ -52,21 +54,6 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         Canvas = new Canvas() { Chart = this };
         Legend = new Legend() { Chart = this };
         PlotArea = new PlotArea() { Chart = this };
-    }
-
-    private async Task<IJSObjectReference> GetModuleReference()
-        => moduleReference ?? await JSRuntime.InvokeAsync<IJSObjectReference>("import", ModuleLocation);
-
-    internal async Task<TextSize> GetTextSize(string text, string? cssClass)
-        => await (await GetModuleReference()).InvokeAsync<TextSize>("getTextSize", text, cssClass);
-
-    /// <inheritdoc/>
-    public async ValueTask DisposeAsync() {
-        if (moduleReference != null) {
-            await moduleReference.DisposeAsync();
-        }
-
-        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
@@ -163,7 +150,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         HandleStateChange();
     }
 
-    internal void HandleStateChange() => (StateHasChangedHandler ?? StateHasChanged)();
+    internal Task<ISizeProvider> GetSizeProvider() => SizeProviderProvider?.Invoke() ?? SizeProvider.Create(JSRuntime);
 
     /// <summary>
     /// Gets the SVG shapes needed to display the chart

@@ -172,8 +172,10 @@ public class Canvas : ChildComponentBase, IDisposable {
             return;
         }
 
+        await using var sizeProvider = await Chart.GetSizeProvider();
+
         // TODO centralize css class
-        AutoSizeXAxisLabelHeight = (int)(await Task.WhenAll(Chart.Labels.Select(async label => await Chart.GetTextSize(label, "x-axis-label"))))
+        AutoSizeXAxisLabelHeight = (int)(await Task.WhenAll(Chart.Labels.Select(async label => await sizeProvider.GetTextSize(label, "x-axis-label"))))
             .Max(size => size.Height);
     }
 }
