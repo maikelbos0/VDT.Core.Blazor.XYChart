@@ -100,10 +100,20 @@ public class PlotArea : ChildComponentBase, IDisposable {
     private decimal? AutoScaleMax { get; set; }
     private decimal? AutoScaleGridLineInterval { get; set; }
 
-    // TODO could be public
-    internal decimal ActualMin => AutoScaleMin ?? Min;
-    internal decimal ActualMax => AutoScaleMax ?? Max;
-    internal decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
+    /// <summary>
+    /// Gets the lowest value that is visible in the chart, taking automatic scaling into account if enabled
+    /// </summary>
+    public decimal ActualMin => AutoScaleMin ?? Min;
+
+    /// <summary>
+    /// Gets the highest value that is visible in the chart, taking automatic scaling into account if enabled
+    /// </summary>
+    public decimal ActualMax => AutoScaleMax ?? Max;
+
+    /// <summary>
+    /// Gets the interval with which grid lines are shown, taking automatic scaling into account if enabled
+    /// </summary>
+    public decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
 
     /// <inheritdoc/>
     protected override void OnInitialized() => Chart.SetPlotArea(this);
