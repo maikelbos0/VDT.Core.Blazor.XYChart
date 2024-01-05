@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
 /// Ploy area/scaling settings for an <see cref="XYChart"/>
 /// </summary>
-public class PlotArea : ChildComponentBase, IDisposable {
+public class PlotArea : ChildComponentBase, IAsyncDisposable {
     /// <summary>
     /// Gets or sets the default value for the lowest data point value that is visible in the chart
     /// </summary>
@@ -116,11 +117,11 @@ public class PlotArea : ChildComponentBase, IDisposable {
     public decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.SetPlotArea(this);
+    protected override Task OnInitializedAsync() => Chart.SetPlotArea(this);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Chart.ResetPlotArea();
+    public async ValueTask DisposeAsync() {
+        await Chart.ResetPlotArea();
         GC.SuppressFinalize(this);
     }
 

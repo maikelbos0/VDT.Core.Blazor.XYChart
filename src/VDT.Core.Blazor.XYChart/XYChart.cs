@@ -63,10 +63,7 @@ public class XYChart : ComponentBase {
         await base.SetParametersAsync(parameters);
 
         if (parametersHaveChanged) {
-            PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
-            await Canvas.AutoSize();
-
-            HandleStateChange();
+            await HandleStateChange();
         }
     }
 
@@ -107,47 +104,60 @@ public class XYChart : ComponentBase {
         builder.CloseElement();
     }
 
-    internal void SetCanvas(Canvas canvas) {
+    internal async Task SetCanvas(Canvas canvas) {
         Canvas = canvas;
-        HandleStateChange();
+        await HandleStateChange();
     }
 
-    internal void ResetCanvas() {
+    internal async Task ResetCanvas() {
         Canvas = new();
-        HandleStateChange();
+        await HandleStateChange();
     }
 
-    internal void SetLegend(Legend legend) {
+    internal async Task SetLegend(Legend legend) {
         Legend = legend;
-        HandleStateChange();
+        await HandleStateChange();
     }
 
-    internal void ResetLegend() {
+    internal async Task ResetLegend() {
         Legend = new();
-        HandleStateChange();
+        await HandleStateChange();
     }
 
-    internal void SetPlotArea(PlotArea plotArea) {
+    internal async Task SetPlotArea(PlotArea plotArea) {
         PlotArea = plotArea;
-        HandleStateChange();
+        await HandleStateChange();
     }
 
-    internal void ResetPlotArea() {
+    internal async Task ResetPlotArea() {
         PlotArea = new();
-        HandleStateChange();
+        await HandleStateChange();
     }
 
-    internal void AddLayer(LayerBase layer) {
+    internal async Task AddLayer(LayerBase layer) {
+        // TODO do we need this check?
         if (!Layers.Contains(layer)) {
             Layers.Add(layer);
         }
 
-        HandleStateChange();
+        await HandleStateChange();
     }
 
-    internal void RemoveLayer(LayerBase layer) {
+    internal async Task RemoveLayer(LayerBase layer) {
         Layers.Remove(layer);
-        HandleStateChange();
+        await HandleStateChange();
+    }
+
+    // TODO check if debounce is needed
+    internal async Task HandleStateChange() {
+        if (StateHasChangedHandler != null) {
+            StateHasChangedHandler();
+        }
+        else {
+            PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
+            await Canvas.AutoSize();
+            StateHasChanged();
+        }
     }
 
     internal Task<ISizeProvider> GetSizeProvider() => SizeProviderProvider?.Invoke() ?? SizeProvider.Create(JSRuntime);

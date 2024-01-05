@@ -8,7 +8,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Canvas settings for an <see cref="XYChart"/>
 /// </summary>
-public class Canvas : ChildComponentBase, IDisposable {
+public class Canvas : ChildComponentBase, IAsyncDisposable {
     /// <summary>
     /// Gets or sets the default value for the total width of the chart, including axis labels and padding
     /// </summary>
@@ -136,11 +136,11 @@ public class Canvas : ChildComponentBase, IDisposable {
     };
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.SetCanvas(this);
+    protected override Task OnInitializedAsync() => Chart.SetCanvas(this);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Chart.ResetCanvas();
+    public async ValueTask DisposeAsync() {
+        await Chart.ResetCanvas();
         GC.SuppressFinalize(this);
     }
 

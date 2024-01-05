@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
@@ -34,97 +35,97 @@ public class XYChartTests {
     };
 
     [Fact]
-    public void SetCanvas() {
+    public async Task SetCanvas() {
         var canvas = new Canvas();
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
 
-        subject.SetCanvas(canvas);
+        await subject.SetCanvas(canvas);
 
         Assert.Same(canvas, subject.Canvas);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public void ResetCanvas() {
+    public async Task ResetCanvas() {
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
         var canvas = subject.Canvas;
 
-        subject.ResetCanvas();
+        await subject.ResetCanvas();
 
         Assert.NotSame(canvas, subject.Canvas);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public void SetLegend() {
+    public async Task SetLegend() {
         var legend = new Legend();
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
 
-        subject.SetLegend(legend);
+        await subject.SetLegend(legend);
 
         Assert.Same(legend, subject.Legend);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public void ResetLegend() {
+    public async Task ResetLegend() {
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
         var legend = subject.Legend;
 
-        subject.ResetLegend();
+        await subject.ResetLegend();
 
         Assert.NotSame(legend, subject.Legend);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public void SetPlotArea() {
+    public async Task SetPlotArea() {
         var plotArea = new PlotArea();
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
 
-        subject.SetPlotArea(plotArea);
+        await subject.SetPlotArea(plotArea);
 
         Assert.Same(plotArea, subject.PlotArea);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public void ResetPlotArea() {
+    public async Task ResetPlotArea() {
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
         var plotArea = subject.PlotArea;
 
-        subject.ResetPlotArea();
+        await subject.ResetPlotArea();
 
         Assert.NotSame(plotArea, subject.PlotArea);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public void AddLayer() {
+    public async Task AddLayer() {
         var layer = new BarLayer();
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
 
-        subject.AddLayer(layer);
+        await subject.AddLayer(layer);
 
         Assert.Same(layer, Assert.Single(subject.Layers));
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public void RemoveLayer() {
+    public async Task RemoveLayer() {
         var layer = new BarLayer();
         var builder = new XYChartBuilder()
             .WithLayer(layer);
         var subject = builder.Chart;
 
-        subject.RemoveLayer(layer);
+        await subject.RemoveLayer(layer);
 
         Assert.Empty(subject.Layers);
         Assert.True(builder.StateHasChangedInvoked);

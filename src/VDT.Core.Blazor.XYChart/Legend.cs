@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
 /// Legend settings for an <see cref="XYChart"/>
 /// </summary>
-public class Legend : ChildComponentBase, IDisposable {
+public class Legend : ChildComponentBase, IAsyncDisposable {
     /// <summary>
     /// Gets or sets the default value for whether or not the legend is displayed
     /// </summary>
@@ -78,11 +79,11 @@ public class Legend : ChildComponentBase, IDisposable {
     [Parameter] public int KeySize { get; set; } = DefaultKeySize;
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.SetLegend(this);
+    protected override Task OnInitializedAsync() => Chart.SetLegend(this);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Chart.ResetLegend();
+    public async ValueTask DisposeAsync() {
+        await Chart.ResetLegend();
         GC.SuppressFinalize(this);
     }
 
