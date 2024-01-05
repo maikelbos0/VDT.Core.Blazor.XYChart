@@ -501,7 +501,6 @@ public class XYChartTests {
     public void XYChart_ModuleLocation_Is_Correct() {
         var fileName = System.IO.Path.GetFileName(XYChart.ModuleLocation);
 
-        // TODO: find a more reliable way to get the location of the javascript module
         var expectedFilePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "xychart.*.js").Single();
         var expectedFileName = System.IO.Path.GetFileName(expectedFilePath);
 
@@ -512,12 +511,13 @@ public class XYChartTests {
     public void XYChart_Module_Has_Correct_Fingerprint() {
         using var sha256 = SHA256.Create();
 
-        // TODO: find a more reliable way to get the location of the javascript module
         var filePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "xychart.*.js").Single();
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
         var fingerprintFinder = new Regex("xychart\\.([a-f0-9]+)\\.js$", RegexOptions.IgnoreCase);
+#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
         var fingerprint = fingerprintFinder.Match(filePath).Groups[1].Value;
         var fileContents = File.ReadAllBytes(filePath).Where(b => b != '\r').ToArray(); // Normalize newlines between Windows and Linux
-        var expectedFingerprint = string.Join("", sha256.ComputeHash(fileContents).Take(5).Select(b => b.ToString("x2")));
+        var expectedFingerprint = string.Join("", SHA256.HashData(fileContents).Take(5).Select(b => b.ToString("x2")));
 
         Assert.Equal(expectedFingerprint, fingerprint);
     }
