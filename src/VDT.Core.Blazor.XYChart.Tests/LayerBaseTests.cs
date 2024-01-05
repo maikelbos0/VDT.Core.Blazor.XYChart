@@ -5,6 +5,7 @@ using VDT.Core.Blazor.XYChart.Shapes;
 using Microsoft.AspNetCore.Components;
 using System.Linq;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
+using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 
@@ -25,27 +26,27 @@ public class LayerBaseTests {
     }
 
     [Fact]
-    public void AddDataSeries() {
+    public async Task AddDataSeries() {
         var dataSeries = new DataSeries();
         var subject = new TestLayer(StackMode.Single, false);
         var builder = new XYChartBuilder()
             .WithLayer(subject);
 
-        subject.AddDataSeries(dataSeries);
+        await subject.AddDataSeries(dataSeries);
 
         Assert.Same(dataSeries, Assert.Single(subject.DataSeries));
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public void RemoveDataSeries() {
+    public async Task RemoveDataSeries() {
         var dataSeries = new DataSeries();
         var subject = new TestLayer(StackMode.Single, false);
         var builder = new XYChartBuilder()
             .WithLayer(subject)
             .WithDataSeries(dataSeries);
 
-        subject.RemoveDataSeries(dataSeries);
+        await subject.RemoveDataSeries(dataSeries);
 
         Assert.Empty(subject.DataSeries);
         Assert.True(builder.StateHasChangedInvoked);
