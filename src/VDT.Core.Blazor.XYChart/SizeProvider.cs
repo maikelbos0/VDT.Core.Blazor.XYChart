@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 namespace VDT.Core.Blazor.XYChart;
 
 internal class SizeProvider : ISizeProvider {
-    // TODO only create one svg element per thing
-    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/sizeprovider.bfc42c57b9.js";
+    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/sizeprovider.8bb0df6555.js";
 
     public static async Task<ISizeProvider> Create(IJSRuntime jsRuntime) {
         var moduleReference = await jsRuntime.InvokeAsync<IJSObjectReference>("import", ModuleLocation);
+
+        await moduleReference.InvokeVoidAsync("register");
 
         return new SizeProvider(moduleReference);
     }
@@ -26,6 +27,7 @@ internal class SizeProvider : ISizeProvider {
     /// <inheritdoc/>
     public async ValueTask DisposeAsync() {
         if (moduleReference != null) {
+            await moduleReference.InvokeVoidAsync("unregister");
             await moduleReference.DisposeAsync();
         }
 
