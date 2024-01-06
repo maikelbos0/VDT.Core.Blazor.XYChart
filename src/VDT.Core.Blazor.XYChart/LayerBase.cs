@@ -64,11 +64,7 @@ public abstract class LayerBase : ChildComponentBase, IAsyncDisposable {
     }
 
     internal async Task AddDataSeries(DataSeries dataSeries) {
-        // TODO is this check needed?
-        if (!DataSeries.Contains(dataSeries)) {
-            DataSeries.Add(dataSeries);
-        }
-
+        DataSeries.Add(dataSeries);
         await Chart.HandleStateChange();
     }
 
