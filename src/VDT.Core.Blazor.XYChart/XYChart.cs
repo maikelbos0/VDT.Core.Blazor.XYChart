@@ -130,11 +130,7 @@ public class XYChart : ComponentBase {
     }
 
     internal async Task AddLayer(LayerBase layer) {
-        // TODO do we need this check?
-        if (!Layers.Contains(layer)) {
-            Layers.Add(layer);
-        }
-
+        Layers.Add(layer);
         await HandleStateChange();
     }
 
