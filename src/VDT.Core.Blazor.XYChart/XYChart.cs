@@ -40,7 +40,6 @@ public class XYChart : ComponentBase {
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
-    internal Action? StateHasChangedHandler { get; init; }
     internal Func<Task<ISizeProvider>>? SizeProviderProvider { get; init; }
     internal OperandStream StateChangeHandler { get; init; } = new();
 
@@ -150,14 +149,9 @@ public class XYChart : ComponentBase {
 
     internal async Task HandleStateChange() {
         // TODO cancel on dispose
-        if (StateHasChangedHandler != null) {
-            StateHasChangedHandler();
-        }
-        else {
-            PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
-            await Canvas.AutoSize();
-            base.StateHasChanged();
-        }
+        PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
+        await Canvas.AutoSize();
+        base.StateHasChanged();
     }
 
     internal Task<ISizeProvider> GetSizeProvider() => SizeProviderProvider?.Invoke() ?? SizeProvider.Create(JSRuntime);
