@@ -104,25 +104,25 @@ public class XYChartTests {
     }
 
     [Fact]
-    public async Task AddLayer() {
+    public void AddLayer() {
         var layer = new BarLayer();
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
 
-        await subject.AddLayer(layer);
+        subject.AddLayer(layer);
 
         Assert.Same(layer, Assert.Single(subject.Layers));
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public async Task RemoveLayer() {
+    public void RemoveLayer() {
         var layer = new BarLayer();
         var builder = new XYChartBuilder()
             .WithLayer(layer);
         var subject = builder.Chart;
 
-        await subject.RemoveLayer(layer);
+        subject.RemoveLayer(layer);
 
         Assert.Empty(subject.Layers);
         Assert.True(builder.StateHasChangedInvoked);

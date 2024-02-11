@@ -132,16 +132,15 @@ public class XYChart : ComponentBase {
         StateHasChanged();
     }
 
-    internal async Task AddLayer(LayerBase layer) {
+    internal void AddLayer(LayerBase layer) {
         Layers.Add(layer);
         StateHasChanged();
     }
 
-    internal async Task RemoveLayer(LayerBase layer) {
+    internal void RemoveLayer(LayerBase layer) {
         Layers.Remove(layer);
         StateHasChanged();
     }
-
 
     internal new void StateHasChanged() {
         _ = StateChangeHandler.Publish();
