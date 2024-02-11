@@ -63,12 +63,12 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         GC.SuppressFinalize(this);
     }
 
-    internal async Task AddDataSeries(DataSeries dataSeries) {
+    internal void AddDataSeries(DataSeries dataSeries) {
         DataSeries.Add(dataSeries);
         Chart.StateHasChanged();
     }
 
-    internal async Task RemoveDataSeries(DataSeries dataSeries) {
+    internal void RemoveDataSeries(DataSeries dataSeries) {
         DataSeries.Remove(dataSeries);
         Chart.StateHasChanged();
     }

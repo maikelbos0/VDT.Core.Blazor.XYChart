@@ -26,27 +26,27 @@ public class LayerBaseTests {
     }
 
     [Fact]
-    public async Task AddDataSeries() {
+    public void AddDataSeries() {
         var dataSeries = new DataSeries();
         var subject = new TestLayer(StackMode.Single, false);
         var builder = new XYChartBuilder()
             .WithLayer(subject);
 
-        await subject.AddDataSeries(dataSeries);
+        subject.AddDataSeries(dataSeries);
 
         Assert.Same(dataSeries, Assert.Single(subject.DataSeries));
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public async Task RemoveDataSeries() {
+    public void RemoveDataSeries() {
         var dataSeries = new DataSeries();
         var subject = new TestLayer(StackMode.Single, false);
         var builder = new XYChartBuilder()
             .WithLayer(subject)
             .WithDataSeries(dataSeries);
 
-        await subject.RemoveDataSeries(dataSeries);
+        subject.RemoveDataSeries(dataSeries);
 
         Assert.Empty(subject.DataSeries);
         Assert.True(builder.StateHasChangedInvoked);
