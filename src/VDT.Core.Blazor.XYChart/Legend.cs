@@ -7,7 +7,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Legend settings for an <see cref="XYChart"/>
 /// </summary>
-public class Legend : ChildComponentBase, IAsyncDisposable {
+public class Legend : ChildComponentBase, IDisposable {
     /// <summary>
     /// Gets or sets the default value for whether or not the legend is displayed
     /// </summary>
@@ -79,11 +79,11 @@ public class Legend : ChildComponentBase, IAsyncDisposable {
     [Parameter] public int KeySize { get; set; } = DefaultKeySize;
 
     /// <inheritdoc/>
-    protected override Task OnInitializedAsync() => Chart.SetLegend(this);
+    protected override void OnInitialized() => Chart.SetLegend(this);
 
     /// <inheritdoc/>
-    public async ValueTask DisposeAsync() {
-        await Chart.ResetLegend();
+    public void Dispose() {
+        Chart.ResetLegend();
         GC.SuppressFinalize(this);
     }
 

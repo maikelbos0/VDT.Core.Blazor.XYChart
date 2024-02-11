@@ -102,32 +102,32 @@ public class XYChart : ComponentBase {
         builder.CloseElement();
     }
 
-    internal async Task SetCanvas(Canvas canvas) {
+    internal void SetCanvas(Canvas canvas) {
         Canvas = canvas;
         StateHasChanged();
     }
 
-    internal async Task ResetCanvas() {
+    internal void ResetCanvas() {
         Canvas = new();
         StateHasChanged();
     }
 
-    internal async Task SetLegend(Legend legend) {
+    internal void SetLegend(Legend legend) {
         Legend = legend;
         StateHasChanged();
     }
 
-    internal async Task ResetLegend() {
+    internal void ResetLegend() {
         Legend = new();
         StateHasChanged();
     }
 
-    internal async Task SetPlotArea(PlotArea plotArea) {
+    internal void SetPlotArea(PlotArea plotArea) {
         PlotArea = plotArea;
         StateHasChanged();
     }
 
-    internal async Task ResetPlotArea() {
+    internal void ResetPlotArea() {
         PlotArea = new();
         StateHasChanged();
     }

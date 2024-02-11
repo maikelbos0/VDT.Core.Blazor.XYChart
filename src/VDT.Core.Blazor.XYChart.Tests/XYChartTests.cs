@@ -32,72 +32,72 @@ public class XYChartTests {
     };
 
     [Fact]
-    public async Task SetCanvas() {
+    public void SetCanvas() {
         var canvas = new Canvas();
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
 
-        await subject.SetCanvas(canvas);
+        subject.SetCanvas(canvas);
 
         Assert.Same(canvas, subject.Canvas);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public async Task ResetCanvas() {
+    public void ResetCanvas() {
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
         var canvas = subject.Canvas;
 
-        await subject.ResetCanvas();
+        subject.ResetCanvas();
 
         Assert.NotSame(canvas, subject.Canvas);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public async Task SetLegend() {
+    public void SetLegend() {
         var legend = new Legend();
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
 
-        await subject.SetLegend(legend);
+        subject.SetLegend(legend);
 
         Assert.Same(legend, subject.Legend);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public async Task ResetLegend() {
+    public void ResetLegend() {
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
         var legend = subject.Legend;
 
-        await subject.ResetLegend();
+        subject.ResetLegend();
 
         Assert.NotSame(legend, subject.Legend);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public async Task SetPlotArea() {
+    public void SetPlotArea() {
         var plotArea = new PlotArea();
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
 
-        await subject.SetPlotArea(plotArea);
+        subject.SetPlotArea(plotArea);
 
         Assert.Same(plotArea, subject.PlotArea);
         Assert.True(builder.StateHasChangedInvoked);
     }
 
     [Fact]
-    public async Task ResetPlotArea() {
+    public void ResetPlotArea() {
         var builder = new XYChartBuilder();
         var subject = builder.Chart;
         var plotArea = subject.PlotArea;
 
-        await subject.ResetPlotArea();
+        subject.ResetPlotArea();
 
         Assert.NotSame(plotArea, subject.PlotArea);
         Assert.True(builder.StateHasChangedInvoked);
