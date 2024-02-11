@@ -48,4 +48,8 @@
 		<InternalsVisibleTo Include="$(AssemblyName).Tests" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="VDT.Core.Operators" Version="0.2.0" />
+	</ItemGroup>
+
 </Project>

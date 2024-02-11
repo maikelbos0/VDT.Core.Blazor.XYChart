@@ -65,12 +65,12 @@ public abstract class LayerBase : ChildComponentBase, IAsyncDisposable {
 
     internal async Task AddDataSeries(DataSeries dataSeries) {
         DataSeries.Add(dataSeries);
-        await Chart.HandleStateChange();
+        Chart.StateHasChanged();
     }
 
     internal async Task RemoveDataSeries(DataSeries dataSeries) {
         DataSeries.Remove(dataSeries);
-        await Chart.HandleStateChange();
+        Chart.StateHasChanged();
     }
 
     /// <inheritdoc/>

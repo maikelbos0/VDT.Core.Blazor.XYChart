@@ -16,7 +16,7 @@ public abstract class ChildComponentBase : ComponentBase {
         await base.SetParametersAsync(parameters);
 
         if (parametersHaveChanged) {
-            await Chart.HandleStateChange();
+            Chart.StateHasChanged();
         }
     }
     

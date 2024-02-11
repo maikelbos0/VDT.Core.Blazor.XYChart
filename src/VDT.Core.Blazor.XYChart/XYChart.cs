@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
+using VDT.Core.Operators;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -41,6 +42,7 @@ public class XYChart : ComponentBase {
     internal List<LayerBase> Layers { get; set; } = new();
     internal Action? StateHasChangedHandler { get; init; }
     internal Func<Task<ISizeProvider>>? SizeProviderProvider { get; init; }
+    internal OperandStream StateChangeHandler { get; init; } = new();
 
     /// <summary>
     /// Create an XY chart
@@ -49,6 +51,8 @@ public class XYChart : ComponentBase {
         Canvas = new Canvas() { Chart = this };
         Legend = new Legend() { Chart = this };
         PlotArea = new PlotArea() { Chart = this };
+
+        StateChangeHandler.Debounce(100).Subscribe(HandleStateChange);
     }
 
     /// <inheritdoc/>
@@ -58,7 +62,7 @@ public class XYChart : ComponentBase {
         await base.SetParametersAsync(parameters);
 
         if (parametersHaveChanged) {
-            await HandleStateChange();
+            StateHasChanged();
         }
     }
 
@@ -101,53 +105,58 @@ public class XYChart : ComponentBase {
 
     internal async Task SetCanvas(Canvas canvas) {
         Canvas = canvas;
-        await HandleStateChange();
+        StateHasChanged();
     }
 
     internal async Task ResetCanvas() {
         Canvas = new();
-        await HandleStateChange();
+        StateHasChanged();
     }
 
     internal async Task SetLegend(Legend legend) {
         Legend = legend;
-        await HandleStateChange();
+        StateHasChanged();
     }
 
     internal async Task ResetLegend() {
         Legend = new();
-        await HandleStateChange();
+        StateHasChanged();
     }
 
     internal async Task SetPlotArea(PlotArea plotArea) {
         PlotArea = plotArea;
-        await HandleStateChange();
+        StateHasChanged();
     }
 
     internal async Task ResetPlotArea() {
         PlotArea = new();
-        await HandleStateChange();
+        StateHasChanged();
     }
 
     internal async Task AddLayer(LayerBase layer) {
         Layers.Add(layer);
-        await HandleStateChange();
+        StateHasChanged();
     }
 
     internal async Task RemoveLayer(LayerBase layer) {
         Layers.Remove(layer);
-        await HandleStateChange();
+        StateHasChanged();
     }
 
-    // TODO check if debounce is needed
+
+    internal new void StateHasChanged() {
+        _ = StateChangeHandler.Publish();
+    }
+
     internal async Task HandleStateChange() {
+        // TODO cancel on dispose
         if (StateHasChangedHandler != null) {
             StateHasChangedHandler();
         }
         else {
             PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
             await Canvas.AutoSize();
-            StateHasChanged();
+            base.StateHasChanged();
         }
     }
 
