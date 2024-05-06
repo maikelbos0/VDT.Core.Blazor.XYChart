@@ -153,7 +153,8 @@ public class Canvas : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(YAxisLabelWidth)
         || parameters.HasParameterChanged(YAxisLabelFormat)
         || parameters.HasParameterChanged(YAxisMultiplierFormat)
-        || parameters.HasParameterChanged(DataLabelFormat);
+        || parameters.HasParameterChanged(DataLabelFormat)
+        || parameters.HasParameterChanged(AutoSizeLabelsIsEnabled);
 
     /// <summary>
     /// Gets the SVG shape for the plot area
