@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
@@ -57,5 +58,29 @@ public class CanvasTests {
         Assert.Equal(PlotArea_Y, result.Y);
         Assert.Equal(PlotArea_Width, result.Width);
         Assert.Equal(PlotArea_Height, result.Height);
+    }
+
+    [Fact]
+    public async Task AutoSize_Disabled() {
+        var subject = new XYChartBuilder()
+            .WithCanvas(autoSizeLabelsIsEnabled: false)
+            .Chart
+            .Canvas;
+
+        await subject.AutoSize();
+
+        Assert.Equal(Canvas_XAxisLabelHeight, subject.ActualXAxisLabelHeight);
+    }
+
+    [Fact]
+    public async Task AutoSize() {
+        var subject = new XYChartBuilder()
+            .WithCanvas(autoSizeLabelsIsEnabled: true)
+            .Chart
+            .Canvas;
+
+        await subject.AutoSize();
+
+        Assert.Equal(Canvas_AutoSizeXAxisLabelHeight, subject.ActualXAxisLabelHeight);
     }
 }

@@ -162,7 +162,6 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// <returns>The SVG plot area shape</returns>
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 
-    // TODO test
     /// <summary>
     /// Applies automatic sizing to labels if <see cref="AutoSizeLabelsIsEnabled"/> is <see langword="true" />
     /// </summary>

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using NSubstitute;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
@@ -8,13 +10,17 @@ public class XYChartBuilder {
     private static readonly List<string> defaultLabels = new() { "Foo", "Bar", "Baz", "Qux", "Quux" };
 
     public XYChart Chart { get; }
+    internal ISizeProvider SizeProvider { get; }
     public bool StateHasChangedInvoked { get; private set; }
 
     public XYChartBuilder(int labelCount = Chart_LabelCount, DataPointSpacingMode dataPointSpacingMode = Chart_DataPointSpacingMode) {
+        SizeProvider = Substitute.For<ISizeProvider>();
+        SizeProvider.GetTextSize(Arg.Any<string>(), Arg.Any<string?>()).Returns(new TextSize(Canvas_AutoSizeYAxisLabelWidth, Canvas_AutoSizeXAxisLabelHeight));
         Chart = new() {
             Labels = defaultLabels.Take(labelCount).ToList(),
             DataPointSpacingMode = dataPointSpacingMode,
-            StateChangeHandler = new()
+            StateChangeHandler = new(),
+            SizeProviderProvider = () => Task.FromResult(SizeProvider)
         };
         Chart.Canvas = new() {
             Chart = Chart,
@@ -105,6 +111,25 @@ public class XYChartBuilder {
     public XYChartBuilder WithPlotArea(PlotArea plotArea) {
         Chart.PlotArea = plotArea;
         plotArea.Chart = Chart;
+        return this;
+    }
+
+    public XYChartBuilder WithCanvas(int? width = null, int? height = null, int? padding = null, int? xAxisLabelHeight = null, int? yAxisLabelWidth = null, string? yAxisLabelFormat = null, string? yAxisMultiplierFormat = null, string? dataLabelFormat = null, bool? autoSizeLabelsIsEnabled = null)
+        => WithCanvas(new Canvas() {
+            Width = width ?? Canvas_Width,
+            Height = height ?? Canvas_Height,
+            Padding = padding ?? Canvas_Padding,
+            XAxisLabelHeight = xAxisLabelHeight ?? Canvas_XAxisLabelHeight,
+            YAxisLabelWidth = yAxisLabelWidth ?? Canvas_YAxisLabelWidth,
+            YAxisLabelFormat = yAxisLabelFormat ?? Canvas_YAxisLabelFormat,
+            YAxisMultiplierFormat = yAxisMultiplierFormat ?? Canvas_YAxisMultiplierFormat,
+            DataLabelFormat = dataLabelFormat ?? Canvas_DataLabelFormat,
+            AutoSizeLabelsIsEnabled = autoSizeLabelsIsEnabled ?? Canvas_AutoSizeLabelsIsEnabled,
+        });
+
+    public XYChartBuilder WithCanvas(Canvas canvas) {
+        Chart.Canvas = canvas;
+        canvas.Chart = Chart;
         return this;
     }
 }
