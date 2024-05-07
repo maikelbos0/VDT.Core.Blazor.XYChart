@@ -6,6 +6,19 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class LegendTests {
     [Theory]
+    [InlineData(75, 10)]
+    [InlineData(100, 7)]
+    [InlineData(150, 5)]
+    [InlineData(151, 4)]
+    public void ItemsPerRow(int itemWidth, int expectedResult) {
+        var subject = new XYChartBuilder()
+            .WithLegend(itemWidth: itemWidth)
+            .Chart.Legend;
+
+        Assert.Equal(expectedResult, subject.ItemsPerRow);
+    }
+
+    [Theory]
     [InlineData(true, LegendPosition.Top, LegendAlignment.Center, 25, 100, 25, 16, false)]
     [InlineData(false, LegendPosition.Top, LegendAlignment.Center, 25, 100, 25, 16, true)]
     [InlineData(true, LegendPosition.Bottom, LegendAlignment.Center, 25, 100, 25, 16, true)]

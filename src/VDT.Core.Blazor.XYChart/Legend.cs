@@ -78,6 +78,11 @@ public class Legend : ChildComponentBase, IDisposable {
     /// </summary>
     [Parameter] public int KeySize { get; set; } = DefaultKeySize;
 
+    /// <summary>
+    /// Gets the number of items that will fit in one row in the legend area
+    /// </summary>
+    public int ItemsPerRow => Chart.Canvas.PlotAreaWidth / ItemWidth;
+
     /// <inheritdoc/>
     protected override void OnInitialized() => Chart.SetLegend(this);
 
