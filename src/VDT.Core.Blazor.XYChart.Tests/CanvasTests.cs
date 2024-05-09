@@ -75,16 +75,17 @@ public class CanvasTests {
         Assert.Equal(Canvas_YAxisLabelWidth, subject.ActualYAxisLabelWidth);
     }
 
-    [Fact]
-    public async Task AutoSize() {
-        const int expectedHeight = 75;
-        const int expectedWidth = 125;
-
+    [Theory]
+    [InlineData(1, 125)]
+    [InlineData(1000, 150)]
+    public async Task AutoSize(decimal multiplier, int expectedWidth) {
         var builder = new XYChartBuilder()
+            .WithPlotArea(multiplier: multiplier)
             .WithCanvas(autoSizeLabelsIsEnabled: true);
 
-        builder.SizeProvider.GetTextSize(Arg.Any<string>(), XAxisLabelShape.DefaultCssClass).Returns(new TextSize(0, expectedHeight));
-        builder.SizeProvider.GetTextSize(Arg.Any<string>(), YAxisLabelShape.DefaultCssClass).Returns(new TextSize(expectedWidth, 0));
+        builder.SizeProvider.GetTextSize(Arg.Any<string>(), XAxisLabelShape.DefaultCssClass).Returns(new TextSize(0, 74.1M));
+        builder.SizeProvider.GetTextSize(Arg.Any<string>(), YAxisLabelShape.DefaultCssClass).Returns(new TextSize(124.1M, 0));
+        builder.SizeProvider.GetTextSize(Arg.Any<string>(), YAxisMultiplierShape.DefaultCssClass).Returns(new TextSize(24.1M, 0));
 
         var subject = builder
             .Chart
@@ -92,7 +93,7 @@ public class CanvasTests {
 
         await subject.AutoSize();
 
-        Assert.Equal(expectedHeight, subject.ActualXAxisLabelHeight);
+        Assert.Equal(75, subject.ActualXAxisLabelHeight);
         Assert.Equal(expectedWidth, subject.ActualYAxisLabelWidth);
     }
 }

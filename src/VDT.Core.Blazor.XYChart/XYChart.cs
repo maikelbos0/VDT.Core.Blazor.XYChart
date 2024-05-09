@@ -202,16 +202,18 @@ public class XYChart : ComponentBase {
     /// </summary>
     /// <returns>The SVG Y-axis label shapes</returns>
     public IEnumerable<YAxisLabelShape> GetYAxisLabelShapes()
-        => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new YAxisLabelShape(Canvas.PlotAreaX, MapDataPointToCanvas(dataPoint), FormatYAxisLabel(dataPoint), index));
+        => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new YAxisLabelShape(Canvas.PlotAreaX, MapDataPointToCanvas(dataPoint), GetFormattedYAxisLabel(dataPoint), index));
 
-    internal string FormatYAxisLabel(decimal dataPoint) => (dataPoint / PlotArea.Multiplier).ToString(Canvas.YAxisLabelFormat);
+    internal string GetFormattedYAxisLabel(decimal dataPoint) => (dataPoint / PlotArea.Multiplier).ToString(Canvas.YAxisLabelFormat);
 
     /// <summary>
     /// Gets the SVG shape for the chart Y-axis multiplier, if the multiplier value is not exactly 1
     /// </summary>
     /// <returns>The SVG Y-axis multiplier shape or <see langword="null"/></returns>
     public YAxisMultiplierShape? GetYAxisMultiplierShape()
-        => PlotArea.Multiplier == 1M ? null : new YAxisMultiplierShape(Canvas.Padding, Canvas.PlotAreaY + Canvas.PlotAreaHeight / 2M, PlotArea.Multiplier.ToString(Canvas.YAxisMultiplierFormat));
+        => PlotArea.Multiplier == 1M ? null : new YAxisMultiplierShape(Canvas.Padding, Canvas.PlotAreaY + Canvas.PlotAreaHeight / 2M, GetFormattedAxisMultiplier());
+
+    internal string GetFormattedAxisMultiplier() => PlotArea.Multiplier.ToString(Canvas.YAxisMultiplierFormat);
 
     /// <summary>
     /// Gets the SVG shapes for the chart X-axis labels

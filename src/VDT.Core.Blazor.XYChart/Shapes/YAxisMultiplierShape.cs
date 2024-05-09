@@ -4,8 +4,13 @@
 /// SVG shape to display the Y-axis multiplier
 /// </summary>
 public class YAxisMultiplierShape : ShapeBase {
+    /// <summary>
+    /// Default CSS classes that are always applied to this SVG shape
+    /// </summary>
+    public const string DefaultCssClass = "y-axis-multiplier";
+
     /// <inheritdoc/>
-    public override string CssClass => "y-axis-multiplier";
+    public override string CssClass => DefaultCssClass;
 
     /// <inheritdoc/>
     public override string ElementName => "text";
