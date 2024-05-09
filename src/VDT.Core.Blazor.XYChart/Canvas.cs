@@ -102,7 +102,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     private int? AutoSizeXAxisLabelHeight { get; set; }
 
     /// <summary>
-    /// Gets the lowest value that is visible in the chart, taking automatic scaling into account if enabled
+    /// Gets the vertical room reserved for labels on the x-axis, taking automatic sizing into account if enabled
     /// </summary>
     public int ActualXAxisLabelHeight => AutoSizeXAxisLabelHeight ?? XAxisLabelHeight;
 
