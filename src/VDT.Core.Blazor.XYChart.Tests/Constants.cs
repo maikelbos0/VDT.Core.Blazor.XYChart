@@ -13,8 +13,6 @@ public static class Constants {
     public const string Canvas_YAxisMultiplierFormat = "x 0.00";
     public const string Canvas_DataLabelFormat = "0.00";
     public const bool Canvas_AutoSizeLabelsIsEnabled = false;
-    public const decimal Canvas_AutoSizeXAxisLabelHeight = 75;
-    public const decimal Canvas_AutoSizeYAxisLabelWidth = 125;
 
     public const bool Legend_IsEnabled = true;
     public const LegendPosition Legend_Position = LegendPosition.Top;

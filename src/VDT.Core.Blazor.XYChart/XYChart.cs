@@ -147,7 +147,6 @@ public class XYChart : ComponentBase {
     }
 
     internal async Task HandleStateChange() {
-        // TODO cancel on dispose
         PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
         await Canvas.AutoSize();
         base.StateHasChanged();
@@ -203,7 +202,9 @@ public class XYChart : ComponentBase {
     /// </summary>
     /// <returns>The SVG Y-axis label shapes</returns>
     public IEnumerable<YAxisLabelShape> GetYAxisLabelShapes()
-        => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new YAxisLabelShape(Canvas.PlotAreaX, MapDataPointToCanvas(dataPoint), (dataPoint / PlotArea.Multiplier).ToString(Canvas.YAxisLabelFormat), index));
+        => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new YAxisLabelShape(Canvas.PlotAreaX, MapDataPointToCanvas(dataPoint), FormatYAxisLabel(dataPoint), index));
+
+    internal string FormatYAxisLabel(decimal dataPoint) => (dataPoint / PlotArea.Multiplier).ToString(Canvas.YAxisLabelFormat);
 
     /// <summary>
     /// Gets the SVG shape for the chart Y-axis multiplier, if the multiplier value is not exactly 1

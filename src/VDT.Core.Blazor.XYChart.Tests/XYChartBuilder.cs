@@ -15,7 +15,6 @@ public class XYChartBuilder {
 
     public XYChartBuilder(int labelCount = Chart_LabelCount, DataPointSpacingMode dataPointSpacingMode = Chart_DataPointSpacingMode) {
         SizeProvider = Substitute.For<ISizeProvider>();
-        SizeProvider.GetTextSize(Arg.Any<string>(), Arg.Any<string?>()).Returns(new TextSize(Canvas_AutoSizeYAxisLabelWidth, Canvas_AutoSizeXAxisLabelHeight));
         Chart = new() {
             Labels = defaultLabels.Take(labelCount).ToList(),
             DataPointSpacingMode = dataPointSpacingMode,

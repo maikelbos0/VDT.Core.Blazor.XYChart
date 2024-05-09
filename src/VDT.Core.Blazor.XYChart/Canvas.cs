@@ -101,6 +101,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
 
     private int? AutoSizeXAxisLabelHeight { get; set; }
+    private int? AutoSizeYAxisLabelWidth { get; set; }
 
     /// <summary>
     /// Gets the vertical room reserved for labels on the x-axis, taking automatic sizing into account if enabled
@@ -108,9 +109,14 @@ public class Canvas : ChildComponentBase, IDisposable {
     public int ActualXAxisLabelHeight => AutoSizeXAxisLabelHeight ?? XAxisLabelHeight;
 
     /// <summary>
+    /// Gets the horizontal room reserved for labels on the y-axis, including the multiplier if applicable, taking automatic scaling into account if enabled
+    /// </summary>
+    public int ActualYAxisLabelWidth => AutoSizeYAxisLabelWidth ?? YAxisLabelWidth;
+
+    /// <summary>
     /// X-coordinate of the top left corner of the plot area
     /// </summary>
-    public int PlotAreaX => Padding + YAxisLabelWidth;
+    public int PlotAreaX => Padding + ActualYAxisLabelWidth;
 
     /// <summary>
     /// Y-coordinate of the top left corner of the plot area
@@ -120,7 +126,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// <summary>
     /// Width of the plot area
     /// </summary>
-    public int PlotAreaWidth => Width - Padding * 2 - YAxisLabelWidth;
+    public int PlotAreaWidth => Width - Padding * 2 - ActualYAxisLabelWidth;
 
     /// <summary>
     /// Height of the plot area
@@ -170,6 +176,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     public async Task AutoSize() {
         if (!AutoSizeLabelsIsEnabled) {
             AutoSizeXAxisLabelHeight = null;
+            AutoSizeYAxisLabelWidth = null;
             return;
         }
 
@@ -177,5 +184,9 @@ public class Canvas : ChildComponentBase, IDisposable {
 
         AutoSizeXAxisLabelHeight = (int)(await Task.WhenAll(Chart.Labels.Select(async label => await sizeProvider.GetTextSize(label, XAxisLabelShape.DefaultCssClass))))
             .Max(size => size.Height);
+        
+        // TODO take multiplier into account
+        AutoSizeYAxisLabelWidth = (int)(await Task.WhenAll(Chart.PlotArea.GetGridLineDataPoints().Select(async dataPoint => await sizeProvider.GetTextSize(Chart.FormatYAxisLabel(dataPoint), YAxisLabelShape.DefaultCssClass))))
+            .Max(size => size.Width);
     }
 }
