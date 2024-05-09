@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VDT.Core.Blazor.XYChart.Shapes;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -174,8 +175,7 @@ public class Canvas : ChildComponentBase, IDisposable {
 
         await using var sizeProvider = await Chart.GetSizeProvider();
 
-        // TODO centralize css class
-        AutoSizeXAxisLabelHeight = (int)(await Task.WhenAll(Chart.Labels.Select(async label => await sizeProvider.GetTextSize(label, "x-axis-label"))))
+        AutoSizeXAxisLabelHeight = (int)(await Task.WhenAll(Chart.Labels.Select(async label => await sizeProvider.GetTextSize(label, XAxisLabelShape.DefaultCssClass))))
             .Max(size => size.Height);
     }
 }

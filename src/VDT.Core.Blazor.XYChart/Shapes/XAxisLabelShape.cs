@@ -4,8 +4,13 @@
 /// SVG shape to display a label on the X-axis
 /// </summary>
 public class XAxisLabelShape : ShapeBase {
+    /// <summary>
+    /// Default CSS classes that are always applied to this SVG shape
+    /// </summary>
+    public const string DefaultCssClass = "x-axis-label";
+
     /// <inheritdoc/>
-    public override string CssClass => "x-axis-label";
+    public override string CssClass => DefaultCssClass;
 
     /// <inheritdoc/>
     public override string ElementName => "text";
