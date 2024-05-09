@@ -34,10 +34,10 @@ public class XYChartBuilder {
             DataLabelFormat = Canvas_DataLabelFormat,
         };
         Chart.Legend = new() {
+            Chart = Chart,
             IsEnabled = Legend_IsEnabled,
             Position = Legend_Position,
             Alignment = Legend_Alignment,
-            Height = Legend_Height,
             ItemWidth = Legend_ItemWidth,
             ItemHeight = Legend_ItemHeight,
             KeySize = Legend_KeySize
@@ -79,12 +79,11 @@ public class XYChartBuilder {
         return this;
     }
 
-    public XYChartBuilder WithLegend(bool? isEnabled = null, LegendPosition? position = null, LegendAlignment? alignment = null, int? height = null, int? itemWidth = null, int? itemHeight = null, int? keySize = null)
+    public XYChartBuilder WithLegend(bool? isEnabled = null, LegendPosition? position = null, LegendAlignment? alignment = null, int? itemWidth = null, int? itemHeight = null, int? keySize = null)
         => WithLegend(new Legend() {
             IsEnabled = isEnabled ?? Legend_IsEnabled,
             Position = position ?? Legend_Position,
             Alignment = alignment ?? Legend_Alignment,
-            Height = height ?? Legend_Height,
             ItemWidth = itemWidth ?? Legend_ItemWidth,
             ItemHeight = itemHeight ?? Legend_ItemHeight,
             KeySize = keySize ?? Legend_KeySize

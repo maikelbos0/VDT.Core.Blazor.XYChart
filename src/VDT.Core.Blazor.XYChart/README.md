@@ -157,7 +157,6 @@ The &lt;Legend&gt; component allows you to configure the positioning and dimensi
     - `LegendPosition.Top` displays the legend above the plot area
     - `LegendPosition.Bottom` displays the legend below the plot area
 - `Alignment` aligns the legend items inside the legend area left, right or centered
-- `Height` is the total height reserved for the legend
 - `ItemWidth` is the total width reserved for each legend item (key and text) inside the legend
 - `ItemHeight` is the total height reserved for each legend item
 - `KeySize` is the width/height of the legend item key
