@@ -76,7 +76,11 @@ public class Legend : ChildComponentBase, IDisposable {
     /// <summary>
     /// Gets the total height reserved for the legend
     /// </summary>
-    public int Height => ItemHeight + (Chart.Layers.Sum(layer => layer.DataSeries.Count) - 1) / ItemsPerRow * ItemHeight;
+    [Parameter] public int Height {
+        get => ItemHeight + (Chart.Layers.Sum(layer => layer.DataSeries.Count) - 1) / ItemsPerRow * ItemHeight;
+        [Obsolete("Legend height is now automatically determined by the amount of data series and the legend item height")]
+        set { }
+    }
 
     /// <inheritdoc/>
     protected override void OnInitialized() => Chart.SetLegend(this);
