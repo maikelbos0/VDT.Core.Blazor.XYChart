@@ -87,7 +87,9 @@ strings can be standard or custom numeric format strings.
 - `Width` is the total width of the chart, including axis labels and padding
 - `Height` is the total height of the chart, including axis labels and padding
 - `Padding` is the distance between the canvas edge and any chart elements
+- `AutoSizeXAxisLabelsIsEnabled` toggles the automatic calculation of x-axis label height
 - `XAxisLabelHeight` is the vertical room reserved for labels on the x-axis
+- `AutoSizeYAxisLabelsIsEnabled` toggles the automatic calculation of y-axis label width
 - `YAxisLabelWidth` is the horizontal room reserved for labels on the y-axis, including the multiplier if applicable
 - `YAxisLabelFormat` is the format string for the numeric labels on the y-axis
 - `YAxisMultiplierFormat` is the format string for the y-axis multiplier, if it's visible
