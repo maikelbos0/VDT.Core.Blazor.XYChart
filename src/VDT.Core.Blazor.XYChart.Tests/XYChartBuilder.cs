@@ -26,7 +26,9 @@ public class XYChartBuilder {
             Width = Canvas_Width,
             Height = Canvas_Height,
             Padding = Canvas_Padding,
+            AutoSizeXAxisLabelsIsEnabled = Canvas_AutoSizeXAxisLabelsIsEnabled,
             XAxisLabelHeight = Canvas_XAxisLabelHeight,
+            AutoSizeYAxisLabelsIsEnabled = Canvas_AutoSizeYAxisLabelsIsEnabled,
             YAxisLabelWidth = Canvas_YAxisLabelWidth,
             YAxisLabelFormat = Canvas_YAxisLabelFormat,
             YAxisMultiplierFormat = Canvas_YAxisMultiplierFormat,
@@ -124,22 +126,24 @@ public class XYChartBuilder {
         int? width = null,
         int? height = null,
         int? padding = null,
+        bool? autoSizeXAxisLabelsIsEnabled = null,
         int? xAxisLabelHeight = null,
+        bool? autoSizeYAxisLabelsIsEnabled = null,
         int? yAxisLabelWidth = null,
         string? yAxisLabelFormat = null,
         string? yAxisMultiplierFormat = null,
-        string? dataLabelFormat = null,
-        bool? autoSizeXAxisLabelsIsEnabled = null
+        string? dataLabelFormat = null
     ) => WithCanvas(new Canvas() {
         Width = width ?? Canvas_Width,
         Height = height ?? Canvas_Height,
         Padding = padding ?? Canvas_Padding,
+        AutoSizeXAxisLabelsIsEnabled = autoSizeXAxisLabelsIsEnabled ?? Canvas_AutoSizeXAxisLabelsIsEnabled,
         XAxisLabelHeight = xAxisLabelHeight ?? Canvas_XAxisLabelHeight,
+        AutoSizeYAxisLabelsIsEnabled = autoSizeYAxisLabelsIsEnabled ?? Canvas_AutoSizeYAxisLabelsIsEnabled,
         YAxisLabelWidth = yAxisLabelWidth ?? Canvas_YAxisLabelWidth,
         YAxisLabelFormat = yAxisLabelFormat ?? Canvas_YAxisLabelFormat,
         YAxisMultiplierFormat = yAxisMultiplierFormat ?? Canvas_YAxisMultiplierFormat,
         DataLabelFormat = dataLabelFormat ?? Canvas_DataLabelFormat,
-        AutoSizeXAxisLabelsIsEnabled = autoSizeXAxisLabelsIsEnabled ?? Canvas_AutoSizeXAxisLabelsIsEnabled,
     });
 
     public XYChartBuilder WithCanvas(Canvas canvas) {

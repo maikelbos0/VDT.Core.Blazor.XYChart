@@ -10,39 +10,54 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Theory]
-    [InlineData(1000, 500, 10, 100, 100, "#", "x #", "#", false, false)]
-    [InlineData(900, 500, 10, 100, 100, "#", "x #", "#", false, true)]
-    [InlineData(1000, 600, 10, 100, 100, "#", "x #", "#", false, true)]
-    [InlineData(1000, 500, 20, 100, 100, "#", "x #", "#", false, true)]
-    [InlineData(1000, 500, 10, 75, 100, "#", "x #", "#", false, true)]
-    [InlineData(1000, 500, 10, 100, 75, "#", "x #", "#", false, true)]
-    [InlineData(1000, 500, 10, 100, 100, "#.##", "x #", "#", false, true)]
-    [InlineData(1000, 500, 10, 100, 100, "#", "x #.##", "#", false, true)]
-    [InlineData(1000, 500, 10, 100, 100, "#", "x #", "#.##", false, true)]
-    [InlineData(1000, 500, 10, 100, 100, "#", "x #", "#", true, true)]
-    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int yAxisLabelWidth, string yAxisLabelFormat, string yAxisMultiplierFormat, string dataLabelFormat, bool autoSizeXAxisLabelsIsEnabled, bool expectedResult) {
+    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #", "#", false)]
+    [InlineData(900, 500, 10, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 600, 10, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 20, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 10, true, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 10, false, 75, false, 100, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 10, false, 100, true, 75, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 10, false, 100, false, 75, "#", "x #", "#", true)]
+    [InlineData(1000, 500, 10, false, 100, false, 100, "#.##", "x #", "#", true)]
+    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #.##", "#", true)]
+    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #", "#.##", true)]
+    public void HaveParametersChanged(
+        int width,
+        int height,
+        int padding,
+        bool autoSizeXAxisLabelsIsEnabled,
+        int xAxisLabelHeight,
+        bool autoSizeYAxisLabelsIsEnabled,
+        int yAxisLabelWidth,
+        string yAxisLabelFormat,
+        string yAxisMultiplierFormat,
+        string dataLabelFormat,
+        bool expectedResult
+    ) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
             { nameof(Canvas.Padding), padding },
+            { nameof(Canvas.AutoSizeXAxisLabelsIsEnabled), autoSizeXAxisLabelsIsEnabled },
             { nameof(Canvas.XAxisLabelHeight), xAxisLabelHeight },
+            { nameof(Canvas.AutoSizeYAxisLabelsIsEnabled), autoSizeYAxisLabelsIsEnabled },
             { nameof(Canvas.YAxisLabelWidth), yAxisLabelWidth },
             { nameof(Canvas.YAxisLabelFormat), yAxisLabelFormat },
             { nameof(Canvas.YAxisMultiplierFormat), yAxisMultiplierFormat },
-            { nameof(Canvas.DataLabelFormat), dataLabelFormat},
-            { nameof(Canvas.AutoSizeXAxisLabelsIsEnabled), autoSizeXAxisLabelsIsEnabled }
+            { nameof(Canvas.DataLabelFormat), dataLabelFormat}
         });
 
         var subject = new Canvas {
             Width = 1000,
             Height = 500,
             Padding = 10,
+            AutoSizeXAxisLabelsIsEnabled = false,
             XAxisLabelHeight = 100,
+            AutoSizeYAxisLabelsIsEnabled = false,
             YAxisLabelWidth = 100,
             YAxisLabelFormat = "#",
             YAxisMultiplierFormat = "x #",
-            DataLabelFormat = "#",
-            AutoSizeXAxisLabelsIsEnabled = false
+            DataLabelFormat = "#"
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));

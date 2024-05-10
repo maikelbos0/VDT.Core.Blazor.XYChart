@@ -7,12 +7,13 @@ public static class Constants {
     public const int Canvas_Width = 900;
     public const int Canvas_Height = 500;
     public const int Canvas_Padding = 25;
+    public const bool Canvas_AutoSizeXAxisLabelsIsEnabled = false;
     public const int Canvas_XAxisLabelHeight = 50;
+    public const bool Canvas_AutoSizeYAxisLabelsIsEnabled = false;
     public const int Canvas_YAxisLabelWidth = 100;
     public const string Canvas_YAxisLabelFormat = "0.00";
     public const string Canvas_YAxisMultiplierFormat = "x 0.00";
     public const string Canvas_DataLabelFormat = "0.00";
-    public const bool Canvas_AutoSizeXAxisLabelsIsEnabled = false;
 
     public const bool Legend_IsEnabled = true;
     public const LegendPosition Legend_Position = LegendPosition.Top;

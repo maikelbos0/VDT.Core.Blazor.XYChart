@@ -9,7 +9,17 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class PlotAreaTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(decimal min, decimal max, decimal gridLineInterval, decimal multiplier, bool autoScaleIsEnabled, int autoScaleRequestedGridLineCount, bool autoScaleIncludesZero, decimal autoScaleClearancePercentage, bool expectedResult) {
+    public void HaveParametersChanged(
+        decimal min,
+        decimal max,
+        decimal gridLineInterval,
+        decimal multiplier,
+        bool autoScaleIsEnabled,
+        int autoScaleRequestedGridLineCount,
+        bool autoScaleIncludesZero,
+        decimal autoScaleClearancePercentage,
+        bool expectedResult
+    ) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(PlotArea.Min), min },
             { nameof(PlotArea.Max), max },
