@@ -151,4 +151,12 @@ public class XYChartBuilder {
         canvas.Chart = Chart;
         return this;
     }
+
+    internal XYChartBuilder WithProvidedSize(string cssClass, decimal width, decimal height)
+        => WithProvidedSize(cssClass, new TextSize(width, height));
+
+    internal XYChartBuilder WithProvidedSize(string cssClass, TextSize textSize) {
+        SizeProvider.GetTextSize(Arg.Any<string>(), cssClass).Returns(textSize);
+        return this;
+    }
 }

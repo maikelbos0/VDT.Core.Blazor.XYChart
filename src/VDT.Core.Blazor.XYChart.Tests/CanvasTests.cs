@@ -77,38 +77,36 @@ public class CanvasTests {
         Assert.Equal(PlotArea_Height, result.Height);
     }
 
-    [Fact]
-    public async Task AutoSize_Disabled() {
+    [Theory]
+    [InlineData(false, Canvas_XAxisLabelHeight)]
+    [InlineData(true, 75)]
+    public async Task AutoSize_XAxisLabels(bool autoSizeXAxisLabelsIsEnabled, int expectedXAxisLabelHeight) {
         var subject = new XYChartBuilder()
-            .WithCanvas(autoSizeXAxisLabelsIsEnabled: false)
+            .WithCanvas(autoSizeXAxisLabelsIsEnabled: autoSizeXAxisLabelsIsEnabled)
+            .WithProvidedSize(XAxisLabelShape.DefaultCssClass, 0, 74.1M)
             .Chart
             .Canvas;
 
         await subject.AutoSize();
 
-        Assert.Equal(Canvas_XAxisLabelHeight, subject.ActualXAxisLabelHeight);
-        Assert.Equal(Canvas_YAxisLabelWidth, subject.ActualYAxisLabelWidth);
+        Assert.Equal(expectedXAxisLabelHeight, subject.ActualXAxisLabelHeight);
     }
 
     [Theory]
-    [InlineData(1, 125)]
-    [InlineData(1000, 150)]
-    public async Task AutoSize(decimal multiplier, int expectedWidth) {
-        var builder = new XYChartBuilder()
+    [InlineData(false, 1000, Canvas_YAxisLabelWidth)]
+    [InlineData(true, 1, 125)]
+    [InlineData(true, 1000, 150)]
+    public async Task AutoSize_YAxisLabels(bool autoSizeYAxisLabelsIsEnabled, decimal multiplier, int expectedYAxisLabelWidth) {
+        var subject = new XYChartBuilder()
             .WithPlotArea(multiplier: multiplier)
-            .WithCanvas(autoSizeXAxisLabelsIsEnabled: true);
-
-        builder.SizeProvider.GetTextSize(Arg.Any<string>(), XAxisLabelShape.DefaultCssClass).Returns(new TextSize(0, 74.1M));
-        builder.SizeProvider.GetTextSize(Arg.Any<string>(), YAxisLabelShape.DefaultCssClass).Returns(new TextSize(124.1M, 0));
-        builder.SizeProvider.GetTextSize(Arg.Any<string>(), YAxisMultiplierShape.DefaultCssClass).Returns(new TextSize(24.1M, 0));
-
-        var subject = builder
+            .WithCanvas(autoSizeYAxisLabelsIsEnabled: autoSizeYAxisLabelsIsEnabled)
+            .WithProvidedSize(YAxisLabelShape.DefaultCssClass, 124.1M, 0)
+            .WithProvidedSize(YAxisMultiplierShape.DefaultCssClass, 24.1M, 0)
             .Chart
             .Canvas;
 
         await subject.AutoSize();
 
-        Assert.Equal(75, subject.ActualXAxisLabelHeight);
-        Assert.Equal(expectedWidth, subject.ActualYAxisLabelWidth);
+        Assert.Equal(expectedYAxisLabelWidth, subject.ActualYAxisLabelWidth);
     }
 }
