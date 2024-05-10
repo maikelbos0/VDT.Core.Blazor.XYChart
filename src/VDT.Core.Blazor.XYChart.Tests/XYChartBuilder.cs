@@ -7,7 +7,7 @@ using static VDT.Core.Blazor.XYChart.Tests.Constants;
 namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class XYChartBuilder {
-    private static readonly List<string> defaultLabels = new() { "Foo", "Bar", "Baz", "Qux", "Quux" };
+    private static readonly List<string> defaultLabels = ["Foo", "Bar", "Baz", "Qux", "Quux"];
 
     public XYChart Chart { get; }
     internal ISizeProvider SizeProvider { get; }
@@ -94,17 +94,25 @@ public class XYChartBuilder {
         return this;
     }
 
-    public XYChartBuilder WithPlotArea(decimal? min = null, decimal? max = null, decimal? gridLineInterval = null, decimal? multiplier = null, bool? autoScaleIsEnabled = null, int? autoScaleRequestedGridLineCount = null, bool? autoScaleIncludesZero = null, decimal? autoScaleClearancePercentage = null)
-        => WithPlotArea(new PlotArea() {
-            Min = min ?? PlotArea_Min,
-            Max = max ?? PlotArea_Max,
-            GridLineInterval = gridLineInterval ?? PlotArea_GridLineInterval,
-            Multiplier = multiplier ?? PlotArea_Multiplier,
-            AutoScaleIsEnabled = autoScaleIsEnabled ?? PlotArea_AutoScaleIsEnabled,
-            AutoScaleRequestedGridLineCount = autoScaleRequestedGridLineCount ?? PlotArea_AutoScaleRequestedGridLineCount,
-            AutoScaleIncludesZero = autoScaleIncludesZero ?? PlotArea_AutoScaleIncludesZero,
-            AutoScaleClearancePercentage = autoScaleClearancePercentage ?? PlotArea_AutoScaleClearancePercentage
-        });
+    public XYChartBuilder WithPlotArea(
+        decimal? min = null,
+        decimal? max = null,
+        decimal? gridLineInterval = null,
+        decimal? multiplier = null, bool?
+        autoScaleIsEnabled = null,
+        int? autoScaleRequestedGridLineCount = null,
+        bool? autoScaleIncludesZero = null,
+        decimal? autoScaleClearancePercentage = null
+    ) => WithPlotArea(new PlotArea() {
+        Min = min ?? PlotArea_Min,
+        Max = max ?? PlotArea_Max,
+        GridLineInterval = gridLineInterval ?? PlotArea_GridLineInterval,
+        Multiplier = multiplier ?? PlotArea_Multiplier,
+        AutoScaleIsEnabled = autoScaleIsEnabled ?? PlotArea_AutoScaleIsEnabled,
+        AutoScaleRequestedGridLineCount = autoScaleRequestedGridLineCount ?? PlotArea_AutoScaleRequestedGridLineCount,
+        AutoScaleIncludesZero = autoScaleIncludesZero ?? PlotArea_AutoScaleIncludesZero,
+        AutoScaleClearancePercentage = autoScaleClearancePercentage ?? PlotArea_AutoScaleClearancePercentage
+    });
 
     public XYChartBuilder WithPlotArea(PlotArea plotArea) {
         Chart.PlotArea = plotArea;
@@ -112,18 +120,27 @@ public class XYChartBuilder {
         return this;
     }
 
-    public XYChartBuilder WithCanvas(int? width = null, int? height = null, int? padding = null, int? xAxisLabelHeight = null, int? yAxisLabelWidth = null, string? yAxisLabelFormat = null, string? yAxisMultiplierFormat = null, string? dataLabelFormat = null, bool? autoSizeXAxisLabelsIsEnabled = null)
-        => WithCanvas(new Canvas() {
-            Width = width ?? Canvas_Width,
-            Height = height ?? Canvas_Height,
-            Padding = padding ?? Canvas_Padding,
-            XAxisLabelHeight = xAxisLabelHeight ?? Canvas_XAxisLabelHeight,
-            YAxisLabelWidth = yAxisLabelWidth ?? Canvas_YAxisLabelWidth,
-            YAxisLabelFormat = yAxisLabelFormat ?? Canvas_YAxisLabelFormat,
-            YAxisMultiplierFormat = yAxisMultiplierFormat ?? Canvas_YAxisMultiplierFormat,
-            DataLabelFormat = dataLabelFormat ?? Canvas_DataLabelFormat,
-            AutoSizeXAxisLabelsIsEnabled = autoSizeXAxisLabelsIsEnabled ?? Canvas_AutoSizeXAxisLabelsIsEnabled,
-        });
+    public XYChartBuilder WithCanvas(
+        int? width = null,
+        int? height = null,
+        int? padding = null,
+        int? xAxisLabelHeight = null,
+        int? yAxisLabelWidth = null,
+        string? yAxisLabelFormat = null,
+        string? yAxisMultiplierFormat = null,
+        string? dataLabelFormat = null,
+        bool? autoSizeXAxisLabelsIsEnabled = null
+    ) => WithCanvas(new Canvas() {
+        Width = width ?? Canvas_Width,
+        Height = height ?? Canvas_Height,
+        Padding = padding ?? Canvas_Padding,
+        XAxisLabelHeight = xAxisLabelHeight ?? Canvas_XAxisLabelHeight,
+        YAxisLabelWidth = yAxisLabelWidth ?? Canvas_YAxisLabelWidth,
+        YAxisLabelFormat = yAxisLabelFormat ?? Canvas_YAxisLabelFormat,
+        YAxisMultiplierFormat = yAxisMultiplierFormat ?? Canvas_YAxisMultiplierFormat,
+        DataLabelFormat = dataLabelFormat ?? Canvas_DataLabelFormat,
+        AutoSizeXAxisLabelsIsEnabled = autoSizeXAxisLabelsIsEnabled ?? Canvas_AutoSizeXAxisLabelsIsEnabled,
+    });
 
     public XYChartBuilder WithCanvas(Canvas canvas) {
         Chart.Canvas = canvas;
