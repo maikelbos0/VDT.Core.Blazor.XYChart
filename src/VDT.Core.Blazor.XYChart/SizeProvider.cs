@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace VDT.Core.Blazor.XYChart;
 
 internal class SizeProvider : ISizeProvider {
-    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/sizeprovider.8bb0df6555.js";
+    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/sizeprovider.dc4a176fa0.js";
 
     public static async Task<ISizeProvider> Create(IJSRuntime jsRuntime) {
         var moduleReference = await jsRuntime.InvokeAsync<IJSObjectReference>("import", ModuleLocation);

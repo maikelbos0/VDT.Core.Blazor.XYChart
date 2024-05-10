@@ -1,6 +1,7 @@
 
 const svgNamespace = "http://www.w3.org/2000/svg";
 let svgElement;
+let groupElement;
 
 function register() {
     svgElement = document.createElementNS(svgNamespace, "svg");
@@ -11,9 +12,13 @@ function register() {
     svgElement.setAttribute("height", "1");
     svgElement.setAttribute("style", "visibility: hidden;");
     document.body.appendChild(svgElement);
+
+    groupElement = document.createElementNS(svgNamespace, "g");
+    svgElement.appendChild(groupElement);
 }
 
 function unregister() {
+    svgElement.removeChild(groupElement);
     document.body.removeChild(svgElement);
 }
 
@@ -21,11 +26,11 @@ function getTextSize(text, cssClass) {
     const textElement = document.createElementNS(svgNamespace, "text");
     textElement.setAttribute("class", cssClass);
     textElement.textContent = text;
-    svgElement.appendChild(textElement);
+    groupElement.appendChild(textElement);
 
-    const bbox = textElement.getBBox();
+    const bbox = groupElement.getBBox();
 
-    svgElement.removeChild(textElement);
+    groupElement.removeChild(textElement);
 
     return {
         width: bbox.width,
