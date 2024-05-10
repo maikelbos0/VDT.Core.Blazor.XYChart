@@ -12,7 +12,7 @@
     <li><code>Width</code> is the total width of the chart, including axis labels and padding</li>
     <li><code>Height</code> is the total height of the chart, including axis labels and padding</li>
     <li><code>Padding</code> is the distance between the canvas edge and any chart elements</li>
-    <li><code>AutoSizeLabelsIsEnabled</code> toggles the automatic calculation of x-axis label height</li>
+    <li><code>AutoSizeXAxisLabelsIsEnabled</code> toggles the automatic calculation of x-axis label height</li>
     <li><code>XAxisLabelHeight</code> is the vertical room reserved for labels on the x-axis</li>
     <li><code>YAxisLabelWidth</code> is the horizontal room reserved for labels on the y-axis, including the multiplier if applicable</li>
     <li><code>YAxisLabelFormat</code> is the format string for the numeric labels on the y-axis</li>
@@ -37,16 +37,16 @@
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 mb-3">
-        <label class="form-label" for="autoSizeLabelsIsEnabled">Auto size labels</label>
-        <select class="form-select" id="autoSizeLabelsIsEnabled" @onchange="args => AutoSizeLabelsIsEnabled = bool.Parse(args.Value?.ToString()!)">
-            <option value="false" selected="@(!AutoSizeLabelsIsEnabled)">Disabled</option>
-            <option value="true" selected="@AutoSizeLabelsIsEnabled">Enabled</option>
+        <label class="form-label" for="autoSizeXAxisLabelsIsEnabled">Auto size x-axis labels</label>
+        <select class="form-select" id="autoSizeXAxisLabelsIsEnabled" @onchange="args => AutoSizeXAxisLabelsIsEnabled = bool.Parse(args.Value?.ToString()!)">
+            <option value="false" selected="@(!AutoSizeXAxisLabelsIsEnabled)">Disabled</option>
+            <option value="true" selected="@AutoSizeXAxisLabelsIsEnabled">Enabled</option>
         </select>
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="xAxisLabelHeight">X-axis label height</label>
-        <input type="number" class="form-control" id="xAxisLabelHeight" @bind-value="@XAxisLabelHeight" />
+        <input type="number" class="form-control" id="xAxisLabelHeight" @bind-value="@XAxisLabelHeight" disabled="@AutoSizeXAxisLabelsIsEnabled" />
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 mb-3">
@@ -75,7 +75,7 @@
         <Canvas Width="Width"
                 Height="Height"
                 Padding="Padding"
-                AutoSizeLabelsIsEnabled="AutoSizeLabelsIsEnabled"
+                AutoSizeXAxisLabelsIsEnabled="AutoSizeXAxisLabelsIsEnabled"
                 XAxisLabelHeight="XAxisLabelHeight"
                 YAxisLabelWidth="YAxisLabelWidth"
                 YAxisLabelFormat="@YAxisLabelFormat"
@@ -110,7 +110,7 @@
     private int Width { get; set; } = Canvas.DefaultWidth;
     private int Height { get; set; } = Canvas.DefaultHeight;
     private int Padding { get; set; } = Canvas.DefaultPadding;
-    private bool AutoSizeLabelsIsEnabled { get; set; } = Canvas.DefaultAutoSizeLabelsIsEnabled;
+    private bool AutoSizeXAxisLabelsIsEnabled { get; set; } = Canvas.DefaultAutoSizeXAxisLabelsIsEnabled;
     private int XAxisLabelHeight { get; set; } = Canvas.DefaultXAxisLabelHeight;
     private int YAxisLabelWidth { get; set; } = Canvas.DefaultYAxisLabelWidth;
     private string YAxisLabelFormat { get; set; } = Canvas.DefaultYAxisLabelFormat;

@@ -112,7 +112,7 @@ public class XYChartBuilder {
         return this;
     }
 
-    public XYChartBuilder WithCanvas(int? width = null, int? height = null, int? padding = null, int? xAxisLabelHeight = null, int? yAxisLabelWidth = null, string? yAxisLabelFormat = null, string? yAxisMultiplierFormat = null, string? dataLabelFormat = null, bool? autoSizeLabelsIsEnabled = null)
+    public XYChartBuilder WithCanvas(int? width = null, int? height = null, int? padding = null, int? xAxisLabelHeight = null, int? yAxisLabelWidth = null, string? yAxisLabelFormat = null, string? yAxisMultiplierFormat = null, string? dataLabelFormat = null, bool? autoSizeXAxisLabelsIsEnabled = null)
         => WithCanvas(new Canvas() {
             Width = width ?? Canvas_Width,
             Height = height ?? Canvas_Height,
@@ -122,7 +122,7 @@ public class XYChartBuilder {
             YAxisLabelFormat = yAxisLabelFormat ?? Canvas_YAxisLabelFormat,
             YAxisMultiplierFormat = yAxisMultiplierFormat ?? Canvas_YAxisMultiplierFormat,
             DataLabelFormat = dataLabelFormat ?? Canvas_DataLabelFormat,
-            AutoSizeLabelsIsEnabled = autoSizeLabelsIsEnabled ?? Canvas_AutoSizeLabelsIsEnabled,
+            AutoSizeXAxisLabelsIsEnabled = autoSizeXAxisLabelsIsEnabled ?? Canvas_AutoSizeXAxisLabelsIsEnabled,
         });
 
     public XYChartBuilder WithCanvas(Canvas canvas) {

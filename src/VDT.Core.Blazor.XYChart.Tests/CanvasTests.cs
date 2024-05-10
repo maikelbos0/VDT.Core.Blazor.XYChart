@@ -20,7 +20,7 @@ public class CanvasTests {
     [InlineData(1000, 500, 10, 100, 100, "#", "x #.##", "#", false, true)]
     [InlineData(1000, 500, 10, 100, 100, "#", "x #", "#.##", false, true)]
     [InlineData(1000, 500, 10, 100, 100, "#", "x #", "#", true, true)]
-    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int yAxisLabelWidth, string yAxisLabelFormat, string yAxisMultiplierFormat, string dataLabelFormat, bool autoSizeLabelsIsEnabled, bool expectedResult) {
+    public void HaveParametersChanged(int width, int height, int padding, int xAxisLabelHeight, int yAxisLabelWidth, string yAxisLabelFormat, string yAxisMultiplierFormat, string dataLabelFormat, bool autoSizeXAxisLabelsIsEnabled, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
@@ -30,7 +30,7 @@ public class CanvasTests {
             { nameof(Canvas.YAxisLabelFormat), yAxisLabelFormat },
             { nameof(Canvas.YAxisMultiplierFormat), yAxisMultiplierFormat },
             { nameof(Canvas.DataLabelFormat), dataLabelFormat},
-            { nameof(Canvas.AutoSizeLabelsIsEnabled), autoSizeLabelsIsEnabled }
+            { nameof(Canvas.AutoSizeXAxisLabelsIsEnabled), autoSizeXAxisLabelsIsEnabled }
         });
 
         var subject = new Canvas {
@@ -42,7 +42,7 @@ public class CanvasTests {
             YAxisLabelFormat = "#",
             YAxisMultiplierFormat = "x #",
             DataLabelFormat = "#",
-            AutoSizeLabelsIsEnabled = false
+            AutoSizeXAxisLabelsIsEnabled = false
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
@@ -65,7 +65,7 @@ public class CanvasTests {
     [Fact]
     public async Task AutoSize_Disabled() {
         var subject = new XYChartBuilder()
-            .WithCanvas(autoSizeLabelsIsEnabled: false)
+            .WithCanvas(autoSizeXAxisLabelsIsEnabled: false)
             .Chart
             .Canvas;
 
@@ -81,7 +81,7 @@ public class CanvasTests {
     public async Task AutoSize(decimal multiplier, int expectedWidth) {
         var builder = new XYChartBuilder()
             .WithPlotArea(multiplier: multiplier)
-            .WithCanvas(autoSizeLabelsIsEnabled: true);
+            .WithCanvas(autoSizeXAxisLabelsIsEnabled: true);
 
         builder.SizeProvider.GetTextSize(Arg.Any<string>(), XAxisLabelShape.DefaultCssClass).Returns(new TextSize(0, 74.1M));
         builder.SizeProvider.GetTextSize(Arg.Any<string>(), YAxisLabelShape.DefaultCssClass).Returns(new TextSize(124.1M, 0));

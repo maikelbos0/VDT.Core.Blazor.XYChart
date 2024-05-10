@@ -26,9 +26,9 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultPadding { get; set; } = 25;
 
     /// <summary>
-    /// Gets or sets the default value for whether or not axis labels should be automatically sized
+    /// Gets or sets the default value for whether or not x-axis labels should be automatically sized
     /// </summary>
-    public static bool DefaultAutoSizeLabelsIsEnabled { get; set; } = false;
+    public static bool DefaultAutoSizeXAxisLabelsIsEnabled { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the default value for the vertical room reserved for labels on the x-axis
@@ -71,9 +71,9 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public int Padding { get; set; } = DefaultPadding;
 
     /// <summary>
-    /// Gets or sets whether or not axis labels should be automatically sized
+    /// Gets or sets whether or not x-axis labels should be automatically sized
     /// </summary>
-    [Parameter] public bool AutoSizeLabelsIsEnabled { get; set; } = DefaultAutoSizeLabelsIsEnabled;
+    [Parameter] public bool AutoSizeXAxisLabelsIsEnabled { get; set; } = DefaultAutoSizeXAxisLabelsIsEnabled;
 
     /// <summary>
     /// Gets or sets the vertical room reserved for labels on the x-axis
@@ -161,7 +161,7 @@ public class Canvas : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(YAxisLabelFormat)
         || parameters.HasParameterChanged(YAxisMultiplierFormat)
         || parameters.HasParameterChanged(DataLabelFormat)
-        || parameters.HasParameterChanged(AutoSizeLabelsIsEnabled);
+        || parameters.HasParameterChanged(AutoSizeXAxisLabelsIsEnabled);
 
     /// <summary>
     /// Gets the SVG shape for the plot area
@@ -170,11 +170,11 @@ public class Canvas : ChildComponentBase, IDisposable {
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 
     /// <summary>
-    /// Applies automatic sizing to labels if <see cref="AutoSizeLabelsIsEnabled"/> is <see langword="true" />
+    /// Applies automatic sizing to labels if <see cref="AutoSizeXAxisLabelsIsEnabled"/> is <see langword="true" />
     /// </summary>
     /// <returns></returns>
     public async Task AutoSize() {
-        if (!AutoSizeLabelsIsEnabled) {
+        if (!AutoSizeXAxisLabelsIsEnabled) {
             AutoSizeXAxisLabelHeight = null;
             AutoSizeYAxisLabelWidth = null;
             return;
