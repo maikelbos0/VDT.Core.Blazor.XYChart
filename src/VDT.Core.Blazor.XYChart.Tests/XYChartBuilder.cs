@@ -153,9 +153,9 @@ public class XYChartBuilder {
     }
 
     internal XYChartBuilder WithProvidedSize(string cssClass, decimal x, decimal y, decimal width, decimal height)
-        => WithProvidedSize(cssClass, new TextSize(x, y, width, height));
+        => WithProvidedSize(cssClass, new BoundingBox(x, y, width, height));
 
-    internal XYChartBuilder WithProvidedSize(string cssClass, TextSize textSize) {
+    internal XYChartBuilder WithProvidedSize(string cssClass, BoundingBox textSize) {
         SizeProvider.GetTextSize(Arg.Any<string>(), cssClass).Returns(textSize);
         return this;
     }

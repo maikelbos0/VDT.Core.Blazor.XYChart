@@ -21,8 +21,8 @@ internal class SizeProvider : ISizeProvider {
         this.moduleReference = moduleReference;
     }
 
-    public async Task<TextSize> GetTextSize(string text, string? cssClass)
-        => await moduleReference.InvokeAsync<TextSize>("getTextSize", text, cssClass);
+    public async Task<BoundingBox> GetTextSize(string text, string? cssClass)
+        => await moduleReference.InvokeAsync<BoundingBox>("getTextSize", text, cssClass);
 
     /// <inheritdoc/>
     public async ValueTask DisposeAsync() {

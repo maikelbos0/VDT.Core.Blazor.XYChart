@@ -6,7 +6,7 @@ public class BoundingBoxTests {
     [Theory]
     [MemberData(nameof(RequiredWidth_Data))]
     public void RequiredWidth(decimal x, decimal width, int expectedResult) {
-        var subject = new TextSize(x, 5, width, 25);
+        var subject = new BoundingBox(x, 5, width, 25);
 
         Assert.Equal(expectedResult, subject.RequiredWidth);
     }
@@ -21,7 +21,7 @@ public class BoundingBoxTests {
     [Theory]
     [MemberData(nameof(RequiredHeight_Data))]
     public void RequiredHeight(decimal y, decimal height, int expectedResult) {
-        var subject = new TextSize(5, y, 25, height);
+        var subject = new BoundingBox(5, y, 25, height);
 
         Assert.Equal(expectedResult, subject.RequiredHeight);
     }
