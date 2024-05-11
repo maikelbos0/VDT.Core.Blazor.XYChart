@@ -5,7 +5,6 @@ using VDT.Core.Blazor.XYChart.Shapes;
 using Microsoft.AspNetCore.Components;
 using System.Linq;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
-using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
 

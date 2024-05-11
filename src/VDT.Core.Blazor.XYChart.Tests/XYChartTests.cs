@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;

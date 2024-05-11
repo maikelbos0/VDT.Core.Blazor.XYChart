@@ -24,7 +24,6 @@ internal class BoundingBoxProvider : IBoundingBoxProvider {
     public async Task<BoundingBox> GetBoundingBox(string text, string? cssClass)
         => await moduleReference.InvokeAsync<BoundingBox>("getBoundingBox", text, cssClass);
 
-    /// <inheritdoc/>
     public async ValueTask DisposeAsync() {
         if (moduleReference != null) {
             await moduleReference.InvokeVoidAsync("unregister");
