@@ -22,7 +22,7 @@ function unregister() {
     document.body.removeChild(svgElement);
 }
 
-function getTextSize(text, cssClass) {
+function getBoundingBox(text, cssClass) {
     const textElement = document.createElementNS(svgNamespace, "text");
     textElement.setAttribute("class", cssClass);
     textElement.textContent = text;
@@ -40,4 +40,4 @@ function getTextSize(text, cssClass) {
     };
 }
 
-export { register, unregister, getTextSize };
+export { register, unregister, getBoundingBox };
