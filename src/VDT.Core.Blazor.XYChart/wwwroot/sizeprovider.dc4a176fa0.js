@@ -33,6 +33,8 @@ function getTextSize(text, cssClass) {
     groupElement.removeChild(textElement);
 
     return {
+        x: bbox.x,
+        y: bbox.y,
         width: bbox.width,
         height: bbox.height
     };

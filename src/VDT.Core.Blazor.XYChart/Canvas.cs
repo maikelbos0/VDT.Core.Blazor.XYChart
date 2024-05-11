@@ -194,14 +194,20 @@ public class Canvas : ChildComponentBase, IDisposable {
         await using var sizeProvider = await Chart.GetSizeProvider();
 
         if (AutoSizeXAxisLabelsIsEnabled) {
-            AutoSizeXAxisLabelHeight = (int)Math.Ceiling((await Task.WhenAll(Chart.Labels.Select(async label => await sizeProvider.GetTextSize(label, XAxisLabelShape.DefaultCssClass)))).Max(size => size.Height));
+            var boundingBoxes = await Task.WhenAll(Chart.Labels.Select(async label => await sizeProvider.GetTextSize(label, XAxisLabelShape.DefaultCssClass)));
+
+            AutoSizeXAxisLabelHeight = boundingBoxes.Max(boundingBox => boundingBox.RequiredHeight);
         }
 
         if (AutoSizeYAxisLabelsIsEnabled) {
-            AutoSizeYAxisLabelWidth = (int)Math.Ceiling((await Task.WhenAll(Chart.PlotArea.GetGridLineDataPoints().Select(async dataPoint => await sizeProvider.GetTextSize(Chart.GetFormattedYAxisLabel(dataPoint), YAxisLabelShape.DefaultCssClass)))).Max(size => size.Width));
+            var boundingBoxes = await Task.WhenAll(Chart.PlotArea.GetGridLineDataPoints().Select(async dataPoint => await sizeProvider.GetTextSize(Chart.GetFormattedYAxisLabel(dataPoint), YAxisLabelShape.DefaultCssClass)));
+
+            AutoSizeYAxisLabelWidth = boundingBoxes.Max(boundingBox => boundingBox.RequiredWidth);
 
             if (Chart.PlotArea.Multiplier != 1M) {
-                AutoSizeYAxisLabelWidth += (int)Math.Ceiling((await sizeProvider.GetTextSize(Chart.GetFormattedAxisMultiplier(), YAxisMultiplierShape.DefaultCssClass)).Width);
+                var boundingBox = await sizeProvider.GetTextSize(Chart.GetFormattedAxisMultiplier(), YAxisMultiplierShape.DefaultCssClass);
+
+                AutoSizeYAxisLabelWidth += boundingBox.RequiredWidth;
             }
         }
     }
