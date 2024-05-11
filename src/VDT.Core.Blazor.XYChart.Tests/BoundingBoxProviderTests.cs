@@ -11,7 +11,7 @@ public class BoundingBoxProviderTests {
     public void BoundingBoxProvider_ModuleLocation_Is_Correct() {
         var fileName = System.IO.Path.GetFileName(BoundingBoxProvider.ModuleLocation);
 
-        var expectedFilePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "sizeprovider.*.js").Single();
+        var expectedFilePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "boundingboxprovider.*.js").Single();
         var expectedFileName = System.IO.Path.GetFileName(expectedFilePath);
 
         Assert.Equal(expectedFileName, fileName);
@@ -21,9 +21,9 @@ public class BoundingBoxProviderTests {
     public void BoundingBoxProvider_Module_Has_Correct_Fingerprint() {
         using var sha256 = SHA256.Create();
 
-        var filePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "sizeprovider.*.js").Single();
+        var filePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "boundingboxprovider.*.js").Single();
 #pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
-        var fingerprintFinder = new Regex("sizeprovider\\.([a-f0-9]+)\\.js$", RegexOptions.IgnoreCase);
+        var fingerprintFinder = new Regex("boundingboxprovider\\.([a-f0-9]+)\\.js$", RegexOptions.IgnoreCase);
 #pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
         var fingerprint = fingerprintFinder.Match(filePath).Groups[1].Value;
         var fileContents = File.ReadAllBytes(filePath).Where(b => b != '\r').ToArray(); // Normalize newlines between Windows and Linux

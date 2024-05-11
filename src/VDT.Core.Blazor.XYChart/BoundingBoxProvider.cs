@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace VDT.Core.Blazor.XYChart;
 
 internal class BoundingBoxProvider : IBoundingBoxProvider {
-    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/boundingboxprovider.dc4a176fa0.js";
+    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/boundingboxprovider.25328e826a.js";
 
     public static async Task<IBoundingBoxProvider> Create(IJSRuntime jsRuntime) {
         var moduleReference = await jsRuntime.InvokeAsync<IJSObjectReference>("import", ModuleLocation);
