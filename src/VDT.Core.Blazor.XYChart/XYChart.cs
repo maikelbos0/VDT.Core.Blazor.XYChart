@@ -40,7 +40,7 @@ public class XYChart : ComponentBase {
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
-    internal Func<Task<ISizeProvider>>? SizeProviderProvider { get; init; }
+    internal Func<Task<IBoundingBoxProvider>>? BoundingBoxProviderProvider { get; init; }
     internal OperandStream StateChangeHandler { get; init; } = new();
 
     /// <summary>
@@ -152,7 +152,7 @@ public class XYChart : ComponentBase {
         base.StateHasChanged();
     }
 
-    internal Task<ISizeProvider> GetSizeProvider() => SizeProviderProvider?.Invoke() ?? SizeProvider.Create(JSRuntime);
+    internal Task<IBoundingBoxProvider> GetBoundingBoxProvider() => BoundingBoxProviderProvider?.Invoke() ?? BoundingBoxProvider.Create(JSRuntime);
 
     /// <summary>
     /// Gets the SVG shapes needed to display the chart

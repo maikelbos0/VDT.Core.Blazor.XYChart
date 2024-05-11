@@ -10,16 +10,16 @@ public class XYChartBuilder {
     private static readonly List<string> defaultLabels = ["Foo", "Bar", "Baz", "Qux", "Quux"];
 
     public XYChart Chart { get; }
-    internal ISizeProvider SizeProvider { get; }
+    internal IBoundingBoxProvider BoundingBoxProvider { get; }
     public bool StateHasChangedInvoked { get; private set; }
 
     public XYChartBuilder(int labelCount = Chart_LabelCount, DataPointSpacingMode dataPointSpacingMode = Chart_DataPointSpacingMode) {
-        SizeProvider = Substitute.For<ISizeProvider>();
+        BoundingBoxProvider = Substitute.For<IBoundingBoxProvider>();
         Chart = new() {
             Labels = defaultLabels.Take(labelCount).ToList(),
             DataPointSpacingMode = dataPointSpacingMode,
             StateChangeHandler = new(),
-            SizeProviderProvider = () => Task.FromResult(SizeProvider)
+            BoundingBoxProviderProvider = () => Task.FromResult(BoundingBoxProvider)
         };
         Chart.Canvas = new() {
             Chart = Chart,
@@ -156,7 +156,7 @@ public class XYChartBuilder {
         => WithProvidedSize(cssClass, new BoundingBox(x, y, width, height));
 
     internal XYChartBuilder WithProvidedSize(string cssClass, BoundingBox textSize) {
-        SizeProvider.GetTextSize(Arg.Any<string>(), cssClass).Returns(textSize);
+        BoundingBoxProvider.GetBoundingBox(Arg.Any<string>(), cssClass).Returns(textSize);
         return this;
     }
 }

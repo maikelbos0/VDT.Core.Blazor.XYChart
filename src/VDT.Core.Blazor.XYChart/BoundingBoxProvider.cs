@@ -4,24 +4,24 @@ using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
 
-internal class SizeProvider : ISizeProvider {
+internal class BoundingBoxProvider : IBoundingBoxProvider {
     internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/boundingboxprovider.dc4a176fa0.js";
 
-    public static async Task<ISizeProvider> Create(IJSRuntime jsRuntime) {
+    public static async Task<IBoundingBoxProvider> Create(IJSRuntime jsRuntime) {
         var moduleReference = await jsRuntime.InvokeAsync<IJSObjectReference>("import", ModuleLocation);
 
         await moduleReference.InvokeVoidAsync("register");
 
-        return new SizeProvider(moduleReference);
+        return new BoundingBoxProvider(moduleReference);
     }
 
     private readonly IJSObjectReference moduleReference;
 
-    public SizeProvider(IJSObjectReference moduleReference) {
+    public BoundingBoxProvider(IJSObjectReference moduleReference) {
         this.moduleReference = moduleReference;
     }
 
-    public async Task<BoundingBox> GetTextSize(string text, string? cssClass)
+    public async Task<BoundingBox> GetBoundingBox(string text, string? cssClass)
         => await moduleReference.InvokeAsync<BoundingBox>("getBoundingBox", text, cssClass);
 
     /// <inheritdoc/>
