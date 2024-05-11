@@ -152,8 +152,8 @@ public class XYChartBuilder {
         return this;
     }
 
-    internal XYChartBuilder WithProvidedSize(string cssClass, decimal width, decimal height)
-        => WithProvidedSize(cssClass, new TextSize(0, 0, width, height));
+    internal XYChartBuilder WithProvidedSize(string cssClass, decimal x, decimal y, decimal width, decimal height)
+        => WithProvidedSize(cssClass, new TextSize(x, y, width, height));
 
     internal XYChartBuilder WithProvidedSize(string cssClass, TextSize textSize) {
         SizeProvider.GetTextSize(Arg.Any<string>(), cssClass).Returns(textSize);
