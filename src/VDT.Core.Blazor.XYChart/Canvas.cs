@@ -31,14 +31,14 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static bool DefaultAutoSizeXAxisLabelsIsEnabled { get; set; } = false;
 
     /// <summary>
-    /// Gets or sets the default value for whether or not y-axis labels should be automatically sized
-    /// </summary>
-    public static bool DefaultAutoSizeYAxisLabelsIsEnabled { get; set; } = false;
-
-    /// <summary>
     /// Gets or sets the default value for the vertical room reserved for labels on the x-axis
     /// </summary>
     public static int DefaultXAxisLabelHeight { get; set; } = 50;
+
+    /// <summary>
+    /// Gets or sets the default value for whether or not y-axis labels should be automatically sized
+    /// </summary>
+    public static bool DefaultAutoSizeYAxisLabelsIsEnabled { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the default value for the horizontal room reserved for labels on the y-axis, including the multiplier if applicable
@@ -81,14 +81,14 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public bool AutoSizeXAxisLabelsIsEnabled { get; set; } = DefaultAutoSizeXAxisLabelsIsEnabled;
 
     /// <summary>
-    /// Gets or sets whether or not y-axis labels should be automatically sized
-    /// </summary>
-    [Parameter] public bool AutoSizeYAxisLabelsIsEnabled { get; set; } = DefaultAutoSizeYAxisLabelsIsEnabled;
-
-    /// <summary>
     /// Gets or sets the vertical room reserved for labels on the x-axis
     /// </summary>
     [Parameter] public int XAxisLabelHeight { get; set; } = DefaultXAxisLabelHeight;
+
+    /// <summary>
+    /// Gets or sets whether or not y-axis labels should be automatically sized
+    /// </summary>
+    [Parameter] public bool AutoSizeYAxisLabelsIsEnabled { get; set; } = DefaultAutoSizeYAxisLabelsIsEnabled;
 
     /// <summary>
     /// Gets or sets the horizontal room reserved for labels on the y-axis, including the multiplier if applicable
@@ -166,13 +166,13 @@ public class Canvas : ChildComponentBase, IDisposable {
         => parameters.HasParameterChanged(Width)
         || parameters.HasParameterChanged(Height)
         || parameters.HasParameterChanged(Padding)
+        || parameters.HasParameterChanged(AutoSizeXAxisLabelsIsEnabled)
         || parameters.HasParameterChanged(XAxisLabelHeight)
+        || parameters.HasParameterChanged(AutoSizeYAxisLabelsIsEnabled)
         || parameters.HasParameterChanged(YAxisLabelWidth)
         || parameters.HasParameterChanged(YAxisLabelFormat)
         || parameters.HasParameterChanged(YAxisMultiplierFormat)
-        || parameters.HasParameterChanged(DataLabelFormat)
-        || parameters.HasParameterChanged(AutoSizeXAxisLabelsIsEnabled)
-        || parameters.HasParameterChanged(AutoSizeYAxisLabelsIsEnabled);
+        || parameters.HasParameterChanged(DataLabelFormat);
 
     /// <summary>
     /// Gets the SVG shape for the plot area
@@ -198,6 +198,9 @@ public class Canvas : ChildComponentBase, IDisposable {
 
             AutoSizeXAxisLabelHeight = boundingBoxes.Max(boundingBox => boundingBox.RequiredHeight);
         }
+        else {
+            AutoSizeXAxisLabelHeight = null;
+        }
 
         if (AutoSizeYAxisLabelsIsEnabled) {
             var boundingBoxes = await Task.WhenAll(Chart.PlotArea.GetGridLineDataPoints().Select(async dataPoint => await boundingBoxProvider.GetBoundingBox(Chart.GetFormattedYAxisLabel(dataPoint), YAxisLabelShape.DefaultCssClass)));
@@ -209,6 +212,9 @@ public class Canvas : ChildComponentBase, IDisposable {
 
                 AutoSizeYAxisLabelWidth += boundingBox.RequiredWidth;
             }
+        }
+        else {
+            AutoSizeYAxisLabelWidth = null;
         }
     }
 }
