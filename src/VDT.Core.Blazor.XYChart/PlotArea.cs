@@ -9,6 +9,8 @@ namespace VDT.Core.Blazor.XYChart;
 /// Ploy area/scaling settings for an <see cref="XYChart"/>
 /// </summary>
 public class PlotArea : ChildComponentBase, IDisposable {
+    private static readonly decimal[] baseGridLineIntervals = new[] { 1M, 2M, 5M, 10M };
+
     /// <summary>
     /// Gets or sets the default value for the lowest data point value that is visible in the chart
     /// </summary>
@@ -100,9 +102,20 @@ public class PlotArea : ChildComponentBase, IDisposable {
     private decimal? AutoScaleMax { get; set; }
     private decimal? AutoScaleGridLineInterval { get; set; }
 
-    internal decimal ActualMin => AutoScaleMin ?? Min;
-    internal decimal ActualMax => AutoScaleMax ?? Max;
-    internal decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
+    /// <summary>
+    /// Gets the lowest value that is visible in the chart, taking automatic scaling into account if enabled
+    /// </summary>
+    public decimal ActualMin => AutoScaleMin ?? Min;
+
+    /// <summary>
+    /// Gets the highest value that is visible in the chart, taking automatic scaling into account if enabled
+    /// </summary>
+    public decimal ActualMax => AutoScaleMax ?? Max;
+
+    /// <summary>
+    /// Gets the interval with which grid lines are shown, taking automatic scaling into account if enabled
+    /// </summary>
+    public decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
 
     /// <inheritdoc/>
     protected override void OnInitialized() => Chart.SetPlotArea(this);
@@ -162,8 +175,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
 
         var rawGridLineInterval = (max - min) / Math.Max(1, AutoScaleRequestedGridLineCount - 1);
         var baseMultiplier = DecimalMath.Pow(10M, (int)Math.Floor((decimal)Math.Log10((double)rawGridLineInterval)));
-        var scale = new[] { 1M, 2M, 5M, 10M }
-            .Select(baseGridLineInterval => baseGridLineInterval * baseMultiplier)
+        var scale = baseGridLineIntervals.Select(baseGridLineInterval => baseGridLineInterval * baseMultiplier)
             .Select(gridLineInterval => new {
                 GridLineInterval = gridLineInterval,
                 Min = DecimalMath.FloorToScale(min, gridLineInterval),

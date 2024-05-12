@@ -63,16 +63,13 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     }
 
     internal void AddDataSeries(DataSeries dataSeries) {
-        if (!DataSeries.Contains(dataSeries)) {
-            DataSeries.Add(dataSeries);
-        }
-
-        Chart.HandleStateChange();
+        DataSeries.Add(dataSeries);
+        Chart.StateHasChanged();
     }
 
     internal void RemoveDataSeries(DataSeries dataSeries) {
         DataSeries.Remove(dataSeries);
-        Chart.HandleStateChange();
+        Chart.StateHasChanged();
     }
 
     /// <inheritdoc/>

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
+using VDT.Core.Operators;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -17,11 +19,13 @@ public class XYChart : ComponentBase {
     /// </summary>
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
 
+    [Inject] internal IJSRuntime JSRuntime { get; set; } = null!;
+
     /// <summary>
     /// Gets or sets the content containing chart components
     /// </summary>
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the category labels of of the chart; this list determines the amount of data point values shown
     /// </summary>
@@ -36,7 +40,8 @@ public class XYChart : ComponentBase {
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
-    internal Action? StateHasChangedHandler { get; init; }
+    internal Func<Task<IBoundingBoxProvider>>? BoundingBoxProviderProvider { get; init; }
+    internal OperandStream StateChangeHandler { get; init; } = new();
 
     /// <summary>
     /// Create an XY chart
@@ -45,6 +50,8 @@ public class XYChart : ComponentBase {
         Canvas = new Canvas() { Chart = this };
         Legend = new Legend() { Chart = this };
         PlotArea = new PlotArea() { Chart = this };
+
+        StateChangeHandler.Debounce(100).Subscribe(HandleStateChange);
     }
 
     /// <inheritdoc/>
@@ -54,7 +61,7 @@ public class XYChart : ComponentBase {
         await base.SetParametersAsync(parameters);
 
         if (parametersHaveChanged) {
-            HandleStateChange();
+            StateHasChanged();
         }
     }
 
@@ -97,56 +104,61 @@ public class XYChart : ComponentBase {
 
     internal void SetCanvas(Canvas canvas) {
         Canvas = canvas;
-        HandleStateChange();
+        StateHasChanged();
     }
 
     internal void ResetCanvas() {
         Canvas = new();
-        HandleStateChange();
+        StateHasChanged();
     }
 
     internal void SetLegend(Legend legend) {
         Legend = legend;
-        HandleStateChange();
+        StateHasChanged();
     }
 
     internal void ResetLegend() {
         Legend = new();
-        HandleStateChange();
+        StateHasChanged();
     }
 
     internal void SetPlotArea(PlotArea plotArea) {
         PlotArea = plotArea;
-        HandleStateChange();
+        StateHasChanged();
     }
 
     internal void ResetPlotArea() {
         PlotArea = new();
-        HandleStateChange();
+        StateHasChanged();
     }
 
     internal void AddLayer(LayerBase layer) {
-        if (!Layers.Contains(layer)) {
-            Layers.Add(layer);
-        }
-
-        HandleStateChange();
+        Layers.Add(layer);
+        StateHasChanged();
     }
 
     internal void RemoveLayer(LayerBase layer) {
         Layers.Remove(layer);
-        HandleStateChange();
+        StateHasChanged();
     }
 
-    internal void HandleStateChange() => (StateHasChangedHandler ?? StateHasChanged)();
+    internal new void StateHasChanged() {
+        _ = StateChangeHandler.Publish();
+    }
+
+    internal async Task HandleStateChange() {
+        PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
+        await Canvas.AutoSize();
+        base.StateHasChanged();
+    }
+
+    internal Task<IBoundingBoxProvider> GetBoundingBoxProvider() => BoundingBoxProviderProvider?.Invoke() ?? BoundingBoxProvider.Create(JSRuntime);
 
     /// <summary>
     /// Gets the SVG shapes needed to display the chart
     /// </summary>
     /// <returns>The SVG shapes</returns>
     public IEnumerable<ShapeBase> GetShapes() {
-        PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
-
         foreach (var shape in GetGridLineShapes()) {
             yield return shape;
         }
@@ -190,14 +202,18 @@ public class XYChart : ComponentBase {
     /// </summary>
     /// <returns>The SVG Y-axis label shapes</returns>
     public IEnumerable<YAxisLabelShape> GetYAxisLabelShapes()
-        => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new YAxisLabelShape(Canvas.PlotAreaX, MapDataPointToCanvas(dataPoint), (dataPoint / PlotArea.Multiplier).ToString(Canvas.YAxisLabelFormat), index));
+        => PlotArea.GetGridLineDataPoints().Select((dataPoint, index) => new YAxisLabelShape(Canvas.PlotAreaX, MapDataPointToCanvas(dataPoint), GetFormattedYAxisLabel(dataPoint), index));
+
+    internal string GetFormattedYAxisLabel(decimal dataPoint) => (dataPoint / PlotArea.Multiplier).ToString(Canvas.YAxisLabelFormat);
 
     /// <summary>
     /// Gets the SVG shape for the chart Y-axis multiplier, if the multiplier value is not exactly 1
     /// </summary>
     /// <returns>The SVG Y-axis multiplier shape or <see langword="null"/></returns>
     public YAxisMultiplierShape? GetYAxisMultiplierShape()
-        => PlotArea.Multiplier == 1M ? null : new YAxisMultiplierShape(Canvas.Padding, Canvas.PlotAreaY + Canvas.PlotAreaHeight / 2M, PlotArea.Multiplier.ToString(Canvas.YAxisMultiplierFormat));
+        => PlotArea.Multiplier == 1M ? null : new YAxisMultiplierShape(Canvas.Padding, Canvas.PlotAreaY + Canvas.PlotAreaHeight / 2M, GetFormattedAxisMultiplier());
+
+    internal string GetFormattedAxisMultiplier() => PlotArea.Multiplier.ToString(Canvas.YAxisMultiplierFormat);
 
     /// <summary>
     /// Gets the SVG shapes for the chart X-axis labels
@@ -230,11 +246,10 @@ public class XYChart : ComponentBase {
             yield break;
         }
 
-        var itemsPerRow = Canvas.PlotAreaWidth / Legend.ItemWidth;
         var rows = Layers
             .SelectMany(layer => layer.GetLegendItems())
             .Select((item, index) => new { Item = item, Index = index })
-            .GroupBy(value => value.Index / itemsPerRow, value => value.Item);
+            .GroupBy(value => value.Index / Legend.ItemsPerRow, value => value.Item);
         Func<int, int, decimal> offsetProvider = Legend.Alignment switch {
             LegendAlignment.Left => (index, _) => Canvas.PlotAreaX + index * Legend.ItemWidth,
             LegendAlignment.Center => (index, count) => Canvas.PlotAreaX + Canvas.PlotAreaWidth / 2 - (count / 2M - index) * Legend.ItemWidth,

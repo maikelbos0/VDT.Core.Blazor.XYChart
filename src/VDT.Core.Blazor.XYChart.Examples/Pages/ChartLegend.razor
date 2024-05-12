@@ -16,7 +16,6 @@
         </ul>
     </li>
     <li><code>Alignment</code> aligns the legend items inside the legend area left, right or centered</li>
-    <li><code>Height</code> is the total height reserved for the legend</li>
     <li><code>ItemWidth</code> is the total width reserved for each legend item (key and text) inside the legend</li>
     <li><code>ItemHeight</code> is the total height reserved for each legend item</li>
     <li><code>KeySize</code> is the width/height of the legend item key</li>
@@ -55,11 +54,6 @@
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 mb-3">
-        <label class="form-label" for="height">Height</label>
-        <input type="number" class="form-control" id="height" @bind-value="@Height" />
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="itemWidth">Item width</label>
         <input type="number" class="form-control" id="itemWidth" @bind-value="@ItemWidth" />
     </div>
@@ -77,7 +71,7 @@
 
 <div class="d-inline-block">
     <XYChart Labels="@ExampleData.Labels">
-        <Legend IsEnabled="IsEnabled" Position="Position" Alignment="Alignment" Height="Height" ItemWidth="ItemWidth" ItemHeight="ItemHeight" KeySize="KeySize" />
+        <Legend IsEnabled="IsEnabled" Position="Position" Alignment="Alignment" ItemWidth="ItemWidth" ItemHeight="ItemHeight" KeySize="KeySize" />
 
         <AreaLayer>
             @foreach (var data in ExampleData.AreaData) {
@@ -105,7 +99,6 @@
     private bool IsEnabled { get; set; } = Legend.DefaultIsEnabled;
     private LegendPosition Position { get; set; } = Legend.DefaultPosition;
     private LegendAlignment Alignment { get; set; } = Legend.DefaultAlignment;
-    private int Height { get; set; } = Legend.DefaultHeight;
     private int ItemWidth { get; set; } = Legend.DefaultItemWidth;
     private int ItemHeight { get; set; } = Legend.DefaultItemHeight;
     private int KeySize { get; set; } = Legend.DefaultKeySize;

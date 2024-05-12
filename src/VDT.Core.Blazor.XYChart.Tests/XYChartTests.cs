@@ -128,38 +128,6 @@ public class XYChartTests {
     }
 
     [Fact]
-    public void GetShapes_AutoScale() {
-        var subject = new XYChartBuilder(labelCount: 2)
-            .WithPlotArea(autoScaleIsEnabled: true, autoScaleRequestedGridLineCount: 15, autoScaleClearancePercentage: 0M)
-            .WithLayer<BarLayer>()
-            .WithDataSeries(-9M, 0M)
-            .WithDataSeries(-5M, 19M)
-            .Chart;
-
-        _ = subject.GetShapes().ToList();
-
-        Assert.Equal(-10M, subject.PlotArea.ActualMin);
-        Assert.Equal(20M, subject.PlotArea.ActualMax);
-        Assert.Equal(2M, subject.PlotArea.ActualGridLineInterval);
-    }
-
-    [Fact]
-    public void GetShapes_No_AutoScale() {
-        var subject = new XYChartBuilder(labelCount: 2)
-            .WithPlotArea(autoScaleIsEnabled: false)
-            .WithLayer<BarLayer>()
-            .WithDataSeries(-9M, 0M)
-            .WithDataSeries(-5M, 19M)
-            .Chart;
-
-        _ = subject.GetShapes().ToList();
-
-        Assert.Equal(PlotArea_Min, subject.PlotArea.ActualMin);
-        Assert.Equal(PlotArea_Max, subject.PlotArea.ActualMax);
-        Assert.Equal(PlotArea_GridLineInterval, subject.PlotArea.ActualGridLineInterval);
-    }
-
-    [Fact]
     public void GetShapes_PlotAreaShape() {
         var subject = new XYChartBuilder()
             .Chart;
@@ -261,7 +229,7 @@ public class XYChartTests {
     public void GetYAxisLabelShapes() {
         var subject = new XYChartBuilder()
             .Chart;
-        
+
         var result = subject.GetYAxisLabelShapes();
 
         Assert.Equal(PlotArea_Range / PlotArea_GridLineInterval, result.Count());
@@ -386,20 +354,25 @@ public class XYChartTests {
         Assert.Equal("legend-key example-data", shape.CssClass);
     }
 
-    public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_KeyShapes_Data() => new() {
-        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
-        { LegendPosition.Top, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
-        { LegendPosition.Top, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
-        { LegendPosition.Top, LegendAlignment.Center, 0, 0, PlotArea_X + PlotArea_Width / 2M - 3.5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
-        { LegendPosition.Top, LegendAlignment.Center, 0, 2, PlotArea_X + PlotArea_Width / 2M - 1.5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
-        { LegendPosition.Top, LegendAlignment.Center, 2, 1, PlotArea_X + PlotArea_Width / 2M - Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
-        { LegendPosition.Top, LegendAlignment.Right, 0, 0, PlotArea_X + PlotArea_Width - 7M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
-        { LegendPosition.Top, LegendAlignment.Right, 0, 2, PlotArea_X + PlotArea_Width - 5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
-        { LegendPosition.Top, LegendAlignment.Right, 2, 1, PlotArea_X + PlotArea_Width - 2M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
-        { LegendPosition.Bottom, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_KeyPadding },
-        { LegendPosition.Bottom, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_KeyPadding, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_KeyPadding },
-        { LegendPosition.Bottom, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_KeyPadding, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_ItemHeight + Legend_KeyPadding }
-    };
+    public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_KeyShapes_Data() {
+        // Since we have two rows of legend items, plot area height differs from normal tests
+        var plotAreaHeight = Canvas_Height - Canvas_Padding * 2 - Canvas_XAxisLabelHeight - Legend_ItemHeight * 2;
+
+        return new() {
+            { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+            { LegendPosition.Top, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+            { LegendPosition.Top, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
+            { LegendPosition.Top, LegendAlignment.Center, 0, 0, PlotArea_X + PlotArea_Width / 2M - 3.5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+            { LegendPosition.Top, LegendAlignment.Center, 0, 2, PlotArea_X + PlotArea_Width / 2M - 1.5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+            { LegendPosition.Top, LegendAlignment.Center, 2, 1, PlotArea_X + PlotArea_Width / 2M - Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
+            { LegendPosition.Top, LegendAlignment.Right, 0, 0, PlotArea_X + PlotArea_Width - 7M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+            { LegendPosition.Top, LegendAlignment.Right, 0, 2, PlotArea_X + PlotArea_Width - 5M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_KeyPadding },
+            { LegendPosition.Top, LegendAlignment.Right, 2, 1, PlotArea_X + PlotArea_Width - 2M * Legend_ItemWidth + Legend_KeyPadding, Canvas_Padding + Legend_ItemHeight + Legend_KeyPadding },
+            { LegendPosition.Bottom, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_KeyPadding, Canvas_Padding + plotAreaHeight + Canvas_XAxisLabelHeight + Legend_KeyPadding },
+            { LegendPosition.Bottom, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_KeyPadding, Canvas_Padding + plotAreaHeight + Canvas_XAxisLabelHeight + Legend_KeyPadding },
+            { LegendPosition.Bottom, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_KeyPadding, Canvas_Padding + plotAreaHeight + Canvas_XAxisLabelHeight + Legend_ItemHeight + Legend_KeyPadding }
+        };
+    }
 
     [Theory]
     [MemberData(nameof(GetLegendShapes_TextShapes_Data))]
@@ -427,20 +400,25 @@ public class XYChartTests {
         Assert.Equal("legend-text example-data", shape.CssClass);
     }
 
-    public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_TextShapes_Data() => new() {
-        { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
-        { LegendPosition.Top, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
-        { LegendPosition.Top, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
-        { LegendPosition.Top, LegendAlignment.Center, 0, 0, PlotArea_X + PlotArea_Width / 2M - 3.5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
-        { LegendPosition.Top, LegendAlignment.Center, 0, 2, PlotArea_X + PlotArea_Width / 2M - 1.5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
-        { LegendPosition.Top, LegendAlignment.Center, 2, 1, PlotArea_X + PlotArea_Width / 2M - Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
-        { LegendPosition.Top, LegendAlignment.Right, 0, 0, PlotArea_X + PlotArea_Width - 7M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
-        { LegendPosition.Top, LegendAlignment.Right, 0, 2, PlotArea_X + PlotArea_Width - 5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
-        { LegendPosition.Top, LegendAlignment.Right, 2, 1, PlotArea_X + PlotArea_Width - 2M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
-        { LegendPosition.Bottom, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_ItemHeight / 2M },
-        { LegendPosition.Bottom, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_ItemHeight, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_ItemHeight / 2M },
-        { LegendPosition.Bottom, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_ItemHeight, Canvas_Padding + PlotArea_Height + Canvas_XAxisLabelHeight + Legend_ItemHeight + Legend_ItemHeight / 2M }
-    };
+    public static TheoryData<LegendPosition, LegendAlignment, int, int, decimal, decimal> GetLegendShapes_TextShapes_Data() {
+        // Since we have two rows of legend items, plot area height differs from normal tests
+        var plotAreaHeight = Canvas_Height - Canvas_Padding * 2 - Canvas_XAxisLabelHeight - Legend_ItemHeight * 2;
+
+        return new() {
+            { LegendPosition.Top, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+            { LegendPosition.Top, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+            { LegendPosition.Top, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
+            { LegendPosition.Top, LegendAlignment.Center, 0, 0, PlotArea_X + PlotArea_Width / 2M - 3.5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+            { LegendPosition.Top, LegendAlignment.Center, 0, 2, PlotArea_X + PlotArea_Width / 2M - 1.5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+            { LegendPosition.Top, LegendAlignment.Center, 2, 1, PlotArea_X + PlotArea_Width / 2M - Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
+            { LegendPosition.Top, LegendAlignment.Right, 0, 0, PlotArea_X + PlotArea_Width - 7M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+            { LegendPosition.Top, LegendAlignment.Right, 0, 2, PlotArea_X + PlotArea_Width - 5M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight / 2M },
+            { LegendPosition.Top, LegendAlignment.Right, 2, 1, PlotArea_X + PlotArea_Width - 2M * Legend_ItemWidth + Legend_ItemHeight, Canvas_Padding + Legend_ItemHeight + Legend_ItemHeight / 2M },
+            { LegendPosition.Bottom, LegendAlignment.Left, 0, 0, PlotArea_X + Legend_ItemHeight, Canvas_Padding + plotAreaHeight + Canvas_XAxisLabelHeight + Legend_ItemHeight / 2M },
+            { LegendPosition.Bottom, LegendAlignment.Left, 0, 2, PlotArea_X + Legend_ItemWidth * 2 + Legend_ItemHeight, Canvas_Padding + plotAreaHeight + Canvas_XAxisLabelHeight + Legend_ItemHeight / 2M },
+            { LegendPosition.Bottom, LegendAlignment.Left, 2, 1, PlotArea_X + Legend_ItemHeight, Canvas_Padding + plotAreaHeight + Canvas_XAxisLabelHeight + Legend_ItemHeight + Legend_ItemHeight / 2M }
+        };
+    }
 
     [Theory]
     [MemberData(nameof(MapDataPointToCanvas_Data))]

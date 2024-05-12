@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
+using VDT.Core.Blazor.XYChart.Shapes;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -23,9 +26,19 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultPadding { get; set; } = 25;
 
     /// <summary>
+    /// Gets or sets the default value for whether or not x-axis labels should be automatically sized
+    /// </summary>
+    public static bool DefaultAutoSizeXAxisLabelsIsEnabled { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets the default value for the vertical room reserved for labels on the x-axis
     /// </summary>
     public static int DefaultXAxisLabelHeight { get; set; } = 50;
+
+    /// <summary>
+    /// Gets or sets the default value for whether or not y-axis labels should be automatically sized
+    /// </summary>
+    public static bool DefaultAutoSizeYAxisLabelsIsEnabled { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the default value for the horizontal room reserved for labels on the y-axis, including the multiplier if applicable
@@ -63,9 +76,19 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public int Padding { get; set; } = DefaultPadding;
 
     /// <summary>
+    /// Gets or sets whether or not x-axis labels should be automatically sized
+    /// </summary>
+    [Parameter] public bool AutoSizeXAxisLabelsIsEnabled { get; set; } = DefaultAutoSizeXAxisLabelsIsEnabled;
+
+    /// <summary>
     /// Gets or sets the vertical room reserved for labels on the x-axis
     /// </summary>
     [Parameter] public int XAxisLabelHeight { get; set; } = DefaultXAxisLabelHeight;
+
+    /// <summary>
+    /// Gets or sets whether or not y-axis labels should be automatically sized
+    /// </summary>
+    [Parameter] public bool AutoSizeYAxisLabelsIsEnabled { get; set; } = DefaultAutoSizeYAxisLabelsIsEnabled;
 
     /// <summary>
     /// Gets or sets the horizontal room reserved for labels on the y-axis, including the multiplier if applicable
@@ -87,10 +110,23 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// </summary>
     [Parameter] public string DataLabelFormat { get; set; } = DefaultDataLabelFormat;
 
+    private int? AutoSizeXAxisLabelHeight { get; set; }
+    private int? AutoSizeYAxisLabelWidth { get; set; }
+
+    /// <summary>
+    /// Gets the vertical room reserved for labels on the x-axis, taking automatic sizing into account if enabled
+    /// </summary>
+    public int ActualXAxisLabelHeight => AutoSizeXAxisLabelHeight ?? XAxisLabelHeight;
+
+    /// <summary>
+    /// Gets the horizontal room reserved for labels on the y-axis, including the multiplier if applicable, taking automatic scaling into account if enabled
+    /// </summary>
+    public int ActualYAxisLabelWidth => AutoSizeYAxisLabelWidth ?? YAxisLabelWidth;
+
     /// <summary>
     /// X-coordinate of the top left corner of the plot area
     /// </summary>
-    public int PlotAreaX => Padding + YAxisLabelWidth;
+    public int PlotAreaX => Padding + ActualYAxisLabelWidth;
 
     /// <summary>
     /// Y-coordinate of the top left corner of the plot area
@@ -100,12 +136,12 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// <summary>
     /// Width of the plot area
     /// </summary>
-    public int PlotAreaWidth => Width - Padding * 2 - YAxisLabelWidth;
+    public int PlotAreaWidth => Width - Padding * 2 - ActualYAxisLabelWidth;
 
     /// <summary>
     /// Height of the plot area
     /// </summary>
-    public int PlotAreaHeight => Height - Padding * 2 - XAxisLabelHeight - (Chart.Legend.IsEnabled ? Chart.Legend.Height : 0);
+    public int PlotAreaHeight => Height - Padding * 2 - ActualXAxisLabelHeight - (Chart.Legend.IsEnabled ? Chart.Legend.Height : 0);
 
     /// <summary>
     /// Y-coordinate of the top left corner of the legend
@@ -130,7 +166,9 @@ public class Canvas : ChildComponentBase, IDisposable {
         => parameters.HasParameterChanged(Width)
         || parameters.HasParameterChanged(Height)
         || parameters.HasParameterChanged(Padding)
+        || parameters.HasParameterChanged(AutoSizeXAxisLabelsIsEnabled)
         || parameters.HasParameterChanged(XAxisLabelHeight)
+        || parameters.HasParameterChanged(AutoSizeYAxisLabelsIsEnabled)
         || parameters.HasParameterChanged(YAxisLabelWidth)
         || parameters.HasParameterChanged(YAxisLabelFormat)
         || parameters.HasParameterChanged(YAxisMultiplierFormat)
@@ -141,4 +179,42 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// </summary>
     /// <returns>The SVG plot area shape</returns>
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(Width, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
+
+    /// <summary>
+    /// Applies automatic sizing to labels if <see cref="AutoSizeXAxisLabelsIsEnabled"/> or <see cref="AutoSizeYAxisLabelsIsEnabled"/> is <see langword="true" />
+    /// </summary>
+    /// <returns></returns>
+    public async Task AutoSize() {
+        if (!AutoSizeXAxisLabelsIsEnabled && !AutoSizeYAxisLabelsIsEnabled) {
+            AutoSizeXAxisLabelHeight = null;
+            AutoSizeYAxisLabelWidth = null;
+            return;
+        }
+
+        await using var boundingBoxProvider = await Chart.GetBoundingBoxProvider();
+
+        if (AutoSizeXAxisLabelsIsEnabled) {
+            var boundingBoxes = await Task.WhenAll(Chart.Labels.Select(async label => await boundingBoxProvider.GetBoundingBox(label, XAxisLabelShape.DefaultCssClass)));
+
+            AutoSizeXAxisLabelHeight = boundingBoxes.Max(boundingBox => boundingBox.RequiredHeight);
+        }
+        else {
+            AutoSizeXAxisLabelHeight = null;
+        }
+
+        if (AutoSizeYAxisLabelsIsEnabled) {
+            var boundingBoxes = await Task.WhenAll(Chart.PlotArea.GetGridLineDataPoints().Select(async dataPoint => await boundingBoxProvider.GetBoundingBox(Chart.GetFormattedYAxisLabel(dataPoint), YAxisLabelShape.DefaultCssClass)));
+
+            AutoSizeYAxisLabelWidth = boundingBoxes.Max(boundingBox => boundingBox.RequiredWidth);
+
+            if (Chart.PlotArea.Multiplier != 1M) {
+                var boundingBox = await boundingBoxProvider.GetBoundingBox(Chart.GetFormattedAxisMultiplier(), YAxisMultiplierShape.DefaultCssClass);
+
+                AutoSizeYAxisLabelWidth += boundingBox.RequiredWidth;
+            }
+        }
+        else {
+            AutoSizeYAxisLabelWidth = null;
+        }
+    }
 }

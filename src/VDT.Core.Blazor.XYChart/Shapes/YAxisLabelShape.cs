@@ -4,8 +4,13 @@
 /// SVG shape to display a label on the Y-axis
 /// </summary>
 public class YAxisLabelShape : ShapeBase {
+    /// <summary>
+    /// Default CSS classes that are always applied to this SVG shape
+    /// </summary>
+    public const string DefaultCssClass = "y-axis-label";
+
     /// <inheritdoc/>
-    public override string CssClass => "y-axis-label";
+    public override string CssClass => DefaultCssClass;
 
     /// <inheritdoc/>
     public override string ElementName => "text";

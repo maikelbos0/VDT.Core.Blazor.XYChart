@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Linq;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -21,11 +22,6 @@ public class Legend : ChildComponentBase, IDisposable {
     /// Gets or sets the default value for the horizontal alignment of the legend items inside the legend area
     /// </summary>
     public static LegendAlignment DefaultAlignment { get; set; } = LegendAlignment.Center;
-
-    /// <summary>
-    /// Gets or sets the default value for the total height reserved for the legend
-    /// </summary>
-    public static int DefaultHeight { get; set; } = 25;
 
     /// <summary>
     /// Gets or sets the default value for the total width reserved for each legend item (key and text) inside the legend
@@ -58,11 +54,6 @@ public class Legend : ChildComponentBase, IDisposable {
     [Parameter] public LegendAlignment Alignment { get; set; } = DefaultAlignment;
 
     /// <summary>
-    /// Gets or sets the total height reserved for the legend
-    /// </summary>
-    [Parameter] public int Height { get; set; } = DefaultHeight;
-
-    /// <summary>
     /// Gets or sets the total width reserved for each legend item (key and text) inside the legend
     /// </summary>
     [Parameter] public int ItemWidth { get; set; } = DefaultItemWidth;
@@ -76,6 +67,20 @@ public class Legend : ChildComponentBase, IDisposable {
     /// Gets or sets the width/height of the legend item key
     /// </summary>
     [Parameter] public int KeySize { get; set; } = DefaultKeySize;
+
+    /// <summary>
+    /// Gets the number of items that will fit in one row in the legend area
+    /// </summary>
+    public int ItemsPerRow => Chart.Canvas.PlotAreaWidth / ItemWidth;
+
+    /// <summary>
+    /// Gets the total height reserved for the legend
+    /// </summary>
+    [Parameter] public int Height {
+        get => ItemHeight + (Chart.Layers.Sum(layer => layer.DataSeries.Count) - 1) / ItemsPerRow * ItemHeight;
+        [Obsolete("Legend height is now automatically determined by the amount of data series and the legend item height")]
+        set { }
+    }
 
     /// <inheritdoc/>
     protected override void OnInitialized() => Chart.SetLegend(this);
@@ -91,7 +96,6 @@ public class Legend : ChildComponentBase, IDisposable {
         => parameters.HasParameterChanged(IsEnabled)
         || parameters.HasParameterChanged(Position)
         || parameters.HasParameterChanged(Alignment)
-        || parameters.HasParameterChanged(Height)
         || parameters.HasParameterChanged(ItemWidth)
         || parameters.HasParameterChanged(ItemHeight)
         || parameters.HasParameterChanged(KeySize);
