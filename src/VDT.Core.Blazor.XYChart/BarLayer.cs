@@ -76,7 +76,7 @@ public class BarLayer : LayerBase {
         var width = Chart.GetDataPointWidth() / 100M * (100M - ClearancePercentage * 2);
         var offsetProvider = (int dataSeriesIndex) => 0M;
 
-        if (!IsStacked && DataSeries.Any()) {
+        if (!IsStacked && DataSeries.Count != 0) {
             var gapWidth = Chart.GetDataPointWidth() / 100M * GapPercentage;
             var dataSeriesWidth = (width - gapWidth * (DataSeries.Count - 1)) / DataSeries.Count;
 

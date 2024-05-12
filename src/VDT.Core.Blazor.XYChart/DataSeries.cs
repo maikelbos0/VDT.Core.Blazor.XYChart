@@ -100,7 +100,7 @@ public class DataSeries : ChildComponentBase, IDisposable {
 
         var index = Chart.Layers.TakeWhile(layer => layer != Layer).Sum(layer => layer.DataSeries.Count) + Layer.DataSeries.IndexOf(this);
 
-        if (DefaultColors.Any() && index >= 0) {
+        if (DefaultColors.Count != 0 && index >= 0) {
             return DefaultColors[index % DefaultColors.Count];
         }
 

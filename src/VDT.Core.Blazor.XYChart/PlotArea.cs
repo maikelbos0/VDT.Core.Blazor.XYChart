@@ -9,6 +9,8 @@ namespace VDT.Core.Blazor.XYChart;
 /// Ploy area/scaling settings for an <see cref="XYChart"/>
 /// </summary>
 public class PlotArea : ChildComponentBase, IDisposable {
+    private static readonly decimal[] baseGridLineIntervals = new[] { 1M, 2M, 5M, 10M };
+
     /// <summary>
     /// Gets or sets the default value for the lowest data point value that is visible in the chart
     /// </summary>
@@ -173,8 +175,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
 
         var rawGridLineInterval = (max - min) / Math.Max(1, AutoScaleRequestedGridLineCount - 1);
         var baseMultiplier = DecimalMath.Pow(10M, (int)Math.Floor((decimal)Math.Log10((double)rawGridLineInterval)));
-        var scale = new[] { 1M, 2M, 5M, 10M }
-            .Select(baseGridLineInterval => baseGridLineInterval * baseMultiplier)
+        var scale = baseGridLineIntervals.Select(baseGridLineInterval => baseGridLineInterval * baseMultiplier)
             .Select(gridLineInterval => new {
                 GridLineInterval = gridLineInterval,
                 Min = DecimalMath.FloorToScale(min, gridLineInterval),
