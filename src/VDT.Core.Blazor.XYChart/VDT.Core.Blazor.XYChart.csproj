@@ -51,7 +51,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="VDT.Core.Operators" Version="0.2.0" />
+	  <PackageReference Include="VDT.Core.Operators" Version="1.0.0" />
 	</ItemGroup>
 
 </Project>
