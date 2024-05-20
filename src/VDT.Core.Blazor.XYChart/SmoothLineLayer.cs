@@ -108,4 +108,17 @@ public class SmoothLineLayer : LayerBase {
             }
         }
     }
+
+    public static ControlPoints GetControlPoints(CanvasDataPoint left, CanvasDataPoint dataPoint, CanvasDataPoint right) {
+        // TODO setting
+        var distance = 0.2M;
+        var slope = (right.Y - left.Y) / 2M;
+
+        return new ControlPoints(
+            dataPoint.X - distance * (dataPoint.X - left.X),
+            dataPoint.Y - slope * distance,
+            dataPoint.X + distance * (right.X - dataPoint.X),
+            dataPoint.Y + slope * distance
+        );
+    }
 }

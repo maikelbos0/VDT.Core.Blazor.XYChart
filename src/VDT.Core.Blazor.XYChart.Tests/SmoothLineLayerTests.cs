@@ -187,4 +187,27 @@ public class SmoothLineLayerTests {
 
         Assert.Empty(subject.GetDataSeriesShapes());
     }
+
+    [Theory]
+    [MemberData(nameof(GetControlPoints_Data))]
+    public void GetControlPoints(decimal leftX, decimal leftY, decimal dataPointX, decimal dataPointY, decimal rightX, decimal rightY, decimal expectedLeftX, decimal expectedLeftY, decimal expectedRightX, decimal expectedRightY) {
+        var left = new CanvasDataPoint(leftX, leftY, 0, 0, 0, 0);
+        var dataPoint = new CanvasDataPoint(dataPointX, dataPointY, 0, 0, 0, 0);
+        var right = new CanvasDataPoint(rightX, rightY, 0, 0, 0, 0);
+
+        var result = SmoothLineLayer.GetControlPoints(left,dataPoint, right);
+
+        Assert.Equal(expectedLeftX, result.leftX);
+        Assert.Equal(expectedLeftY, result.leftY);
+        Assert.Equal(expectedRightX, result.rightX);
+        Assert.Equal(expectedRightY, result.rightY);
+    }
+
+    public static TheoryData<decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal> GetControlPoints_Data() => new() {
+        { 10M, 50M, 20M, 50M, 30M, 50M, 18M, 50M, 22M, 50M },
+        { 10M, 100M, 20M, 50M, 30M, 100M, 18M, 50M, 22M, 50M },
+        { 10M, 60M, 20M, 50M, 30M, 40M, 18M, 52M, 22M, 48M },
+        { 10M, 40M, 20M, 50M, 30M, 60M, 18M, 48M, 22M, 52M },
+        { 10M, 40M, 20M, 50M, 30M, 70M, 18M, 47M, 22M, 53M },
+    };
 }
