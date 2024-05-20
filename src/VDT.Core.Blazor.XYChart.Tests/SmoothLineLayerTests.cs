@@ -204,10 +204,10 @@ public class SmoothLineLayerTests {
     }
 
     public static TheoryData<decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal> GetControlPoints_Data() => new() {
-        { 10M, 50M, 20M, 50M, 30M, 50M, 18M, 50M, 22M, 50M },
-        { 10M, 100M, 20M, 50M, 30M, 100M, 18M, 50M, 22M, 50M },
-        { 10M, 60M, 20M, 50M, 30M, 40M, 18M, 52M, 22M, 48M },
-        { 10M, 40M, 20M, 50M, 30M, 60M, 18M, 48M, 22M, 52M },
-        { 10M, 40M, 20M, 50M, 30M, 70M, 18M, 47M, 22M, 53M },
+        { 10M, 50M, 20M, 50M, 30M, 50M, 17.5M, 50M, 22.5M, 50M },
+        { 10M, 100M, 20M, 50M, 30M, 100M, 17.5M, 50M, 22.5M, 50M },
+        { 10M, 60M, 20M, 50M, 30M, 40M, 17.5M, 52.5M, 22.5M, 47.5M },
+        { 10M, 40M, 20M, 50M, 30M, 60M, 17.5M, 47.5M, 22.5M, 52.5M },
+        { 10M, 40M, 20M, 50M, 30M, 70M, 17.5M, 46.25M, 22.5M, 53.75M },
     };
 }
