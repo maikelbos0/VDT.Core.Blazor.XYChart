@@ -109,9 +109,16 @@ public class SmoothLineLayer : LayerBase {
         }
     }
 
+    /// <summary>
+    /// Calculate control points for bezier curves to create smooth lines
+    /// </summary>
+    /// <param name="left">Previous data point</param>
+    /// <param name="dataPoint">Current data point</param>
+    /// <param name="right">Next data point</param>
+    /// <returns>The control points for this data point</returns>
     public static ControlPoints GetControlPoints(CanvasDataPoint left, CanvasDataPoint dataPoint, CanvasDataPoint right) {
         // TODO setting
-        var distance = 0.2M;
+        var distance = 0.3M;
         var slope = (right.Y - left.Y) / 2M;
 
         return new ControlPoints(

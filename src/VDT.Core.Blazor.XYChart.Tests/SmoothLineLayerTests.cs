@@ -197,10 +197,10 @@ public class SmoothLineLayerTests {
 
         var result = SmoothLineLayer.GetControlPoints(left,dataPoint, right);
 
-        Assert.Equal(expectedLeftX, result.leftX);
-        Assert.Equal(expectedLeftY, result.leftY);
-        Assert.Equal(expectedRightX, result.rightX);
-        Assert.Equal(expectedRightY, result.rightY);
+        Assert.Equal(expectedLeftX, result.LeftX);
+        Assert.Equal(expectedLeftY, result.LeftY);
+        Assert.Equal(expectedRightX, result.RightX);
+        Assert.Equal(expectedRightY, result.RightY);
     }
 
     public static TheoryData<decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal> GetControlPoints_Data() => new() {
