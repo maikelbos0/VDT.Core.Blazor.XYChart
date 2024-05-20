@@ -93,9 +93,50 @@ public class SmoothLineLayer : LayerBase {
                 }
 
                 if (ShowDataLines) {
+                    var controlPoints = new ControlPoints?[canvasDataSeries.DataPoints.Count];
+
+                    for (var i = 1; i < canvasDataSeries.DataPoints.Count - 1; i++) {
+                        if (canvasDataSeries.DataPoints[i - 1].Index == canvasDataSeries.DataPoints[i].Index - 1 && canvasDataSeries.DataPoints[i + 1].Index == canvasDataSeries.DataPoints[i].Index + 1) {
+                            controlPoints[i] = GetControlPoints(canvasDataSeries.DataPoints[i - 1], canvasDataSeries.DataPoints[i], canvasDataSeries.DataPoints[i + 1]);
+                        }
+                    }
+
                     var commands = new List<string>();
 
-                    // TODO
+                    for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
+                        if (i == 0 || canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
+                            commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+                        }
+                        else if (i > 0 && controlPoints[i - 1] != null && controlPoints[i] != null) {
+                            commands.Add(PathCommandFactory.CubicBezierTo(
+                                controlPoints[i - 1]!.RightX,
+                                controlPoints[i - 1]!.RightY,
+                                controlPoints[i]!.LeftX,
+                                controlPoints[i]!.LeftY,
+                                canvasDataSeries.DataPoints[i].X,
+                                canvasDataSeries.DataPoints[i].Y
+                            ));
+                        }
+                        else if (i > 0 && controlPoints[i - 1] != null) {
+                            commands.Add(PathCommandFactory.QuadraticBezierTo(
+                                controlPoints[i - 1]!.RightX,
+                                controlPoints[i - 1]!.RightY,
+                                canvasDataSeries.DataPoints[i].X,
+                                canvasDataSeries.DataPoints[i].Y
+                            ));
+                        }
+                        else if (controlPoints[i] != null) {
+                            commands.Add(PathCommandFactory.QuadraticBezierTo(
+                                controlPoints[i]!.LeftX,
+                                controlPoints[i]!.LeftY,
+                                canvasDataSeries.DataPoints[i].X,
+                                canvasDataSeries.DataPoints[i].Y
+                            ));
+                        }
+                        else {
+                            commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+                        }
+                    }
 
                     yield return new LineDataShape(
                         commands,
@@ -118,7 +159,7 @@ public class SmoothLineLayer : LayerBase {
     /// <returns>The control points for this data point</returns>
     public static ControlPoints GetControlPoints(CanvasDataPoint left, CanvasDataPoint dataPoint, CanvasDataPoint right) {
         // TODO setting
-        var distance = 0.3M;
+        var distance = 0.25M;
         var slope = (right.Y - left.Y) / 2M;
 
         return new ControlPoints(
