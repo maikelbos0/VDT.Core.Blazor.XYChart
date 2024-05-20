@@ -153,7 +153,99 @@ public class SmoothLineLayerTests {
         Assert.DoesNotContain(result, shape => shape is RoundDataMarkerShape);
     }
 
-    // TODO line layer
+    [Theory]
+    [MemberData(nameof(GetUnstackedDataSeriesShapes_Lines_Data))]
+    public void GetUnstackedDataSeriesShapes_Lines(int dataSeriesIndex, string expectedPath) {
+        var subject = new XYChartBuilder(labelCount: 4, DataPointSpacingMode.Center)
+            .WithLayer(new SmoothLineLayer() {
+                IsStacked = false,
+                ShowDataLines = true
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -60M, -60M, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "red",
+                DataPoints = { null, null, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
+
+        var result = subject.GetDataSeriesShapes();
+
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[0,{dataSeriesIndex}]"));
+
+        Assert.Equal(expectedPath, Path.TrimDecimals(shape.Path));
+        Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data line-data example-data", shape.CssClass);
+    }
+
+    public static TheoryData<int, string> GetUnstackedDataSeriesShapes_Lines_Data() {
+        var dataPointWidth = PlotArea_Width / 4M;
+
+        return new() {
+            { 0, Path.Create(
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 60M) / PlotArea_Range * PlotArea_Height}",
+                $"Q {PlotArea_X + 1.25M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 75M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 60M) / PlotArea_Range * PlotArea_Height}",
+                $"C {PlotArea_X + 1.75M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 45M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 2.25M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 33.75M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 60M) / PlotArea_Range * PlotArea_Height}",
+                $"Q {PlotArea_X + 2.75M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 86.25M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 3.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 150M) / PlotArea_Range * PlotArea_Height}"
+            ) },
+            { 1, Path.Create(
+                $"M {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 60M) / PlotArea_Range * PlotArea_Height}",
+                $"L {PlotArea_X + 3.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 150M) / PlotArea_Range * PlotArea_Height}"
+            ) },
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(GetStackedDataSeriesShapes_Lines_Data))]
+    public void GetStackedDataSeriesShapes_Lines(int dataSeriesIndex, string expectedPath) {
+        var subject = new XYChartBuilder(labelCount: 4, DataPointSpacingMode.Center)
+            .WithLayer(new SmoothLineLayer() {
+                IsStacked = true,
+                ShowDataLines = true
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "blue",
+                DataPoints = { -60M, -60M, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .WithDataSeries(new DataSeries() {
+                Color = "red",
+                DataPoints = { null, null, 60M, 150M },
+                CssClass = "example-data"
+            })
+            .Chart.Layers.Single();
+
+        var result = subject.GetDataSeriesShapes();
+
+        var shape = Assert.IsType<LineDataShape>(Assert.Single(result, shape => shape.Key == $"{nameof(LineDataShape)}[0,{dataSeriesIndex}]"));
+
+        Assert.Equal(expectedPath, Path.TrimDecimals(shape.Path));
+        Assert.Equal(subject.DataSeries[dataSeriesIndex].Color, shape.Color);
+        Assert.Equal("data line-data example-data", shape.CssClass);
+    }
+
+    public static TheoryData<int, string> GetStackedDataSeriesShapes_Lines_Data() {
+        var dataPointWidth = PlotArea_Width / 4M;
+
+        return new() {
+            { 0, Path.Create(
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 60M) / PlotArea_Range * PlotArea_Height}",
+                $"Q {PlotArea_X + 1.25M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 75M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 60M) / PlotArea_Range * PlotArea_Height}",
+                $"C {PlotArea_X + 1.75M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 45M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 2.25M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 33.75M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 60M) / PlotArea_Range * PlotArea_Height}",
+                $"Q {PlotArea_X + 2.75M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 86.25M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 3.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 150M) / PlotArea_Range * PlotArea_Height}"
+            ) },
+            { 1, Path.Create(
+                $"M {PlotArea_X + 0.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 60M) / PlotArea_Range * PlotArea_Height}",
+                $"Q {PlotArea_X + 1.25M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 82.5M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 1.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 60M) / PlotArea_Range * PlotArea_Height}",
+                $"C {PlotArea_X + 1.75M * dataPointWidth} {PlotArea_Y + (PlotArea_Max + 37.5M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 2.25M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 75M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 2.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 120M) / PlotArea_Range * PlotArea_Height}",
+                $"Q {PlotArea_X + 2.75M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 165M) / PlotArea_Range * PlotArea_Height}, {PlotArea_X + 3.5M * dataPointWidth} {PlotArea_Y + (PlotArea_Max - 300M) / PlotArea_Range * PlotArea_Height}"
+            ) }
+        };
+    }
 
     [Fact]
     public void GetStackedDataSeriesShapes_HideDataLines() {
