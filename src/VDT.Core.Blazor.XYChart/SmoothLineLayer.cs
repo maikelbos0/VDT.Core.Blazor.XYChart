@@ -93,42 +93,49 @@ public class SmoothLineLayer : LayerBase {
                 }
 
                 if (ShowDataLines) {
-                    var controlPoints = new ControlPoints?[canvasDataSeries.DataPoints.Count];
-
-                    for (var i = 1; i < canvasDataSeries.DataPoints.Count - 1; i++) {
-                        if (canvasDataSeries.DataPoints[i - 1].Index == canvasDataSeries.DataPoints[i].Index - 1 && canvasDataSeries.DataPoints[i + 1].Index == canvasDataSeries.DataPoints[i].Index + 1) {
-                            controlPoints[i] = GetControlPoints(canvasDataSeries.DataPoints[i - 1], canvasDataSeries.DataPoints[i], canvasDataSeries.DataPoints[i + 1]);
-                        }
-                    }
-
                     var commands = new List<string>();
+                    ControlPoints? previousControlPoints;
+                    ControlPoints? controlPoints = null;
 
                     for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
+                        previousControlPoints = controlPoints;
+
+                        if (i > 0 
+                            && i < canvasDataSeries.DataPoints.Count - 1 
+                            && canvasDataSeries.DataPoints[i - 1].Index == canvasDataSeries.DataPoints[i].Index - 1 
+                            && canvasDataSeries.DataPoints[i + 1].Index == canvasDataSeries.DataPoints[i].Index + 1) {
+
+                            controlPoints = GetControlPoints(canvasDataSeries.DataPoints[i - 1], canvasDataSeries.DataPoints[i], canvasDataSeries.DataPoints[i + 1]);
+                        }
+                        else {
+                            controlPoints = null;
+                        }
+
                         if (i == 0 || canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
                             commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
                         }
-                        else if (i > 0 && controlPoints[i - 1] != null && controlPoints[i] != null) {
+                        else if (i > 0 && previousControlPoints != null && controlPoints != null) {
                             commands.Add(PathCommandFactory.CubicBezierTo(
-                                controlPoints[i - 1]!.RightX,
-                                controlPoints[i - 1]!.RightY,
-                                controlPoints[i]!.LeftX,
-                                controlPoints[i]!.LeftY,
+                                previousControlPoints.RightX,
+                                previousControlPoints.RightY,
+                                controlPoints.LeftX,
+                                controlPoints.LeftY,
                                 canvasDataSeries.DataPoints[i].X,
                                 canvasDataSeries.DataPoints[i].Y
                             ));
                         }
-                        else if (i > 0 && controlPoints[i - 1] != null) {
+                        else if (i > 0 && previousControlPoints != null) {
                             commands.Add(PathCommandFactory.QuadraticBezierTo(
-                                controlPoints[i - 1]!.RightX,
-                                controlPoints[i - 1]!.RightY,
+                                previousControlPoints.RightX,
+                                previousControlPoints.RightY,
                                 canvasDataSeries.DataPoints[i].X,
                                 canvasDataSeries.DataPoints[i].Y
                             ));
                         }
-                        else if (controlPoints[i] != null) {
+                        else if (controlPoints != null) {
                             commands.Add(PathCommandFactory.QuadraticBezierTo(
-                                controlPoints[i]!.LeftX,
-                                controlPoints[i]!.LeftY,
+                                controlPoints.LeftX,
+                                controlPoints.LeftY,
                                 canvasDataSeries.DataPoints[i].X,
                                 canvasDataSeries.DataPoints[i].Y
                             ));
