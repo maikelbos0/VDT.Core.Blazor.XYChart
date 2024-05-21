@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
@@ -29,7 +30,13 @@ public class LineLayer : LayerBase {
     /// <summary>
     /// Gets or sets the default value for visibility of the lines connecting the positions of the data points
     /// </summary>
+    [Obsolete($"Default data line visibility is now determined by {nameof(DefaultDataLineMode)}")]
     public static bool DefaultShowDataLines { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the default value for the visibility and type of lines connecting the positions of data points
+    /// </summary>
+    public static DataLineMode DefaultDataLineMode { get; set; } = DataLineMode.Straight;
 
     /// <inheritdoc/>
     public override StackMode StackMode => StackMode.Single;
@@ -60,7 +67,13 @@ public class LineLayer : LayerBase {
     /// <summary>
     /// Gets or sets visibility of the lines connecting the positions of the data points
     /// </summary>
+    [Obsolete($"Data line visibility is now determined by {nameof(DataLineMode)}")]
     [Parameter] public bool ShowDataLines { get; set; } = DefaultShowDataLines;
+
+    /// <summary>
+    /// Gets or sets the visibility and type of lines connecting the positions of data points
+    /// </summary>
+    [Parameter] public DataLineMode DataLineMode { get; set; } = DefaultDataLineMode;
 
     /// <inheritdoc/>
     public override bool HaveParametersChanged(ParameterView parameters)
@@ -69,7 +82,7 @@ public class LineLayer : LayerBase {
         || parameters.HasParameterChanged(ShowDataMarkers)
         || parameters.HasParameterChanged(DataMarkerSize)
         || parameters.HasParameterChanged(DataMarkerType)
-        || parameters.HasParameterChanged(ShowDataLines);
+        || parameters.HasParameterChanged(DataLineMode);
 
     /// <inheritdoc/>
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
@@ -92,30 +105,34 @@ public class LineLayer : LayerBase {
                     }
                 }
 
-                if (ShowDataLines) {
-                    var commands = new List<string>();
-
-                    for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
-                        if (i == 0) {
-                            commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
-                        }
-                        else if (canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
-                            commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
-                        }
-                        else {
-                            commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
-                        }
-                    }
-
-                    yield return new LineDataShape(
-                        commands,
-                        canvasDataSeries.Color,
-                        canvasDataSeries.CssClass,
-                        layerIndex,
-                        canvasDataSeries.Index
-                    );
+                if (DataLineMode != DataLineMode.Hidden) {
+                    yield return DataLineMode switch {
+                        DataLineMode.Straight => GetStraightDataLine(layerIndex, canvasDataSeries),
+                        _ => throw new NotImplementedException($"No implementation found for {nameof(DataLineMode)} '{DataLineMode}'.")
+                    };
                 }
             }
         }
+    }
+
+    private ShapeBase GetStraightDataLine(int layerIndex, CanvasDataSeries canvasDataSeries) {
+        var commands = new List<string>();
+
+        for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
+            if (i == 0 || canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
+                commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+            }
+            else {
+                commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+            }
+        }
+
+        return new LineDataShape(
+            commands,
+            canvasDataSeries.Color,
+            canvasDataSeries.CssClass,
+            layerIndex,
+            canvasDataSeries.Index
+        );
     }
 }

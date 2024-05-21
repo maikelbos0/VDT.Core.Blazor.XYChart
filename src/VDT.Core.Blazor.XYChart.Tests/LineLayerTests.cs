@@ -10,14 +10,14 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class LineLayerTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(bool isStacked, bool showDataLabels, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, bool showDataLines, bool expectedResult) {
+    public void HaveParametersChanged(bool isStacked, bool showDataLabels, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, DataLineMode dataLineMode, bool expectedResult) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(LineLayer.IsStacked), isStacked },
             { nameof(LineLayer.ShowDataLabels), showDataLabels },
             { nameof(LineLayer.ShowDataMarkers), showDataMarkers },
             { nameof(LineLayer.DataMarkerSize), dataMarkerSize },
             { nameof(LineLayer.DataMarkerType), dataMarkerType },
-            { nameof(LineLayer.ShowDataLines), showDataLines }
+            { nameof(LineLayer.DataLineMode), dataLineMode }
         });
 
         var subject = new LineLayer {
@@ -26,20 +26,20 @@ public class LineLayerTests {
             ShowDataMarkers = true,
             DataMarkerSize = 10M,
             DataMarkerType = DefaultDataMarkerTypes.Square,
-            ShowDataLines = true
+            DataLineMode = DataLineMode.Straight
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<bool, bool, bool, decimal, DataMarkerDelegate, bool, bool> HaveParametersChanged_Data() => new() {
-        { false, false, true, 10M, DefaultDataMarkerTypes.Square, true, false },
-        { true, false, true, 10M, DefaultDataMarkerTypes.Square, true, true },
-        { false, true, true, 10M, DefaultDataMarkerTypes.Square, true, true },
-        { false, false, false, 10M, DefaultDataMarkerTypes.Square, true, true },
-        { false, false, true, 15M, DefaultDataMarkerTypes.Square, true, true },
-        { false, false, true, 10M, DefaultDataMarkerTypes.Round, true, true },
-        { false, false, true, 10M, DefaultDataMarkerTypes.Square, false, true }
+    public static TheoryData<bool, bool, bool, decimal, DataMarkerDelegate, DataLineMode, bool> HaveParametersChanged_Data() => new() {
+        { false, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, false },
+        { true, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, true },
+        { false, true, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, true },
+        { false, false, false, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, true },
+        { false, false, true, 15M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, true },
+        { false, false, true, 10M, DefaultDataMarkerTypes.Round, DataLineMode.Straight, true },
+        { false, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Hidden, true }
     };
 
     [Theory]
@@ -154,12 +154,12 @@ public class LineLayerTests {
     }
 
     [Theory]
-    [MemberData(nameof(GetUnstackedDataSeriesShapes_Lines_Data))]
-    public void GetUnstackedDataSeriesShapes_Lines(int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {
+    [MemberData(nameof(GetUnstackedDataSeriesShapes_StraightDataLines_Data))]
+    public void GetUnstackedDataSeriesShapes_StraightDataLines(int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {
         var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
             .WithLayer(new LineLayer() {
                 IsStacked = false,
-                ShowDataLines = true
+                DataLineMode = DataLineMode.Straight
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
@@ -185,7 +185,7 @@ public class LineLayerTests {
         Assert.Equal("data line-data example-data", shape.CssClass);
     }
 
-    public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_Lines_Data() {
+    public static TheoryData<int, decimal, int, decimal, string> GetUnstackedDataSeriesShapes_StraightDataLines_Data() {
         var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
@@ -201,12 +201,12 @@ public class LineLayerTests {
     }
 
     [Theory]
-    [MemberData(nameof(GetStackedDataSeriesShapes_Lines_Data))]
-    public void GetStackedDataSeriesShapes_Lines(int dataSeriesIndex, int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {
+    [MemberData(nameof(GetStackedDataSeriesShapes_StraightDataLines_Data))]
+    public void GetStackedDataSeriesShapes_StraightDataLines(int dataSeriesIndex, int startIndex, decimal startDataPoint, int endIndex, decimal endDataPoint, string expectedPath) {
         var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
             .WithLayer(new LineLayer() {
                 IsStacked = true,
-                ShowDataLines = true
+                DataLineMode = DataLineMode.Straight
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
@@ -232,7 +232,7 @@ public class LineLayerTests {
         Assert.Equal("data line-data example-data", shape.CssClass);
     }
 
-    public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_Lines_Data() {
+    public static TheoryData<int, int, decimal, int, decimal, string> GetStackedDataSeriesShapes_StraightDataLines_Data() {
         var dataPointWidth = PlotArea_Width / 3M;
 
         return new() {
@@ -265,10 +265,10 @@ public class LineLayerTests {
     }
 
     [Fact]
-    public void GetStackedDataSeriesShapes_HideDataLines() {
+    public void GetStackedDataSeriesShapes_HiddenDataLines() {
         var subject = new XYChartBuilder(labelCount: 3, DataPointSpacingMode.Center)
             .WithLayer(new LineLayer() {
-                ShowDataLines = false
+                DataLineMode = DataLineMode.Hidden
             })
             .WithDataSeries(new DataSeries() {
                 Color = "blue",
@@ -289,8 +289,8 @@ public class LineLayerTests {
         var subject = new XYChartBuilder()
             .WithLayer(new LineLayer() {
                 IsStacked = isStacked,
-                ShowDataLines = true,
-                ShowDataMarkers = true
+                ShowDataMarkers = true,
+                DataLineMode= DataLineMode.Hidden
             })
             .Chart.Layers.Single();
 

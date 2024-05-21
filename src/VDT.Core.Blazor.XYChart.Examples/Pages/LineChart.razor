@@ -21,7 +21,7 @@
             <li><code>DefaultDataMarkerTypes.Square</code> shows the data point as a square</li>
         </ul>
     </li>
-    <li><code>ShowDataLines</code> toggles visibility of the lines connecting the positions of the data points</li>
+    <li><code>DataLineMode</code> sets the visibility and type of lines connecting the positions of the data points</li>
 </ul>
 
 <p>
@@ -78,17 +78,17 @@
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 mb-3">
-        <label class="form-label" for="showDataLines">Data lines</label>
-        <select class="form-select" id="showDataLines" @onchange="args => ShowDataLines = bool.Parse(args.Value?.ToString()!)">
-            <option value="true" selected="@ShowDataLines">Show</option>
-            <option value="false" selected="@(!ShowDataLines)">Hide</option>
+        <label class="form-label" for="dataLineMode">Data lines</label>
+        <select class="form-select" id="dataLineMode" @onchange="args => DataLineMode = Enum.Parse<DataLineMode>(args.Value?.ToString() ?? throw new InvalidOperationException())">
+            <option value="@DataLineMode.Hidden" selected="@(DataLineMode == DataLineMode.Hidden)">Hidden</option>
+            <option value="@DataLineMode.Straight" selected="@(DataLineMode == DataLineMode.Straight)">Straight</option>
         </select>
     </div>
 </div>
 
 <div class="d-inline-block">
     <XYChart Labels="ExampleData.Labels">
-        <LineLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" ShowDataLines="ShowDataLines">
+        <LineLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" DataLineMode="DataLineMode">
             @foreach (var data in ExampleData.LineData) {
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
             }
@@ -139,7 +139,7 @@
     private bool ShowDataMarkers { get; set; } = true;
     private decimal DataMarkerSize { get; set; } = 10M;
     private DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
-    private bool ShowDataLines { get; set; } = true;
+    private DataLineMode DataLineMode { get; set; } = DataLineMode.Straight;
 
     private void SetDataMarkerType(ChangeEventArgs args) {
         DataMarkerType = args.Value?.ToString() switch {
