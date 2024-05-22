@@ -10,14 +10,24 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 public class LineLayerTests {
     [Theory]
     [MemberData(nameof(HaveParametersChanged_Data))]
-    public void HaveParametersChanged(bool isStacked, bool showDataLabels, bool showDataMarkers, decimal dataMarkerSize, DataMarkerDelegate dataMarkerType, DataLineMode dataLineMode, bool expectedResult) {
+    public void HaveParametersChanged(
+        bool isStacked,
+        bool showDataLabels,
+        bool showDataMarkers,
+        decimal dataMarkerSize,
+        DataMarkerDelegate dataMarkerType,
+        DataLineMode dataLineMode,
+        decimal controlPointDistancePercentage,
+        bool expectedResult
+    ) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
             { nameof(LineLayer.IsStacked), isStacked },
             { nameof(LineLayer.ShowDataLabels), showDataLabels },
             { nameof(LineLayer.ShowDataMarkers), showDataMarkers },
             { nameof(LineLayer.DataMarkerSize), dataMarkerSize },
             { nameof(LineLayer.DataMarkerType), dataMarkerType },
-            { nameof(LineLayer.DataLineMode), dataLineMode }
+            { nameof(LineLayer.DataLineMode), dataLineMode },
+            { nameof(LineLayer.ControlPointDistancePercentage), controlPointDistancePercentage }
         });
 
         var subject = new LineLayer {
@@ -26,20 +36,22 @@ public class LineLayerTests {
             ShowDataMarkers = true,
             DataMarkerSize = 10M,
             DataMarkerType = DefaultDataMarkerTypes.Square,
-            DataLineMode = DataLineMode.Straight
+            DataLineMode = DataLineMode.Straight,
+            ControlPointDistancePercentage = 25M
         };
 
         Assert.Equal(expectedResult, subject.HaveParametersChanged(parameters));
     }
 
-    public static TheoryData<bool, bool, bool, decimal, DataMarkerDelegate, DataLineMode, bool> HaveParametersChanged_Data() => new() {
-        { false, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, false },
-        { true, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, true },
-        { false, true, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, true },
-        { false, false, false, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, true },
-        { false, false, true, 15M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, true },
-        { false, false, true, 10M, DefaultDataMarkerTypes.Round, DataLineMode.Straight, true },
-        { false, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Hidden, true }
+    public static TheoryData<bool, bool, bool, decimal, DataMarkerDelegate, DataLineMode, decimal, bool> HaveParametersChanged_Data() => new() {
+        { false, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, 25M, false },
+        { true, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, 25M, true },
+        { false, true, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, 25M, true },
+        { false, false, false, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, 25M, true },
+        { false, false, true, 15M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, 25M, true },
+        { false, false, true, 10M, DefaultDataMarkerTypes.Round, DataLineMode.Straight, 25M, true },
+        { false, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Hidden, 25M, true },
+        { false, false, true, 10M, DefaultDataMarkerTypes.Square, DataLineMode.Straight, 50M, true }
     };
 
     [Theory]
@@ -384,7 +396,7 @@ public class LineLayerTests {
             .WithLayer(new LineLayer() {
                 IsStacked = isStacked,
                 ShowDataMarkers = true,
-                DataLineMode= DataLineMode.Hidden
+                DataLineMode = DataLineMode.Hidden
             })
             .Chart.Layers.Single();
 

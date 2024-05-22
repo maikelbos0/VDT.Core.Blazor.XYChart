@@ -94,7 +94,8 @@ public class LineLayer : LayerBase {
         || parameters.HasParameterChanged(ShowDataMarkers)
         || parameters.HasParameterChanged(DataMarkerSize)
         || parameters.HasParameterChanged(DataMarkerType)
-        || parameters.HasParameterChanged(DataLineMode);
+        || parameters.HasParameterChanged(DataLineMode)
+        || parameters.HasParameterChanged(ControlPointDistancePercentage);
 
     /// <inheritdoc/>
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
