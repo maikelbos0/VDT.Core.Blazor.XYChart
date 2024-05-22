@@ -85,11 +85,23 @@
             <option value="@DataLineMode.Smooth" selected="@(DataLineMode == DataLineMode.Smooth)">Smooth</option>
         </select>
     </div>
+
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="controlPointDistancePercentage">Control point distance percentage</label>
+        <input type="number" class="form-control" id="controlPointDistancePercentage" @bind-value="@ControlPointDistancePercentage" />
+    </div>
 </div>
 
 <div class="d-inline-block">
     <XYChart Labels="ExampleData.Labels">
-        <LineLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels" ShowDataMarkers="ShowDataMarkers" DataMarkerSize="DataMarkerSize" DataMarkerType="DataMarkerType" DataLineMode="DataLineMode">
+        <LineLayer IsStacked="IsStacked"
+                   ShowDataLabels="ShowDataLabels" 
+                   ShowDataMarkers="ShowDataMarkers" 
+                   DataMarkerSize="DataMarkerSize" 
+                   DataMarkerType="DataMarkerType" 
+                   DataLineMode="DataLineMode"
+                   ControlPointDistancePercentage="ControlPointDistancePercentage">
+
             @foreach (var data in ExampleData.LineData) {
                 <DataSeries Name="@data.Name" Color="@data.Color" DataPoints="data.DataPoints" />
             }
@@ -141,6 +153,7 @@
     private decimal DataMarkerSize { get; set; } = 10M;
     private DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
     private DataLineMode DataLineMode { get; set; } = DataLineMode.Straight;
+    private decimal ControlPointDistancePercentage { get; set; } = 25M;
 
     private void SetDataMarkerType(ChangeEventArgs args) {
         DataMarkerType = args.Value?.ToString() switch {
