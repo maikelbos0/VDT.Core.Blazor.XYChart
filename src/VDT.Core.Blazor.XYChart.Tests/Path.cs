@@ -11,6 +11,6 @@ public static partial class Path {
 
     public static string Create(params FormattableString[] commands) => TrimDecimals(string.Join(" ", commands.Select(FormattableString.Invariant)));
 
-    [GeneratedRegex("(\\.0+|(?<=\\.[1-9]+)(0+))(?= )")]
+    [GeneratedRegex("(\\.0+|(?<=\\.[1-9]+)(0+))(?=[ ,]|$)")]
     private static partial Regex CreatePathDecimalTrimmer();
 }

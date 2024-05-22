@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VDT.Core.Blazor.XYChart.Shapes;
@@ -29,7 +30,19 @@ public class LineLayer : LayerBase {
     /// <summary>
     /// Gets or sets the default value for visibility of the lines connecting the positions of the data points
     /// </summary>
+    [Obsolete($"Default data line visibility is now determined by {nameof(DefaultDataLineMode)}")]
     public static bool DefaultShowDataLines { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the default value for the visibility and type of lines connecting the positions of data points
+    /// </summary>
+    public static DataLineMode DefaultDataLineMode { get; set; } = DataLineMode.Straight;
+
+    /// <summary>
+    /// Gets or sets the default value for the distance between data points and their control points for <see cref="DataLineMode.Smooth"/>, expressed as a
+    /// percentage of the total amount of space available for this index
+    /// </summary>
+    public static decimal DefaultControlPointDistancePercentage { get; set; } = 25M;
 
     /// <inheritdoc/>
     public override StackMode StackMode => StackMode.Single;
@@ -60,7 +73,19 @@ public class LineLayer : LayerBase {
     /// <summary>
     /// Gets or sets visibility of the lines connecting the positions of the data points
     /// </summary>
+    [Obsolete($"Data line visibility is now determined by {nameof(DataLineMode)}")]
     [Parameter] public bool ShowDataLines { get; set; } = DefaultShowDataLines;
+
+    /// <summary>
+    /// Gets or sets the visibility and type of lines connecting the positions of data points
+    /// </summary>
+    [Parameter] public DataLineMode DataLineMode { get; set; } = DefaultDataLineMode;
+
+    /// <summary>
+    /// Gets or sets the distance between data points and their control points for <see cref="DataLineMode.Smooth"/>, expressed as a percentage of the total
+    /// amount of space available for this index
+    /// </summary>
+    [Parameter] public decimal ControlPointDistancePercentage { get; set; } = DefaultControlPointDistancePercentage;
 
     /// <inheritdoc/>
     public override bool HaveParametersChanged(ParameterView parameters)
@@ -69,7 +94,8 @@ public class LineLayer : LayerBase {
         || parameters.HasParameterChanged(ShowDataMarkers)
         || parameters.HasParameterChanged(DataMarkerSize)
         || parameters.HasParameterChanged(DataMarkerType)
-        || parameters.HasParameterChanged(ShowDataLines);
+        || parameters.HasParameterChanged(DataLineMode)
+        || parameters.HasParameterChanged(ControlPointDistancePercentage);
 
     /// <inheritdoc/>
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
@@ -92,30 +118,116 @@ public class LineLayer : LayerBase {
                     }
                 }
 
-                if (ShowDataLines) {
-                    var commands = new List<string>();
-
-                    for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
-                        if (i == 0) {
-                            commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
-                        }
-                        else if (canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
-                            commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
-                        }
-                        else {
-                            commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
-                        }
-                    }
-
-                    yield return new LineDataShape(
-                        commands,
-                        canvasDataSeries.Color,
-                        canvasDataSeries.CssClass,
-                        layerIndex,
-                        canvasDataSeries.Index
-                    );
+                if (DataLineMode != DataLineMode.Hidden) {
+                    yield return DataLineMode switch {
+                        DataLineMode.Straight => GetStraightDataLine(layerIndex, canvasDataSeries),
+                        DataLineMode.Smooth => GetSmoothDataLine(layerIndex, canvasDataSeries),
+                        _ => throw new NotImplementedException($"No implementation found for {nameof(DataLineMode)} '{DataLineMode}'.")
+                    };
                 }
             }
         }
+    }
+
+    private static LineDataShape GetStraightDataLine(int layerIndex, CanvasDataSeries canvasDataSeries) {
+        var commands = new List<string>();
+
+        for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
+            if (i == 0 || canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
+                commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+            }
+            else {
+                commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+            }
+        }
+
+        return new LineDataShape(
+            commands,
+            canvasDataSeries.Color,
+            canvasDataSeries.CssClass,
+            layerIndex,
+            canvasDataSeries.Index
+        );
+    }
+
+    private LineDataShape GetSmoothDataLine(int layerIndex, CanvasDataSeries canvasDataSeries) {
+        var commands = new List<string>();
+        ControlPoints? previousControlPoints;
+        ControlPoints? controlPoints = null;
+
+        for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
+            previousControlPoints = controlPoints;
+
+            if (i > 0
+                && i < canvasDataSeries.DataPoints.Count - 1
+                && canvasDataSeries.DataPoints[i - 1].Index == canvasDataSeries.DataPoints[i].Index - 1
+                && canvasDataSeries.DataPoints[i + 1].Index == canvasDataSeries.DataPoints[i].Index + 1) {
+
+                controlPoints = GetControlPoints(canvasDataSeries.DataPoints[i - 1], canvasDataSeries.DataPoints[i], canvasDataSeries.DataPoints[i + 1]);
+            }
+            else {
+                controlPoints = null;
+            }
+
+            if (i == 0 || canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
+                commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+            }
+            else if (i > 0 && previousControlPoints != null && controlPoints != null) {
+                commands.Add(PathCommandFactory.CubicBezierTo(
+                    previousControlPoints.RightX,
+                    previousControlPoints.RightY,
+                    controlPoints.LeftX,
+                    controlPoints.LeftY,
+                    canvasDataSeries.DataPoints[i].X,
+                    canvasDataSeries.DataPoints[i].Y
+                ));
+            }
+            else if (i > 0 && previousControlPoints != null) {
+                commands.Add(PathCommandFactory.QuadraticBezierTo(
+                    previousControlPoints.RightX,
+                    previousControlPoints.RightY,
+                    canvasDataSeries.DataPoints[i].X,
+                    canvasDataSeries.DataPoints[i].Y
+                ));
+            }
+            else if (controlPoints != null) {
+                commands.Add(PathCommandFactory.QuadraticBezierTo(
+                    controlPoints.LeftX,
+                    controlPoints.LeftY,
+                    canvasDataSeries.DataPoints[i].X,
+                    canvasDataSeries.DataPoints[i].Y
+                ));
+            }
+            else {
+                commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+            }
+        }
+
+        return new LineDataShape(
+            commands,
+            canvasDataSeries.Color,
+            canvasDataSeries.CssClass,
+            layerIndex,
+            canvasDataSeries.Index
+        );
+    }
+
+    /// <summary>
+    /// Calculate control points for bezier curves to create smooth lines
+    /// </summary>
+    /// <param name="left">Previous data point</param>
+    /// <param name="dataPoint">Current data point</param>
+    /// <param name="right">Next data point</param>
+    /// <returns>The control points for this data point</returns>
+    public ControlPoints GetControlPoints(CanvasDataPoint left, CanvasDataPoint dataPoint, CanvasDataPoint right) {
+        var distance = ControlPointDistancePercentage / 100M;
+        var slope = (right.Y - left.Y) / 2M;
+
+        return new ControlPoints(
+            dataPoint.X - distance * (dataPoint.X - left.X),
+            dataPoint.Y - slope * distance,
+            dataPoint.X + distance * (right.X - dataPoint.X),
+            dataPoint.Y + slope * distance
+        );
     }
 }
