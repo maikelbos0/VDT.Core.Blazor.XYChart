@@ -47,13 +47,15 @@ customization parameters:
 - `ShowDataMarkers` toggles visibility of the markers at the positions of the data points
 - `DataMarkerSize` is the size of the data markers
 - `DataMarkerType` is the type of data marker to use
-- `ShowDataLines` toggles visibility of the lines connecting the positions of the data points
+- `DataLineMode` is the visibility and type of lines connecting the positions of data points
+- `ControlPointDistancePercentage` is the distance between data points and their control points for smooth lines, expressed as a percentage of the total amount of space
+  available for this index
 
 ### Example
 
 ```
 <XYChart Labels="@(new List<string>() { "Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply" })">
-    <LineLayer IsStacked="true" ShowDataLabels="true" ShowDataMarkers="true" DataMarkerSize="16" DataMarkerType="@DefaultDataMarkerTypes.Square" ShowDataLines="false">
+    <LineLayer IsStacked="true" ShowDataLabels="true" ShowDataMarkers="true" DataMarkerSize="16" DataMarkerType="@DefaultDataMarkerTypes.Square" DataLineMode="DataLineMode.Smooth">
         <DataSeries Name="Line" Color="#3366bb" DataPoints="@(new List<decimal?> { 125000, 95000, 205000, 145000, 110000, 155000, 135500, 140000 })" />
         <DataSeries Name="Linz" Color="#dd3377" DataPoints="@(new List<decimal?> { 65000, 55000, null, 81000, 52500, null, 58000, 70500 })" />
     </LineLayer>
