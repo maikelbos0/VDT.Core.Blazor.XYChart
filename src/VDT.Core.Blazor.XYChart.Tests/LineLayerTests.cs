@@ -393,12 +393,15 @@ public class LineLayerTests {
 
     [Theory]
     [MemberData(nameof(GetControlPoints_Data))]
-    public void GetControlPoints(decimal leftX, decimal leftY, decimal dataPointX, decimal dataPointY, decimal rightX, decimal rightY, decimal expectedLeftX, decimal expectedLeftY, decimal expectedRightX, decimal expectedRightY) {
+    public void GetControlPoints(decimal controlPointDistancePercentage, decimal leftX, decimal leftY, decimal rightX, decimal rightY, decimal expectedLeftX, decimal expectedLeftY, decimal expectedRightX, decimal expectedRightY) {
         var left = new CanvasDataPoint(leftX, leftY, 0, 0, 0, 0);
-        var dataPoint = new CanvasDataPoint(dataPointX, dataPointY, 0, 0, 0, 0);
+        var dataPoint = new CanvasDataPoint(20M, 50M, 0, 0, 0, 0);
         var right = new CanvasDataPoint(rightX, rightY, 0, 0, 0, 0);
+        var subject = new LineLayer() {
+            ControlPointDistancePercentage = controlPointDistancePercentage
+        };
 
-        var result = LineLayer.GetControlPoints(left, dataPoint, right);
+        var result = subject.GetControlPoints(left, dataPoint, right);
 
         Assert.Equal(expectedLeftX, result.LeftX);
         Assert.Equal(expectedLeftY, result.LeftY);
@@ -406,11 +409,13 @@ public class LineLayerTests {
         Assert.Equal(expectedRightY, result.RightY);
     }
 
-    public static TheoryData<decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal> GetControlPoints_Data() => new() {
-        { 10M, 50M, 20M, 50M, 30M, 50M, 17.5M, 50M, 22.5M, 50M },
-        { 10M, 100M, 20M, 50M, 30M, 100M, 17.5M, 50M, 22.5M, 50M },
-        { 10M, 60M, 20M, 50M, 30M, 40M, 17.5M, 52.5M, 22.5M, 47.5M },
-        { 10M, 40M, 20M, 50M, 30M, 60M, 17.5M, 47.5M, 22.5M, 52.5M },
-        { 10M, 40M, 20M, 50M, 30M, 70M, 17.5M, 46.25M, 22.5M, 53.75M },
+    public static TheoryData<decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal> GetControlPoints_Data() => new() {
+        { 25M, 10M, 50M, 30M, 50M, 17.5M, 50M, 22.5M, 50M },
+        { 40M, 10M, 50M, 30M, 50M, 16M, 50M, 24M, 50M },
+        { 25M, 10M, 100M, 30M, 100M, 17.5M, 50M, 22.5M, 50M },
+        { 25M, 10M, 60M, 30M, 40M, 17.5M, 52.5M, 22.5M, 47.5M },
+        { 40M, 10M, 60M, 30M, 40M, 16M, 54M, 24M, 46M },
+        { 25M, 10M, 40M, 30M, 60M, 17.5M, 47.5M, 22.5M, 52.5M },
+        { 25M, 10M, 40M, 30M, 70M, 17.5M, 46.25M, 22.5M, 53.75M },
     };
 }

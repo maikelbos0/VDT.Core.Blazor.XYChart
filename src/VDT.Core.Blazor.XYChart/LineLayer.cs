@@ -38,6 +38,12 @@ public class LineLayer : LayerBase {
     /// </summary>
     public static DataLineMode DefaultDataLineMode { get; set; } = DataLineMode.Straight;
 
+    /// <summary>
+    /// Gets or sets the default value for the distance between data points and their control points for smooth lines, expressed as a percentage of the total
+    /// amount of space available for this index
+    /// </summary>
+    public static decimal DefaultControlPointDistancePercentage { get; set; } = 25M;
+
     /// <inheritdoc/>
     public override StackMode StackMode => StackMode.Single;
 
@@ -74,6 +80,12 @@ public class LineLayer : LayerBase {
     /// Gets or sets the visibility and type of lines connecting the positions of data points
     /// </summary>
     [Parameter] public DataLineMode DataLineMode { get; set; } = DefaultDataLineMode;
+
+    /// <summary>
+    /// Gets or sets the distance between data points and their control points for smooth lines, expressed as a percentage of the total amount of space
+    /// available for this index
+    /// </summary>
+    [Parameter] public decimal ControlPointDistancePercentage { get; set; } = DefaultControlPointDistancePercentage;
 
     /// <inheritdoc/>
     public override bool HaveParametersChanged(ParameterView parameters)
@@ -137,7 +149,7 @@ public class LineLayer : LayerBase {
         );
     }
 
-    private static LineDataShape GetSmoothDataLine(int layerIndex, CanvasDataSeries canvasDataSeries) {
+    private LineDataShape GetSmoothDataLine(int layerIndex, CanvasDataSeries canvasDataSeries) {
         var commands = new List<string>();
         ControlPoints? previousControlPoints;
         ControlPoints? controlPoints = null;
@@ -206,9 +218,8 @@ public class LineLayer : LayerBase {
     /// <param name="dataPoint">Current data point</param>
     /// <param name="right">Next data point</param>
     /// <returns>The control points for this data point</returns>
-    public static ControlPoints GetControlPoints(CanvasDataPoint left, CanvasDataPoint dataPoint, CanvasDataPoint right) {
-        // TODO setting
-        var distance = 0.25M;
+    public ControlPoints GetControlPoints(CanvasDataPoint left, CanvasDataPoint dataPoint, CanvasDataPoint right) {
+        var distance = ControlPointDistancePercentage / 100M;
         var slope = (right.Y - left.Y) / 2M;
 
         return new ControlPoints(
