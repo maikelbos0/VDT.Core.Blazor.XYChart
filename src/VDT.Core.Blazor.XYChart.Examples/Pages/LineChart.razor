@@ -82,6 +82,7 @@
         <select class="form-select" id="dataLineMode" @onchange="args => DataLineMode = Enum.Parse<DataLineMode>(args.Value?.ToString() ?? throw new InvalidOperationException())">
             <option value="@DataLineMode.Hidden" selected="@(DataLineMode == DataLineMode.Hidden)">Hidden</option>
             <option value="@DataLineMode.Straight" selected="@(DataLineMode == DataLineMode.Straight)">Straight</option>
+            <option value="@DataLineMode.Smooth" selected="@(DataLineMode == DataLineMode.Smooth)">Smooth</option>
         </select>
     </div>
 </div>

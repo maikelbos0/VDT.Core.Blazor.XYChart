@@ -12,5 +12,10 @@ public enum DataLineMode {
     /// <summary>
     /// Connect data points with straight lines
     /// </summary>
-    Straight
+    Straight,
+
+    /// <summary>
+    /// Use a smoothly curved line to connect data points
+    /// </summary>
+    Smooth
 }

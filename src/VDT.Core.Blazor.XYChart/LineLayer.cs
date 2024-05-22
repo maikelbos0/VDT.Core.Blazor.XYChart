@@ -108,6 +108,7 @@ public class LineLayer : LayerBase {
                 if (DataLineMode != DataLineMode.Hidden) {
                     yield return DataLineMode switch {
                         DataLineMode.Straight => GetStraightDataLine(layerIndex, canvasDataSeries),
+                        DataLineMode.Smooth => GetSmoothDataLine(layerIndex, canvasDataSeries),
                         _ => throw new NotImplementedException($"No implementation found for {nameof(DataLineMode)} '{DataLineMode}'.")
                     };
                 }
@@ -115,7 +116,7 @@ public class LineLayer : LayerBase {
         }
     }
 
-    private ShapeBase GetStraightDataLine(int layerIndex, CanvasDataSeries canvasDataSeries) {
+    private static LineDataShape GetStraightDataLine(int layerIndex, CanvasDataSeries canvasDataSeries) {
         var commands = new List<string>();
 
         for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
@@ -133,6 +134,88 @@ public class LineLayer : LayerBase {
             canvasDataSeries.CssClass,
             layerIndex,
             canvasDataSeries.Index
+        );
+    }
+
+    private static LineDataShape GetSmoothDataLine(int layerIndex, CanvasDataSeries canvasDataSeries) {
+        var commands = new List<string>();
+        ControlPoints? previousControlPoints;
+        ControlPoints? controlPoints = null;
+
+        for (var i = 0; i < canvasDataSeries.DataPoints.Count; i++) {
+            previousControlPoints = controlPoints;
+
+            if (i > 0
+                && i < canvasDataSeries.DataPoints.Count - 1
+                && canvasDataSeries.DataPoints[i - 1].Index == canvasDataSeries.DataPoints[i].Index - 1
+                && canvasDataSeries.DataPoints[i + 1].Index == canvasDataSeries.DataPoints[i].Index + 1) {
+
+                controlPoints = GetControlPoints(canvasDataSeries.DataPoints[i - 1], canvasDataSeries.DataPoints[i], canvasDataSeries.DataPoints[i + 1]);
+            }
+            else {
+                controlPoints = null;
+            }
+
+            if (i == 0 || canvasDataSeries.DataPoints[i - 1].Index < canvasDataSeries.DataPoints[i].Index - 1) {
+                commands.Add(PathCommandFactory.MoveTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+            }
+            else if (i > 0 && previousControlPoints != null && controlPoints != null) {
+                commands.Add(PathCommandFactory.CubicBezierTo(
+                    previousControlPoints.RightX,
+                    previousControlPoints.RightY,
+                    controlPoints.LeftX,
+                    controlPoints.LeftY,
+                    canvasDataSeries.DataPoints[i].X,
+                    canvasDataSeries.DataPoints[i].Y
+                ));
+            }
+            else if (i > 0 && previousControlPoints != null) {
+                commands.Add(PathCommandFactory.QuadraticBezierTo(
+                    previousControlPoints.RightX,
+                    previousControlPoints.RightY,
+                    canvasDataSeries.DataPoints[i].X,
+                    canvasDataSeries.DataPoints[i].Y
+                ));
+            }
+            else if (controlPoints != null) {
+                commands.Add(PathCommandFactory.QuadraticBezierTo(
+                    controlPoints.LeftX,
+                    controlPoints.LeftY,
+                    canvasDataSeries.DataPoints[i].X,
+                    canvasDataSeries.DataPoints[i].Y
+                ));
+            }
+            else {
+                commands.Add(PathCommandFactory.LineTo(canvasDataSeries.DataPoints[i].X, canvasDataSeries.DataPoints[i].Y));
+            }
+        }
+
+        return new LineDataShape(
+            commands,
+            canvasDataSeries.Color,
+            canvasDataSeries.CssClass,
+            layerIndex,
+            canvasDataSeries.Index
+        );
+    }
+
+    /// <summary>
+    /// Calculate control points for bezier curves to create smooth lines
+    /// </summary>
+    /// <param name="left">Previous data point</param>
+    /// <param name="dataPoint">Current data point</param>
+    /// <param name="right">Next data point</param>
+    /// <returns>The control points for this data point</returns>
+    public static ControlPoints GetControlPoints(CanvasDataPoint left, CanvasDataPoint dataPoint, CanvasDataPoint right) {
+        // TODO setting
+        var distance = 0.25M;
+        var slope = (right.Y - left.Y) / 2M;
+
+        return new ControlPoints(
+            dataPoint.X - distance * (dataPoint.X - left.X),
+            dataPoint.Y - slope * distance,
+            dataPoint.X + distance * (right.X - dataPoint.X),
+            dataPoint.Y + slope * distance
         );
     }
 }
