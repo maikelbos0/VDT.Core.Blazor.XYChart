@@ -39,8 +39,8 @@ public class LineLayer : LayerBase {
     public static DataLineMode DefaultDataLineMode { get; set; } = DataLineMode.Straight;
 
     /// <summary>
-    /// Gets or sets the default value for the distance between data points and their control points for smooth lines, expressed as a percentage of the total
-    /// amount of space available for this index
+    /// Gets or sets the default value for the distance between data points and their control points for <see cref="DataLineMode.Smooth"/>, expressed as a
+    /// percentage of the total amount of space available for this index
     /// </summary>
     public static decimal DefaultControlPointDistancePercentage { get; set; } = 25M;
 
@@ -82,8 +82,8 @@ public class LineLayer : LayerBase {
     [Parameter] public DataLineMode DataLineMode { get; set; } = DefaultDataLineMode;
 
     /// <summary>
-    /// Gets or sets the distance between data points and their control points for smooth lines, expressed as a percentage of the total amount of space
-    /// available for this index
+    /// Gets or sets the distance between data points and their control points for <see cref="DataLineMode.Smooth"/>, expressed as a percentage of the total
+    /// amount of space available for this index
     /// </summary>
     [Parameter] public decimal ControlPointDistancePercentage { get; set; } = DefaultControlPointDistancePercentage;
 
