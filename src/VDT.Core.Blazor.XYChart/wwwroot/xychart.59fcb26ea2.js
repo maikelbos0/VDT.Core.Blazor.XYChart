@@ -1,8 +1,8 @@
 const handlers = {};
 
-function register(dotNetObjectReference, element) {
-    handler[dotNetObjectReference] = function (e) {
-        dotNetObjectReference.invokeMethodAsync('InvokeResize', getAvailableSize(element));
+function register(dotNetObjectReference) {
+    handlers[dotNetObjectReference] = function () {
+        dotNetObjectReference.invokeMethodAsync('StateHasChanged');
     }
 
     window.addEventListener('resize', handlers[dotNetObjectReference]);
@@ -28,4 +28,4 @@ function getAvailableSize(element) {
     }
 }
 
-export { register, unregister, getSize };
+export { register, unregister, getAvailableSize };

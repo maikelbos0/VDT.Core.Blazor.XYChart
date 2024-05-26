@@ -13,8 +13,8 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Component to render charts with a category X-axis and a value Y-axis
 /// </summary>
-public class XYChart : ComponentBase {
-    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/xychart.484e171b45.js";
+public class XYChart : ComponentBase, IAsyncDisposable {
+    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/xychart.59fcb26ea2.js";
 
     /// <summary>
     /// Gets or sets the default value for the the way data points are spaced out over the plot area
@@ -22,6 +22,8 @@ public class XYChart : ComponentBase {
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
 
     private ElementReference elementReference;
+    private IJSObjectReference? moduleReference;
+    private DotNetObjectReference<XYChart>? dotNetObjectReference;
 
     [Inject] internal IJSRuntime JSRuntime { get; set; } = null!;
 
@@ -56,6 +58,16 @@ public class XYChart : ComponentBase {
         PlotArea = new PlotArea() { Chart = this };
 
         StateChangeHandler.Debounce(100).Subscribe(HandleStateChange);
+    }
+
+    /// <inheritdoc/>
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            moduleReference = await JSRuntime.InvokeAsync<IJSObjectReference>("import", ModuleLocation);
+            dotNetObjectReference = DotNetObjectReference.Create(this);
+
+            await moduleReference.InvokeVoidAsync("register", dotNetObjectReference);
+        }
     }
 
     /// <inheritdoc/>
@@ -146,7 +158,12 @@ public class XYChart : ComponentBase {
         StateHasChanged();
     }
 
-    internal new void StateHasChanged() {
+    /// <summary>
+    /// Notifies the component that its state has changed
+    /// </summary>
+    [JSInvokable]
+    public new void StateHasChanged() {
+        Console.WriteLine(DateTime.Now);
         _ = StateChangeHandler.Publish();
     }
 
@@ -335,4 +352,14 @@ public class XYChart : ComponentBase {
         DataPointSpacingMode.Center => Canvas.PlotAreaX + (index + 0.5M) * GetDataPointWidth(),
         _ => throw new NotImplementedException($"No implementation found for {nameof(DataPointSpacingMode)} '{DataPointSpacingMode}'.")
     };
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync() {
+        if (moduleReference != null) {
+            await moduleReference.InvokeVoidAsync("unregister", dotNetObjectReference);
+            await moduleReference.DisposeAsync();
+        }
+
+        GC.SuppressFinalize(this);
+    }
 }
