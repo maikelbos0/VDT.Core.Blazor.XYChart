@@ -98,6 +98,7 @@ public class LineLayer : LayerBase {
         || parameters.HasParameterChanged(ControlPointDistancePercentage);
 
     /// <inheritdoc/>
+    /// <exception cref="NotImplementedException">Thrown when the line layer uses an unknown or unusable <see cref="DataLineMode"/></exception>
     public override IEnumerable<ShapeBase> GetDataSeriesShapes() {
         var layerIndex = Chart.Layers.IndexOf(this);
 
