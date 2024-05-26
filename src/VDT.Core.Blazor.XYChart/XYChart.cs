@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
 using VDT.Core.Operators;
@@ -48,6 +49,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     internal List<LayerBase> Layers { get; set; } = new();
     internal Func<Task<IBoundingBoxProvider>>? BoundingBoxProviderProvider { get; init; }
     internal OperandStream StateChangeHandler { get; init; } = new();
+    internal IJSObjectReference ModuleReference => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
 
     /// <summary>
     /// Create an XY chart
@@ -95,11 +97,12 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         builder.OpenElement(1, "svg");
         builder.AddAttribute(2, "xmlns", "http://www.w3.org/2000/svg");
         builder.AddAttribute(3, "class", "chart-main");
-        builder.AddAttribute(4, "viewbox", $"0 0 {Canvas.Width} {Canvas.Height}");
-        builder.AddAttribute(5, "width", Canvas.Width);
+        builder.AddAttribute(4, "viewbox", $"0 0 {Canvas.ActualWidth} {Canvas.Height}");
+        builder.AddAttribute(5, "width", Canvas.ActualWidth);
         builder.AddAttribute(6, "height", Canvas.Height);
+        builder.AddElementReferenceCapture(7, elementReference => this.elementReference = elementReference);
 
-        builder.OpenRegion(7);
+        builder.OpenRegion(8);
         foreach (var shape in GetShapes()) {
             builder.OpenElement(1, shape.ElementName);
             builder.SetKey(shape.Key);
@@ -110,9 +113,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         }
         builder.CloseRegion();
 
-        builder.OpenComponent<CascadingValue<XYChart>>(8);
-        builder.AddAttribute(9, "Value", this);
-        builder.AddAttribute(10, "ChildContent", ChildContent);
+        builder.OpenComponent<CascadingValue<XYChart>>(9);
+        builder.AddAttribute(10, "Value", this);
+        builder.AddAttribute(11, "ChildContent", ChildContent);
         builder.CloseComponent();
 
         builder.CloseElement();
@@ -352,6 +355,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         DataPointSpacingMode.Center => Canvas.PlotAreaX + (index + 0.5M) * GetDataPointWidth(),
         _ => throw new NotImplementedException($"No implementation found for {nameof(DataPointSpacingMode)} '{DataPointSpacingMode}'.")
     };
+
+    internal async Task<AvailableSize> GetAvailableSize()
+        => await ModuleReference.InvokeAsync<AvailableSize>("getAvailableSize", elementReference);
 
     /// <inheritdoc/>
     public async ValueTask DisposeAsync() {
