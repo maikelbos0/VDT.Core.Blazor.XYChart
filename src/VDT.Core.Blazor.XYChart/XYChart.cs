@@ -14,10 +14,14 @@ namespace VDT.Core.Blazor.XYChart;
 /// Component to render charts with a category X-axis and a value Y-axis
 /// </summary>
 public class XYChart : ComponentBase {
+    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/xychart.484e171b45.js";
+
     /// <summary>
     /// Gets or sets the default value for the the way data points are spaced out over the plot area
     /// </summary>
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
+
+    private ElementReference elementReference;
 
     [Inject] internal IJSRuntime JSRuntime { get; set; } = null!;
 
