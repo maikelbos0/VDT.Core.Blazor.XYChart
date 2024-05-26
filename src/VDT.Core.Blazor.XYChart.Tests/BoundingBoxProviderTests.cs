@@ -8,7 +8,7 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class BoundingBoxProviderTests {
     [Fact]
-    public void BoundingBoxProvider_ModuleLocation_Is_Correct() {
+    public void ModuleLocation_Is_Correct() {
         var fileName = System.IO.Path.GetFileName(BoundingBoxProvider.ModuleLocation);
 
         var expectedFilePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "boundingboxprovider.*.js").Single();
@@ -18,7 +18,7 @@ public class BoundingBoxProviderTests {
     }
 
     [Fact]
-    public void BoundingBoxProvider_Module_Has_Correct_Fingerprint() {
+    public void Module_Has_Correct_Fingerprint() {
         using var sha256 = SHA256.Create();
 
         var filePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "boundingboxprovider.*.js").Single();
