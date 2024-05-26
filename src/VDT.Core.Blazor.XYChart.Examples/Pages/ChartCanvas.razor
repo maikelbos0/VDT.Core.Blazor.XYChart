@@ -9,6 +9,7 @@
 </p>
 
 <ul>
+    <li><code>AutoSizeWidthIsEnabled</code> toggles the automatic calculation of chart width</li>
     <li><code>Width</code> is the total width of the chart, including axis labels and padding</li>
     <li><code>Height</code> is the total height of the chart, including axis labels and padding</li>
     <li><code>Padding</code> is the distance between the canvas edge and any chart elements</li>
@@ -22,6 +23,14 @@
 </ul>
 
 <div class="row">
+    <div class="col-12 col-md-6 col-xl-4 mb-3">
+        <label class="form-label" for="autoSizeWidthIsEnabled">Auto size x-axis labels</label>
+        <select class="form-select" id="autoSizeWidthIsEnabled" @onchange="args => AutoSizeWidthIsEnabled = bool.Parse(args.Value?.ToString()!)">
+            <option value="false" selected="@(!AutoSizeWidthIsEnabled)">Disabled</option>
+            <option value="true" selected="@AutoSizeWidthIsEnabled">Enabled</option>
+        </select>
+    </div>
+
     <div class="col-12 col-md-6 col-xl-4 mb-3">
         <label class="form-label" for="width">Width</label>
         <input type="number" class="form-control" id="width" @bind-value="@Width" />
@@ -79,9 +88,10 @@
     </div>
 </div>
 
-<div class="d-inline-block">
+<div class="@(AutoSizeWidthIsEnabled ? "" : "d-inline-block")">
     <XYChart Labels="@ExampleData.Labels">
-        <Canvas Width="Width"
+        <Canvas AutoSizeWidthIsEnabled="AutoSizeWidthIsEnabled"
+                Width="Width"
                 Height="Height"
                 Padding="Padding"
                 AutoSizeXAxisLabelsIsEnabled="AutoSizeXAxisLabelsIsEnabled"
@@ -117,6 +127,7 @@
 </div>
 
 @code {
+    private bool AutoSizeWidthIsEnabled { get; set; } = Canvas.DefaultAutoSizeWidthIsEnabled;
     private int Width { get; set; } = Canvas.DefaultWidth;
     private int Height { get; set; } = Canvas.DefaultHeight;
     private int Padding { get; set; } = Canvas.DefaultPadding;
