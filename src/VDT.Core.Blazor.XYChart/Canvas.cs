@@ -177,11 +177,10 @@ public class Canvas : ChildComponentBase, IDisposable {
         GC.SuppressFinalize(this);
     }
 
-    // TODO add AutoSizeXAxisLabelsIsEnabled
-
     /// <inheritdoc/>
     public override bool HaveParametersChanged(ParameterView parameters)
-        => parameters.HasParameterChanged(Width)
+        => parameters.HasParameterChanged(AutoSizeWidthIsEnabled)
+        || parameters.HasParameterChanged(Width)
         || parameters.HasParameterChanged(Height)
         || parameters.HasParameterChanged(Padding)
         || parameters.HasParameterChanged(AutoSizeXAxisLabelsIsEnabled)

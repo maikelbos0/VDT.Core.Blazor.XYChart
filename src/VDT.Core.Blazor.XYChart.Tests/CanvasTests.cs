@@ -10,18 +10,20 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Theory]
-    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #", "#", false)]
-    [InlineData(900, 500, 10, false, 100, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 600, 10, false, 100, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 20, false, 100, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, true, 100, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 75, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, true, 75, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, false, 75, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, false, 100, "#.##", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #.##", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #", "#.##", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 100, "#", "x #", "#", false)]
+    [InlineData(false, 900, 500, 10, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 600, 10, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 20, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, true, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 75, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, true, 75, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 75, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 100, "#.##", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 100, "#", "x #.##", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 100, "#", "x #", "#.##", true)]
+    [InlineData(true, 1000, 500, 10, false, 100, false, 100, "#", "x #", "#", true)]
     public void HaveParametersChanged(
+        bool autoSizeWidthIsEnabled,
         int width,
         int height,
         int padding,
@@ -35,6 +37,7 @@ public class CanvasTests {
         bool expectedResult
     ) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(Canvas.AutoSizeWidthIsEnabled), autoSizeWidthIsEnabled },
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
             { nameof(Canvas.Padding), padding },
@@ -48,6 +51,7 @@ public class CanvasTests {
         });
 
         var subject = new Canvas {
+            AutoSizeWidthIsEnabled = false,
             Width = 1000,
             Height = 500,
             Padding = 10,
