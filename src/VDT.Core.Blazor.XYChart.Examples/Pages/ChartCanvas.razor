@@ -24,7 +24,7 @@
 
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4 mb-3">
-        <label class="form-label" for="autoSizeWidthIsEnabled">Auto size x-axis labels</label>
+        <label class="form-label" for="autoSizeWidthIsEnabled">Auto size width</label>
         <select class="form-select" id="autoSizeWidthIsEnabled" @onchange="args => AutoSizeWidthIsEnabled = bool.Parse(args.Value?.ToString()!)">
             <option value="false" selected="@(!AutoSizeWidthIsEnabled)">Disabled</option>
             <option value="true" selected="@AutoSizeWidthIsEnabled">Enabled</option>
@@ -88,7 +88,7 @@
     </div>
 </div>
 
-<div class="@(AutoSizeWidthIsEnabled ? "" : "d-inline-block")">
+<div class="xxx @(AutoSizeWidthIsEnabled ? "" : "d-inline-block")">
     <XYChart Labels="@ExampleData.Labels">
         <Canvas AutoSizeWidthIsEnabled="AutoSizeWidthIsEnabled"
                 Width="Width"
