@@ -353,8 +353,12 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         _ => throw new NotImplementedException($"No implementation found for {nameof(DataPointSpacingMode)} '{DataPointSpacingMode}'.")
     };
 
-    internal async Task<AvailableSize> GetAvailableSize()
-        => await ModuleReference.InvokeAsync<AvailableSize>("getAvailableSize", elementReference);
+    /// <summary>
+    /// Gets the maximum width available for automatic sizing of the chart
+    /// </summary>
+    /// <returns>The available width</returns>
+    public async Task<int> GetAvailableWidth()
+        => (int)await ModuleReference.InvokeAsync<decimal>("getAvailableWidth", elementReference);
 
     /// <inheritdoc/>
     public async ValueTask DisposeAsync() {

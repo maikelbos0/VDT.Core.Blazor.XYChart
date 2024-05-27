@@ -237,7 +237,7 @@ public class Canvas : ChildComponentBase, IDisposable {
 
         // TODO test
         if (AutoSizeWidthIsEnabled) {
-            AutoSizeWidth = (int)(await Chart.GetAvailableSize()).Width;
+            AutoSizeWidth = await Chart.GetAvailableWidth();
         }
         else {
             AutoSizeWidth = null;

@@ -17,15 +17,28 @@ function unregister(dotNetObjectReference) {
 }
 
 // TODO integrate boundingboxprovider ?
-function getAvailableSize(element) {
+function getAvailableWidth(element) {
     if (element && element.parentElement) {
-        // take into account margin/border/padding since getBoundingClientRect includes parent border/padding and child margin
-        const bbox = element.parentElement.getBoundingClientRect();
-        return {
-            width: bbox.width,
-            height: bbox.height
-        };
+        const parentWidth = element.parentElement.getBoundingClientRect().width;
+
+        const parentComputedStyle = getComputedStyle(element.parentElement);
+        const parentBorder = getSize(parentComputedStyle, "border-left-width") + getSize(parentComputedStyle, "border-right-width");
+        const parentPadding = getSize(parentComputedStyle, "padding-left") + getSize(parentComputedStyle, "padding-right");
+
+        const elementComputedStyle = getComputedStyle(element);
+        const elementMargin = getSize(elementComputedStyle, "margin-left") + getSize(elementComputedStyle, "margin-right");
+        const elementBorder = getSize(elementComputedStyle, "border-left-width") + getSize(elementComputedStyle, "border-right-width");
+
+        return parentWidth - parentBorder - parentPadding - elementMargin - elementBorder;
     }
 }
 
-export { register, unregister, getAvailableSize };
+function getSize(computedStyle, property) {
+    const size = +computedStyle.getPropertyValue(property).slice(0, -2);
+    
+    return isNaN(size) ? 0 : size;
+}
+
+// TODO height
+
+export { register, unregister, getAvailableWidth };
