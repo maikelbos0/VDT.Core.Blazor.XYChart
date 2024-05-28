@@ -1,22 +1,50 @@
-const handlers = {};
+const svgNamespace = "http://www.w3.org/2000/svg";
+const charts = {};
 
 function register(dotNetObjectReference) {
-    handlers[dotNetObjectReference._id] = function () {
-        dotNetObjectReference.invokeMethodAsync('StateHasChanged');
-    }
+    const chart = {
+        ...CreateSvgElement(),
+        eventListener: CreateEventListener(dotNetObjectReference)
+    };
 
-    window.addEventListener('resize', handlers[dotNetObjectReference]);
-    console.log(handlers);
+    charts[dotNetObjectReference._id] = chart;
+    window.addEventListener('resize', chart.eventListener);
+}
+
+function CreateEventListener(dotNetObjectReference) {
+    return function () {
+        dotNetObjectReference.invokeMethodAsync('StateHasChanged');
+    };
+}
+
+function CreateSvgElement() {
+    const svgElement = document.createElementNS(svgNamespace, "svg");
+    svgElement.setAttribute("class", "chart-main");
+    svgElement.setAttribute("xmlns", svgNamespace);
+    svgElement.setAttribute("viewBox", "0 0 1 1");
+    svgElement.setAttribute("width", "1");
+    svgElement.setAttribute("height", "1");
+    svgElement.setAttribute("style", "visibility: hidden;");
+    document.body.appendChild(svgElement);
+
+    const groupElement = document.createElementNS(svgNamespace, "g");
+    svgElement.appendChild(groupElement);
+
+    return { svgElement, groupElement };
 }
 
 function unregister(dotNetObjectReference) {
-    if (handlers[dotNetObjectReference._id]) {
-        window.removeEventListener('resize', handlers[dotNetObjectReference._id]);
-        delete handlers[dotNetObjectReference._id];
+    const chart = charts[dotNetObjectReference._id];
+
+    if (chart) {
+        chart.svgElement.removeChild(chart.groupElement);
+        document.body.removeChild(chart.svgElement);
+        window.removeEventListener('resize', chart.eventListener);
+
+        delete charts[dotNetObjectReference._id];
     }
 }
 
-// TODO integrate boundingboxprovider ?
 function getAvailableWidth(element) {
     if (element && element.parentElement) {
         const parentWidth = element.parentElement.getBoundingClientRect().width;
@@ -39,6 +67,24 @@ function getSize(computedStyle, property) {
     return isNaN(size) ? 0 : size;
 }
 
+function getBoundingBox(text, cssClass) {
+    const textElement = document.createElementNS(svgNamespace, "text");
+    textElement.setAttribute("class", cssClass);
+    textElement.textContent = text;
+    groupElement.appendChild(textElement);
+
+    const bbox = groupElement.getBBox();
+
+    groupElement.removeChild(textElement);
+
+    return {
+        x: bbox.x,
+        y: bbox.y,
+        width: bbox.width,
+        height: bbox.height
+    };
+}
+
 // TODO height
 
-export { register, unregister, getAvailableWidth };
+export { register, unregister, getAvailableWidth, getBoundingBox };
