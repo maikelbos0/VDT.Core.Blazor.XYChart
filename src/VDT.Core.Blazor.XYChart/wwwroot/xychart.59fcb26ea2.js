@@ -1,19 +1,19 @@
 const handlers = {};
 
 function register(dotNetObjectReference) {
-    handlers[dotNetObjectReference] = function () {
+    handlers[dotNetObjectReference._id] = function () {
         dotNetObjectReference.invokeMethodAsync('StateHasChanged');
     }
 
     window.addEventListener('resize', handlers[dotNetObjectReference]);
+    console.log(handlers);
 }
 
 function unregister(dotNetObjectReference) {
-    if (handlers[dotNetObjectReference]) {
-        window.removeEventListener('resize', handlers[dotNetObjectReference]);
+    if (handlers[dotNetObjectReference._id]) {
+        window.removeEventListener('resize', handlers[dotNetObjectReference._id]);
+        delete handlers[dotNetObjectReference._id];
     }
-
-    delete handlers[dotNetObjectReference];
 }
 
 // TODO integrate boundingboxprovider ?
@@ -35,7 +35,7 @@ function getAvailableWidth(element) {
 
 function getSize(computedStyle, property) {
     const size = +computedStyle.getPropertyValue(property).slice(0, -2);
-    
+
     return isNaN(size) ? 0 : size;
 }
 
