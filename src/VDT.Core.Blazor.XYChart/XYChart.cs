@@ -49,7 +49,10 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     internal List<LayerBase> Layers { get; set; } = new();
     internal Func<Task<IBoundingBoxProvider>>? BoundingBoxProviderProvider { get; init; }
     internal OperandStream StateChangeHandler { get; init; } = new();
-    internal IJSObjectReference ModuleReference => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
+    internal IJSObjectReference ModuleReference {
+        get => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
+        set => moduleReference = value;
+    }
 
     /// <summary>
     /// Create an XY chart
