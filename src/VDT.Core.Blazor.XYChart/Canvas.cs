@@ -11,7 +11,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// </summary>
 public class Canvas : ChildComponentBase, IDisposable {
     /// <summary>
-    /// Gets or sets the default value for whether or not chart width should be automatically sized
+    /// Gets or sets the default value for whether or not chart width should be automatically sized; if enabled <see cref="Width"/> will be ignored
     /// </summary>
     public static bool DefaultAutoSizeWidthIsEnabled { get; set; } = false;
 
@@ -31,7 +31,8 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultPadding { get; set; } = 25;
 
     /// <summary>
-    /// Gets or sets the default value for whether or not x-axis labels should be automatically sized
+    /// Gets or sets the default value for whether or not x-axis labels should be automatically sized; if enabled <see cref="XAxisLabelHeight"/> will be
+    /// ignored
     /// </summary>
     public static bool DefaultAutoSizeXAxisLabelsIsEnabled { get; set; } = false;
 
@@ -41,7 +42,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static int DefaultXAxisLabelHeight { get; set; } = 50;
 
     /// <summary>
-    /// Gets or sets the default value for whether or not y-axis labels should be automatically sized
+    /// Gets or sets the default value for whether or not y-axis labels should be automatically sized; if enabled <see cref="YAxisLabelWidth"/> will be ignored
     /// </summary>
     public static bool DefaultAutoSizeYAxisLabelsIsEnabled { get; set; } = false;
 
@@ -66,7 +67,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     public static string DefaultDataLabelFormat { get; set; } = "#,##0.######";
 
     /// <summary>
-    /// Gets or sets whether or not chart width should be automatically sized
+    /// Gets or sets whether or not chart width should be automatically sized; if enabled <see cref="Width"/> will be ignored
     /// </summary>
     [Parameter] public bool AutoSizeWidthIsEnabled { get; set; } = DefaultAutoSizeWidthIsEnabled;
 
@@ -86,7 +87,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public int Padding { get; set; } = DefaultPadding;
 
     /// <summary>
-    /// Gets or sets whether or not x-axis labels should be automatically sized
+    /// Gets or sets whether or not x-axis labels should be automatically sized; if enabled <see cref="XAxisLabelHeight"/> will be ignored
     /// </summary>
     [Parameter] public bool AutoSizeXAxisLabelsIsEnabled { get; set; } = DefaultAutoSizeXAxisLabelsIsEnabled;
 
@@ -96,7 +97,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     [Parameter] public int XAxisLabelHeight { get; set; } = DefaultXAxisLabelHeight;
 
     /// <summary>
-    /// Gets or sets whether or not y-axis labels should be automatically sized
+    /// Gets or sets whether or not y-axis labels should be automatically sized; if enabled <see cref="YAxisLabelWidth"/> will be ignored
     /// </summary>
     [Parameter] public bool AutoSizeYAxisLabelsIsEnabled { get; set; } = DefaultAutoSizeYAxisLabelsIsEnabled;
 
@@ -198,7 +199,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     public Shapes.PlotAreaShape GetPlotAreaShape() => new(ActualWidth, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 
     /// <summary>
-    /// Applies automatic sizing to labels if <see cref="AutoSizeXAxisLabelsIsEnabled"/> or <see cref="AutoSizeYAxisLabelsIsEnabled"/> is <see langword="true" />
+    /// Applies automatic sizing to dimensions that have automatic sizing enabled
     /// </summary>
     /// <returns></returns>
     public async Task AutoSize() {
