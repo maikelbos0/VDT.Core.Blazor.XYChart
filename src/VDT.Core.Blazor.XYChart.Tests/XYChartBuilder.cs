@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using Microsoft.JSInterop;
+using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,15 +12,18 @@ public class XYChartBuilder {
 
     public XYChart Chart { get; }
     internal IBoundingBoxProvider BoundingBoxProvider { get; }
+    public IJSObjectReference ModuleReference { get; }
     public bool StateHasChangedInvoked { get; private set; }
 
     public XYChartBuilder(int labelCount = Chart_LabelCount, DataPointSpacingMode dataPointSpacingMode = Chart_DataPointSpacingMode) {
         BoundingBoxProvider = Substitute.For<IBoundingBoxProvider>();
+        ModuleReference = Substitute.For<IJSObjectReference>();
         Chart = new() {
             Labels = defaultLabels.Take(labelCount).ToList(),
             DataPointSpacingMode = dataPointSpacingMode,
             StateChangeHandler = new(),
-            BoundingBoxProviderProvider = () => Task.FromResult(BoundingBoxProvider)
+            BoundingBoxProviderProvider = () => Task.FromResult(BoundingBoxProvider),
+            ModuleReference = ModuleReference
         };
         Chart.Canvas = new() {
             Chart = Chart,
@@ -123,6 +127,7 @@ public class XYChartBuilder {
     }
 
     public XYChartBuilder WithCanvas(
+        bool? autoSizeWidthIsEnabled = null,
         int? width = null,
         int? height = null,
         int? padding = null,
@@ -134,6 +139,7 @@ public class XYChartBuilder {
         string? yAxisMultiplierFormat = null,
         string? dataLabelFormat = null
     ) => WithCanvas(new Canvas() {
+        AutoSizeWidthIsEnabled = autoSizeWidthIsEnabled ?? Canvas_AutoSizeWidthIsEnabled,
         Width = width ?? Canvas_Width,
         Height = height ?? Canvas_Height,
         Padding = padding ?? Canvas_Padding,
@@ -157,6 +163,11 @@ public class XYChartBuilder {
 
     internal XYChartBuilder WithProvidedSize(string cssClass, BoundingBox textSize) {
         BoundingBoxProvider.GetBoundingBox(Arg.Any<string>(), cssClass).Returns(textSize);
+        return this;
+    }
+
+    public XYChartBuilder WithModuleReturnValue<TValue>(string identifier, TValue returnValue) {
+        ModuleReference.InvokeAsync<TValue>(identifier, Arg.Any<object?[]?>()).Returns(returnValue);
         return this;
     }
 }

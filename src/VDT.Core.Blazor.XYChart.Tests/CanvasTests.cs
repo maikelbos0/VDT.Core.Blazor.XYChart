@@ -82,6 +82,21 @@ public class CanvasTests {
     }
 
     [Theory]
+    [InlineData(false, Canvas_Width)]
+    [InlineData(true, 1234)]
+    public async Task AutoSize_Width(bool autoSizeWidthIsEnabled, int expectedWidth) {
+        var subject = new XYChartBuilder()
+            .WithCanvas(autoSizeWidthIsEnabled: autoSizeWidthIsEnabled)
+            .WithModuleReturnValue("getAvailableWidth", 1234.3M)
+            .Chart
+            .Canvas;
+
+        await subject.AutoSize();
+
+        Assert.Equal(expectedWidth, subject.ActualWidth);
+    }
+
+    [Theory]
     [InlineData(false, Canvas_XAxisLabelHeight)]
     [InlineData(true, 75)]
     public async Task AutoSize_XAxisLabels(bool autoSizeXAxisLabelsIsEnabled, int expectedXAxisLabelHeight) {

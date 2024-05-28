@@ -4,6 +4,7 @@ public static class Constants {
     public const int Chart_LabelCount = 5;
     public const DataPointSpacingMode Chart_DataPointSpacingMode = DataPointSpacingMode.Auto;
 
+    public const bool Canvas_AutoSizeWidthIsEnabled = false;
     public const int Canvas_Width = 900;
     public const int Canvas_Height = 500;
     public const int Canvas_Padding = 25;
