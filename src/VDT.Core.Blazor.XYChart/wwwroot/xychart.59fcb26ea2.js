@@ -35,30 +35,25 @@ function CreateSvgElement() {
 
 function unregister(dotNetObjectReference) {
     const chart = charts[dotNetObjectReference._id];
+    chart.svgElement.removeChild(chart.groupElement);
+    document.body.removeChild(chart.svgElement);
+    window.removeEventListener('resize', chart.eventListener);
 
-    if (chart) {
-        chart.svgElement.removeChild(chart.groupElement);
-        document.body.removeChild(chart.svgElement);
-        window.removeEventListener('resize', chart.eventListener);
-
-        delete charts[dotNetObjectReference._id];
-    }
+    delete charts[dotNetObjectReference._id];
 }
 
 function getAvailableWidth(element) {
-    if (element && element.parentElement) {
-        const parentWidth = element.parentElement.getBoundingClientRect().width;
+    const parentWidth = element.parentElement.getBoundingClientRect().width;
 
-        const parentComputedStyle = getComputedStyle(element.parentElement);
-        const parentBorder = getSize(parentComputedStyle, "border-left-width") + getSize(parentComputedStyle, "border-right-width");
-        const parentPadding = getSize(parentComputedStyle, "padding-left") + getSize(parentComputedStyle, "padding-right");
+    const parentComputedStyle = getComputedStyle(element.parentElement);
+    const parentBorder = getSize(parentComputedStyle, "border-left-width") + getSize(parentComputedStyle, "border-right-width");
+    const parentPadding = getSize(parentComputedStyle, "padding-left") + getSize(parentComputedStyle, "padding-right");
 
-        const elementComputedStyle = getComputedStyle(element);
-        const elementMargin = getSize(elementComputedStyle, "margin-left") + getSize(elementComputedStyle, "margin-right");
-        const elementBorder = getSize(elementComputedStyle, "border-left-width") + getSize(elementComputedStyle, "border-right-width");
+    const elementComputedStyle = getComputedStyle(element);
+    const elementMargin = getSize(elementComputedStyle, "margin-left") + getSize(elementComputedStyle, "margin-right");
+    const elementBorder = getSize(elementComputedStyle, "border-left-width") + getSize(elementComputedStyle, "border-right-width");
 
-        return parentWidth - parentBorder - parentPadding - elementMargin - elementBorder;
-    }
+    return parentWidth - parentBorder - parentPadding - elementMargin - elementBorder;
 }
 
 function getSize(computedStyle, property) {
