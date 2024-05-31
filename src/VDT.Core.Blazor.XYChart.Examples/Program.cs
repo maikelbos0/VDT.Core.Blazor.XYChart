@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-// TODO make charts responsive?
 // TODO data labels for stacked are incorrect
 
 namespace VDT.Core.Blazor.XYChart.Examples;

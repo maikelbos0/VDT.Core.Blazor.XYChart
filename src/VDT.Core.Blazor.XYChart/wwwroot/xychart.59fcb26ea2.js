@@ -86,6 +86,4 @@ function getBoundingBox(dotNetObjectReference, text, cssClass) {
     };
 }
 
-// TODO height
-
 export { register, unregister, getAvailableWidth, getBoundingBox };
