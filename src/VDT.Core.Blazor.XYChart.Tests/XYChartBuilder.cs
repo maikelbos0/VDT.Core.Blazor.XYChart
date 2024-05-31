@@ -2,7 +2,6 @@
 using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
@@ -11,18 +10,15 @@ public class XYChartBuilder {
     private static readonly List<string> defaultLabels = ["Foo", "Bar", "Baz", "Qux", "Quux"];
 
     public XYChart Chart { get; }
-    internal IBoundingBoxProvider BoundingBoxProvider { get; }
     public IJSObjectReference ModuleReference { get; }
     public bool StateHasChangedInvoked { get; private set; }
 
     public XYChartBuilder(int labelCount = Chart_LabelCount, DataPointSpacingMode dataPointSpacingMode = Chart_DataPointSpacingMode) {
-        BoundingBoxProvider = Substitute.For<IBoundingBoxProvider>();
         ModuleReference = Substitute.For<IJSObjectReference>();
         Chart = new() {
             Labels = defaultLabels.Take(labelCount).ToList(),
             DataPointSpacingMode = dataPointSpacingMode,
             StateChangeHandler = new(),
-            BoundingBoxProviderProvider = () => Task.FromResult(BoundingBoxProvider),
             ModuleReference = ModuleReference
         };
         Chart.Canvas = new() {
@@ -155,14 +151,6 @@ public class XYChartBuilder {
     public XYChartBuilder WithCanvas(Canvas canvas) {
         Chart.Canvas = canvas;
         canvas.Chart = Chart;
-        return this;
-    }
-
-    internal XYChartBuilder WithProvidedSize(string cssClass, decimal x, decimal y, decimal width, decimal height)
-        => WithProvidedSize(cssClass, new BoundingBox(x, y, width, height));
-
-    internal XYChartBuilder WithProvidedSize(string cssClass, BoundingBox textSize) {
-        BoundingBoxProvider.GetBoundingBox(Arg.Any<string>(), cssClass).Returns(textSize);
         return this;
     }
 

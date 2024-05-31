@@ -47,7 +47,6 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
-    internal Func<Task<IBoundingBoxProvider>>? BoundingBoxProviderProvider { get; init; }
     internal OperandStream StateChangeHandler { get; init; } = new();
     internal IJSObjectReference ModuleReference {
         get => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
@@ -175,8 +174,6 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         await Canvas.AutoSize();
         base.StateHasChanged();
     }
-
-    internal Task<IBoundingBoxProvider> GetBoundingBoxProvider() => BoundingBoxProviderProvider?.Invoke() ?? BoundingBoxProvider.Create(JSRuntime);
 
     /// <summary>
     /// Gets the SVG shapes needed to display the chart
