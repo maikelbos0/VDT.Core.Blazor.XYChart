@@ -370,7 +370,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// <param name="cssClass">CSS class to apply to the text element</param>
     /// <returns></returns>
     public async Task<BoundingBox> GetBoundingBox(string text, string? cssClass)
-        => await ModuleReference.InvokeAsync<BoundingBox>("getBoundingBox", text, cssClass);
+        => await ModuleReference.InvokeAsync<BoundingBox>("getBoundingBox", dotNetObjectReference, text, cssClass);
 
     /// <inheritdoc/>
     public async ValueTask DisposeAsync() {

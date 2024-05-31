@@ -67,7 +67,8 @@ function getSize(computedStyle, property) {
     return isNaN(size) ? 0 : size;
 }
 
-function getBoundingBox(text, cssClass) {
+function getBoundingBox(dotNetObjectReference, text, cssClass) {
+    const groupElement = charts[dotNetObjectReference._id].groupElement;
     const textElement = document.createElementNS(svgNamespace, "text");
     textElement.setAttribute("class", cssClass);
     textElement.textContent = text;
