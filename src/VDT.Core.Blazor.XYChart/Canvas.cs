@@ -196,47 +196,37 @@ public class Canvas : ChildComponentBase, IDisposable {
     /// Gets the SVG shape for the plot area
     /// </summary>
     /// <returns>The SVG plot area shape</returns>
-    public Shapes.PlotAreaShape GetPlotAreaShape() => new(ActualWidth, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
+    public PlotAreaShape GetPlotAreaShape() => new(ActualWidth, Height, PlotAreaX, PlotAreaY, PlotAreaWidth, PlotAreaHeight);
 
     /// <summary>
     /// Applies automatic sizing to dimensions that have automatic sizing enabled
     /// </summary>
     /// <returns></returns>
     public async Task AutoSize() {
-        // TODO cleanup once getboundingbox is integrated into chart
-        if (!AutoSizeXAxisLabelsIsEnabled && !AutoSizeYAxisLabelsIsEnabled) {
-            AutoSizeXAxisLabelHeight = null;
-            AutoSizeYAxisLabelWidth = null;
+        if (AutoSizeXAxisLabelsIsEnabled) {
+            var boundingBoxes = await Task.WhenAll(Chart.Labels.Select(async label => await Chart.GetBoundingBox(label, XAxisLabelShape.DefaultCssClass)));
+
+            AutoSizeXAxisLabelHeight = boundingBoxes.Max(boundingBox => boundingBox.RequiredHeight);
         }
         else {
-            await using var boundingBoxProvider = await Chart.GetBoundingBoxProvider();
-
-            if (AutoSizeXAxisLabelsIsEnabled) {
-                var boundingBoxes = await Task.WhenAll(Chart.Labels.Select(async label => await boundingBoxProvider.GetBoundingBox(label, XAxisLabelShape.DefaultCssClass)));
-
-                AutoSizeXAxisLabelHeight = boundingBoxes.Max(boundingBox => boundingBox.RequiredHeight);
-            }
-            else {
-                AutoSizeXAxisLabelHeight = null;
-            }
-
-            if (AutoSizeYAxisLabelsIsEnabled) {
-                var boundingBoxes = await Task.WhenAll(Chart.PlotArea.GetGridLineDataPoints().Select(async dataPoint => await boundingBoxProvider.GetBoundingBox(Chart.GetFormattedYAxisLabel(dataPoint), YAxisLabelShape.DefaultCssClass)));
-
-                AutoSizeYAxisLabelWidth = boundingBoxes.Max(boundingBox => boundingBox.RequiredWidth);
-
-                if (Chart.PlotArea.Multiplier != 1M) {
-                    var boundingBox = await boundingBoxProvider.GetBoundingBox(Chart.GetFormattedAxisMultiplier(), YAxisMultiplierShape.DefaultCssClass);
-
-                    AutoSizeYAxisLabelWidth += boundingBox.RequiredWidth;
-                }
-            }
-            else {
-                AutoSizeYAxisLabelWidth = null;
-            }
+            AutoSizeXAxisLabelHeight = null;
         }
 
-        // TODO test
+        if (AutoSizeYAxisLabelsIsEnabled) {
+            var boundingBoxes = await Task.WhenAll(Chart.PlotArea.GetGridLineDataPoints().Select(async dataPoint => await Chart.GetBoundingBox(Chart.GetFormattedYAxisLabel(dataPoint), YAxisLabelShape.DefaultCssClass)));
+
+            AutoSizeYAxisLabelWidth = boundingBoxes.Max(boundingBox => boundingBox.RequiredWidth);
+
+            if (Chart.PlotArea.Multiplier != 1M) {
+                var boundingBox = await Chart.GetBoundingBox(Chart.GetFormattedAxisMultiplier(), YAxisMultiplierShape.DefaultCssClass);
+
+                AutoSizeYAxisLabelWidth += boundingBox.RequiredWidth;
+            }
+        }
+        else {
+            AutoSizeYAxisLabelWidth = null;
+        }
+
         if (AutoSizeWidthIsEnabled) {
             AutoSizeWidth = await Chart.GetAvailableWidth();
         }

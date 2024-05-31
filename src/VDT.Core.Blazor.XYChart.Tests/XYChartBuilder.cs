@@ -166,8 +166,14 @@ public class XYChartBuilder {
         return this;
     }
 
-    public XYChartBuilder WithModuleReturnValue<TValue>(string identifier, TValue returnValue) {
-        ModuleReference.InvokeAsync<TValue>(identifier, Arg.Any<object?[]?>()).Returns(returnValue);
+    public XYChartBuilder WithBoundingBox(string cssClass, decimal x, decimal y, decimal width, decimal height)
+        => WithModuleReturnValue("getBoundingBox", new BoundingBox(x, y, width, height), Arg.Is<object?[]?>(v => v != null && v.Length >= 3 && v[2] as string == cssClass));
+
+    public XYChartBuilder WithModuleReturnValue<TValue>(string identifier, TValue returnValue)
+        => WithModuleReturnValue(identifier, returnValue, Arg.Any<object?[]?>());
+
+    public XYChartBuilder WithModuleReturnValue<TValue>(string identifier, TValue returnValue, object?[]? args) {
+        ModuleReference.InvokeAsync<TValue>(identifier, args).Returns(returnValue);
         return this;
     }
 }
