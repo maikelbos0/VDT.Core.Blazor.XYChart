@@ -10,18 +10,20 @@ namespace VDT.Core.Blazor.XYChart.Tests;
 
 public class CanvasTests {
     [Theory]
-    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #", "#", false)]
-    [InlineData(900, 500, 10, false, 100, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 600, 10, false, 100, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 20, false, 100, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, true, 100, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 75, false, 100, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, true, 75, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, false, 75, "#", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, false, 100, "#.##", "x #", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #.##", "#", true)]
-    [InlineData(1000, 500, 10, false, 100, false, 100, "#", "x #", "#.##", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 100, "#", "x #", "#", false)]
+    [InlineData(false, 900, 500, 10, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 600, 10, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 20, false, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, true, 100, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 75, false, 100, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, true, 75, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 75, "#", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 100, "#.##", "x #", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 100, "#", "x #.##", "#", true)]
+    [InlineData(false, 1000, 500, 10, false, 100, false, 100, "#", "x #", "#.##", true)]
+    [InlineData(true, 1000, 500, 10, false, 100, false, 100, "#", "x #", "#", true)]
     public void HaveParametersChanged(
+        bool autoSizeWidthIsEnabled,
         int width,
         int height,
         int padding,
@@ -35,6 +37,7 @@ public class CanvasTests {
         bool expectedResult
     ) {
         var parameters = ParameterView.FromDictionary(new Dictionary<string, object?>() {
+            { nameof(Canvas.AutoSizeWidthIsEnabled), autoSizeWidthIsEnabled },
             { nameof(Canvas.Width), width },
             { nameof(Canvas.Height), height },
             { nameof(Canvas.Padding), padding },
@@ -48,6 +51,7 @@ public class CanvasTests {
         });
 
         var subject = new Canvas {
+            AutoSizeWidthIsEnabled = false,
             Width = 1000,
             Height = 500,
             Padding = 10,
@@ -78,12 +82,27 @@ public class CanvasTests {
     }
 
     [Theory]
+    [InlineData(false, Canvas_Width)]
+    [InlineData(true, 1234)]
+    public async Task AutoSize_Width(bool autoSizeWidthIsEnabled, int expectedWidth) {
+        var subject = new XYChartBuilder()
+            .WithCanvas(autoSizeWidthIsEnabled: autoSizeWidthIsEnabled)
+            .WithModuleReturnValue("getAvailableWidth", 1234.3M)
+            .Chart
+            .Canvas;
+
+        await subject.AutoSize();
+
+        Assert.Equal(expectedWidth, subject.ActualWidth);
+    }
+
+    [Theory]
     [InlineData(false, Canvas_XAxisLabelHeight)]
     [InlineData(true, 75)]
     public async Task AutoSize_XAxisLabels(bool autoSizeXAxisLabelsIsEnabled, int expectedXAxisLabelHeight) {
         var subject = new XYChartBuilder()
             .WithCanvas(autoSizeXAxisLabelsIsEnabled: autoSizeXAxisLabelsIsEnabled)
-            .WithProvidedSize(XAxisLabelShape.DefaultCssClass, 0, 10, 0, 64.1M)
+            .WithBoundingBox(XAxisLabelShape.DefaultCssClass, 0, 10, 0, 64.1M)
             .Chart
             .Canvas;
 
@@ -100,8 +119,8 @@ public class CanvasTests {
         var subject = new XYChartBuilder()
             .WithPlotArea(multiplier: multiplier)
             .WithCanvas(autoSizeYAxisLabelsIsEnabled: autoSizeYAxisLabelsIsEnabled)
-            .WithProvidedSize(YAxisLabelShape.DefaultCssClass, 10, 0, 114.1M, 0)
-            .WithProvidedSize(YAxisMultiplierShape.DefaultCssClass, 4, 0, 20.1M, 0)
+            .WithBoundingBox(YAxisLabelShape.DefaultCssClass, 10, 0, 114.1M, 0)
+            .WithBoundingBox(YAxisMultiplierShape.DefaultCssClass, 4, 0, 20.1M, 0)
             .Chart
             .Canvas;
 

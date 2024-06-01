@@ -9,11 +9,11 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.XYChart</PackageId>
-		<Version>2.2.0</Version>
+		<Version>2.3.0</Version>
 		<Title>VDT.Core.Blazor.XYChart</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component to create SVG charts with a category X-axis and a value Y-axis such as bar, line and area charts</Description>
-		<PackageReleaseNotes>- Added smooth lines to line charts</PackageReleaseNotes>
+		<PackageReleaseNotes>- Added automatic chart width based on parent</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Maikel Bos</Copyright>

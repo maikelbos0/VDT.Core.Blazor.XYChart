@@ -13,11 +13,17 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Component to render charts with a category X-axis and a value Y-axis
 /// </summary>
-public class XYChart : ComponentBase {
+public class XYChart : ComponentBase, IAsyncDisposable {
+    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/xychart.f047879a94.js";
+
     /// <summary>
     /// Gets or sets the default value for the the way data points are spaced out over the plot area
     /// </summary>
     public static DataPointSpacingMode DefaultDataPointSpacingMode { get; set; } = DataPointSpacingMode.Auto;
+
+    private ElementReference elementReference;
+    private IJSObjectReference? moduleReference;
+    private DotNetObjectReference<XYChart>? dotNetObjectReference;
 
     [Inject] internal IJSRuntime JSRuntime { get; set; } = null!;
 
@@ -40,8 +46,11 @@ public class XYChart : ComponentBase {
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = new();
-    internal Func<Task<IBoundingBoxProvider>>? BoundingBoxProviderProvider { get; init; }
     internal OperandStream StateChangeHandler { get; init; } = new();
+    internal IJSObjectReference ModuleReference {
+        get => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
+        set => moduleReference = value;
+    }
 
     /// <summary>
     /// Create an XY chart
@@ -52,6 +61,16 @@ public class XYChart : ComponentBase {
         PlotArea = new PlotArea() { Chart = this };
 
         StateChangeHandler.Debounce(100).Subscribe(HandleStateChange);
+    }
+
+    /// <inheritdoc/>
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            moduleReference = await JSRuntime.InvokeAsync<IJSObjectReference>("import", ModuleLocation);
+            dotNetObjectReference = DotNetObjectReference.Create(this);
+
+            await moduleReference.InvokeVoidAsync("register", dotNetObjectReference);
+        }
     }
 
     /// <inheritdoc/>
@@ -79,11 +98,12 @@ public class XYChart : ComponentBase {
         builder.OpenElement(1, "svg");
         builder.AddAttribute(2, "xmlns", "http://www.w3.org/2000/svg");
         builder.AddAttribute(3, "class", "chart-main");
-        builder.AddAttribute(4, "viewbox", $"0 0 {Canvas.Width} {Canvas.Height}");
-        builder.AddAttribute(5, "width", Canvas.Width);
+        builder.AddAttribute(4, "viewbox", $"0 0 {Canvas.ActualWidth} {Canvas.Height}");
+        builder.AddAttribute(5, "width", Canvas.ActualWidth);
         builder.AddAttribute(6, "height", Canvas.Height);
+        builder.AddElementReferenceCapture(7, elementReference => this.elementReference = elementReference);
 
-        builder.OpenRegion(7);
+        builder.OpenRegion(8);
         foreach (var shape in GetShapes()) {
             builder.OpenElement(1, shape.ElementName);
             builder.SetKey(shape.Key);
@@ -94,9 +114,9 @@ public class XYChart : ComponentBase {
         }
         builder.CloseRegion();
 
-        builder.OpenComponent<CascadingValue<XYChart>>(8);
-        builder.AddAttribute(9, "Value", this);
-        builder.AddAttribute(10, "ChildContent", ChildContent);
+        builder.OpenComponent<CascadingValue<XYChart>>(9);
+        builder.AddAttribute(10, "Value", this);
+        builder.AddAttribute(11, "ChildContent", ChildContent);
         builder.CloseComponent();
 
         builder.CloseElement();
@@ -142,17 +162,17 @@ public class XYChart : ComponentBase {
         StateHasChanged();
     }
 
-    internal new void StateHasChanged() {
-        _ = StateChangeHandler.Publish();
-    }
+    /// <summary>
+    /// Notifies the component that its state has changed
+    /// </summary>
+    [JSInvokable]
+    public new void StateHasChanged() => StateChangeHandler.Publish();
 
     internal async Task HandleStateChange() {
         PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
         await Canvas.AutoSize();
         base.StateHasChanged();
     }
-
-    internal Task<IBoundingBoxProvider> GetBoundingBoxProvider() => BoundingBoxProviderProvider?.Invoke() ?? BoundingBoxProvider.Create(JSRuntime);
 
     /// <summary>
     /// Gets the SVG shapes needed to display the chart
@@ -331,4 +351,30 @@ public class XYChart : ComponentBase {
         DataPointSpacingMode.Center => Canvas.PlotAreaX + (index + 0.5M) * GetDataPointWidth(),
         _ => throw new NotImplementedException($"No implementation found for {nameof(DataPointSpacingMode)} '{DataPointSpacingMode}'.")
     };
+
+    /// <summary>
+    /// Gets the maximum width available for automatic sizing of the chart
+    /// </summary>
+    /// <returns>The available width</returns>
+    public async Task<int> GetAvailableWidth()
+        => (int)await ModuleReference.InvokeAsync<decimal>("getAvailableWidth", elementReference);
+
+    /// <summary>
+    /// Gets the smallest rectangle in which an SVG text fits
+    /// </summary>
+    /// <param name="text">Text to determine the bounding box for</param>
+    /// <param name="cssClass">CSS class to apply to the text element</param>
+    /// <returns></returns>
+    public async Task<BoundingBox> GetBoundingBox(string text, string? cssClass)
+        => await ModuleReference.InvokeAsync<BoundingBox>("getBoundingBox", dotNetObjectReference, text, cssClass);
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync() {
+        if (moduleReference != null) {
+            await moduleReference.InvokeVoidAsync("unregister", dotNetObjectReference);
+            await moduleReference.DisposeAsync();
+        }
+
+        GC.SuppressFinalize(this);
+    }
 }
