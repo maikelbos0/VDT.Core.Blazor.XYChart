@@ -4,7 +4,6 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
 using VDT.Core.Operators;
