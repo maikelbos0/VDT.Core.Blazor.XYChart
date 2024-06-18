@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-// TODO data labels for stacked are incorrect
-
 namespace VDT.Core.Blazor.XYChart.Examples;
 
 public class Program {
