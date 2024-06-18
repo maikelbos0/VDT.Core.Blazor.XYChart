@@ -23,8 +23,6 @@ public class XYChartTests {
 
     [Fact]
     public void Module_Has_Correct_Fingerprint() {
-        using var sha256 = SHA256.Create();
-
         var filePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "xychart.*.js").Single();
 #pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
         var fingerprintFinder = new Regex("xychart\\.([a-f0-9]+)\\.js$", RegexOptions.IgnoreCase);
