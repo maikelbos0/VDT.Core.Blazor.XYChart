@@ -46,7 +46,9 @@ public class YAxisLabelShape : ShapeBase {
     /// <inheritdoc/>
     public override ShapeAttributeCollection GetAttributes() => new() {
         { "x", X },
-        { "y", Y }
+        { "y", Y },
+        { "text-anchor", "end" },
+        { "dominant-baseline", "middle" }
     };
 
     /// <inheritdoc/>

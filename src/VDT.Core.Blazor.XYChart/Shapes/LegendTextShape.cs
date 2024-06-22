@@ -49,7 +49,8 @@ public class LegendTextShape : ShapeBase {
     /// <inheritdoc/>
     public override ShapeAttributeCollection GetAttributes() => new() {
         { "x", X },
-        { "y", Y }
+        { "y", Y },
+        { "dominant-baseline", "middle" }
     };
 
     /// <inheritdoc/>

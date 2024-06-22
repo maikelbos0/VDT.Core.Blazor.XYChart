@@ -18,8 +18,10 @@ public class PlotAreaShapeTests {
 
         var result = subject.GetAttributes();
 
-        Assert.Equal(2, result.Count());
+        Assert.Equal(4, result.Count());
         Assert.Equal("evenodd", Assert.Single(result, attribute => attribute.Key == "fill-rule").Value);
         Assert.Equal("M-100 -100 l500 0 l0 400 l-500 0 Z M20 50 l130 0 l0 90 l-130 0 Z", Assert.Single(result, attribute => attribute.Key == "d").Value);
+        Assert.Equal("grey", Assert.Single(result, attribute => attribute.Key == "stroke").Value);
+        Assert.Equal("white", Assert.Single(result, attribute => attribute.Key == "fill").Value);
     }
 }

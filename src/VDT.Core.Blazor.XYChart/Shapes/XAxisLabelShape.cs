@@ -46,7 +46,9 @@ public class XAxisLabelShape : ShapeBase {
     /// <inheritdoc/>
     public override ShapeAttributeCollection GetAttributes() => new() {
         { "x", X },
-        { "y", Y }
+        { "y", Y },
+        { "text-anchor", "middle" },
+        { "dominant-baseline", "hanging" }
     };
 
     /// <inheritdoc/>

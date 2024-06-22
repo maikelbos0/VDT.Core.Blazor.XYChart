@@ -18,11 +18,12 @@ public class GridLineShapeTests {
 
         var result = subject.GetAttributes();
 
-        Assert.Equal(5, result.Count());
+        Assert.Equal(6, result.Count());
         Assert.Equal("20", Assert.Single(result, attribute => attribute.Key == "x1").Value);
         Assert.Equal("50", Assert.Single(result, attribute => attribute.Key == "y1").Value);
         Assert.Equal("100", Assert.Single(result, attribute => attribute.Key == "x2").Value);
         Assert.Equal("50", Assert.Single(result, attribute => attribute.Key == "y2").Value);
         Assert.Equal("10", Assert.Single(result, attribute => attribute.Key == "value").Value);
+        Assert.Equal("grey", Assert.Single(result, attribute => attribute.Key == "stroke").Value);
     }
 }

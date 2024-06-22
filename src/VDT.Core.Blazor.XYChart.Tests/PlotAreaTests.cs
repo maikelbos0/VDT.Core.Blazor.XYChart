@@ -92,7 +92,7 @@ public class PlotAreaTests {
             .WithPlotArea(autoScaleIsEnabled: true, autoScaleIncludesZero: false, autoScaleClearancePercentage: 0M, autoScaleRequestedGridLineCount: requestedGridLineCount)
             .Chart.PlotArea;
 
-        subject.AutoScale(Array.Empty<decimal>());
+        subject.AutoScale([]);
 
         Assert.Equal(expectedMin, subject.ActualMin);
         Assert.Equal(expectedMax, subject.ActualMax);
@@ -157,7 +157,7 @@ public class PlotAreaTests {
             .WithPlotArea(autoScaleIsEnabled: false)
             .Chart.PlotArea;
 
-        subject.AutoScale(new[] { 0.006M, 0.044M });
+        subject.AutoScale([0.006M, 0.044M]);
 
         Assert.Equal(PlotArea_Min, subject.ActualMin);
         Assert.Equal(PlotArea_Max, subject.ActualMax);

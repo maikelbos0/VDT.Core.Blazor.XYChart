@@ -9,8 +9,8 @@ public class ParameterViewExtensionsTests {
         public string? String { get; set; }
         public int Struct { get; set; }
         public DataMarkerDelegate Delegate { get; set; } = DefaultDataMarkerTypes.Square;
-        public List<string> StringList { get; set; } = new();
-        public List<int?> StructList { get; set; } = new();
+        public List<string> StringList { get; set; } = [];
+        public List<int?> StructList { get; set; } = [];
 
         public override bool HaveParametersChanged(ParameterView parameters)
             => parameters.HasParameterChanged(Struct)

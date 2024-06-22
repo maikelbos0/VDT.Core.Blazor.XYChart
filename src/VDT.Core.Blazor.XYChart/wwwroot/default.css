@@ -23,7 +23,6 @@
 }
 
 .chart-main .y-axis-label {
-    font-size: 10pt;
     text-anchor: end;
     dominant-baseline: middle;
     transform: translate(-10px, 0);
@@ -33,13 +32,12 @@
     transform-box: fill-box;
     transform-origin: 50% 50% 0;
     transform: translate(6pt, 0) rotate(-90deg);
-    font-size: 12pt;
+    font-size: larger;
     text-anchor: middle;
     dominant-baseline: central;
 }
 
 .chart-main .x-axis-label {
-    font-size: 10pt;
     text-anchor: middle;
     dominant-baseline: hanging;
     transform: translate(0, 10px);
@@ -53,7 +51,6 @@
 .chart-main .data-label {
     transform-box: fill-box;
     transform-origin: 50% 50% 0;
-    font-size: 10pt;
     text-anchor: middle;
     dominant-baseline: middle;
 }
@@ -67,6 +64,5 @@
 }
 
 .chart-main .legend-text {
-    font-size: 10pt;
     dominant-baseline: middle;
 }

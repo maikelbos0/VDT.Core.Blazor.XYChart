@@ -185,10 +185,17 @@ offset by `ItemHeight` horizontally.
 
 ## Style
 
-Since the chart is rendered as SVG, each chart element is fully customizable using the powerful SVG options in CSS. Each element type can be referenced using
-the below CSS classes. The chart itself can be referenced with the CSS class `svg.chart-main`. Aside from the default CSS classes, it is also possible to
-assign each data series its own custom CSS class using the `CssClass` parameter. All SVG elements that are associated with this data series will contain this
-CSS class, including data labels and legend items.
+Since the chart is rendered as SVG, each chart element is fully customizable using the powerful SVG options in CSS. While the chart is essentially functional
+without CSS, the chart package comes with a default style sheet that gives a good starting point for rendering your charts. To include this style sheet, add
+the following link tag to the header of your index page.
+
+```
+<link href="_content/VDT.Core.Blazor.XYChart/default.css" rel="stylesheet" />
+```
+
+For customization each element type can be referenced using the below CSS classes. The chart itself can be referenced with the CSS class `svg.chart-main`.
+Aside from the default CSS classes, it is also possible to assign each data series its own custom CSS class using the `CssClass` parameter. All SVG elements
+that are associated with this data series will contain this CSS class, including data labels and legend items.
 
 - Plot area: `.plot-area`; please note that this shape is inverted so that it covers chart data elements that would otherwise extend into the rest of the
   canvas

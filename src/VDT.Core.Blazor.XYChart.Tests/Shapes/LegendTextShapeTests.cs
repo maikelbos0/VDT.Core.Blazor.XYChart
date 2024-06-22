@@ -18,9 +18,10 @@ public class LegendTextShapeTests {
 
         var result = subject.GetAttributes();
 
-        Assert.Equal(2, result.Count());
+        Assert.Equal(3, result.Count());
         Assert.Equal("100", Assert.Single(result, attribute => attribute.Key == "x").Value);
         Assert.Equal("50", Assert.Single(result, attribute => attribute.Key == "y").Value);
+        Assert.Equal("middle", Assert.Single(result, attribute => attribute.Key == "dominant-baseline").Value);
     }
 
     [Fact]

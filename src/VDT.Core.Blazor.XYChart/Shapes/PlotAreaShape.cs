@@ -67,6 +67,8 @@ public class PlotAreaShape : ShapeBase {
     /// <inheritdoc/>
     public override ShapeAttributeCollection GetAttributes() => new() {
         { "d", $"M{-Bleed} {-Bleed} l{CanvasWidth + Bleed * 2} 0 l0 {CanvasHeight + Bleed * 2} l{-CanvasWidth - Bleed * 2} 0 Z M{X} {Y} l{Width} 0 l0 {Height} l{-Width} 0 Z" },
+        { "stroke", "grey" },
+        { "fill", "white" },
         { "fill-rule", "evenodd" }
     };
 }
