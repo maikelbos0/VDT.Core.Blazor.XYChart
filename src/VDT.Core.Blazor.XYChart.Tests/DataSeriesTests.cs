@@ -86,7 +86,7 @@ public class DataSeriesTests {
     [InlineData(2, 0, "blue")]
     [InlineData(2, 1, "green")]
     public void GetColor_Default(int layerIndex, int index, string expectedColor) {
-        DataSeries.DefaultColors = new List<string>() { "red", "blue", "green" };
+        DataSeries.DefaultColors = ["red", "blue", "green"];
 
         var subject = new XYChartBuilder()
             .WithLayer<LineLayer>()
@@ -108,7 +108,7 @@ public class DataSeriesTests {
 
     [Fact]
     public void GetColor_Fallback() {
-        DataSeries.DefaultColors = new();
+        DataSeries.DefaultColors = [];
 
         var subject = new XYChartBuilder()
             .WithLayer<LineLayer>()
