@@ -18,8 +18,9 @@ public class LineDataShapeTests {
 
         var result = subject.GetAttributes();
 
-        Assert.Equal(2, result.Count());
+        Assert.Equal(3, result.Count());
         Assert.Equal("M 20 50 L 80 90", Assert.Single(result, attribute => attribute.Key == "d").Value);
         Assert.Equal("red", Assert.Single(result, attribute => attribute.Key == "stroke").Value);
+        Assert.Equal("none", Assert.Single(result, attribute => attribute.Key == "fill").Value);
     }
 }

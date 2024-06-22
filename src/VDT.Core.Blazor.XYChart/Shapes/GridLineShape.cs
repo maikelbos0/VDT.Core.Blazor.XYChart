@@ -51,6 +51,7 @@ public class GridLineShape : ShapeBase {
         { "y1", Y },
         { "x2", X + Width },
         { "y2", Y },
-        { "value", Value }
+        { "value", Value },
+        { "stroke", "grey" }
     };
 }

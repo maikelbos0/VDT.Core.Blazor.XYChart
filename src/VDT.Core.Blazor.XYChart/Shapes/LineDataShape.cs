@@ -44,6 +44,7 @@ public class LineDataShape : ShapeBase {
     /// <inheritdoc/>
     public override ShapeAttributeCollection GetAttributes() => new() {
         { "d", Path },
-        { "stroke", Color }
+        { "stroke", Color },
+        { "fill", "none" },
     };
 }
