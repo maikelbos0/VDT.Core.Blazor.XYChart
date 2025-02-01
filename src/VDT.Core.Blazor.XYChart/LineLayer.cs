@@ -28,12 +28,6 @@ public class LineLayer : LayerBase {
     public static DataMarkerDelegate DefaultDataMarkerType { get; set; } = DefaultDataMarkerTypes.Round;
 
     /// <summary>
-    /// Gets or sets the default value for visibility of the lines connecting the positions of the data points
-    /// </summary>
-    [Obsolete($"Default data line visibility is now determined by {nameof(DefaultDataLineMode)}")]
-    public static bool DefaultShowDataLines { get; set; } = true;
-
-    /// <summary>
     /// Gets or sets the default value for the visibility and type of lines connecting the positions of data points
     /// </summary>
     public static DataLineMode DefaultDataLineMode { get; set; } = DataLineMode.Straight;
@@ -69,12 +63,6 @@ public class LineLayer : LayerBase {
     /// that returns it
     /// </summary>
     [Parameter] public DataMarkerDelegate DataMarkerType { get; set; } = DefaultDataMarkerType;
-
-    /// <summary>
-    /// Gets or sets visibility of the lines connecting the positions of the data points
-    /// </summary>
-    [Obsolete($"Data line visibility is now determined by {nameof(DataLineMode)}")]
-    [Parameter] public bool ShowDataLines { get; set; } = DefaultShowDataLines;
 
     /// <summary>
     /// Gets or sets the visibility and type of lines connecting the positions of data points
