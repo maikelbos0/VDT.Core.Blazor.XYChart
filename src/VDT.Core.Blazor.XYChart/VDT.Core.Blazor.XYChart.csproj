@@ -9,13 +9,12 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.XYChart</PackageId>
-		<Version>3.0.0</Version>
+		<Version>4.0.0</Version>
 		<Title>VDT.Core.Blazor.XYChart</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component to create SVG charts with a category X-axis and a value Y-axis such as bar, line and area charts</Description>
-		<PackageReleaseNotes>- Made sure the chart is functional without CSS
-- Removed default font size so it will be inherited from default
-- Added details on how to include default CSS</PackageReleaseNotes>
+		<PackageReleaseNotes>- Removed .net 6.0 and .net 7.0 support
+- Added explicit .net 9.0 support</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Maikel Bos</Copyright>
