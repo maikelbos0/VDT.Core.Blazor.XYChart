@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -13,8 +13,10 @@
 		<Title>VDT.Core.Blazor.XYChart</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component to create SVG charts with a category X-axis and a value Y-axis such as bar, line and area charts</Description>
-		<PackageReleaseNotes>- Removed .net 6.0 and .net 7.0 support
-- Added explicit .net 9.0 support</PackageReleaseNotes>
+		<PackageReleaseNotes>
+			- Removed .net 6.0 and .net 7.0 support
+			- Added explicit .net 9.0 support
+		</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Maikel Bos</Copyright>
@@ -41,13 +43,17 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.0" />
 	</ItemGroup>
 
+	<ItemGroup Condition="$(TargetFramework) == 'net10.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.0" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<InternalsVisibleTo Include="$(AssemblyName).Tests" />
 		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="VDT.Core.Operators" Version="1.0.0" />
+		<PackageReference Include="VDT.Core.Operators" Version="1.0.0" />
 	</ItemGroup>
 
 </Project>
