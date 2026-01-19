@@ -140,12 +140,12 @@
         }
 
         public override ShapeAttributeCollection GetAttributes() => new() {
-            { "d", string.Join(" ", new[] {
+            { "d", string.Join(" ", [
                 PathCommandFactory.MoveTo(X - Size / 2, Y - Size / 2),
                 PathCommandFactory.LineTo(X + Size / 2, Y + Size / 2),
                 PathCommandFactory.MoveTo(X - Size / 2, Y + Size / 2),
                 PathCommandFactory.LineTo(X + Size / 2, Y - Size / 2)
-            }) },
+            ]) },
             { "stroke", Color },
             { "stroke-width", "2" }
         };

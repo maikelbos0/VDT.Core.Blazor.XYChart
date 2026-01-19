@@ -27,17 +27,13 @@
 </ul>
 
 <pre><code>
-public class Program {
-    public static async Task Main(string[] args) {
-        var builder = WebAssemblyHostBuilder.CreateDefault(args);
-        builder.RootComponents.Add&lt;App&gt;("#app");
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add&lt;App&gt;("#app");
 
-        Canvas.DefaultWidth = 900;
-        Canvas.DefaultHeight = 400;
-        Legend.DefaultPosition = LegendPosition.Bottom;
-        Legend.DefaultHeight = 50;
+Canvas.DefaultWidth = 900;
+Canvas.DefaultHeight = 400;
+Legend.DefaultPosition = LegendPosition.Bottom;
+Legend.DefaultHeight = 50;
 
-        await builder.Build().RunAsync();
-    }
-}
+await builder.Build().RunAsync();
 </code></pre>

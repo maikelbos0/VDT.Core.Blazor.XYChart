@@ -80,8 +80,8 @@
 </div>
 
 @code {
-    private List<ChartLayerType> LayerTypes { get; set; } = new(Enum.GetValues<ChartLayerType>());
-    private List<(ChartLayerType, string)> AllLayerTypes { get; } = Enum.GetValues<ChartLayerType>().Select(layerType => (layerType, layerType.ToString())).ToList();
+    private List<ChartLayerType> LayerTypes { get; set; } = [.. Enum.GetValues<ChartLayerType>()];
+    private List<(ChartLayerType, string)> AllLayerTypes { get; } = [.. Enum.GetValues<ChartLayerType>().Select(layerType => (layerType, layerType.ToString()))];
     private bool IsStacked { get; set; } = false;
     private bool ShowDataLabels { get; set; } = false;
     private ushort LabelCount { get; set; } = 5;
