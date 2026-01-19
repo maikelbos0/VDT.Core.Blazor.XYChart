@@ -84,18 +84,18 @@ public class BarLayer : LayerBase {
             offsetProvider = dataSeriesIndex => (dataSeriesIndex - DataSeries.Count / 2M + 0.5M) * dataSeriesWidth + (dataSeriesIndex - (DataSeries.Count - 1) / 2M) * gapWidth;
         }
 
-        return DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
+        return [.. DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
             dataSeries.GetColor(),
             dataSeries.CssClass,
             index,
-            dataSeries.GetDataPoints().Select(value => new CanvasDataPoint(
+            [.. dataSeries.GetDataPoints().Select(value => new CanvasDataPoint(
                 Chart.MapDataIndexToCanvas(value.Index) + offsetProvider(index),
                 Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
                 Chart.MapDataValueToPlotArea(value.DataPoint),
                 width,
                 value.Index,
                 (value.DataPoint / Chart.PlotArea.Multiplier)
-            )).ToList())
-        ).ToList();
+            ))])
+        )];
     }
 }

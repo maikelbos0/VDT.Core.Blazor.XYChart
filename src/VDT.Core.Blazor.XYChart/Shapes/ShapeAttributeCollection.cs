@@ -8,7 +8,7 @@ namespace VDT.Core.Blazor.XYChart.Shapes;
 /// Collection of key-value pairs representing attributes
 /// </summary>
 public class ShapeAttributeCollection : IEnumerable<KeyValuePair<string, object>> {
-    private readonly Dictionary<string, object> attributes = new();
+    private readonly Dictionary<string, object> attributes = [];
 
     /// <summary>
     /// Add an attribute

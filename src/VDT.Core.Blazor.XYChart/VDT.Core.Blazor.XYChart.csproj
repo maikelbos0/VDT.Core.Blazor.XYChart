@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);IDE0290</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup>

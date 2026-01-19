@@ -35,7 +35,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// <summary>
     /// Gets or sets the category labels of of the chart; this list determines the amount of data point values shown
     /// </summary>
-    [Parameter] public IList<string> Labels { get; set; } = new List<string>();
+    [Parameter] public IList<string> Labels { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the the way data points are spaced out over the plot area
@@ -45,7 +45,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     internal Canvas Canvas { get; set; }
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
-    internal List<LayerBase> Layers { get; set; } = new();
+    internal List<LayerBase> Layers { get; set; } = [];
     internal OperandStream StateChangeHandler { get; init; } = new();
     internal IJSObjectReference ModuleReference {
         get => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
