@@ -36,7 +36,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     /// </summary>
     [Parameter] public bool ShowDataLabels { get; set; } = DefaultShowDataLabels;
 
-    internal List<DataSeries> DataSeries { get; set; } = new();
+    internal List<DataSeries> DataSeries { get; set; } = [];
 
     /// <summary>
     /// Gets the way data points are stacked if stacking is enabled
@@ -106,7 +106,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
             )));
         }
         else {
-            return Enumerable.Empty<DataLabelShape>();
+            return [];
         }
     }
 
@@ -117,19 +117,19 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     public virtual IEnumerable<CanvasDataSeries> GetCanvasDataSeries() {
         var dataPointTransformer = GetDataPointTransformer();
 
-        return DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
+        return [.. DataSeries.Select((dataSeries, index) => new CanvasDataSeries(
             dataSeries.GetColor(),
             dataSeries.CssClass,
             index,
-            dataSeries.GetDataPoints().Select(value => new CanvasDataPoint(
+            [.. dataSeries.GetDataPoints().Select(value => new CanvasDataPoint(
                 Chart.MapDataIndexToCanvas(value.Index),
                 Chart.MapDataPointToCanvas(dataPointTransformer(value.DataPoint, value.Index)),
                 Chart.MapDataValueToPlotArea(value.DataPoint),
                 0, // By default, data point shapes don't require a width
                 value.Index,
                 (value.DataPoint / Chart.PlotArea.Multiplier)
-            )).ToList())
-        ).ToList();
+            ))])
+        )];
     }
 
     /// <summary>

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 using VDT.Core.Blazor.XYChart.Shapes;
 using Xunit;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
@@ -24,12 +24,9 @@ public class XYChartTests {
     [Fact]
     public void Module_Has_Correct_Fingerprint() {
         var filePath = Directory.GetFiles(System.IO.Path.Combine("..", "..", "..", "..", "VDT.Core.Blazor.XYChart", "wwwroot"), "xychart.*.js").Single();
-#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
-        var fingerprintFinder = new Regex("xychart\\.([a-f0-9]+)\\.js$", RegexOptions.IgnoreCase);
-#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
-        var fingerprint = fingerprintFinder.Match(filePath).Groups[1].Value;
+        var fingerprint = System.IO.Path.GetFileNameWithoutExtension(filePath)[8..];
         var fileContents = File.ReadAllBytes(filePath).Where(b => b != '\r').ToArray(); // Normalize newlines between Windows and Linux
-        var expectedFingerprint = string.Join("", SHA256.HashData(fileContents).Take(5).Select(b => b.ToString("x2")));
+        var expectedFingerprint = Convert.ToHexStringLower([.. SHA256.HashData(fileContents).Take(5)]);
 
         Assert.Equal(expectedFingerprint, fingerprint);
     }

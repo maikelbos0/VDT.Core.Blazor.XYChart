@@ -16,7 +16,7 @@ public class XYChartBuilder {
     public XYChartBuilder(int labelCount = Chart_LabelCount, DataPointSpacingMode dataPointSpacingMode = Chart_DataPointSpacingMode) {
         ModuleReference = Substitute.For<IJSObjectReference>();
         Chart = new() {
-            Labels = defaultLabels.Take(labelCount).ToList(),
+            Labels = [.. defaultLabels.Take(labelCount)],
             DataPointSpacingMode = dataPointSpacingMode,
             StateChangeHandler = new(),
             ModuleReference = ModuleReference

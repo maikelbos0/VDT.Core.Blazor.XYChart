@@ -18,7 +18,7 @@ public class DataSeries : ChildComponentBase, IDisposable {
     /// Gets or sets the default colors for data series without a <see cref="Color"/>; the color is chosen by determining the data series index within the 
     /// entire <see cref="XYChart"/>, using modulus if required
     /// </summary>
-    public static List<string> DefaultColors { get; set; } = new() {
+    public static List<string> DefaultColors { get; set; } = [
         "#ff9933",
         "#11bbdd",
         "#aa66ee",
@@ -27,7 +27,7 @@ public class DataSeries : ChildComponentBase, IDisposable {
         "#ee4411",
         "#ffcc11",
         "#dd3377"
-    };
+    ];
 
     [CascadingParameter] internal LayerBase Layer { get; set; } = null!;
 
@@ -44,7 +44,7 @@ public class DataSeries : ChildComponentBase, IDisposable {
     /// <summary>
     /// Gets or sets the data point values that make up this data series; data points are matched to category labels in the <see cref="XYChart"/> by index
     /// </summary>
-    [Parameter] public IList<decimal?> DataPoints { get; set; } = new List<decimal?>();
+    [Parameter] public IList<decimal?> DataPoints { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the CSS class applied to shapes for this data series
