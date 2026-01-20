@@ -1,4 +1,6 @@
-﻿namespace VDT.Core.Blazor.XYChart.Examples.Shared;
+﻿using System.Collections.Generic;
+
+namespace VDT.Core.Blazor.XYChart.Examples.Shared;
 
 public class ExampleData {
     public static List<string> Labels => ["Foo", "Bar", "Baz", "Qux", "Quux", "Corge", "Grault", "Garply"];
