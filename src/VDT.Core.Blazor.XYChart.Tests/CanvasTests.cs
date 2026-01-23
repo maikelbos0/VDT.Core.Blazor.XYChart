@@ -102,7 +102,7 @@ public class CanvasTests {
     public async Task AutoSize_XAxisLabels(bool autoSizeXAxisLabelsIsEnabled, int expectedXAxisLabelHeight) {
         var subject = new XYChartBuilder()
             .WithCanvas(autoSizeXAxisLabelsIsEnabled: autoSizeXAxisLabelsIsEnabled)
-            .WithBoundingBox(XAxisLabelShape.DefaultCssClass, 0, 10, 0, 64.1M)
+            .WithBoundingBoxes(XAxisLabelShape.DefaultCssClass, 0, 10, 0, 64.1M)
             .Chart
             .Canvas;
 
@@ -119,7 +119,7 @@ public class CanvasTests {
         var subject = new XYChartBuilder()
             .WithPlotArea(multiplier: multiplier)
             .WithCanvas(autoSizeYAxisLabelsIsEnabled: autoSizeYAxisLabelsIsEnabled)
-            .WithBoundingBox(YAxisLabelShape.DefaultCssClass, 10, 0, 114.1M, 0)
+            .WithBoundingBoxes(YAxisLabelShape.DefaultCssClass, 10, 0, 114.1M, 0)
             .WithBoundingBox(YAxisMultiplierShape.DefaultCssClass, 4, 0, 20.1M, 0)
             .Chart
             .Canvas;
