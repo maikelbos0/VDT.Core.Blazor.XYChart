@@ -2,6 +2,7 @@
 using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
@@ -18,7 +19,11 @@ public class XYChartBuilder {
         Chart = new() {
             Labels = [.. defaultLabels.Take(labelCount)],
             DataPointSpacingMode = dataPointSpacingMode,
-            ModuleReference = ModuleReference
+            ModuleReference = ModuleReference,
+            StateChangeHandler = () => {
+                StateHasChangedInvoked = true;
+                return Task.CompletedTask;
+            }
         };
         Chart.Canvas = new() {
             Chart = Chart,

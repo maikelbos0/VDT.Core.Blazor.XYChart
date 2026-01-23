@@ -45,6 +45,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = [];
+    internal Func<Task> StateChangeHandler { get; init; }
     internal IJSObjectReference ModuleReference {
         get => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
         set => moduleReference = value;
@@ -57,6 +58,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         Canvas = new Canvas() { Chart = this };
         Legend = new Legend() { Chart = this };
         PlotArea = new PlotArea() { Chart = this };
+        StateChangeHandler = HandleStateChange;
     }
 
     /// <inheritdoc/>
@@ -162,7 +164,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// Notifies the component that its state has changed
     /// </summary>
     [JSInvokable]
-    public new async Task StateHasChanged() {
+    public new Task StateHasChanged() => StateChangeHandler();
+
+    internal async Task HandleStateChange() {
         PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
         await Canvas.AutoSize();
         base.StateHasChanged();
