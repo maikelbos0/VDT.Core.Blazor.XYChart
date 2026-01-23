@@ -46,7 +46,7 @@
     </div>
 </div>
 
-<div class="d-inline-block">
+<div class="chart-container">
     <XYChart Labels="@ExampleData.Labels.Take(LabelCount).ToList()" DataPointSpacingMode="DataPointSpacingMode">
         @if (LayerTypes.Contains(ChartLayerType.Area)) {
             <AreaLayer IsStacked="IsStacked" ShowDataLabels="ShowDataLabels">
