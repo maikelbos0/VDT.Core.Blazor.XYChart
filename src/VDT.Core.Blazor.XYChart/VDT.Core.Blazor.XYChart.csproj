@@ -49,8 +49,4 @@
 		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="VDT.Core.Operators" Version="1.0.0" />
-	</ItemGroup>
-
 </Project>

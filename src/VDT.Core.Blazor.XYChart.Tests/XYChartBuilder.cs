@@ -18,7 +18,6 @@ public class XYChartBuilder {
         Chart = new() {
             Labels = [.. defaultLabels.Take(labelCount)],
             DataPointSpacingMode = dataPointSpacingMode,
-            StateChangeHandler = new(),
             ModuleReference = ModuleReference
         };
         Chart.Canvas = new() {
@@ -54,7 +53,6 @@ public class XYChartBuilder {
             AutoScaleIncludesZero = PlotArea_AutoScaleIncludesZero,
             AutoScaleClearancePercentage = PlotArea_AutoScaleClearancePercentage
         };
-        Chart.StateChangeHandler.Subscribe(() => StateHasChangedInvoked = true);
     }
 
     public XYChartBuilder WithLayer<TLayer>() where TLayer : LayerBase, new()

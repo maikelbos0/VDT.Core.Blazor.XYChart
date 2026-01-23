@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
-using VDT.Core.Operators;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -46,7 +45,6 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = [];
-    internal OperandStream StateChangeHandler { get; init; } = new();
     internal IJSObjectReference ModuleReference {
         get => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
         set => moduleReference = value;
@@ -59,8 +57,6 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         Canvas = new Canvas() { Chart = this };
         Legend = new Legend() { Chart = this };
         PlotArea = new PlotArea() { Chart = this };
-
-        StateChangeHandler.Debounce(100).Subscribe(HandleStateChange);
     }
 
     /// <inheritdoc/>
@@ -80,7 +76,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         await base.SetParametersAsync(parameters);
 
         if (parametersHaveChanged) {
-            StateHasChanged();
+            await StateHasChanged();
         }
     }
 
@@ -166,9 +162,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// Notifies the component that its state has changed
     /// </summary>
     [JSInvokable]
-    public new void StateHasChanged() => StateChangeHandler.Publish();
-
-    internal async Task HandleStateChange() {
+    public new async Task StateHasChanged() {
         PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
         await Canvas.AutoSize();
         base.StateHasChanged();
