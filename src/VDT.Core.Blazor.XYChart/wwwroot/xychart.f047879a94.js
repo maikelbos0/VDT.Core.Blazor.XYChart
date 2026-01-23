@@ -81,4 +81,28 @@ function getBoundingBox(dotNetObjectReference, text, cssClass) {
     };
 }
 
-export { register, unregister, getAvailableWidth, getBoundingBox };
+function getBoundingBoxes(dotNetObjectReference, texts, cssClass) {
+    const boundingBoxes = [];
+    const groupElement = charts[dotNetObjectReference._id].groupElement;
+    const textElement = document.createElementNS(svgNamespace, "text");
+    textElement.setAttribute("class", cssClass);
+    groupElement.appendChild(textElement);
+
+    for (const text of texts) {
+        textElement.textContent = text;
+
+        const bbox = groupElement.getBBox();
+        boundingBoxes.push({
+            x: bbox.x,
+            y: bbox.y,
+            width: bbox.width,
+            height: bbox.height
+        });
+    }
+
+    groupElement.removeChild(textElement);
+
+    return boundingBoxes;
+}
+
+export { register, unregister, getAvailableWidth, getBoundingBox, getBoundingBoxes };

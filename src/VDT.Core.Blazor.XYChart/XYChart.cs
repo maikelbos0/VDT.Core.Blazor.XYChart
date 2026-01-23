@@ -368,6 +368,15 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     public async Task<BoundingBox> GetBoundingBox(string text, string? cssClass)
         => await ModuleReference.InvokeAsync<BoundingBox>("getBoundingBox", dotNetObjectReference, text, cssClass);
 
+    /// <summary>
+    /// For each provided text, gets the smallest rectangle in which an SVG text fits
+    /// </summary>
+    /// <param name="texts">Texts to determine the bounding boxes for</param>
+    /// <param name="cssClass">CSS class to apply to the text element</param>
+    /// <returns></returns>
+    public async Task<BoundingBox[]> GetBoundingBoxes(IEnumerable<string> texts, string? cssClass)
+        => await ModuleReference.InvokeAsync<BoundingBox[]>("getBoundingBoxes", dotNetObjectReference, texts, cssClass);
+
     /// <inheritdoc/>
     public async ValueTask DisposeAsync() {
         if (moduleReference != null) {
