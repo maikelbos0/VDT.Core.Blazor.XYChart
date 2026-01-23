@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -79,7 +80,7 @@ public class Legend : ChildComponentBase, IDisposable {
     public int Height => ItemHeight + (Chart.Layers.Sum(layer => layer.DataSeries.Count) - 1) / ItemsPerRow * ItemHeight;
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.SetLegend(this);
+    protected override Task OnInitializedAsync() => Chart.SetLegend(this);
 
     /// <inheritdoc/>
     public void Dispose() {

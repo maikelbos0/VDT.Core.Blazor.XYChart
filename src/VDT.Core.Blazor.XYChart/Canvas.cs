@@ -170,7 +170,7 @@ public class Canvas : ChildComponentBase, IDisposable {
     };
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.SetCanvas(this);
+    protected override Task OnInitializedAsync() => Chart.SetCanvas(this);
 
     /// <inheritdoc/>
     public void Dispose() {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -118,7 +119,7 @@ public class PlotArea : ChildComponentBase, IDisposable {
     public decimal ActualGridLineInterval => AutoScaleGridLineInterval ?? GridLineInterval;
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.SetPlotArea(this);
+    protected override Task OnInitializedAsync() => Chart.SetPlotArea(this);
 
     /// <inheritdoc/>
     public void Dispose() {

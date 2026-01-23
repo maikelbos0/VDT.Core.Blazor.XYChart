@@ -120,9 +120,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         builder.CloseElement();
     }
 
-    internal void SetCanvas(Canvas canvas) {
+    internal async Task SetCanvas(Canvas canvas) {
         Canvas = canvas;
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     internal void ResetCanvas() {
@@ -130,9 +130,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         StateHasChanged();
     }
 
-    internal void SetLegend(Legend legend) {
+    internal async Task SetLegend(Legend legend) {
         Legend = legend;
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     internal void ResetLegend() {
@@ -140,9 +140,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         StateHasChanged();
     }
 
-    internal void SetPlotArea(PlotArea plotArea) {
+    internal async Task SetPlotArea(PlotArea plotArea) {
         PlotArea = plotArea;
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     internal void ResetPlotArea() {
@@ -150,9 +150,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         StateHasChanged();
     }
 
-    internal void AddLayer(LayerBase layer) {
+    internal async Task AddLayer(LayerBase layer) {
         Layers.Add(layer);
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     internal void RemoveLayer(LayerBase layer) {
@@ -164,7 +164,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// Notifies the component that its state has changed
     /// </summary>
     [JSInvokable]
-    public new Task StateHasChanged() => StateChangeHandler();
+    public new async Task StateHasChanged() => await StateChangeHandler();
 
     internal async Task HandleStateChange() {
         PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));

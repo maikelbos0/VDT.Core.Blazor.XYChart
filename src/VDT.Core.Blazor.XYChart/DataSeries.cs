@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -52,7 +53,7 @@ public class DataSeries : ChildComponentBase, IDisposable {
     [Parameter] public string? CssClass { get; set; }
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Layer.AddDataSeries(this);
+    protected override Task OnInitializedAsync() => Layer.AddDataSeries(this);
 
     /// <inheritdoc/>
     public override bool HaveParametersChanged(ParameterView parameters)

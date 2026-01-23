@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
 
 namespace VDT.Core.Blazor.XYChart;
@@ -54,7 +55,7 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     public abstract bool NullAsZero { get; }
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.AddLayer(this);
+    protected override Task OnInitializedAsync() => Chart.AddLayer(this);
 
     /// <inheritdoc/>
     public void Dispose() {
@@ -62,9 +63,9 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         GC.SuppressFinalize(this);
     }
 
-    internal void AddDataSeries(DataSeries dataSeries) {
+    internal async Task AddDataSeries(DataSeries dataSeries) {
         DataSeries.Add(dataSeries);
-        Chart.StateHasChanged();
+        await Chart.StateHasChanged();
     }
 
     internal void RemoveDataSeries(DataSeries dataSeries) {
