@@ -3,21 +3,21 @@ const charts = {};
 
 function register(dotNetObjectReference) {
     const chart = {
-        ...CreateSvgElement(),
-        eventListener: CreateEventListener(dotNetObjectReference)
+        ...createSvgElement(),
+        eventListener: createEventListener(dotNetObjectReference)
     };
 
     charts[dotNetObjectReference._id] = chart;
     window.addEventListener('resize', chart.eventListener);
 }
 
-function CreateEventListener(dotNetObjectReference) {
+function createEventListener(dotNetObjectReference) {
     return function () {
         dotNetObjectReference.invokeMethodAsync('StateHasChanged');
     };
 }
 
-function CreateSvgElement() {
+function createSvgElement() {
     const svgElement = document.createElementNS(svgNamespace, "svg");
     svgElement.setAttribute("class", "chart-main");
     svgElement.setAttribute("xmlns", svgNamespace);
