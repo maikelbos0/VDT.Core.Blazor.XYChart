@@ -11,7 +11,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Base class for defining a layer in an <see cref="XYChart"/> that defines the layout of the data series it contains
 /// </summary>
-public abstract class LayerBase : ChildComponentBase, IDisposable {
+public abstract class LayerBase : ChildComponentBase, IAsyncDisposable {
     /// <summary>
     /// Gets or sets the default value for whether or not the data series should be stacked
     /// </summary>
@@ -58,8 +58,8 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     protected override Task OnInitializedAsync() => Chart.AddLayer(this);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Chart.RemoveLayer(this);
+    public async ValueTask DisposeAsync() {
+        await Chart.RemoveLayer(this);
         GC.SuppressFinalize(this);
     }
 
@@ -68,9 +68,9 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
         await Chart.StateHasChanged();
     }
 
-    internal void RemoveDataSeries(DataSeries dataSeries) {
+    internal async Task RemoveDataSeries(DataSeries dataSeries) {
         DataSeries.Remove(dataSeries);
-        Chart.StateHasChanged();
+        await Chart.StateHasChanged();
     }
 
     /// <inheritdoc/>

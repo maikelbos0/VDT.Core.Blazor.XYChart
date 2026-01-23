@@ -9,7 +9,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Ploy area/scaling settings for an <see cref="XYChart"/>
 /// </summary>
-public class PlotArea : ChildComponentBase, IDisposable {
+public class PlotArea : ChildComponentBase, IAsyncDisposable {
     private static readonly decimal[] baseGridLineIntervals = [1M, 2M, 5M, 10M];
 
     /// <summary>
@@ -122,8 +122,8 @@ public class PlotArea : ChildComponentBase, IDisposable {
     protected override Task OnInitializedAsync() => Chart.SetPlotArea(this);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Chart.ResetPlotArea();
+    public async ValueTask DisposeAsync() {
+        await Chart.ResetPlotArea();
         GC.SuppressFinalize(this);
     }
 

@@ -9,7 +9,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Series of data points to be displayed in a layer in an <see cref="XYChart"/>
 /// </summary>
-public class DataSeries : ChildComponentBase, IDisposable {
+public class DataSeries : ChildComponentBase, IAsyncDisposable {
     /// <summary>
     /// Color that is applied to a data series if no <see cref="Color"/> was provided and <see cref="DefaultColors"/> is empty
     /// </summary>
@@ -63,8 +63,8 @@ public class DataSeries : ChildComponentBase, IDisposable {
         || parameters.HasParameterChanged(CssClass);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Layer.RemoveDataSeries(this);
+    public async ValueTask DisposeAsync() {
+        await Layer.RemoveDataSeries(this);
         GC.SuppressFinalize(this);
     }
 

@@ -8,7 +8,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Legend settings for an <see cref="XYChart"/>
 /// </summary>
-public class Legend : ChildComponentBase, IDisposable {
+public class Legend : ChildComponentBase, IAsyncDisposable {
     /// <summary>
     /// Gets or sets the default value for whether or not the legend is displayed
     /// </summary>
@@ -83,8 +83,8 @@ public class Legend : ChildComponentBase, IDisposable {
     protected override Task OnInitializedAsync() => Chart.SetLegend(this);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Chart.ResetLegend();
+    public async ValueTask DisposeAsync() {
+        await Chart.ResetLegend();
         GC.SuppressFinalize(this);
     }
 

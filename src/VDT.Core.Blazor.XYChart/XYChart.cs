@@ -125,9 +125,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         await StateHasChanged();
     }
 
-    internal void ResetCanvas() {
+    internal async Task ResetCanvas() {
         Canvas = new();
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     internal async Task SetLegend(Legend legend) {
@@ -135,9 +135,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         await StateHasChanged();
     }
 
-    internal void ResetLegend() {
+    internal async Task ResetLegend() {
         Legend = new();
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     internal async Task SetPlotArea(PlotArea plotArea) {
@@ -145,9 +145,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         await StateHasChanged();
     }
 
-    internal void ResetPlotArea() {
+    internal async Task ResetPlotArea() {
         PlotArea = new();
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     internal async Task AddLayer(LayerBase layer) {
@@ -155,9 +155,9 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         await StateHasChanged();
     }
 
-    internal void RemoveLayer(LayerBase layer) {
+    internal async Task RemoveLayer(LayerBase layer) {
         Layers.Remove(layer);
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     /// <summary>
