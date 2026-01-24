@@ -71,3 +71,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.chart-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.chart-container > * {
+    grid-column: 1
+}

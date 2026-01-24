@@ -2,6 +2,7 @@
 using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using static VDT.Core.Blazor.XYChart.Tests.Constants;
 
 namespace VDT.Core.Blazor.XYChart.Tests;
@@ -18,8 +19,11 @@ public class XYChartBuilder {
         Chart = new() {
             Labels = [.. defaultLabels.Take(labelCount)],
             DataPointSpacingMode = dataPointSpacingMode,
-            StateChangeHandler = new(),
-            ModuleReference = ModuleReference
+            ModuleReference = ModuleReference,
+            StateChangeHandler = () => {
+                StateHasChangedInvoked = true;
+                return Task.CompletedTask;
+            }
         };
         Chart.Canvas = new() {
             Chart = Chart,
@@ -54,7 +58,6 @@ public class XYChartBuilder {
             AutoScaleIncludesZero = PlotArea_AutoScaleIncludesZero,
             AutoScaleClearancePercentage = PlotArea_AutoScaleClearancePercentage
         };
-        Chart.StateChangeHandler.Subscribe(() => StateHasChangedInvoked = true);
     }
 
     public XYChartBuilder WithLayer<TLayer>() where TLayer : LayerBase, new()
@@ -156,6 +159,9 @@ public class XYChartBuilder {
 
     public XYChartBuilder WithBoundingBox(string cssClass, decimal x, decimal y, decimal width, decimal height)
         => WithModuleReturnValue("getBoundingBox", new BoundingBox(x, y, width, height), Arg.Is<object?[]?>(v => v != null && v.Length >= 3 && v[2] as string == cssClass));
+
+    public XYChartBuilder WithBoundingBoxes(string cssClass, decimal x, decimal y, decimal width, decimal height)
+        => WithModuleReturnValue("getBoundingBoxes", new List<BoundingBox>() { new(x, y, width, height) }, Arg.Is<object?[]?>(v => v != null && v.Length >= 3 && v[2] as string == cssClass));
 
     public XYChartBuilder WithModuleReturnValue<TValue>(string identifier, TValue returnValue)
         => WithModuleReturnValue(identifier, returnValue, Arg.Any<object?[]?>());

@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.XYChart;
 
 /// <summary>
 /// Legend settings for an <see cref="XYChart"/>
 /// </summary>
-public class Legend : ChildComponentBase, IDisposable {
+public class Legend : ChildComponentBase, IAsyncDisposable {
     /// <summary>
     /// Gets or sets the default value for whether or not the legend is displayed
     /// </summary>
@@ -79,11 +80,11 @@ public class Legend : ChildComponentBase, IDisposable {
     public int Height => ItemHeight + (Chart.Layers.Sum(layer => layer.DataSeries.Count) - 1) / ItemsPerRow * ItemHeight;
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.SetLegend(this);
+    protected override Task OnInitializedAsync() => Chart.SetLegend(this);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Chart.ResetLegend();
+    public async ValueTask DisposeAsync() {
+        await Chart.ResetLegend();
         GC.SuppressFinalize(this);
     }
 

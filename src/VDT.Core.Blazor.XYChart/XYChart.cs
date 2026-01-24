@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
-using VDT.Core.Operators;
 
 namespace VDT.Core.Blazor.XYChart;
 
@@ -14,7 +13,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// Component to render charts with a category X-axis and a value Y-axis
 /// </summary>
 public class XYChart : ComponentBase, IAsyncDisposable {
-    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/xychart.f047879a94.js";
+    internal const string ModuleLocation = "./_content/VDT.Core.Blazor.XYChart/xychart.1a02b87b88.js";
 
     /// <summary>
     /// Gets or sets the default value for the the way data points are spaced out over the plot area
@@ -46,7 +45,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     internal Legend Legend { get; set; }
     internal PlotArea PlotArea { get; set; }
     internal List<LayerBase> Layers { get; set; } = [];
-    internal OperandStream StateChangeHandler { get; init; } = new();
+    internal Func<Task> StateChangeHandler { get; init; }
     internal IJSObjectReference ModuleReference {
         get => moduleReference ?? throw new InvalidOperationException($"{nameof(ModuleReference)} is only available after the chart has rendered");
         set => moduleReference = value;
@@ -59,8 +58,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         Canvas = new Canvas() { Chart = this };
         Legend = new Legend() { Chart = this };
         PlotArea = new PlotArea() { Chart = this };
-
-        StateChangeHandler.Debounce(100).Subscribe(HandleStateChange);
+        StateChangeHandler = HandleStateChange;
     }
 
     /// <inheritdoc/>
@@ -80,7 +78,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         await base.SetParametersAsync(parameters);
 
         if (parametersHaveChanged) {
-            StateHasChanged();
+            await StateHasChanged();
         }
     }
 
@@ -122,51 +120,51 @@ public class XYChart : ComponentBase, IAsyncDisposable {
         builder.CloseElement();
     }
 
-    internal void SetCanvas(Canvas canvas) {
+    internal async Task SetCanvas(Canvas canvas) {
         Canvas = canvas;
-        StateHasChanged();
+        await StateHasChanged();
     }
 
-    internal void ResetCanvas() {
+    internal async Task ResetCanvas() {
         Canvas = new();
-        StateHasChanged();
+        await StateHasChanged();
     }
 
-    internal void SetLegend(Legend legend) {
+    internal async Task SetLegend(Legend legend) {
         Legend = legend;
-        StateHasChanged();
+        await StateHasChanged();
     }
 
-    internal void ResetLegend() {
+    internal async Task ResetLegend() {
         Legend = new();
-        StateHasChanged();
+        await StateHasChanged();
     }
 
-    internal void SetPlotArea(PlotArea plotArea) {
+    internal async Task SetPlotArea(PlotArea plotArea) {
         PlotArea = plotArea;
-        StateHasChanged();
+        await StateHasChanged();
     }
 
-    internal void ResetPlotArea() {
+    internal async Task ResetPlotArea() {
         PlotArea = new();
-        StateHasChanged();
+        await StateHasChanged();
     }
 
-    internal void AddLayer(LayerBase layer) {
+    internal async Task AddLayer(LayerBase layer) {
         Layers.Add(layer);
-        StateHasChanged();
+        await StateHasChanged();
     }
 
-    internal void RemoveLayer(LayerBase layer) {
+    internal async Task RemoveLayer(LayerBase layer) {
         Layers.Remove(layer);
-        StateHasChanged();
+        await StateHasChanged();
     }
 
     /// <summary>
     /// Notifies the component that its state has changed
     /// </summary>
     [JSInvokable]
-    public new void StateHasChanged() => StateChangeHandler.Publish();
+    public new Task StateHasChanged() => StateChangeHandler();
 
     internal async Task HandleStateChange() {
         PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
@@ -365,8 +363,17 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// <param name="text">Text to determine the bounding box for</param>
     /// <param name="cssClass">CSS class to apply to the text element</param>
     /// <returns></returns>
-    public async Task<BoundingBox> GetBoundingBox(string text, string? cssClass)
+    public async Task<BoundingBox> GetBoundingBox(string text, string cssClass)
         => await ModuleReference.InvokeAsync<BoundingBox>("getBoundingBox", dotNetObjectReference, text, cssClass);
+
+    /// <summary>
+    /// For each provided text, gets the smallest rectangle in which an SVG text fits
+    /// </summary>
+    /// <param name="texts">Texts to determine the bounding boxes for</param>
+    /// <param name="cssClass">CSS class to apply to the text element</param>
+    /// <returns></returns>
+    public async Task<List<BoundingBox>> GetBoundingBoxes(IEnumerable<string> texts, string cssClass)
+        => await ModuleReference.InvokeAsync<List<BoundingBox>>("getBoundingBoxes", dotNetObjectReference, texts, cssClass);
 
     /// <inheritdoc/>
     public async ValueTask DisposeAsync() {

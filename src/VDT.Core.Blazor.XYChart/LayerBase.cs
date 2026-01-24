@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VDT.Core.Blazor.XYChart.Shapes;
 
 namespace VDT.Core.Blazor.XYChart;
@@ -10,7 +11,7 @@ namespace VDT.Core.Blazor.XYChart;
 /// <summary>
 /// Base class for defining a layer in an <see cref="XYChart"/> that defines the layout of the data series it contains
 /// </summary>
-public abstract class LayerBase : ChildComponentBase, IDisposable {
+public abstract class LayerBase : ChildComponentBase, IAsyncDisposable {
     /// <summary>
     /// Gets or sets the default value for whether or not the data series should be stacked
     /// </summary>
@@ -54,22 +55,22 @@ public abstract class LayerBase : ChildComponentBase, IDisposable {
     public abstract bool NullAsZero { get; }
 
     /// <inheritdoc/>
-    protected override void OnInitialized() => Chart.AddLayer(this);
+    protected override Task OnInitializedAsync() => Chart.AddLayer(this);
 
     /// <inheritdoc/>
-    public void Dispose() {
-        Chart.RemoveLayer(this);
+    public async ValueTask DisposeAsync() {
+        await Chart.RemoveLayer(this);
         GC.SuppressFinalize(this);
     }
 
-    internal void AddDataSeries(DataSeries dataSeries) {
+    internal async Task AddDataSeries(DataSeries dataSeries) {
         DataSeries.Add(dataSeries);
-        Chart.StateHasChanged();
+        await Chart.StateHasChanged();
     }
 
-    internal void RemoveDataSeries(DataSeries dataSeries) {
+    internal async Task RemoveDataSeries(DataSeries dataSeries) {
         DataSeries.Remove(dataSeries);
-        Chart.StateHasChanged();
+        await Chart.StateHasChanged();
     }
 
     /// <inheritdoc/>
