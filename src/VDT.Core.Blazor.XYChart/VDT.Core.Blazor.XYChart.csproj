@@ -13,7 +13,7 @@
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component to create SVG charts with a category X-axis and a value Y-axis such as bar, line and area charts</Description>
 		<PackageReleaseNotes>- Improve auto sizing performance
-- Remove debounce from redraw</PackageReleaseNotes>
+- Remove debounce from redraw for better perceived performance</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2023 Maikel Bos</Copyright>

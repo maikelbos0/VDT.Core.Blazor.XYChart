@@ -164,7 +164,7 @@ public class XYChart : ComponentBase, IAsyncDisposable {
     /// Notifies the component that its state has changed
     /// </summary>
     [JSInvokable]
-    public new async Task StateHasChanged() => await StateChangeHandler();
+    public new Task StateHasChanged() => StateChangeHandler();
 
     internal async Task HandleStateChange() {
         PlotArea.AutoScale(Layers.SelectMany(layer => layer.GetScaleDataPoints()));
